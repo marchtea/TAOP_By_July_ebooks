@@ -12,5 +12,9 @@ Build script havn't support **pdf** format. I'll try to fix it lately.
 *	mobi
 *	html
 
+##Html version
+
+html is generated using pandoc. Pandoc doesn't build image into html files, so, while copy html into somewhere, you need to copy images directory as well
+
 ##TODO
 Add Pdf format.
