@@ -16,5 +16,9 @@ Build script havn't support **pdf** format. I'll try to fix it lately.
 
 html is generated using pandoc. Pandoc doesn't build image into html files, so, while copy html into somewhere, you need to copy images directory as well
 
+##Current Version
+
+updated 2014/01/20
+
 ##TODO
 Add Pdf format.

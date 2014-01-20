@@ -35,7 +35,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="#第一章左旋转字符串">第一章：左旋转字符串</a></li>
 <li><a href="#第二章字符串是否包含问题">第二章：字符串是否包含问题</a></li>
 <li><a href="#第三章寻找最小的-k-个数">第三章：寻找最小的 k 个数</a></li>
-<li><a href="#第三章续top-k-算法问题的实现">第三章续：Top K 算法问题的实现</a></li>
+<li><a href="#第三章续搜索引擎热门查询统计">第三章续：搜索引擎热门查询统计</a></li>
 <li><a href="#第三章再续快速选择select算法的深入分析与实现">第三章再续：快速选择SELECT算法的深入分析与实现</a></li>
 <li><a href="#第三章三续求数组中给定下标区间内的第-k-小大元素">第三章三续：求数组中给定下标区间内的第 K 小(大)元素</a></li>
 <li><a href="#第三章四续动态数据中求第-k-小大元素">第三章四续：动态数据中求第 K 小(大)元素</a></li>
@@ -441,147 +441,10 @@ code > span.er { color: #ff0000; font-weight: bold; }
     <span class="kw">return</span> <span class="dv">0</span>;
 }</code></pre>
 <p>同样，若想寻找最大的k个数，则可通过构造大小为k的最小堆来实现以上操作，读者可考虑如何通过修改以上代码完成。</p>
-<h1 id="第三章续top-k-算法问题的实现">第三章续：Top K 算法问题的实现</h1>
-<p>在进入寻找最大的k个数的主题之前，先补充下关于寻找最k小的数的三种简单实现。由于堆的完整实现，第三章：第五节，堆结构实现，处理海量数据中已经给出，下面主要给出类似快速排序中partition过程的代码实现：</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="co">//下面的代码对July博客中的三个版本代码进行重新改写。欢迎指出错误。</span>
-<span class="co">//先把它们贴在这里，还要进行随机化数据测试。待发...</span>
-
-<span class="co">//modified by 飞羽 at 2011.5.11</span>
-<span class="co">//Top_K_test</span>
-
-<span class="co">//修改了下命名规范，July、updated，2011.05.12。</span>
-<span class="ot">#include &lt;iostream&gt;</span>
-<span class="ot">#include &lt;stdlib.h&gt;</span>
-using namespace std;
-
-<span class="kw">inline</span> <span class="dt">int</span> my_rand(<span class="dt">int</span> low, <span class="dt">int</span> high)
-{
-    <span class="dt">int</span> size = high - low + <span class="dv">1</span>;
-    <span class="kw">return</span>  low + rand() % size;
-}
-
-<span class="dt">int</span> partition(<span class="dt">int</span> array[], <span class="dt">int</span> left, <span class="dt">int</span> right)
-{
-    <span class="dt">int</span> pivot = array[right];
-    <span class="dt">int</span> pos = left - <span class="dv">1</span>;
-    <span class="kw">for</span> (<span class="dt">int</span> index = left; index &lt; right; index++)
-    {
-        <span class="kw">if</span> (array[index] &lt;= pivot)
-            swap(array[++pos], array[index]);
-    }
-    swap(array[++pos], array[right]);
-    <span class="kw">return</span> pos; <span class="co">//返回pivot所在位置</span>
-}
-
-bool median_select(<span class="dt">int</span> array[], <span class="dt">int</span> left, <span class="dt">int</span> right, <span class="dt">int</span> k)
-{
-    <span class="co">//第k小元素，实际上应该在数组中下标为k-1</span>
-    <span class="kw">if</span> (k - <span class="dv">1</span> &gt; right || k - <span class="dv">1</span> &lt; left)
-        <span class="kw">return</span> false;
-
-    <span class="co">//真正的三数中值作为枢纽元方法，关键代码就是下述六行</span>
-    <span class="dt">int</span> midIndex = (left + right) / <span class="dv">2</span>;
-    <span class="kw">if</span> (array[left] &lt; array[midIndex])
-        swap(array[left], array[midIndex]);
-    <span class="kw">if</span> (array[right] &lt; array[midIndex])
-        swap(array[right], array[midIndex]);
-    <span class="kw">if</span> (array[right] &lt; array[left])
-        swap(array[right], array[left]);
-    swap(array[left], array[right]);
-
-    <span class="dt">int</span> pos = partition(array, left, right);
-
-    <span class="kw">if</span> (pos == k - <span class="dv">1</span>)
-        <span class="kw">return</span> true;
-    <span class="kw">else</span> <span class="kw">if</span> (pos &gt; k - <span class="dv">1</span>)
-        <span class="kw">return</span> median_select(array, left, pos - <span class="dv">1</span>, k);
-    <span class="kw">else</span> <span class="kw">return</span> median_select(array, pos + <span class="dv">1</span>, right, k);
-}
-
-bool rand_select(<span class="dt">int</span> array[], <span class="dt">int</span> left, <span class="dt">int</span> right, <span class="dt">int</span> k)
-{
-    <span class="co">//第k小元素，实际上应该在数组中下标为k-1</span>
-    <span class="kw">if</span> (k - <span class="dv">1</span> &gt; right || k - <span class="dv">1</span> &lt; left)
-        <span class="kw">return</span> false;
-
-    <span class="co">//随机从数组中选取枢纽元元素</span>
-    <span class="dt">int</span> Index = my_rand(left, right);
-    swap(array[Index], array[right]);
-
-    <span class="dt">int</span> pos = partition(array, left, right);
-
-    <span class="kw">if</span> (pos == k - <span class="dv">1</span>)
-        <span class="kw">return</span> true;
-    <span class="kw">else</span> <span class="kw">if</span> (pos &gt; k - <span class="dv">1</span>)
-        <span class="kw">return</span> rand_select(array, left, pos - <span class="dv">1</span>, k);
-    <span class="kw">else</span> <span class="kw">return</span> rand_select(array, pos + <span class="dv">1</span>, right, k);
-}
-
-bool kth_select(<span class="dt">int</span> array[], <span class="dt">int</span> left, <span class="dt">int</span> right, <span class="dt">int</span> k)
-{
-    <span class="co">//直接取最原始的划分操作</span>
-    <span class="kw">if</span> (k - <span class="dv">1</span> &gt; right || k - <span class="dv">1</span> &lt; left)
-        <span class="kw">return</span> false;
-
-    <span class="dt">int</span> pos = partition(array, left, right);
-    <span class="kw">if</span> (pos == k - <span class="dv">1</span>)
-        <span class="kw">return</span> true;
-    <span class="kw">else</span> <span class="kw">if</span> (pos &gt; k - <span class="dv">1</span>)
-        <span class="kw">return</span> kth_select(array, left, pos - <span class="dv">1</span>, k);
-    <span class="kw">else</span> <span class="kw">return</span> kth_select(array, pos + <span class="dv">1</span>, right, k);
-}
-
-<span class="dt">int</span> main()
-{
-    <span class="dt">int</span> array1[] = {<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">54</span>, <span class="dv">6</span>, <span class="dv">4</span>, <span class="dv">11</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">33</span>};
-    <span class="dt">int</span> array2[] = {<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">54</span>, <span class="dv">6</span>, <span class="dv">4</span>, <span class="dv">11</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">33</span>};
-    <span class="dt">int</span> array3[] = {<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">54</span>, <span class="dv">6</span>, <span class="dv">4</span>, <span class="dv">11</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">33</span>};
-
-    <span class="dt">int</span> numOfArray = <span class="kw">sizeof</span>(array1) / <span class="kw">sizeof</span>(<span class="dt">int</span>);
-    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; numOfArray; i++)
-        printf(<span class="st">&quot;%d</span><span class="ch">\t</span><span class="st">&quot;</span>, array1[i]);
-
-    <span class="dt">int</span> K = <span class="dv">9</span>;
-    bool flag1 = median_select(array1, <span class="dv">0</span>, numOfArray - <span class="dv">1</span>, K);
-    bool flag2 = rand_select(array2, <span class="dv">0</span>, numOfArray - <span class="dv">1</span>, K);
-    bool flag3 = kth_select(array3, <span class="dv">0</span>, numOfArray - <span class="dv">1</span>, K);
-    <span class="kw">if</span> (!flag1)
-        <span class="kw">return</span> <span class="dv">1</span>;
-    <span class="kw">for</span> (i = <span class="dv">0</span>; i &lt; K; i++)
-        printf(<span class="st">&quot;%d</span><span class="ch">\t</span><span class="st">&quot;</span>, array1[i]);
-    printf(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>);
-
-    <span class="kw">if</span> (!flag2)
-        <span class="kw">return</span> <span class="dv">1</span>;
-    <span class="kw">for</span> (i = <span class="dv">0</span>; i &lt; K; i++)
-        printf(<span class="st">&quot;%d</span><span class="ch">\t</span><span class="st">&quot;</span>, array2[i]);
-    printf(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>);
-
-    <span class="kw">if</span> (!flag3)
-        <span class="kw">return</span> <span class="dv">1</span>;
-    <span class="kw">for</span> (i = <span class="dv">0</span>; i &lt; K; i++)
-        printf(<span class="st">&quot;%d</span><span class="ch">\t</span><span class="st">&quot;</span>, array3[i]);
-    printf(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>);
-
-    <span class="kw">return</span> <span class="dv">0</span>;
-}</code></pre>
-<p>说明：<span class="citation" data-cites="飞羽">@飞羽</span>：因为预先设定了K，经过分割算法后，数组肯定被划分为array[0...k-1]和array[k...length-1]，注意到经过Select_K_Version操作后，数组是被不断地分割的，使得比array[k-1]的元素小的全在左边，题目要求的是最小的K个元素，当然也就是array[0...k-1]，所以输出的结果就是前k个最小的数：</p>
-<p>7 8 9 54 6 4 11 1 2 33 4 1 2 6 7 8 9 11 33 7 6 4 1 2 8 9 11 33 7 8 9 6 4 11 1 2 33</p>
-<h2 id="第二节寻找最大的k个数">第二节、寻找最大的k个数</h2>
-<p>把之前第三章的问题，改几个字，即成为寻找最大的k个数的问题了，如下所述：<br /><strong>查找最大的k个元素</strong><br />题目描述：输入n个整数，输出其中最大的k个。<br />例如输入1，2，3，4，5，6，7和8这8个数字，则最大的4个数字为8，7，6和5。</p>
-<p>分析：由于寻找最大的k个数的问题与之前的寻找最小的k个数的问题，本质是一样的，所以，这里就简单阐述下思路，ok，考验你举一反三能力的时间到了：</p>
-<ol type="1">
-<li><p>排序，快速排序。我们知道，快速排序平均所费时间为n*logn，从小到大排序这n个数，然后再遍历序列中后k个元素输出，即可，总的时间复杂度为O(n*logn+k)=O(n*logn)。</p></li>
-<li><p>排序，选择排序。用选择或交换排序，即遍历n个数，先把最先遍历到得k个数存入大小为k的数组之中，对这k个数，利用选择或交换排序，找到k个数中的最小数kmin（kmin设为k个元素的数组中最小元素），用时O（k）（你应该知道，插入或选择排序查找操作需要O（k）的时间），后再继续遍历后n-k个数，x与kmin比较：如果x&gt;kmin，则x代替kmin，并再次重新找出k个元素的数组中最大元素kmin‘（多谢jiyeyuran 提醒修正）；如果x&lt;kmin，则不更新数组。这样，每次更新或不更新数组的所用的时间为O（k）或O（0），整趟下来，总的时间复杂度平均下来为：n*O（k）=O（n*k）。</p></li>
-<li><p>维护k个元素的最小堆，原理与上述第2个方案一致，即用容量为k的最小堆存储最先遍历到的k个数，并假设它们即是最大的k个数，建堆费时O（k），并调整堆（费时O（logk））后，有k1&gt;k2&gt;...kmin（kmin设为小顶堆中最大元素）。继续遍历数列，每次遍历一个元素x，与堆顶元素比较，若x&gt;kmin，则更新堆（用时logk），否则不更新堆。这样下来，总费时O（k*logk+（n-k）*logk）=O（n*logk）。此方法得益于在堆中，查找等各项操作时间复杂度均为logk（不然，就如上述思路2所述：直接用数组也可以找出最大的k个元素，用时O（n*k））。</p></li>
-<li><p>按编程之美第141页上解法二的所述，类似快速排序的划分方法，N个数存储在数组S中，再从数组中随机选取一个数X，把数组划分为Sa和Sb俩部分，Sa&gt;=X&gt;=Sb，如果要查找的k个元素小于Sa的元素个数，则返回Sa中较大的k个元素，否则返回Sa中所有的元素+Sb中最大的k-|Sa|个元素。不断递归下去，把问题分解成更小的问题，平均时间复杂度为O（N）（编程之美所述的n*logk的复杂度有误，应为O（N），特此订正。其严格证明，请参考第三章：<a href="http://blog.csdn.net/v_JULY_v/article/details/6370650">程序员面试题狂想曲：第三章、寻找最小的k个数、updated 10次</a>）。</p></li>
-</ol>
-<p>其它的方法，在此不再重复了，同时，寻找最小的k个数借助堆的实现，代码在上一篇文章第三章已有给出，更多，可参考第三章，只要把最大堆改成最小堆，即可。</p>
-<h2 id="第三节top-k-算法问题">第三节、Top K 算法问题</h2>
-<h3 id="搜索引擎热门查询统计">3.1、搜索引擎热门查询统计</h3>
+<h1 id="第三章续搜索引擎热门查询统计">第三章续：搜索引擎热门查询统计</h1>
 <p><strong>题目描述</strong>： 搜索引擎会通过日志文件把用户每次检索使用的所有检索串都记录下来，每个查询串的长度为1-255字节。<br />假设目前有一千万个记录（这些查询串的重复度比较高，虽然总数是1千万，但如果除去重复后，不超过3百万个。一个查询串的重复度越高，说明查询它的用户越多，也就是越热门。），请你统计最热门的10个查询串，要求使用的内存不能超过1G。</p>
 <p>分析：这个问题在之前的这篇文章<a href="http://blog.csdn.net/v_JULY_v/article/details/6256463">十一、从头到尾彻底解析Hash表算法</a>里，已经有所解答。方法是:</p>
-<p><strong>第一步</strong>、先对这批海量数据预处理，在O(N)的时间内用Hash表完成统计；<br /><strong>第二步</strong>、借助堆这个数据结构，找出Top K，时间复杂度为N‘logK。<br />即，借助堆结构，我们可以在log量级的时间内查找和调整/移动。因此，维护一个K(该题目中是10)大小的小根堆（K1&gt;K2&gt;....Kmin，Kmin设为堆顶元素），然后遍历300万的Query，分别和根元素Kmin进行对比比较（如上第2节思路3所述，若X&gt;Kmin，则更新并调整堆，否则，不更新），我们最终的时间复杂度是：O(N) + N'*O(logK)，（N为1000万，N’为300万）。ok，更多，详情，请参考原文。</p>
+<p><strong>第一步</strong>、先对这批海量数据预处理，在O(N)的时间内用Hash表完成统计；<br /><strong>第二步</strong>、借助堆这个数据结构，找出Top K，时间复杂度为N‘logK。<br />即，借助堆结构，我们可以在log量级的时间内查找和调整/移动。因此，维护一个K(该题目中是10)大小的小根堆（K1&gt;K2&gt;....Kmin，Kmin设为堆顶元素），然后遍历300万的Query，分别和根元素Kmin进行对比比较（如上第2节思路3所述，若X&gt;Kmin，则更新并调整堆，否则，不更新），我们最终的时间复杂度是：O(N) + N'*O(logK)，（N为1000万，N’为300万）。</p>
 <p>或者：采用trie树，关键字域存该查询串出现的次数，没有出现为0。最后用10个元素的最小推来对出现频率进行排序。</p>
 <p>ok，本章里，咱们来实现这个问题，为了降低实现上的难度，假设这些记录全部是一些英文单词，即用户在搜索框里敲入一个英文单词，然后查询搜索结果，最后，要你统计输入单词中频率最大的前K个单词。ok，复杂问题简单化了之后，编写代码实现也相对轻松多了，画的简单示意图（绘制者，yansha），如下：</p>
 <figure>
@@ -805,743 +668,10 @@ ptr_no_space head[HASHLEN];
 <img src="../images/3/3.1/3.1.3.jpg" />
 </figure>
 <p><strong>读者反馈from 杨忠胜</strong>：3.1节的代码第38行 hash_function(char const *p)有误吧，这样的话，不能修改p的值（但是函数需要修改指针的值），要想不修改*p指向的内容，应该是const char *p; 此外，您程序中的/t, /n有误，C语言是,。<br />  感谢这位读者的来信，日后统一订正。谢谢。</p>
-<h3 id="统计出现次数最多的数据">3.2、统计出现次数最多的数据</h3>
+<h3 id="扩展统计出现次数最多的数据">扩展、统计出现次数最多的数据</h3>
 <p><strong>题目描述</strong>： 给你上千万或上亿数据（有重复），统计其中出现次数最多的前N个数据。</p>
 <p>分析：上千万或上亿的数据，现在的机器的内存应该能存下（也许可以，也许不可以）。所以考虑采用hash_map/搜索二叉树/红黑树等来进行统计次数。然后就是取出前N个出现次数最多的数据了。当然，也可以堆实现。</p>
 <p>ok，此题与上题类似，最好的方法是用hash_map统计出现的次数，然后再借用堆找出出现次数最多的N个数据。不过，上一题统计搜索引擎最热门的查询已经采用过hash表统计单词出现的次数，特此，本题咱们改用红黑树取代之前的用hash表，来完成最初的统计，然后用堆更新，找出出现次数最多的前N个数据。</p>
-<p>同时，正好个人此前用c &amp;&amp; c++ 语言实现过红黑树，那么，代码能借用就借用吧。<br /><strong>完整代码</strong>：</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="co">//copyright@ zhouzhenren &amp;&amp;July</span>
-<span class="co">//July、updated，2011.05.08.</span>
-
-<span class="co">//题目描述：</span>
-<span class="co">//上千万或上亿数据（有重复），统计其中出现次数最多的前N个数据</span>
-
-<span class="co">//解决方案：</span>
-<span class="co">//1、采用红黑树（本程序中有关红黑树的实现代码来源于@July）来进行统计次数。</span>
-<span class="co">//2、然后遍历整棵树，同时采用最小堆更新前N个出现次数最多的数据。</span>
-
-<span class="co">//声明：版权所有，引用必须注明出处。</span>
-<span class="ot">#define PARENT(i) (i)/2</span>
-<span class="ot">#define LEFT(i)   2*(i)</span>
-<span class="ot">#define RIGHT(i)  2*(i)+1</span>
-
-<span class="ot">#include &lt;stdio.h&gt;</span>
-<span class="ot">#include &lt;stdlib.h&gt;</span>
-<span class="ot">#include &lt;string.h&gt;</span>
-
-<span class="kw">typedef</span> <span class="kw">enum</span> rb_color{ RED, BLACK }RB_COLOR;
-<span class="kw">typedef</span> <span class="kw">struct</span> rb_node
-{
-    <span class="dt">int</span> key;
-    <span class="dt">int</span> data;
-    RB_COLOR color;
-    <span class="kw">struct</span> rb_node* left;
-    <span class="kw">struct</span> rb_node* right;
-    <span class="kw">struct</span> rb_node* parent;
-}RB_NODE;
-
-RB_NODE* RB_CreatNode(<span class="dt">int</span> key, <span class="dt">int</span> data)
-{
-    RB_NODE* node = (RB_NODE*)malloc(<span class="kw">sizeof</span>(RB_NODE));
-    <span class="kw">if</span> (NULL == node)
-    {
-        printf(<span class="st">&quot;malloc error!&quot;</span>);
-        exit(-<span class="dv">1</span>);
-    }
-
-    node-&gt;key = key;
-    node-&gt;data = data;
-    node-&gt;color = RED;
-    node-&gt;left = NULL;
-    node-&gt;right = NULL;
-    node-&gt;parent = NULL;
-
-    <span class="kw">return</span> node;
-}
-
-<span class="co">/**</span>
-<span class="co">* 左旋</span>
-<span class="co">*</span>
-<span class="co">*  node           right</span>
-<span class="co">*  / /    ==&gt;     / /</span>
-<span class="co">* a  right     node  y</span>
-<span class="co">*     / /       / /</span>
-<span class="co">*     b  y     a   b</span>
-<span class="co">*/</span>
-RB_NODE* RB_RotateLeft(RB_NODE* node, RB_NODE* root)
-{
-    RB_NODE* right = node-&gt;right;    <span class="co">// 指定指针指向 right&lt;--node-&gt;right</span>
-
-    <span class="kw">if</span> ((node-&gt;right = right-&gt;left))
-        right-&gt;left-&gt;parent = node;  <span class="co">// 好比上面的注释图，node成为b的父母</span>
-
-    right-&gt;left = node;   <span class="co">// node成为right的左孩子</span>
-
-    <span class="kw">if</span> ((right-&gt;parent = node-&gt;parent))
-    {  
-        <span class="kw">if</span> (node == node-&gt;parent-&gt;right)
-            node-&gt;parent-&gt;right = right;
-        <span class="kw">else</span>  
-            node-&gt;parent-&gt;left = right;
-    }
-    <span class="kw">else</span>
-        root = right;
-
-    node-&gt;parent = right;  <span class="co">//right成为node的父母</span>
-
-    <span class="kw">return</span> root;
-}
-
-<span class="co">/**</span>
-<span class="co">* 右旋</span>
-<span class="co">*</span>
-<span class="co">*      node            left</span>
-<span class="co">*       / /             / /</span>
-<span class="co">*     left y   ==&gt;     a  node</span>
-<span class="co">*     / /                  / /</span>
-<span class="co">*    a   b                b   y</span>
-<span class="co">*/</span>
-RB_NODE* RB_RotateRight(RB_NODE* node, RB_NODE* root)
-{
-    RB_NODE* left = node-&gt;left;
-
-    <span class="kw">if</span> ((node-&gt;left = left-&gt;right))
-        left-&gt;right-&gt;parent = node;
-
-    left-&gt;right = node;
-
-    <span class="kw">if</span> ((left-&gt;parent = node-&gt;parent))
-    {
-        <span class="kw">if</span> (node == node-&gt;parent-&gt;right)
-            node-&gt;parent-&gt;right = left;
-        <span class="kw">else</span>
-            node-&gt;parent-&gt;left = left;
-    }
-    <span class="kw">else</span>
-        root = left;
-
-    node-&gt;parent = left;
-
-    <span class="kw">return</span> root;
-}
-
-<span class="co">/**</span>
-<span class="co">* 红黑树的3种插入情况</span>
-<span class="co">* 用z表示当前结点, p[z]表示父母、p[p[z]]表示祖父, y表示叔叔.</span>
-<span class="co">*/</span>
-RB_NODE* RB_Insert_Rebalance(RB_NODE* node, RB_NODE* r
-{
-    RB_NODE *parent, *gparent, *uncle, *tmp;  <span class="co">//父母p[z]、祖父p[p[z]]、叔叔y、临时结点*tmp</span>
-
-    <span class="kw">while</span> ((parent = node-&gt;parent) &amp;&amp; parent-&gt;color == RED)
-    { <span class="co">// parent 为node的父母，且当父母的颜色为红时</span>
-        gparent = parent-&gt;parent;   <span class="co">// gparent为祖父</span>
-
-        <span class="kw">if</span> (parent == gparent-&gt;left)  <span class="co">// 当祖父的左孩子即为父母时,其实上述几行语句，无非就是理顺孩子、父母、祖父的关</span>
-
-            uncle = gparent-&gt;right; <span class="co">// 定义叔叔的概念，叔叔y就是父母的右孩子。</span>
-            <span class="kw">if</span> (uncle &amp;&amp; uncle-&gt;color == RED) <span class="co">// 情况1：z的叔叔y是红色的</span>
-            {
-                uncle-&gt;color = BLACK;   <span class="co">// 将叔叔结点y着为黑色</span>
-                parent-&gt;color = BLACK;  <span class="co">// z的父母p[z]也着为黑色。解决z，p[z]都是红色的问题。</span>
-                gparent-&gt;color = RED;
-                node = gparent;     <span class="co">// 将祖父当做新增结点z，指针z上移俩层，且着为红色。</span>
-                <span class="co">// 上述情况1中，只考虑了z作为父母的右孩子的情况。</span>
-            }
-            <span class="kw">else</span>                     <span class="co">// 情况2：z的叔叔y是黑色的，</span>
-            {
-                <span class="kw">if</span> (parent-&gt;right == node)  <span class="co">// 且z为右孩子</span>
-                {
-                    root = RB_RotateLeft(parent, root); <span class="co">// 左旋[结点z，与父母结点]</span>
-                    tmp = parent;
-                    parent = node;
-                    node = tmp;     <span class="co">// parent与node 互换角色</span>
-                }
-                <span class="co">// 情况3：z的叔叔y是黑色的，此时z成为了左孩子。</span>
-                <span class="co">// 注意，1：情况3是由上述情况2变化而来的。</span>
-                <span class="co">// ......2：z的叔叔总是黑色的，否则就是情况1了。</span>
-                parent-&gt;color = BLACK;   <span class="co">// z的父母p[z]着为黑色</span>
-                gparent-&gt;color = RED;    <span class="co">// 原祖父结点着为红色</span>
-                root = RB_RotateRight(gparent, root); <span class="co">// 右旋[结点z，与祖父结点]</span>
-            }
-        }
-
-        <span class="kw">else</span>
-        {
-            <span class="co">// 这部分是特别为情况1中，z作为左孩子情况，而写的。</span>
-            uncle = gparent-&gt;left;  <span class="co">// 祖父的左孩子作为叔叔结点。[原理还是与上部分一样的]</span>
-            <span class="kw">if</span> (uncle &amp;&amp; uncle-&gt;color == RED)  <span class="co">// 情况1：z的叔叔y是红色的</span>
-            {
-                uncle-&gt;color = BLACK;
-                parent-&gt;color = BLACK;
-                gparent-&gt;color = RED;
-                node = gparent;           <span class="co">// 同上</span>
-            }
-            <span class="kw">else</span>                               <span class="co">// 情况2：z的叔叔y是黑色的，</span>
-            {
-                <span class="kw">if</span> (parent-&gt;left == node)  <span class="co">// 且z为左孩子</span>
-                {
-                    root = RB_RotateRight(parent, root);  <span class="co">// 以结点parent、root右旋</span>
-                    tmp = parent;
-                    parent = node;
-                    node = tmp;       <span class="co">// parent与node 互换角色</span>
-                }
-                <span class="co">// 经过情况2的变化，成为了情况3.</span>
-                parent-&gt;color = BLACK;
-                gparent-&gt;color = RED;
-                root = RB_RotateLeft(gparent, root);   <span class="co">// 以结点gparent和root左旋</span>
-            }
-        }
-    }
-
-    root-&gt;color = BLACK; <span class="co">// 根结点，不论怎样，都得置为黑色。</span>
-    <span class="kw">return</span> root;      <span class="co">// 返回根结点。</span>
-}
-
-<span class="co">/**</span>
-<span class="co">* 红黑树查找结点</span>
-<span class="co">* rb_search_auxiliary：查找</span>
-<span class="co">* rb_node_t* rb_search：返回找到的结点</span>
-<span class="co">*/</span>
-RB_NODE* RB_SearchAuxiliary(<span class="dt">int</span> key, RB_NODE* root, RB_NODE** save)
-{
-    RB_NODE* node = roo
-    RB_NODE* parent = NULL;
-    <span class="dt">int</span> ret;
-
-    <span class="kw">while</span> (n
-    {
-        parent = node;
-        ret = node-&gt;key - key;
-        <span class="kw">if</span> (<span class="dv">0</span> &lt; ret)
-            node = node-&gt;left;
-        <span class="kw">else</span> <span class="kw">if</span> (<span class="dv">0</span> &gt; ret)
-            node = node-&gt;right;
-        <span class="kw">else</span>
-            <span class="kw">return</span> node;
-    }
-
-    <span class="kw">if</span> (save)
-        *save = parent;
-
-    <span class="kw">return</span> NULL;
-}
-
-<span class="co">/**</span>
-<span class="co">* 返回上述rb_search_auxiliary查找结果</span>
-<span class="co">*/</span>
-RB_NODE* RB_Search(<span class="dt">int</span> key, RB_NODE* root)
-{
-    <span class="kw">return</span> RB_SearchAuxiliary(key, root, NULL);
-}
-
-<span class="co">/**</span>
-<span class="co">* 红黑树的插</span>
-<span class="co">*/</span>
-RB_NODE* RB_Insert(<span class="dt">int</span> key, <span class="dt">int</span> data, RB_NODE* root)
-{
-    RB_NODE* parent = NUL
-    RB_NODE* node = NULL;
-
-    parent = NULL;
-    <span class="kw">if</span> ((node = RB_SearchAuxiliary(key, root, &amp;parent)))  <span class="co">// 调用RB_SearchAuxiliary找到插入结点的地方</span>
-    {
-        node-&gt;data++; <span class="co">// 节点已经存在data值</span>
-        <span class="kw">return</span> root;
-    }
-
-    node = RB_CreatNode(key, data);  <span class="co">// 分配结点</span>
-    node-&gt;parent = parent;
-
-    <span class="kw">if</span> (parent)
-    {
-        <span class="kw">if</span> (parent-&gt;key &gt; key)
-            parent-&gt;left = node;
-        <span class="kw">else</span>
-            parent-&gt;right = node;
-    }
-    <span class="kw">else</span>
-    {
-        root = node;
-    }
-
-    <span class="kw">return</span> RB_Insert_Rebalance(node, root);   <span class="co">// 插入结点后，调用RB_Insert_Rebalance修复红黑树的性质</span>
-}
-
-<span class="kw">typedef</span> <span class="kw">struct</span> rb_heap
-{
-    <span class="dt">int</span> key;
-    <span class="dt">int</span> data;
-}RB_HEAP;
-<span class="dt">const</span> <span class="dt">int</span> heapSize = <span class="dv">10</span>;
-RB_HEAP heap[heapSize<span class="dv">+1</span>];
-
-<span class="co">/**</span>
-<span class="co">* MAX_HEAPIFY函数对堆进行更新，使以i为根的子树成最大堆</span>
-<span class="co">*/</span>
-<span class="dt">void</span> MIN_HEAPIFY(RB_HEAP* A, <span class="dt">const</span> <span class="dt">int</span>&amp; size, <span class="dt">int</span> i)
-{
-    <span class="dt">int</span> l = LEFT(i);
-    <span class="dt">int</span> r = RIGHT(i);
-    <span class="dt">int</span> smallest = i;
-
-    <span class="kw">if</span> (l &lt;= size &amp;&amp; A[l].data &lt; A[i].data)
-        smallest = l;
-    <span class="kw">if</span> (r &lt;= size &amp;&amp; A[r].data &lt; A[smallest].data)
-        smallest = r;
-
-    <span class="kw">if</span> (smallest != i)
-    {
-        RB_HEAP tmp = A[i];
-        A[i] = A[smallest];
-        A[smallest] = tmp;
-        MIN_HEAPIFY(A, size, smallest);
-    }
-}
-
-<span class="co">/**</span>
-<span class="co">* BUILD_MINHEAP函数对数组A中的数据建立最小堆</span>
-<span class="co">*/</span>
-<span class="dt">void</span> BUILD_MINHEAP(RB_HEAP* A, <span class="dt">const</span> <span class="dt">int</span>&amp; size)
-{
-    <span class="kw">for</span> (<span class="dt">int</span> i = size/<span class="dv">2</span>; i &gt;= <span class="dv">1</span>; --i)
-        MIN_HEAPIFY(A, size, i);
-}
-
-
-<span class="co">/*</span>
-<span class="co">3、维护k个元素的最小堆，原理与上述第2个方案一致，</span>
-<span class="co">即用容量为k的最小堆存储最先在红黑树中遍历到的k个数，并假设它们即是最大的k个数，建堆费时O（k），</span>
-<span class="co">然后调整堆（费时O（logk））后，有k1&gt;k2&gt;...kmin（kmin设为小顶堆中最小元素）。</span>
-<span class="co">继续中序遍历红黑树，每次遍历一个元素x，与堆顶元素比较，若x&gt;kmin，则更新堆（用时logk），否则不更新堆。</span>
-<span class="co">这样下来，总费时O（k*logk+（n-k）*logk）=O（n*logk）。</span>
-<span class="co">此方法得益于在堆中，查找等各项操作时间复杂度均为logk）。</span>
-<span class="co">*/</span>
-
-<span class="co">//中序遍历RBTree</span>
-<span class="dt">void</span> InOrderTraverse(RB_NODE* node)
-{
-    <span class="kw">if</span> (node == NULL)
-    {
-        <span class="kw">return</span>;
-    }
-    <span class="kw">else</span>
-    {
-        InOrderTraverse(node-&gt;left);
-        <span class="kw">if</span> (node-&gt;data &gt; heap[<span class="dv">1</span>].data) <span class="co">// 当前节点data大于最小堆的最小元素时，更新堆数据</span>
-        {
-            heap[<span class="dv">1</span>].data = node-&gt;data;
-            heap[<span class="dv">1</span>].key = node-&gt;key;
-            MIN_HEAPIFY(heap, heapSize, <span class="dv">1</span>);
-        }
-        InOrderTraverse(node-&gt;right);
-    }
-}
-
-<span class="dt">void</span> RB_Destroy(RB_NODE* node)
-{
-    <span class="kw">if</span> (NULL == node)
-    {
-        <span class="kw">return</span>;
-    }
-    <span class="kw">else</span>
-    {
-        RB_Destroy(node-&gt;left);
-        RB_Destroy(node-&gt;right);
-        free(node);
-        node = NULL;
-    }
-}
-
-<span class="dt">int</span> main()
-{
-    RB_NODE* root = NULL;
-    RB_NODE* node = NULL;
-      
-    <span class="co">// 初始化最小堆</span>
-    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= <span class="dv">10</span>; ++i)
-    {
-        heap[i].key = i;
-        heap[i].data = -i;
-    }
-    BUILD_MINHEAP(heap, heapSize);
-
-    FILE* fp = fopen(<span class="st">&quot;data.txt&quot;</span>, <span class="st">&quot;r&quot;</span>);
-    <span class="dt">int</span> num;
-    <span class="kw">while</span> (!feof(fp))
-    {
-        fscanf(fp, <span class="st">&quot;%d&quot;</span>, &amp;num);
-        root = RB_Insert(num, <span class="dv">1</span>, root);
-    }
-    fclose(fp);
-
-    InOrderTraverse(root);   <span class="co">//递归遍历红黑树</span>
-    RB_Destroy(root);
-
-    <span class="kw">for</span> (i = <span class="dv">1</span>; i &lt;= <span class="dv">10</span>; ++i)
-    {
-        printf(<span class="st">&quot;%d</span><span class="ch">\t</span><span class="st">%d</span><span class="ch">\n</span><span class="st">&quot;</span>, heap[i].key, heap[i].data);
-    }   
-    <span class="kw">return</span> <span class="dv">0</span>;
-}</code></pre>
-<p><strong>程序测试</strong>：咱们来对下面这个小文件进行测试：</p>
-<figure>
-<img src="../images/3/3.1/3.1.4.jpg" />
-</figure>
-<p><strong>运行结果</strong>：如下图所示，</p>
-<figure>
-<img src="../images/3/3.1/3.1.5.jpg" />
-</figure>
-<p><strong>问题补遗</strong>：</p>
-<p>ok，由于在遍历红黑树采用的是递归方式比较耗内存，下面给出一个非递归遍历的程序（下述代码若要运行，需贴到上述程序之后，因为其它的代码未变，只是在遍历红黑树的时候，采取非递归遍历而已，同时，主函数的编写也要稍微修改下）：</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="co">//copyright@ zhouzhenren</span>
-<span class="co">//July、updated，2011.05.08.</span>
-<span class="ot">#define STACK_SIZE 1000</span>
-<span class="kw">typedef</span> <span class="kw">struct</span>
-{                                              <span class="co">// 栈的结点定义</span>
-    RB_NODE** top;
-    RB_NODE** base;
-}*PStack, Stack;
-
-bool InitStack(PStack&amp; st)                       <span class="co">// 初始化栈</span>
-{
-    st-&gt;base = (RB_NODE**)malloc(<span class="kw">sizeof</span>(RB_NODE*) * STACK_SIZE);
-    <span class="kw">if</span> (!st-&gt;base)
-    {
-        printf(<span class="st">&quot;InitStack error!&quot;</span>);
-        exit(<span class="dv">1</span>);
-    }
-    st-&gt;top = st-&gt;base;
-    <span class="kw">return</span> true;
-}
-
-bool Push(PStack&amp; st, RB_NODE*&amp; e)                    <span class="co">// 入栈</span>
-{
-    <span class="kw">if</span> (st-&gt;top - st-&gt;base &gt;= STACK_SIZE)
-        <span class="kw">return</span> false;
-    *st-&gt;top = e;
-    st-&gt;top++;
-    <span class="kw">return</span> true;
-}
-
-bool Pop(PStack&amp; st, RB_NODE*&amp; e)                     <span class="co">// 出栈</span>
-{
-    <span class="kw">if</span> (st-&gt;top == st-&gt;base)
-    {
-        e = NULL;
-        <span class="kw">return</span> false;
-    }
-    e = *--st-&gt;top;
-    <span class="kw">return</span> true;
-}
-
-bool StackEmpty(PStack&amp; st)                     <span class="co">// 栈是否为空</span>
-{
-    <span class="kw">if</span> (st-&gt;base == st-&gt;top)
-        <span class="kw">return</span> true;
-    <span class="kw">else</span>
-        <span class="kw">return</span> false;
-}
-
-bool InOrderTraverse_Stack(RB_NODE*&amp; T)                 <span class="co">// 中序遍历</span>
-{
-    PStack S = (PStack)malloc(<span class="kw">sizeof</span>(Stack));
-    RB_NODE* P = T;
-    InitStack(S);
-    <span class="kw">while</span> (P != NULL || !StackEmpty(S))
-    {
-        <span class="kw">if</span> (P != NULL)
-        {
-            Push(S, P);
-            P = P-&gt;left;
-        }
-        <span class="kw">else</span>
-        {
-            Pop(S, P);
-            <span class="kw">if</span> (P-&gt;data &gt; heap[<span class="dv">1</span>].data) <span class="co">// 当前节点data大于最小堆的最小元素时，更新堆数据</span>
-            {
-                heap[<span class="dv">1</span>].data = P-&gt;data;
-                heap[<span class="dv">1</span>].key = P-&gt;key;
-                MIN_HEAPIFY(heap, heapSize, <span class="dv">1</span>);
-            }
-            P = P-&gt;right;
-        }
-    }
-    free(S-&gt;base);
-    S-&gt;base = NULL;
-    free(S);
-    S = NULL;
-
-    <span class="kw">return</span> true;
-}
-
-bool PostOrderTraverse_Stack(RB_NODE*&amp; T)               <span class="co">//后序遍历</span>
-{
-    PStack S = (PStack)malloc(<span class="kw">sizeof</span>(Stack));
-    RB_NODE* P = T;
-    RB_NODE* Pre = NULL;
-    InitStack(S);
-    <span class="kw">while</span> (P != NULL || !StackEmpty(S))
-    {
-        <span class="kw">if</span> (P != NULL) <span class="co">// 非空直接入栈</span>
-        {
-            Push(S, P);
-            P = P-&gt;left;
-        }
-        <span class="kw">else</span>
-        {
-            Pop(S, P); <span class="co">// 弹出栈顶元素赋值给P</span>
-            <span class="kw">if</span> (P-&gt;right == NULL || P-&gt;right == Pre) <span class="co">// P的右子树空或是右子树是刚访问过的</span>
-            { <span class="co">// 节点，则释放当前节点内存</span>
-                free(P);
-                Pre = P;
-                P = NULL;
-            }
-            <span class="kw">else</span> <span class="co">// 反之，当前节点重新入栈，接着判断右子树</span>
-            {
-                Push(S, P);
-                P = P-&gt;right;
-            }
-        }
-    }
-    free(S-&gt;base);
-    S-&gt;base = NULL;
-    free(S);
-    S = NULL;
-
-    <span class="kw">return</span> true;
-}
-
-<span class="co">//主函数稍微修改如下：</span>
-<span class="dt">int</span> main()
-{
-    RB_NODE* root = NULL;
-    RB_NODE* node = NULL;
-
-    <span class="co">// 初始化最小堆</span>
-    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= <span class="dv">10</span>; ++i)
-    {
-        heap[i].key = i;
-        heap[i].data = -i;
-    }
-    BUILD_MINHEAP(heap, heapSize);
-
-    FILE* fp = fopen(<span class="st">&quot;data.txt&quot;</span>, <span class="st">&quot;r&quot;</span>);
-    <span class="dt">int</span> num;
-    <span class="kw">while</span> (!feof(fp))
-    {
-        fscanf(fp, <span class="st">&quot;%d&quot;</span>, &amp;num);
-        root = RB_Insert(num, <span class="dv">1</span>, root);
-    }
-    fclose(fp);
-
-    <span class="co">//若上面的程序后面加上了上述的非递归遍历红黑树的代码，那么以下几行代码，就得修改如下：</span>
-    <span class="co">//InOrderTraverse(root); //此句去掉（递归遍历树）</span>
-    InOrderTraverse_Stack(root); <span class="co">// 非递归遍历树</span>
-
-    <span class="co">//RB_Destroy(root); //此句去掉（通过递归释放内存）</span>
-    PostOrderTraverse_Stack(root); <span class="co">// 非递归释放内存</span>
-
-    <span class="kw">for</span> (i = <span class="dv">1</span>; i &lt;= <span class="dv">10</span>; ++i)
-    {
-        printf(<span class="st">&quot;%d</span><span class="ch">\t</span><span class="st">%d</span><span class="ch">\n</span><span class="st">&quot;</span>, heap[i].key, heap[i].data);
-    }   
-    <span class="kw">return</span> <span class="dv">0</span>;
-}</code></pre>
-<p>updated：</p>
-<p>后来，我们狂想曲创作组中的3又用hash+堆实现了上题，很明显比采用上面的红黑树，整个实现简洁了不少，其完整源码如下：</p>
-<p><strong>完整源码</strong>：</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="co">//Author: zhouzhenren</span>
-<span class="co">//Description: 上千万或上亿数据（有重复），统计其中出现次数最多的钱N个数据</span>
-
-<span class="co">//Algorithm： 采用hash_map来进行统计次数+堆（找出Top K</span>
-<span class="co">//July，2011.05.12。纪念汶川地震三周年，默哀三</span>
-
-<span class="ot">#define PARENT(i) (i)/2</span>
-<span class="ot">#define LEFT(i)   2*(i)</span>
-<span class="ot">#define RIGHT(i)  2*(i)+1</span>
-
-<span class="ot">#define HASHTABLESIZE 2807303</span>
-<span class="ot">#define HEAPSIZE 10</span>
-<span class="ot">#define A 0.6180339887</span>
-<span class="ot">#define M 16384     </span><span class="co">//m=2^14</span>
-
-<span class="ot">#include &lt;stdio.h&gt;</span>
-<span class="ot">#include &lt;stdlib.h&gt;</span>
-
-<span class="kw">typedef</span> <span class="kw">struct</span> hash_node
-{
-    <span class="dt">int</span> data;
-    <span class="dt">int</span> count;
-    <span class="kw">struct</span> hash_node* next;
-}HASH_NODE;
-HASH_NODE* hash_table[HASHTABLESIZE];
-
-HASH_NODE* creat_node(<span class="dt">int</span>&amp; data)
-{
-    HASH_NODE* node = (HASH_NODE*)malloc(<span class="kw">sizeof</span>(HASH_NODE));
-
-    <span class="kw">if</span> (NULL == node)
-    {
-        printf(<span class="st">&quot;malloc node failed!</span><span class="ch">\n</span><span class="st">&quot;</span>);
-        exit(EXIT_FAILURE);
-    }
-
-    node-&gt;data = data;
-    node-&gt;count = <span class="dv">1</span>;
-    node-&gt;next = NULL;
-    <span class="kw">return</span> node;
-}
-
-<span class="co">/**</span>
-<span class="co">* hash函数采用乘法散列法</span>
-<span class="co">* h(k)=int(m*(A*k mod 1))</span>
-<span class="co">*/</span>
-<span class="dt">int</span> hash_function(<span class="dt">int</span>&amp; key)
-{
-    <span class="dt">double</span> result = A * key;
-    <span class="kw">return</span> (<span class="dt">int</span>)(M * (result - (<span class="dt">int</span>)result));
-}
-
-<span class="dt">void</span> insert(<span class="dt">int</span>&amp; data)
-{
-    <span class="dt">int</span> index = hash_function(data);
-    HASH_NODE* pnode = hash_table[index];
-    <span class="kw">while</span> (NULL != pnode)
-    {   <span class="co">// 以存在data，则count++</span>
-        <span class="kw">if</span> (pnode-&gt;data == data)
-        {
-            pnode-&gt;count += <span class="dv">1</span>;
-            <span class="kw">return</span>;
-        }
-        pnode = pnode-&gt;next;
-    }
-
-    <span class="co">// 建立一个新的节点，在表头插入</span>
-    pnode = creat_node(data);
-    pnode-&gt;next = hash_table[index];
-    hash_table[index] = pnode;
-}
-
-<span class="co">/**</span>
-<span class="co">* destroy_node释放创建节点产生的所有内存</span>
-<span class="co">*/</span>
-<span class="dt">void</span> destroy_node()
-{
-    HASH_NODE* p = NULL;
-    HASH_NODE* tmp = NULL;
-    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; HASHTABLESIZE; ++i)
-    {
-        p = hash_table[i];
-        <span class="kw">while</span> (NULL != p)
-        {
-            tmp = p;
-            p = p-&gt;next;
-            free(tmp);
-            tmp = NULL;
-        }
-    }
-}
-
-<span class="kw">typedef</span> <span class="kw">struct</span> min_heap
-{
-    <span class="dt">int</span> count;
-    <span class="dt">int</span> data;
-}MIN_HEAP;
-MIN_HEAP heap[HEAPSIZE + <span class="dv">1</span>];
-
-<span class="co">/**</span>
-<span class="co">* min_heapify函数对堆进行更新，使以i为跟的子树成最大堆</span>
-<span class="co">*/</span>
-<span class="dt">void</span> min_heapify(MIN_HEAP* H, <span class="dt">const</span> <span class="dt">int</span>&amp; size, <span class="dt">int</span> i)
-{
-    <span class="dt">int</span> l = LEFT(i);
-    <span class="dt">int</span> r = RIGHT(i);
-    <span class="dt">int</span> smallest = i;
-
-    <span class="kw">if</span> (l &lt;= size &amp;&amp; H[l].count &lt; H[i].count)
-        smallest = l;
-    <span class="kw">if</span> (r &lt;= size &amp;&amp; H[r].count &lt; H[smallest].count)
-        smallest = r;
-
-    <span class="kw">if</span> (smallest != i)
-    {
-        MIN_HEAP tmp = H[i];
-        H[i] = H[smallest];
-        H[smallest] = tmp;
-        min_heapify(H, size, smallest);
-    }
-}
-
-<span class="co">/**</span>
-<span class="co">* build_min_heap函数对数组A中的数据建立最小堆</span>
-<span class="co">*/</span>
-<span class="dt">void</span> build_min_heap(MIN_HEAP* H, <span class="dt">const</span> <span class="dt">int</span>&amp; size)
-{
-    <span class="kw">for</span> (<span class="dt">int</span> i = size/<span class="dv">2</span>; i &gt;= <span class="dv">1</span>; --i)
-        min_heapify(H, size, i);
-}
-
-<span class="co">/**</span>
-<span class="co">* traverse_hashtale函数遍历整个hashtable，更新最小堆</span>
-<span class="co">*/</span>
-<span class="dt">void</span> traverse_hashtale()
-{
-    HASH_NODE* p = NULL;
-    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; HASHTABLESIZE; ++i)
-    {
-        p = hash_table[i];
-        <span class="kw">while</span> (NULL != p)
-        {   <span class="co">// 如果当前节点的数量大于最小堆的最小值，则更新堆</span>
-            <span class="kw">if</span> (p-&gt;count &gt; heap[<span class="dv">1</span>].count)
-            {
-                heap[<span class="dv">1</span>].count = p-&gt;count;
-                heap[<span class="dv">1</span>].data = p-&gt;data;
-                min_heapify(heap, HEAPSIZE, <span class="dv">1</span>);
-            }
-            p = p-&gt;next;
-        }
-    }
-}
-
-<span class="dt">int</span> main()
-{
-    <span class="co">// 初始化最小堆</span>
-    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= <span class="dv">10</span>; ++i)
-    {
-        heap[i].count = -i;
-        heap[i].data = i;
-    }
-    build_min_heap(heap, HEAPSIZE);
-
-    FILE* fp = fopen(<span class="st">&quot;data.txt&quot;</span>, <span class="st">&quot;r&quot;</span>);
-    <span class="dt">int</span> num;
-    <span class="kw">while</span> (!feof(fp))
-    {
-        fscanf(fp, <span class="st">&quot;%d&quot;</span>, &amp;num);
-        insert(num);
-    }
-    fclose(fp);
-
-    traverse_hashtale();
-
-    <span class="kw">for</span> (i = <span class="dv">1</span>; i &lt;= <span class="dv">10</span>; ++i)
-    {
-        printf(<span class="st">&quot;%d</span><span class="ch">\t</span><span class="st">%d</span><span class="ch">\n</span><span class="st">&quot;</span>, heap[i].data, heap[i].count);
-    }
-
-    <span class="kw">return</span> <span class="dv">0</span>;
-}</code></pre>
-<p><strong>程序测试</strong>：对65047kb的数据量文件，进行测试统计（不过，因其数据量实在太大，半天没打开）：</p>
-<figure>
-<img src="../images/3/3.1/3.1.6.jpg" />
-</figure>
-<p><strong>运行结果</strong>：如下，</p>
-<figure>
-<img src="../images/3/3.1/3.1.7.jpg" />
-</figure>
-<h2 id="第四节海量数据处理问题一般总结">第四节、海量数据处理问题一般总结</h2>
-<p>关于海量数据处理的问题，一般有Bloom filter，Hashing，bit-map，堆，trie树等方法来处理。更详细的介绍，请查看此文：<a href="http://blog.csdn.net/v_JULY_v/article/details/6279498">十道海量数据处理面试题与十个方法大总结</a>。</p>
 <h1 id="第三章再续快速选择select算法的深入分析与实现">第三章再续：快速选择SELECT算法的深入分析与实现</h1>
 <h2 id="第一部分快速排序">第一部分、快速排序</h2>
 <p>关于快速排序算法，本人已经写了3篇文章（可参见其中的两篇： 1、十二、快速排序算法之所有版本的c/c++实现， 2、一之续、快速排序算法的深入分析），</p>
@@ -1776,8 +906,6 @@ bool median_select(<span class="dt">int</span> array[], <span class="dt">int</sp
 <p>本节，咱们将依据下图所示的步骤，采取中位数的中位数选取枢纽元的方法来实现此SELECT算法，</p>
 <p>不过，在实现之前，有个细节我还是必须要提醒你，即上文中2.2节开头处所述，“数组元素索引是从“0...i”开始计数的，所以第k小的元素应该是返回a[i]=a[k-1].即k-1=i。换句话就是说，第k小元素，实际上应该在数组中对应下标为k-1”这句话，我想，你应该明白了：返回数组中第k小的元素，实际上就是返回数组中的元素array[i]，即array[k-1]。ok，最后请看此快速选择SELECT算法的完整代码实现（据我所知，在此之前，从没有人采取中位数的中位数选取枢纽元的方法来实现过这个SELECT算法）：</p>
 <pre class="sourceCode c"><code class="sourceCode c"><span class="co">//copyright@ yansha &amp;&amp; July &amp;&amp; 飞羽</span>
-<span class="co">//July、updated，2011.05.19.清晨。</span>
-<span class="co">//版权所有，引用必须注明出处：http://blog.csdn.net/v_JULY_v。</span>
 <span class="ot">#include &lt;iostream&gt;</span>
 <span class="ot">#include &lt;time.h&gt;</span>
 using namespace std;
@@ -1930,21 +1058,16 @@ using namespace std;
     <span class="kw">return</span> <span class="dv">0</span>;
 }</code></pre>
 <h1 id="第三章三续求数组中给定下标区间内的第-k-小大元素">第三章三续：求数组中给定下标区间内的第 K 小(大)元素</h1>
-<p>作者：July、上善若水、编程艺术室。<br />出处：<a href="http://blog.csdn.net/v_JULY_v">结构之法 算法之道</a> 。</p>
-<h3 id="前奏">前奏</h3>
-<p>原狂想曲系列已更名为：<a href="http://blog.csdn.net/v_JULY_v/article/category/784066">程序员编程艺术系列</a>。原狂想曲创作组更名为<strong>编程艺术室</strong>。编程艺术室致力于以下三点工作：1、针对一个问题，不断寻找更高效的算法，并予以编程实现。2、解决实际中会碰到的应用问题，如第十章、如何给磁盘文件排序。3、经典算法的研究与实现。总体突出一点：编程，如何高效的编程解决实际问题。欢迎有志者加入。</p>
-<p>ok，扯远了。在上一章，我们介绍了<a href="http://blog.csdn.net/v_JULY_v/article/details/6451990">第十章、如何给10^7个数据量的磁盘文件排序</a>，下面介绍下本章的主题。我们知道，通常来讲，寻找给定区间内的第k小（大）的元素的问题是ACM中一类常用的数据结构的一个典型例题，即划分树/逆向归并树，通常用线段树的结构存储。</p>
-<p>当然这里暂且不表，尚不说划分树思想的神奇，就是线段树的结构，一般没有ACM基础的人也都觉得难以理解。所以，这里提供一个时间效率尚可，空间代价还要略小的巧妙解法—伴随数组。</p>
-<p>如果看过此前程序员编程艺术：<a href="http://blog.csdn.net/v_JULY_v/article/details/6441279">第六章、求解500万以内的亲和数</a>中，有关亲和数的那个题目的伴随数组的解法，也就是利用数组下标作为伴随数组，相信就会对这个方法有一定程度的理解。</p>
-<h3 id="第一节寻找给定区间内的第k小大的元素">第一节、寻找给定区间内的第k小（大）的元素</h3>
+<p>作者：July、上善若水、编程艺术室。</p>
+<h2 id="第一节寻找给定区间内的第k小大的元素">第一节、寻找给定区间内的第k小（大）的元素</h2>
 <p>给定数组，给定区间，求第K小的数如何处理？求最小的k个元素用最大堆，求最大的k的元素用最小堆。OK，常规方法请查阅：程序员编程艺术：第三章、寻找最小的k个数。</p>
-<blockquote>
 <p>1、排序，快速排序。我们知道，快速排序平均所费时间为<code>n*logn</code>，从小到大排序这n个数，然后再遍历序列中后k个元素输出，即可，总的时间复杂度为<code>O(n*logn+k)=O(n*logn)</code>。</p>
 <p>2、排序，选择排序。用选择或交换排序，即遍历n个数，先把最先遍历到得k个数存入大小为k的数组之中，对这k个数，利用选择或交换排序，找到k个数中的最大数kmax（kmax设为k个元素的数组中最大元素），用时<code>O(k)</code>（你应该知道，插入或选择排序查找操作需要<code>O(k)</code>的时间），后再继续遍历后<code>n-k</code>个数，x与kmax比较：如果<code>x&lt;kmax</code>，则x代替kmax，并再次重新找出k个元素的数组中最大元素kmax‘（多谢jiyeyuran 提醒修正）；如果<code>x&gt;kmax</code>，则不更新数组。这样，每次更新或不更新数组的所用的时间为<code>O(k)</code>或<code>O(0)</code>，整趟下来，总的时间复杂度平均下来为：<code>n*O(k)=O(n*k)</code>。</p>
 <p>3、维护k个元素的最大堆，原理与上述第2个方案一致，即用容量为k的最大堆存储最先遍历到的k个数，并假设它们即是最小的k个数，建堆费时<code>O(k)</code>，有<code>k1&lt;k2&lt;...kmax</code>（kmax设为最大堆中的最小元素）。继续遍历数列，每次遍历一个元素x，与堆顶元素比较，若<code>x&lt;kmax</code>，则更新堆（用时<code>logk</code>），否则不更新堆。这样下来，总费时<code>O(k+(n-k)*logk)=O(N*logK)</code>。此方法得益于在堆中，查找等各项操作时间复杂度均为<code>logk</code>（不然，就如上述思路2所述：直接用数组也可以找出最大的k个元素，用时<code>O(n*k)</code>）。</p>
-<p>4、按编程之美上解法二的所述，类似快速排序的划分方法，N个数存储在数组S中，再从数组中随机选取一个数X，把数组划分为Sa和Sb俩部分，<code>Sa&lt;=X&lt;=Sb</code>，如果要查找的k个元素小于Sa的元素个数，则返回Sa中较小的k个元素，否则返回Sa中所有的元素+Sb中较小的<code>k-|Sa|</code>个元素。不断递归下去，把问题分解成更小的问题，平均时间复杂度为<code>O(N)</code>（编程之美所述的<code>O(N*logk)</code>的复杂度有误，应为<code>O(N)</code>，特此订正。其严格证明，请参考第三章：程序员面试题狂想曲：<a href="http://blog.csdn.net/v_JULY_v/article/details/6370650">第三章、寻找最小的k个数</a>，updated 10次......）。</p>
-</blockquote>
-<p>下面我们给出伴随数组解法，首先，定义一个结构体，一个是数组元素，另一个是数组原来的标号，记录每个数在数组的原顺序。</p>
+<p>4、按编程之美上解法二的所述，类似快速排序的划分方法，N个数存储在数组S中，再从数组中随机选取一个数X，把数组划分为Sa和Sb俩部分，<code>Sa&lt;=X&lt;=Sb</code>，如果要查找的k个元素小于Sa的元素个数，则返回Sa中较小的k个元素，否则返回Sa中所有的元素+Sb中较小的<code>k-|Sa|</code>个元素。不断递归下去，把问题分解成更小的问题，平均时间复杂度为<code>O(N)</code>。</p>
+<p>下面我们给出伴随数组解法。我们知道，通常来讲，寻找给定区间内的第k小（大）的元素的问题是ACM中一类常用的数据结构的一个典型例题，即划分树/逆向归并树，通常用线段树的结构存储。</p>
+<p>当然这里暂且不表，尚不说划分树思想的神奇，就是线段树的结构，一般没有ACM基础的人也都觉得难以理解。所以，这里提供一个时间效率尚可，空间代价还要略小的巧妙解法—伴随数组。</p>
+<p>首先，定义一个结构体，一个是数组元素，另一个是数组原来的标号，记录每个数在数组的原顺序。</p>
 <p>我们以下面的测试数据举例（红体部分表示下标为2~5之间的数5,2,6,3，浅色部分表示数组中的数各自对应的数组下标，淡蓝色部分为给定的下标区间，注，这里，我们让数组下标从1开始）：</p>
 <figure>
 <img src="../images/3/3.3/3.3.1.png" />
@@ -2405,7 +1528,7 @@ node p[<span class="dv">100001</span>];
 }</code></pre>
 <p><strong>测试</strong>：以上所有的函数，都待进一步测试，有任何问题，欢迎任何人随时不吝指出。</p>
 <h1 id="第五章寻找和为定值的两个或多个数">第五章：寻找和为定值的两个或多个数</h1>
-<h2 id="前奏-1">前奏</h2>
+<h2 id="前奏">前奏</h2>
 <p>希望此编程艺术系列能给各位带来的是一种方法，一种创造力，一种举一反三的能力。本章依然同第四章一样，选取比较简单的面试题，恭祝各位旅途愉快。同样，有任何问题，欢迎不吝指正。谢谢。</p>
 <h2 id="第一节寻找和为定值的两个数">第一节、寻找和为定值的两个数</h2>
 <p>第14题（数组）：</p>
@@ -2773,8 +1896,7 @@ main()
 <p>除此之外，受本文读者xiafei1987128启示，有朋友在stacoverflow上也问过一个类似的题，:-)，见此：<a href="http://stackoverflow.com/questions/9047908/swap-the-elements-of-two-sequences-such-that-the-difference-of-the-element-sums">http://stackoverflow.com/questions/9047908/swap-the-elements-of-two-sequences-such-that-the-difference-of-the-element-sums</a>。感兴趣的可以看看。</p>
 <h1 id="第六章亲和数问题--求解500万以内的亲和数">第六章：亲和数问题--求解500万以内的亲和数</h1>
 <p>作者：上善若水、July、yansha</p>
-<p>出处：<a href="http://blog.csdn.net/v_JULY_v">http://blog.csdn.net/v_JULY_v</a></p>
-<h2 id="前奏-2">前奏</h2>
+<h2 id="前奏-1">前奏</h2>
 <p>本章陆续开始，除了继续保持原有的字符串、数组等面试题之外，会有意识的间断性节选一些有关数字趣味小而巧的面试题目，重在突出思路的“巧”，和“妙”。本章亲和数问题之关键字，“500万”，“线性复杂度”。</p>
 <h2 id="第一节亲和数问题">第一节、亲和数问题</h2>
 <p>题目描述：</p>
@@ -3155,21 +2277,19 @@ result = max(result, sum[i])</code></pre>
     }
     <span class="kw">return</span> MaxSum;
 }</code></pre>
-<p>本章完。</p>
-<p>原文链接：http://blog.csdn.net/v_JULY_v/article/details/6444021</p>
 <p>原第8章：http://blog.csdn.net/v_JULY_v/article/details/6446364 ，将废掉重写另外的议题。</p>
 <p>原第9章：http://blog.csdn.net/v_JULY_v/article/details/6447013， 将废掉，重新写新的议题。</p>
 <h1 id="第十章如何给107个数据量的磁盘文件排序">第十章：如何给10^7个数据量的磁盘文件排序</h1>
-<p>作者:July，yansha，5，编程艺术室。 出处：http://blog.csdn.net/v_JULY_v 。</p>
-<h4 id="前奏-3">前奏</h4>
+<p>作者:July，yansha，5，编程艺术室。</p>
+<h2 id="前奏-2">前奏</h2>
 <p>经过几天的痛苦沉思，最终决定，把原程序员面试题狂想曲系列正式更名为程序员编程艺术系列，同时，狂想曲创作组更名为编程艺术室。之所以要改名，我们考虑到三点：1、为面试服务不能成为我们最终或最主要的目的，2、我更愿把解答一道道面试题，ACM题等各类程序设计题目的过程，当做一种艺术来看待，3、艺术的提炼本身是一个非常非常艰难的过程，但我们乐意接受这个挑战。</p>
 <p>ok，如果任何人对本编程艺术系列有任何意见，或发现了本编程艺术系列任何问题，漏洞，bug，欢迎随时提出，我们将虚心接受并感激不尽，以为他人创造更好的价值，更好的服务。</p>
-<h4 id="第一节如何给磁盘文件排序">第一节、如何给磁盘文件排序</h4>
+<h2 id="第一节如何给磁盘文件排序">第一节、如何给磁盘文件排序</h2>
 <p>问题描述： 输入：给定一个文件，里面最多含有n个不重复的正整数（也就是说可能含有少于n个不重复正整数），且其中每个数都小于等于n，n=10^7。 输出：得到按从小到大升序排列的包含所有输入的整数的列表。 条件：最多有大约1MB的内存空间可用，但磁盘空间足够。且要求运行时间在5分钟以下，10秒为最佳结果。</p>
 <p>分析：下面咱们来一步一步的解决这个问题，</p>
-<h6 id="归并排序">1. 归并排序</h6>
+<h3 id="归并排序">1. 归并排序</h3>
 <p>你可能会想到把磁盘文件进行归并排序，但题目要求你只有1MB的内存空间可用，所以，归并排序这个方法不行。</p>
-<h6 id="位图方案">2. 位图方案</h6>
+<h3 id="位图方案">2. 位图方案</h3>
 <p>熟悉位图的朋友可能会想到用位图来表示这个文件集合。例如正如编程珠玑一书上所述，用一个20位长的字符串来表示一个所有元素都小于20的简单的非负整数集合，边框用如下字符串来表示集合{1,2,3,5,8,13}：</p>
 <pre><code>0 1 1 1 0 1 0 0 1 0 0 0 0 1 0 0 0 0 0 0</code></pre>
 <p>上述集合中各数对应的位置则置1，没有对应的数的位置则置0。</p>
@@ -3319,12 +2439,12 @@ for i={0...n}
 <p>updated &amp;&amp; correct：</p>
 <p><span class="citation" data-cites="yansha">@yansha</span>： 上述的位图方案，共需要扫描输入数据两次，具体执行步骤如下：</p>
 <p>第一次，只处理1—4999999之间的数据，这些数都是小于5000000的，对这些数进行位图排序，只需要约5000000/8=625000Byte，也就是0.625M，排序后输出。 第二次，扫描输入文件时，只处理4999999-10000000的数据项，也只需要0.625M（可以使用第一次处理申请的内存）。 因此，总共也只需要0.625M 位图的的方法有必要强调一下，就是位图的适用范围为针对不重复的数据进行排序，若数据有重复，位图方案就不适用了。</p>
-<h6 id="多路归并">3、多路归并</h6>
+<h3 id="多路归并">3、多路归并</h3>
 <p>诚然，在面对本题时，还可以通过计算分析出可以用如2的位图法解决，但实际上，很多的时候，我们都面临着这样一个问题，文件太大，无法一次性放入内存中计算处理，那这个时候咋办呢？分而治之，大而化小，也就是把整个大文件分为若干大小的几块，然后分别对每一块进行排序，最后完成整个过程的排序。k趟算法可以在kn的时间开销内和n/k的空间开销内完成对最多n个小于n的无重复正整数的排序。</p>
 <p>比如可分为2块（k=2，1趟反正占用的内存只有1.25/2M），1<sub>4999999，和5000000</sub>9999999。先遍历一趟，首先排序处理1<sub>4999999之间的整数（用5000000/8=625000个字的存储空间来排序0</sub>4999999之间的整数），然后再第二趟，对5000001~1000000之间的整数进行排序处理。在稍后的第二节、第三节、第四节，我们将详细阐述并实现这种多路归并排序磁盘文件的方案。</p>
-<h6 id="读者思考">4、读者思考</h6>
+<h3 id="读者思考">4、读者思考</h3>
 <p>经过上述思路3的方案之后，现在有两个局部有序的数组了，那么要得到一个完整的排序的数组，接下来改怎么做呢?或者说，如果是K路归并，得到k个排序的子数组，把他们合并成一个完整的排序数组，如何优化？或者，我再问你一个问题，K路归并用败者树 和 胜者树 效率有什么差别?这些问题，请读者思考。</p>
-<h4 id="第二节多路归并算法的c实现">第二节、多路归并算法的c++实现</h4>
+<h2 id="第二节多路归并算法的c实现">第二节、多路归并算法的c++实现</h2>
 <p>本节咱们暂抛开咱们的问题，阐述下有关多路归并算法的c++实现问题。在稍后的第三节，咱们再来具体针对咱们的磁盘文件排序问题阐述与实现。</p>
 <p>在了解多路归并算法之前，你还得了解归并排序的过程，因为下面的多路归并算法就是基于这个流程的。其实归并排序就是2路归并，而多路归并算法就是把2换成了k，即多（k）路归并。下面，举个例子来说明下此归并排序算法，如下图所示，我们对数组8 3 2 6 7 1 5 4进行归并排序：</p>
 <figure>
@@ -3550,7 +2670,7 @@ for i={0...n}
 <figure>
 <img src="../images/10/10.4.jpg" />
 </figure>
-<h4 id="第三节磁盘文件排序的编程实现">第三节、磁盘文件排序的编程实现</h4>
+<h2 id="第三节磁盘文件排序的编程实现">第三节、磁盘文件排序的编程实现</h2>
 <p>ok，接下来，我们来编程实现上述磁盘文件排序的问题，本程序由两部分构成：</p>
 <p><strong>1、内存排序</strong></p>
 <p>由于要求的可用内存为1MB，那么每次可以在内存中对250K的数据进行排序，然后将有序的数写入硬盘。 那么10M的数据需要循环40次，最终产生40个有序的文件。</p>
@@ -3763,7 +2883,7 @@ string new_file_name(<span class="dt">int</span> n)
 </figure>
 <p>沙海拾贝：</p>
 <p>我们不在乎是否能把一个软件产品或一本书最终完成，我们更在乎的是，在完成这个产品或创作这本书的过程中，读者学到了什么，能学到什么?所以，不要一味的马上就想得到一道题目的正确答案，请跟着我们一起逐步走向山巅。</p>
-<h4 id="第四节多路归并算法的c实现">第四节、多路归并算法的c实现</h4>
+<h2 id="第四节多路归并算法的c实现">第四节、多路归并算法的c实现</h2>
 <p>本多路归并算法的c实现原理与上述c++实现一致，不同的地方体现在一些细节处理上，且对临时文件的排序，不再用系统提供的快排，即上面的qsort库函数，是采用的三数中值的快速排序（个数小于3用插入排序）的。而我们知道，纯正的归并排序其实就是比较排序，在归并过程中总是不断的比较，为了从两个数中挑小的归并到最终的序列中。ok，此程序的详情请看：</p>
 <pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">//copyright@ 555  </span>
 <span class="co">//July、2011.05.29。  </span>
@@ -4061,13 +3181,8 @@ string new_file_name(<span class="dt">int</span> n)
 <p>3、[外排序适用范围]大数据的排序，去重基本原理及要点：外排序的归并方法，置换选择败者树原理，最优归并树扩展。问题实例：1).有一个1G大小的一个文件，里面每一行是一个词，词的大小不超过16个字节，内存限制大小是1M。返回频数最高的100个词。这个数据具有很明显的特点，词的大小为16个字节，但是内存只有1m做hash有些不够，所以可以用来排序。内存可以当输入缓冲区使用。</p>
 <p>4、海量数据处理</p>
 <p>有关海量数据处理的方法或面试题可参考此文，十道海量数据处理面试题与十个方法大总结。日后，会逐步实现这十个处理海量数据的方法。同时，送给各位一句话，解决问题的关键在于熟悉一个算法，而不是某一个问题。熟悉了一个算法，便通了一片题目。</p>
-<p>本章完。</p>
-<p>updated：有一读者朋友针对本文写了一篇文章为，海量数据多路归并排序的c++实现（归并时利用了败者树），地址为：http://www.cnblogs.com/harryshayne/archive/2011/07/02/2096196.html。谢谢，欢迎参考。</p>
-<p>原文链接：<a href="http://blog.csdn.net/v_JULY_v/article/details/6451990">http://blog.csdn.net/v_JULY_v/article/details/6451990</a></p>
+<p>有一读者朋友针对本文写了一篇文章为，海量数据多路归并排序的c++实现（归并时利用了败者树），地址为：http://www.cnblogs.com/harryshayne/archive/2011/07/02/2096196.html 。谢谢，欢迎参考。</p>
 <h1 id="第十一章最长公共子序列lcs问题">第十一章：最长公共子序列（LCS）问题</h1>
-<h2 id="前言">0、前言</h2>
-<p>程序员编程艺术系列重新开始创作了（前十章，请参考<a href="http://blog.csdn.net/v_JULY_v/article/details/6460494">程序员编程艺术第一~十章集锦与总结</a>）。回顾之前的前十章，有些代码是值得商榷的，因当时的代码只顾阐述算法的原理或思想，所以，很多的与代码规范相关的问题都未能做到完美。日后，会着力修缮之。</p>
-<p>搜遍网上，讲解这个LCS问题的文章不计其数，但大多给读者一种并不友好的感觉，稍感晦涩，且代码也不够清晰。本文力图避免此些情况。力保通俗，阐述详尽。同时，经典算法研究系列的第三章（<a href="http://blog.csdn.net/v_JULY_v/article/details/6110269">三、dynamic programming</a>）也论述了此LCS问题。有任何问题，欢迎不吝赐教。</p>
 <h2 id="第一节问题描述">第一节、问题描述</h2>
 <p>什么是最长公共子序列呢?好比一个数列 S，如果分别是两个或多个已知数列的子序列，且是所有符合此条件序列中最长的，则S 称为已知序列的最长公共子序列。</p>
 <p>举个例子，如：有两条随机序列，如 1 3 4 5 5 ，and 2 4 5 5 7 6，则它们的最长公共子序列便是：4 5 5。</p>
@@ -4089,18 +3204,22 @@ string new_file_name(<span class="dt">int</span> n)
 <p>也就是说，解决这个LCS问题，你要求三个方面的东西：1、LCS（Xm-1，Yn-1）+1；2、LCS（Xm-1，Y），LCS（X，Yn-1）；3、max{LCS（Xm-1，Y），LCS（X，Yn-1）}。</p>
 <p>行文至此，其实对这个LCS的动态规划解法已叙述殆尽，不过，为了成书的某种必要性，下面，我试着再多加详细阐述这个问题。</p>
 <h2 id="第三节动态规划算法解lcs问题">第三节、动态规划算法解LCS问题</h2>
-<h3 id="最长公共子序列的结构">3.1、最长公共子序列的结构</h3>
+<h3 id="最长公共子序列的结构">最长公共子序列的结构</h3>
 <p>最长公共子序列的结构有如下表示：</p>
-<pre><code>设序列X=&lt; x1, x2, …, xm &gt;和Y=&lt; y1, y2, …, yn &gt;的一个最长公共子序列Z=&lt; z1, z2, …, zk &gt;，则：</code></pre>
-<p>1.若xm=yn，则zk=xm=yn且Zk-1是Xm-1和Yn-1的最长公共子序列；<br /> 2.若xm≠yn且zk≠xm ，则Z是Xm-1和Y的最长公共子序列；<br /> 3.若xm≠yn且zk≠yn ，则Z是X和Yn-1的最长公共子序列。<br /> 其中Xm-1 = &lt; x1, x2, …, xm-1 &gt;，Yn-1 = &lt; y1, y2, …, yn-1 &gt;，Zk-1 = &lt; z1, z2, …, zk-1 &gt;。</p>
-<h3 id="子问题的递归结构">3.2、子问题的递归结构</h3>
+<p>设序列X=&lt; x1, x2, …, xm &gt;和Y=&lt; y1, y2, …, yn &gt;的一个最长公共子序列Z=&lt; z1, z2, …, zk &gt;，则：</p>
+<ol type="1">
+<li>若xm=yn，则zk=xm=yn且Zk-1是Xm-1和Yn-1的最长公共子序列；<br /></li>
+<li>若xm≠yn且zk≠xm ，则Z是Xm-1和Y的最长公共子序列；<br /></li>
+<li>若xm≠yn且zk≠yn ，则Z是X和Yn-1的最长公共子序列。<br />其中Xm-1 = &lt; x1, x2, …, xm-1 &gt;，Yn-1 = &lt; y1, y2, …, yn-1 &gt;，Zk-1 = &lt; z1, z2, …, zk-1 &gt;。</li>
+</ol>
+<h3 id="子问题的递归结构">子问题的递归结构</h3>
 <p>由最长公共子序列问题的最优子结构性质可知，要找出X=&lt; x1, x2, …, xm &gt;和Y=&lt; y1, y2, …, yn &gt;的最长公共子序列，可按以下方式递归地进行：当xm=yn时，找出Xm-1和Yn-1的最长公共子序列，然后在其尾部加上xm(=yn)即可得X和Y的一个最长公共子序列。当xm≠yn时，必须解两个子问题，即找出Xm-1和Y的一个最长公共子序列及X和Yn-1的一个最长公共子序列。这两个公共子序列中较长者即为X和Y的一个最长公共子序列。</p>
 <p>由此递归结构容易看到最长公共子序列问题具有子问题重叠性质。例如，在计算X和Y的最长公共子序列时，可能要计算出X和Yn-1及Xm-1和Y的最长公共子序列。而这两个子问题都包含一个公共子问题，即计算Xm-1和Yn-1的最长公共子序列。</p>
 <p>与矩阵连乘积最优计算次序问题类似，我们来建立子问题的最优值的递归关系。用c[i,j]记录序列Xi和Yj的最长公共子序列的长度。其中Xi=&lt; x1, x2, …, xi &gt;，Yj=&lt; y1, y2, …, yj &gt;。当i=0或j=0时，空序列是Xi和Yj的最长公共子序列，故c[i,j]=0。其他情况下，由定理可建立递归关系如下：</p>
 <figure>
 <img src="../images/11/11.1.jpg" />
 </figure>
-<h3 id="计算最优值">3.3、计算最优值</h3>
+<h3 id="计算最优值">计算最优值</h3>
 <p>直接利用上节节末的递归式，我们将很容易就能写出一个计算c[i,j]的递归算法，但其计算时间是随输入长度指数增长的。由于在所考虑的子问题空间中，总共只有θ(m*n)个不同的子问题，因此，用动态规划算法自底向上地计算最优值能提高算法的效率。</p>
 <p>计算最长公共子序列长度的动态规划算法LCS_LENGTH(X,Y)以序列X=&lt; x1, x2, …, xm &gt;和Y=&lt; y1, y2, …, yn &gt;作为输入。输出两个数组c[0..m ,0..n]和b[1..m ,1..n]。其中c[i,j]存储Xi与Yj的最长公共子序列的长度，b[i,j]记录指示c[i,j]的值是由哪一个子问题的解达到的，这在构造最长公共子序列时要用到。最后，X和Y的最长公共子序列的长度记录于c[m,n]中。</p>
 <pre><code>Procedure LCS_LENGTH(X,Y);  
@@ -4135,7 +3254,7 @@ end;   </code></pre>
 <li><p>当b[i,j]中遇到&quot;←&quot;时，表示Xi与Yj的最长公共子序列和Xi与Yj-1的最长公共子序列相同。</p></li>
 </ul>
 <p>这种方法是按照反序来找LCS的每一个元素的。由于每个数组单元的计算耗费Ο(1)时间，算法LCS_LENGTH耗时Ο(mn)。</p>
-<h3 id="构造最长公共子序列">3.4、构造最长公共子序列</h3>
+<h3 id="构造最长公共子序列">构造最长公共子序列</h3>
 <p>下面的算法LCS(b,X,i,j)实现根据b的内容打印出Xi与Yj的最长公共子序列。通过算法的调用LCS(b,X,length[X],length[Y])，便可打印出序列X和Y的最长公共子序列。</p>
 <pre><code>Procedure LCS(b,X,i,j);  
 begin  
@@ -4153,8 +3272,10 @@ end;   </code></pre>
 <figure>
 <img src="../images/11/11.2.jpg" />
 </figure>
-<p><em>我来说明下此图（参考算法导论）</em>。在序列X={A，B，C，B，D，A，B}和 Y={B，D，C，A，B，A}上，由LCS_LENGTH计算出的表c和b。第i行和第j列中的方块包含了c[i，j]的值以及指向b[i，j]的箭头。在c[7,6]的项4，表的右下角为X和Y的一个LCS &lt; B，C，B，A &gt;的长度。对于i，j&gt;0，项c[i，j]仅依赖于是否有xi=yi，及项c[i-1，j]和c[i，j-1]的值，这几个项都在c[i，j]之前计算。为了重构一个LCS的元素，从右下角开始跟踪b[i，j]的箭头即可，这条路径标示为阴影，这条路径上的每一个“↖”对应于一个使xi=yi为一个LCS的成员的项（高亮标示）。<br /> 所以根据上述图所示的结果，程序将最终输出：“B C B A”。</p>
-<h3 id="算法的改进">3.5、算法的改进</h3>
+<ul>
+<li>我来说明下此图（参考算法导论）*。在序列X={A，B，C，B，D，A，B}和 Y={B，D，C，A，B，A}上，由LCS_LENGTH计算出的表c和b。第i行和第j列中的方块包含了c[i，j]的值以及指向b[i，j]的箭头。在c[7,6]的项4，表的右下角为X和Y的一个LCS &lt; B，C，B，A &gt;的长度。对于i，j&gt;0，项c[i，j]仅依赖于是否有xi=yi，及项c[i-1，j]和c[i，j-1]的值，这几个项都在c[i，j]之前计算。为了重构一个LCS的元素，从右下角开始跟踪b[i，j]的箭头即可，这条路径标示为阴影，这条路径上的每一个“↖”对应于一个使xi=yi为一个LCS的成员的项（高亮标示）。<br /> 所以根据上述图所示的结果，程序将最终输出：“B C B A”。</li>
+</ul>
+<h3 id="算法的改进">算法的改进</h3>
 <p>对于一个具体问题，按照一般的算法设计策略设计出的算法，往往在算法的时间和空间需求上还可以改进。这种改进，通常是利用具体问题的一些特殊性。</p>
 <p>例如，在算法LCS_LENGTH和LCS中，可进一步将数组b省去。事实上，数组元素c[i,j]的值仅由c[i-1,j-1]，c[i-1,j]和c[i,j-1]三个值之一确定，而数组元素b[i,j]也只是用来指示c[i,j]究竟由哪个值确定。因此，在算法LCS中，我们可以不借助于数组b而借助于数组c本身临时判断c[i,j]的值是由c[i-1,j-1]，c[i-1,j]和c[i,j-1]中哪一个数值元素所确定，代价是Ο(1)时间。既然b对于算法LCS不是必要的，那么算法LCS_LENGTH便不必保存它。这一来，可节省θ(mn)的空间，而LCS_LENGTH和LCS所需要的时间分别仍然是Ο(mn)和Ο(m+n)。不过，由于数组c仍需要Ο(mn)的空间，因此这里所作的改进，只是在空间复杂性的常数因子上的改进。</p>
 <p>另外，如果只需要计算最长公共子序列的长度，则算法的空间需求还可大大减少。事实上，在计算c[i,j]时，只用到数组c的第i行和第i-1行。因此，只要用2行的数组空间就可以计算出最长公共子序列的长度。更进一步的分析还可将空间需求减至min(m, n)。</p>
@@ -4242,7 +3363,7 @@ end;   </code></pre>
 <p>下面咱们来了解一种不同于动态规划法的一种新的求解最长公共子序列问题的方法,该算法主要是把求解公共字符串问题转化为求解矩阵L(p,m)的问题，在利用定理求解矩阵的元素过程中</p>
 <p>（1）while(i &lt; k),L(k,i)=null,<br /> （2）while(L(k,i)=k),L(k,i+1)=L(k,i+2)=…L(k,m)=k；</p>
 <p>求出每列元素，一直到发现第p+1 行都为null 时退出循环，得出矩阵L(k,m)后，B[L(1,m-p+1)]B[L(2,m-p+2)]…B[L(p,m)]即为A 和B 的LCS，其中p 为LCS 的长度。</p>
-<h3 id="主要定义及定理">5.1 主要定义及定理</h3>
+<h3 id="主要定义及定理">主要定义及定理</h3>
 <ul>
 <li><p>定义 1 子序列(Subsequence)：给定字符串A=A[1]A[2]…A[m]，(A[i]是A 的第i 个字母，A[i]∈字符集Σ，l&lt;= i&lt;m = A ， A 表示字符串A 的长度)，字符串B 是A 的子序列是指B=A[ 1 i ]A[ 2 i ]…A[ k i ],其中1 i &lt; 2 i &lt;…&lt; k i 且k&lt;=m.</p></li>
 <li><p>定义2 公共子序列(Common Subsequence)：给定字符串A、B、C，C 称为A 和B 的公共子序列是指C 既是A 的子序列，又是B 的子序列。</p></li>
@@ -4255,14 +3376,14 @@ end;   </code></pre>
 </figure>
 <p>矩阵中元素L(k，i)=Li(k)，这里(1 &lt; i &lt;= m，1 &lt; k &lt;= m)，null 表示L(k,i)不存在。当i &lt; k 时，显然L(k，i)不存在。</p>
 <p>设p=Maxk(L(k ， m) ≠ null) ， 可以证明L 矩阵中L(p,m) 所在的对角线,L(1,m-p+1),L(2,m-p+2)…L(p-1,m-1),L(p,m) 所对应的子序列B[L(1,m-p+1)]B[L(2,m-p+2)]…B[L(p,m)]即为A 和B 的LCS，p 为该LCS 的长度。这样，LCS 问题的求解就转化为对m m L × 矩阵的求解。</p>
-<h3 id="算法思想">5.2 算法思想</h3>
+<h3 id="算法思想">算法思想</h3>
 <p>根据定理,第一步求出第一行元素,L(1,1),L(1,2),…L(1,m),第二步求第二行,一直到发现第p+1 行都为null 为止。在计算过程中遇到i &lt; k 时,L(k,i)=null, 及L(k,i)=k时,L(k,i+1)=L(k,i+2)=…L(k,m)=k。这样,计算每行的时间复杂度为O(n),则整个时间复杂度为O(pn)。在求L 矩阵的过程中不用存储整个矩阵,只需存储当前行和上一行即可。空间复杂度为O(m+n)。</p>
 <p>下面给出一个例子来说明:给定字符串A 和B，A=acdabbc，B=cddbacaba，(m= A =7，n= B =9)。按照定理给出的递推公式，求出A 和B 的L 矩阵如图2，其中的$表示NULL。</p>
 <figure>
 <img src="../images/11/11.4.jpg" />
 </figure>
-<p>则A 和B 的LCS 为B[1]B[2]B[4]B[6]=cdbc,LCS 的长度为4。</p>
-<h3 id="算法伪代码">5.3 算法伪代码</h3>
+<p>则A 和B 的LCS 为B[1]B[2]B[4]B[6]=cdbc, LCS 的长度为4。</p>
+<h3 id="算法伪代码">算法伪代码</h3>
 <p>算法 L(A,B,L)<br />输入 长度分别为m,n 的字符串A,B<br />输出 A,B 的最长公共子序列LCS</p>
 <pre><code>L(A,B,L){//字符串A，B，所求矩阵L  
   for(k=1;k&lt;=m;k++){ //m 为A 的长度  
@@ -4285,12 +3406,11 @@ end;   </code></pre>
   }  
   p=k-1;  
 }  </code></pre>
-<h3 id="结语">5.4 结语</h3>
+<h2 id="结语">结语</h2>
 <p>本节主要描述区别于动态规划法的一种新的求解最长公共子序列问题的方法，在不影响精确度的前提下，提高序列匹配的速度，根据定理i 1 L + (k)=Min(j, i L (k))得出矩阵，在求解矩阵的过程中对最耗时的L(p,m)进行条件约束优化。我们在Intel(R) Core(TM)2 Quad 双核处理器、1G 内存，软件环境：windows xp 下试验结果证明，本文算法与其他经典的比对算法相比,不但能够取得准确的结果,而且速度有了较大的提高（本节参考了刘佳梅女士的论文）。</p>
-<p>若有任何问题，恳请不吝指正。谢谢各位。完。</p>
 <h1 id="第十二第十五章中钱概率ip访问次数回文等问题初稿">第十二~第十五章：中钱概率，IP访问次数，回文等问题（初稿）</h1>
 <p>作者：上善若水.qinyu，BigPotato，luuillu，well，July。编程艺术室出品。</p>
-<h2 id="前言-1">前言</h2>
+<h2 id="前言">前言</h2>
 <p>本文的全部稿件是由我们编程艺术室的部分成员：上善若水.qinyu，BigPotato，luuillu，well，July共同完成，共分4个部分，即4道题：</p>
 <ul>
 <li>第一部分、从一道题，漫谈数据结构、以及压缩、位图算法，由上善若水.qinyu完成，</li>
@@ -4299,7 +3419,6 @@ end;   </code></pre>
 <li>第四部分、回文判断，由well完成。全文由July统稿完成。</li>
 </ul>
 <p>由于本人在这周时间上实在是过于仓促，来不及过多整理，所以我尽量保持上述我的几位伙伴的原话原文，基本没做多少改动。因此，标明为初稿，以后会更加详尽细致的进行修补完善。</p>
-<p>前十一章请见这：<a href="http://blog.csdn.net/v_JULY_v/archive/2011/06/02/6460494.aspx">程序员编程艺术第一~十章集锦与总结</a>。吾以咱们编程艺术室的朋友为傲，以能识尽天下各路朋友为傲，以诸君为傲。</p>
 <h2 id="第一部分从一道题漫谈数据结构以及压缩位图算法">第一部分、从一道题，漫谈数据结构、以及压缩、位图算法</h2>
 <p>海量数据处理往往会很有趣，有趣在什么地方呢？</p>
 <ul>
@@ -4571,34 +3690,14 @@ end;   </code></pre>
 <p>代码稍微难懂一点的地方就是内层的两个 for 循环，它们分别对于以 i 为中心的，长度为奇数和偶数的两种情况，整个代码遍历中心位置 i 并以之扩展，找出最长的回文。</p>
 <p>当然，还有更先进但也更复杂的方法，比如用 s 和逆置 s' 的组合 s$s' 来建立后缀树的方法也能找到最长回文，但构建的过程比较复杂，所以在实践中用的比较少，感兴趣的朋友可以参考相应资料。</p>
 <p>回文的内容还有不少，但主要的部分通过上面的内容相信大家已经掌握，希望大家能抓住实质，在实践中灵活运用，回文的内容我就暂时介绍到这里了，谢谢大家--well。</p>
-<p><em>附注</em>：</p>
-<ul>
-<li><p>如果读者对本文的内容或形式，语言和表达不甚满意。完全理解。我之前也跟编程艺术室内的朋友们开玩笑的说：我暂不做任何修改，题目会标明为初稿。这样的话，你们才会相信或者知晓，你们的才情只有通过我的语言和表达才能最大限度的发挥出来，被最广泛的人轻而易举的所认同和接受（不过，以上4位兄弟的思维灵活度都在本人之上）。呵呵，开个玩笑。</p></li>
-<li><p>本文日后会抽取时间再做修补和完善。若有任何问题，欢迎随时不吝指正。谢谢。</p></li>
-</ul>
-<p>完。</p>
 <h1 id="第十六第二十章全排列跳台阶奇偶排序第一个只出现一次等问题">第十六~第二十章：全排列，跳台阶，奇偶排序，第一个只出现一次等问题</h1>
-<p>作者：July、2011.10.16。</p>
-<p>出处：http://blog.csdn.net/v_JULY_v。</p>
-<h2 id="引言">引言</h2>
-<p>最近这几天闲职在家，一忙着投简历，二为准备面试而搜集整理各种面试题。故常常关注个人所建的Algorithms1-14群内朋友关于笔试，面试，宣讲会，offer，薪资的讨论以及在群内发布的各种笔/面试题，常感言道：咱们这群人之前已经在学校受够了学校的那种应试教育，如今出来找工作又得东奔西走去参加各种笔试/面试，着实亦不轻松。幻想，如果在企业与求职者之间有个中间面试服务平台就更好了。</p>
-<p>ok，闲话少扯。在上一篇文章中，已经说过，“个人正在针对那100题一题一题的写文章，多种思路，不断优化，即成程序员编程艺术系列。”现本编程艺术系列继续开始创作，你而后自会和我有同样的感慨：各种面试题千变万化，层出不穷，但基本类型，解决问题的思路基本一致。</p>
-<p>本文为程序员编程艺术第十六章~第二十章，包含以下5个问题：</p>
-<ol type="1">
-<li>全排列；</li>
-<li>跳台阶；</li>
-<li>奇偶排序；</li>
-<li>第一个只出现一次的字符；</li>
-<li>一致性哈希算法。</li>
-</ol>
-<p>同时，本文会在解答去年微软面试100题的部分题目时，尽量结合今年最近各大IT公司最新的面试题来讲解，两相对比，彼此对照，相信你会更加赞同我上面的话。且本文也不奢望读者能从中学到什么高深技术之类的东西，只求读者看此文看着舒服便可，通顺流畅以致一口气读完而无任何压力。ok，有任何问题，欢迎不吝指正。谢谢。</p>
 <h2 id="第十六章全排列问题">第十六章、全排列问题</h2>
 <p>53.字符串的排列。</p>
 <p>题目：输入一个字符串，打印出该字符串中字符的所有排列。</p>
 <p>例如输入字符串abc，则输出由字符a、b、c 所能排列出来的所有字符串</p>
 <p>abc、acb、bac、bca、cab 和cba。</p>
 <p>分析：此题最初整理于去年的微软面试100题中第53题，第二次整理于微软、Google等公司非常好的面试题及解答[第61-70题] 第67题。无独有偶，这个问题今年又出现于今年的2011.10.09百度笔试题中。ok，接下来，咱们先好好分析这个问题。</p>
-<p><strong>一. 递归实现</strong></p>
+<p><strong>解法一、递归实现</strong></p>
 <p>从集合中依次选出每一个元素，作为排列的第一个元素，然后对剩余的元素进行全排列，如此递归处理，从而得到所有元素的全排列。以对字符串abc进行全排列为例，我们可以这么做：以abc为例</p>
 <p>固定a，求后面bc的排列：abc，acb，求好后，a和b交换，得到bac</p>
 <p>固定b，求后面ac的排列：bac，bca，求好后，c放到第一位置，得到cba</p>
@@ -4650,7 +3749,7 @@ end;   </code></pre>
         }  
     }  
 } </code></pre>
-<p><strong>二. 字典序排列</strong></p>
+<p><strong>解法二、字典序排列</strong></p>
 <p>把升序的排列（当然，也可以实现为降序）作为当前排列开始，然后依次计算当前排列的下一个字典序排列。</p>
 <p>对当前排列从后向前扫描，找到一对为升序的相邻元素，记为i和j（i &lt; j）。如果不存在这样一对为升序的相邻元素，则所有排列均已找到，算法结束；否则，重新对当前排列从后向前扫描，找到第一个大于i的元素k，交换i和k，然后对从j开始到结束的子序列反转，则此时得到的新排列就为下一个字典序排列。这种方式实现得到的所有排列是按字典序有序的，这也是C++ STL算法next_permutation的思想。算法实现如下：</p>
 <pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">template</span> &lt;<span class="kw">typename</span> T&gt;  
@@ -4954,7 +4053,7 @@ f(n)=     2                                      n = 2
 <li>行文仓促，若有任何问题或漏洞，欢迎不吝指正或赐教。谢谢。转载，请注明出处。完。</li>
 </ol>
 <h1 id="第二十一章出现次数超过一半的数字">第二十一章：出现次数超过一半的数字</h1>
-<h2 id="前言-2">前言</h2>
+<h2 id="前言-1">前言</h2>
 <p>这个问题来自编程之美上，Tango是微软亚洲研究院的一个试验项目，如图1所示。研究院的员工和实习生们都很喜欢在Tango上面交流灌水。传说，Tango有一大“水王”，他不但喜欢发帖，还会回复其他ID发的每个帖子。坊间风闻该“水王”发帖数目超过了帖子总数的一半。如果你有一个当前论坛上所有帖子（包括回帖）的列表，其中帖子作者的ID也在表中，你能快速找出这个传说中的Tango水王吗？</p>
 <figure>
 <img src="../images/21~22/21.1.gif" />
@@ -5815,22 +4914,14 @@ key_list test_data[nTableSize];
 <h1 id="第二十五章二分查找实现">第二十五章：二分查找实现</h1>
 <p>作者：July</p>
 <p>出处：结构之法算法之道</p>
-<h4 id="引言-1">引言</h4>
+<h2 id="引言">引言</h2>
 <p>Jon Bentley：90%以上的程序员无法正确无误的写出二分查找代码。也许很多人都早已听说过这句话，但我还是想引用《编程珠玑》上的如下几段文字：</p>
-<blockquote>
 <p>二分查找可以解决（预排序数组的查找）问题：只要数组中包含T（即要查找的值），那么通过不断缩小包含T的范围，最终就可以找到它。一开始，范围覆盖整个数组。将数组的中间项与T进行比较，可以排除一半元素，范围缩小一半。就这样反复比较，反复缩小范围，最终就会在数组中找到T，或者确定原以为T所在的范围实际为空。对于包含N个元素的表，整个查找过程大约要经过log(2)N次比较。</p>
-</blockquote>
-<blockquote>
 <p>多数程序员都觉得只要理解了上面的描述，写出代码就不难了；但事实并非如此。如果你不认同这一点，最好的办法就是放下书本，自己动手写一写。试试吧。</p>
-</blockquote>
-<blockquote>
 <p>我在贝尔实验室和IBM的时候都出过这道考题。那些专业的程序员有几个小时的时间，可以用他们选择的语言把上面的描述写出来；写出高级伪代码也可以。考试结束后，差不多所有程序员都认为自己写出了正确的程序。于是，我们花了半个钟头来看他们编写的代码经过测试用例验证的结果。几次课，一百多人的结果相差无几：90%的程序员写的程序中有bug（我并不认为没有bug的代码就正确）。</p>
-</blockquote>
-<blockquote>
 <p>我很惊讶：在足够的时间内，只有大约10%的专业程序员可以把这个小程序写对。但写不对这个小程序的还不止这些人：高德纳在《计算机程序设计的艺术 第3卷 排序和查找》第6.2.1节的“历史与参考文献”部分指出，虽然早在1946年就有人将二分查找的方法公诸于世，但直到1962年才有人写出没有bug的二分查找程序。 ”——乔恩·本特利，《编程珠玑（第1版）》第35-36页。</p>
-</blockquote>
 <p><strong>你能正确无误的写出二分查找代码么？不妨一试。</strong></p>
-<h4 id="二分查找代码">二分查找代码</h4>
+<h2 id="二分查找代码">二分查找代码</h2>
 <p>二分查找的原理想必不用多解释了，不过有一点必须提醒读者的是，二分查找是针对的排好序的数组。OK，纸上读来终觉浅，觉知此事要躬行。我先来写一份，下面是我写的一份二分查找的实现（之前去某一家公司面试也曾被叫当场实现二分查找，不过结果可能跟你一样，当时就未能完整无误写出），有任何问题或错误，恳请不吝指正：</p>
 <pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">//二分查找V0.1实现版</span>
 <span class="co">//copyright@2011 July</span>
@@ -5871,10 +4962,10 @@ key_list test_data[nTableSize];
 <figure>
 <img src="../images/25.1.gif" alt="img" /><figcaption>img</figcaption>
 </figure>
-<h4 id="测试">测试</h4>
+<h2 id="测试">测试</h2>
 <p>也许你之前已经把二分查找实现过很多次了，但现在不妨再次测试一下。关闭所有网页，窗口，打开记事本，或者编辑器，或者直接在本文评论下，不参考上面我写的或其他任何人的程序，给自己十分钟到N个小时不等的时间，立即编写一个二分查找程序。</p>
 <p>当然，能正确写出来不代表任何什么，不能正确写出来亦不代表什么，仅仅针对Jon Bentley的言论做一个简单的测试而已。</p>
-<h4 id="总结">总结</h4>
+<h2 id="总结">总结</h2>
 <p>本文发表后，马上就有很多朋友自己尝试了。根据从朋友们在本文评论下留下的代码，发现出错率最高的在以下这么几个地方：</p>
 <p>注释里已经说得很明白了，可还是会有不少朋友犯此类的错误：</p>
 <pre><code>首先要把握下面几个要点：
@@ -5885,8 +4976,6 @@ middle的计算不能写在while循环外，否则无法得到更新。</code></
 <p>这个也是错误的:</p>
 <pre><code>right = n   =&gt; while(left &lt;  right) =&gt; right = middle;</code></pre>
 <p>如果搜索数组中不存在的数字的时候,可能会导致死循环. 因为最后left = middle, right = middle + 1,这样每次更新left和middle总是不变的.</p>
-<p>各位继续努力。</p>
-<p>原文链接：<a href="http://blog.csdn.net/v_july_v/article/details/7093204">http://blog.csdn.net/v_july_v/article/details/7093204</a></p>
 <h1 id="第二十六章基于给定的文档生成倒排索引的编码与实践">第二十六章：基于给定的文档生成倒排索引的编码与实践</h1>
 <p>作者：July、yansha。</p>
 <p>出处：结构之法算法之道</p>
@@ -5904,7 +4993,7 @@ middle的计算不能写在while循环外，否则无法得到更新。</code></
 <li>除去排序针对不同日期的记录直接插入</li>
 <li>后记</li>
 </ul>
-<h4 id="引言-2">引言</h4>
+<h4 id="引言-1">引言</h4>
 <p>本周实现倒排索引。实现过程中，寻找资料，结果发现找份资料诸多不易：1、网上搜倒排索引实现，结果千篇一律，例子都是那几个同样的单词；2、到谷歌学术上想找点稍微有价值水平的资料，结果下篇论文还收费或者要求注册之类；3、大部分技术书籍只有理论，没有实践。于是，朋友戏言：网上一般有价值的东西不多。希望，本blog的出现能改变此现状。</p>
 <p>在第二十四章、倒排索引关键词不重复Hash编码中，我们针对一个给定的倒排索引文件，提取出其中的关键词，然后针对这些关键词进行Hash不重复编码。本章，咱们再倒退一步，即给定一个正排文档（暂略过文本解析，分词等步骤，日后会慢慢考虑这些且一并予以实现），要求生成对应的倒排索引文件。同时，本章还是基于Hash索引之上（运用暴雪的Hash函数可以比较完美的解决大数据量下的冲突问题），日后自会实现B+树索引。</p>
 <p>与此同时，本编程艺术系列逐步从为面试服务而转到实战性的编程当中了，教初学者如何编程，如何运用高效的算法解决实际应用中的编程问题，将逐步成为本编程艺术系列的主旨之一。</p>
@@ -6681,7 +5770,7 @@ qsort(words, WORD_MAX_NUM, WORD_MAX_LEN, strcoll);</code></pre>
 <p>原文链接：<a href="http://blog.csdn.net/v_july_v/article/details/7109500">http://blog.csdn.net/v_july_v/article/details/7109500</a></p>
 <h1 id="第二十七章不改变正负数相对顺序重新排列数组">第二十七章：不改变正负数相对顺序重新排列数组</h1>
 <h2 id="时间on空间o1-无解">时间O(N)，空间O(1) (无解?)</h2>
-<h2 id="前言-3">前言</h2>
+<h2 id="前言-2">前言</h2>
 <p>在这篇文章：九月腾讯，创新工场，淘宝等公司最新面试十三题的第5题(一个未排序整数数组，有正负数，重新排列使负数排在正数前面，并且要求不改变原来的正负数之间相对顺序)，自从去年九月收录了此题至今，一直未曾看到令人满意的答案，为何呢?</p>
 <p>因为一般达不到题目所要求的：时间复杂度O(N),空间O(1)，且保证原来正负数之间的相对位置不变。本编程艺术系列第27章就来阐述这个问题，若有任何漏洞，欢迎随时不吝指正。谢谢。</p>
 <h2 id="重新排列使负数排在正数前面">重新排列使负数排在正数前面</h2>
@@ -6810,9 +5899,8 @@ pos的计算扫描2遍num数组即可，有了pos数组当然排序不成问题�
 </ol>
 <p>但本题统统与这些无关，因为追根究底，本题实质性上只是一个排列，重新组合问题，与排序无关。</p>
 <p>更多还可参考此论文：《STABLE MINIMUM SPACE PARTITIONING IN LINEAR TIME》。待后续验证。</p>
-<p>原文链接：<a href="http://blog.csdn.net/v_july_v/article/details/7329314">http://blog.csdn.net/v_july_v/article/details/7329314</a></p>
 <h1 id="第二十八章最大连续乘积子串">第二十八章：最大连续乘积子串</h1>
-<h2 id="前言-4">前言</h2>
+<h2 id="前言-3">前言</h2>
 <p>这一章和下一章的问题皆是各大IT公司最喜欢出的笔试面试题之一，比如说前者是小米2013年校招笔试原题，而后者则更是反复出现，如去年9月26日百度一二面试题，10月9日腾讯面试题第1小题，10月13日百度2013校招北京站笔试题第二 大道题第3小题，及去年10月15日2013年Google校招笔试最后一道大题皆是考察下一章的字符串编辑距离问题。</p>
 <p>OK，欢迎朋友们在本文下参与讨论，如果在线编译自己的代码（编程语言任选C/C++/Java/C#），可以上英雄会提交你的代码，有任何问题，欢迎随时不吝批评或指正，感谢。</p>
 <h2 id="题目描述-5">题目描述：</h2>
@@ -7062,7 +6150,7 @@ public class Test
 </ol>
 <p>July、二零一三年三月二十一日。</p>
 <h1 id="第二十九章字符串编辑距离">第二十九章：字符串编辑距离</h1>
-<h2 id="前言-5">前言</h2>
+<h2 id="前言-4">前言</h2>
 <p>上一章和这一章的问题皆是各大IT公司最喜欢出的笔试面试题之一，比如说前者是小米2013年校招笔试原题，而后者则更是反复出现，如去年9月26日百度一二面试题，10月9日腾讯面试题第1小题，10月13日百度2013校招北京站笔试题第二 大道题第3小题，及去年10月15日2013年Google校招笔试最后一道大题皆是考察的这个字符串编辑距离问题。</p>
 <p><strong>题目描述:</strong>给定一个源串和目标串，能够对源串进行如下操作：<br />1.在给定位置上插入一个字符<br />2.替换任意字符<br />3.删除任意字符</p>
 <p>写一个程序，返回最小操作数，使得对源串进行这些操作后等于目标串，源串和目标串的长度都小于2000。</p>
@@ -9727,26 +8815,13 @@ bool isValid(<span class="dt">int</span> step, <span class="dt">int</span> x1, <
 <p>以上第35章可能是整个系列迄今为止我最满意的一篇，不仅仅是因为此章思路清晰，过渡自然，代码风格良好，更因为有了@曹鹏博士 的加入，编程艺术如虎添翼，质量更上一层！</p>
 <p>编程艺术通过解决一个个实际的编程面试题，让广大初学者一步步学会分析问题解决问题优化问题的能力，且每个问题的讲解足够通俗，希望后续我(们)做得越来越好！July、二零一三年八月二十四日凌晨零点三十七分。</p>
 <h1 id="第三十六三十七章搜索智能提示suggestion附近点搜索">第三十六~三十七章：搜索智能提示suggestion，附近点搜索</h1>
-<ul>
-<li>题记</li>
-<li>第三十六章、搜索关键词智能提示suggestion</li>
-<li>解法一、Trie树 + TOP K</li>
-<li>扩展阅读</li>
-<li>第三十七章、附近地点搜索</li>
-<li>解法一、R树二维搜索</li>
-<li>解法二、GeoHash算法索引地理位置信息</li>
-<li>参考链接及推荐阅读</li>
-</ul>
-<p>作者：July。致谢：caopengcs、胡果果。<br />时间：二零一三年九月七日。</p>
+<p>作者：July。致谢：caopengcs、胡果果。</p>
 <h2 id="题记-1">题记</h2>
-<p>写博的近三年，整理了太多太多的笔试面试题，如微软面试100题系列，和眼下这个程序员编程艺术系列，真心觉得题目年年变，但解决问题的方法永远都是那几种，用心准备后，自会发现一切有迹可循。</p>
-<p>故为更好的帮助人们找到工作，特准备在北京举办一系列面试&amp;算法讲座。时间定为周末，每次一个上午或下午，受众对象为要找工作或换工作或对算法感兴趣的朋友，费用前期暂愿交就交，交多少全由自己决定。主讲人：我和目前zoj排名第一的caopengcs博士。9月15日为第1次讲座：<a href="http://blog.csdn.net/v_july_v/article/details/7237351#t22">http://blog.csdn.net/v_july_v/article/details/7237351#t22</a>。</p>
 <p>OK，切入正题。上面说整理过很多笔试面试题，但好的笔试面试题真心难求，包括在编程艺术系列每一章的选题，越到后面越难挑，而本文写两个跟实际挂钩的问题，它们来自<a href="http://blog.csdn.net/v_july_v/article/details/7974418">此文</a>的第3.6题，和第87题，即</p>
 <ul>
 <li>第三十六章、搜索引擎中中的关键词智能提示suggestion；</li>
 <li>第三十七章、附近地点的搜索；</li>
 </ul>
-<p>本文的两个选题都是比较开放的，没有固定标准的答案。读者若有何意见，或是发现了任何问题，欢迎随时于本文评论下留言或指正，感谢。</p>
 <h2 id="第三十六章搜索关键词智能提示suggestion">第三十六章、搜索关键词智能提示suggestion</h2>
 <p><strong>题目详情：</strong>百度搜索框中，输入“北京”，搜索框下面会以北京为前缀，展示“北京爱情故事”、“北京公交”、“北京医院”等等搜索词，输入“<a href="http://www.baidu.com/s?wd=结构之&amp;rsv_bp=0&amp;ch=&amp;tn=baidu&amp;bar=&amp;rsv_spt=3&amp;ie=utf-8&amp;rsv_sug3=8&amp;rsv_sug=0&amp;rsv_sug4=1075&amp;rsv_sug1=3&amp;inputT=2559">结构之</a>”，会提示“结构之法”，“结构之法 算法之道”等搜索词。 请问，如何设计此系统，使得空间和时间复杂度尽量低。</p>
 <figure>
@@ -9761,57 +8836,27 @@ bool isValid(<span class="dt">int</span> step, <span class="dt">int</span> x1, <
 <h3 id="解法一trie树-top-k">解法一、Trie树 + TOP K</h3>
 <h4 id="步骤一trie树存储前缀后缀">步骤一、trie树存储前缀后缀</h4>
 <p>若看过博客内这篇<a href="http://blog.csdn.net/v_july_v/article/details/6897097">介绍Trie树和后缀树的文章</a>的话，应该就能对trie树有个大致的了解，为示本文完整性，引用下原文内容，如下：</p>
-<blockquote>
 <p><strong>1.1、什么是Trie树</strong></p>
-</blockquote>
-<blockquote>
 <p>Trie树，即字典树，又称单词查找树或键树，是一种树形结构，是一种哈希树的变种。典型应用是用于统计和排序大量的字符串（但不仅限于字符串），所以经常被搜索引擎系统用于文本词频统计。它的优点是：最大限度地减少无谓的字符串比较，查询效率比哈希表高。</p>
-</blockquote>
-<blockquote>
 <p>Trie的核心思想是空间换时间。利用字符串的公共前缀来降低查询时间的开销以达到提高效率的目的。</p>
-</blockquote>
-<blockquote>
 <p>它有3个基本性质：</p>
-</blockquote>
-<blockquote>
 <ol type="1">
 <li>根节点不包含字符，除根节点外每一个节点都只包含一个字符。</li>
 <li>从根节点到某一节点，路径上经过的字符连接起来，为该节点对应的字符串。</li>
 <li>每个节点的所有子节点包含的字符都不相同。</li>
 </ol>
-</blockquote>
-<blockquote>
 <p><strong>1.2、树的构建</strong></p>
-</blockquote>
-<blockquote>
 <p>举个在网上流传颇广的例子，如下：</p>
-</blockquote>
-<blockquote>
 <p>题目：给你100000个长度不超过10的单词。对于每一个单词，我们要判断他出没出现过，如果出现了，求第一次出现在第几个位置。</p>
-</blockquote>
-<blockquote>
 <p>分析：这题当然可以用hash来解决，但是本文重点介绍的是trie树，因为在某些方面它的用途更大。比如说对于某一个单词，我们要询问它的前缀是否出现过。这样hash就不好搞了，而用trie还是很简单。</p>
-</blockquote>
-<blockquote>
 <p>现在回到例子中，如果我们用最傻的方法，对于每一个单词，我们都要去查找它前面的单词中是否有它。那么这个算法的复杂度就是O(n^2)。显然对于100000的范围难以接受。现在我们换个思路想。假设我要查询的单词是abcd，那么在他前面的单词中，以b，c，d，f之类开头的我显然不必考虑。而只要找以a开头的中是否存在abcd就可以了。同样的，在以a开头中的单词中，我们只要考虑以b作为第二个字母的，一次次缩小范围和提高针对性，这样一个树的模型就渐渐清晰了。</p>
-</blockquote>
-<blockquote>
 <p>好比假设有b，abc，abd，bcd，abcd，efg，hii 这6个单词，我们构建的树就是如下图这样的：</p>
-</blockquote>
-<blockquote>
 <figure>
 <img src="../images/36~37/36.2.jpg" />
 </figure>
-</blockquote>
-<blockquote>
 <p>当时第一次看到这幅图的时候，便立马感到此树之不凡构造了。单单从上幅图便可窥知一二，好比大海搜人，立马就能确定东南西北中的到底哪个方位，如此迅速缩小查找的范围和提高查找的针对性，不失为一创举。</p>
-</blockquote>
-<blockquote>
 <p>ok，如上图所示，对于每一个节点，从根遍历到他的过程就是一个单词，如果这个节点被标记为红色，就表示这个单词存在，否则不存在。</p>
-</blockquote>
-<blockquote>
 <p>那么，对于一个单词，我只要顺着他从根走到对应的节点，再看这个节点是否被标记为红色就可以知道它是否出现过了。把这个节点标记为红色，就相当于插入了这个单词。</p>
-</blockquote>
 <p>借用上面的图，当用户输入前缀a的时候，搜索框可能会展示以a为前缀的“abcd”，“abd”等关键词，再当用户输入前缀b的时候，搜索框下面可能会提示以b为前缀的“bcd”等关键词，如此，实现搜索引擎智能提示suggestion的第一个步骤便清晰了，即用trie树存储大量字符串，当前缀固定时，存储相对来说比较热的后缀。那又如何统计热词呢？请看下文步骤二、TOP K算法统计热词。</p>
 <h4 id="步骤二top-k算法统计热词">步骤二、TOP K算法统计热词</h4>
 <p>当每个搜索引擎输入一个前缀时，下面它只会展示0~10个候选词，但若是碰到那种候选词很多的时候，如何取舍，哪些展示在前面，哪些展示在后面？这就是一个搜索热度的问题。</p>
@@ -9824,33 +8869,17 @@ bool isValid(<span class="dt">int</span> step, <span class="dt">int</span> x1, <
 <p>但为何今年这个时候再次搜索“北京”的时候，它展示出来的词不同了呢？</p>
 <p>原因在于随着时间变化，人们对《北京爱情故事》这部电视剧的关注度逐渐下降，与此同时，又出现了新的热词，或新的电影，故现在虽然同样是输入“北京”，后面提示的词也相应跟着起了变化。那解决这个问题的办法是什么呢？如开头所说：定期分析某段时间内的人们搜索的关键词，统计出搜索次数比较多的热词，继而当用户输入某个前缀时，优先展示热词。</p>
 <p>故说白了，这个问题的第二个步骤便是统计热词，我们把统计热词的方法称为TOP K算法，此算法的应用场景便是<a href="http://blog.csdn.net/v_july_v/article/details/7382693">此文</a>中的第2个问题，再次原文引用：</p>
-<blockquote>
 <p><strong>寻找热门查询，300万个查询字符串中统计最热门的10个查询</strong></p>
-</blockquote>
-<blockquote>
 <p>原题：搜索引擎会通过日志文件把用户每次检索使用的所有检索串都记录下来，每个查询串的长度为1-255字节。假设目前有一千万个记录（这些查询串的重复度比较高，虽然总数是1千万，但如果除去重复后，不超过3百万个。一个查询串的重复度越高，说明查询它的用户越多，也就是越热门），请你统计最热门的10个查询串，要求使用的内存不能超过1G。</p>
-</blockquote>
-<blockquote>
 <p>解答：由上面第1题，我们知道，数据大则划为小的，如一亿个Ip求Top 10，可先%1000将ip分到1000个小文件中去，并保证一种ip只出现在一个文件中，再对每个小文件中的ip进行hashmap计数统计并按数量排序，最后归并或者最小堆依次处理每个小文件的top10以得到最后的结果。</p>
-</blockquote>
-<blockquote>
 <p>但如果数据规模本身就比较小，能一次性装入内存呢？比如这第2题，虽然有一千万个Query，但是由于重复度比较高，因此事实上只有300万的Query，每个Query255Byte，因此我们可以考虑把他们都放进内存中去（300万个字符串假设没有重复，都是最大长度，那么最多占用内存3M*1K/4=0.75G。所以可以将所有字符串都存放在内存中进行处理），而现在只是需要一个合适的数据结构，在这里，HashTable绝对是我们优先的选择。</p>
-</blockquote>
-<blockquote>
 <p>所以我们放弃分而治之/hash映射的步骤，直接上hash统计，然后排序。So，针对此类典型的TOP K问题，采取的对策往往是：hashmap + 堆。如下所示：</p>
-</blockquote>
-<blockquote>
 <ol type="1">
 <li><strong>hashmap统计：</strong>先对这批海量数据预处理。具体方法是：维护一个Key为Query字串，Value为该Query出现次数的HashTable，即hash_map(Query，Value)，每次读取一个Query，如果该字串不在Table中，那么加入该字串，并且将Value值设为1；如果该字串在Table中，那么将该字串的计数加一即可。最终我们在O(N)的时间复杂度内用Hash表完成了统计；</li>
 <li><strong>堆排序：</strong>第二步、借助堆这个数据结构，找出Top K，时间复杂度为N‘logK。即借助堆结构，我们可以在log量级的时间内查找和调整/移动。因此，维护一个K(该题目中是10)大小的小根堆，然后遍历300万的Query，分别和根元素进行对比。所以，我们最终的时间复杂度是：O（N） + N' * O（logK），（N为1000万，N’为300万）。</li>
 </ol>
-</blockquote>
-<blockquote>
 <p>别忘了这篇文章中所述的堆排序思路：‘维护k个元素的最小堆，即用容量为k的最小堆存储最先遍历到的k个数，并假设它们即是最大的k个数，建堆费时O（k），并调整堆(费时O（logk）)后，有k1&gt;k2&gt;...kmin（kmin设为小顶堆中最小元素）。继续遍历数列，每次遍历一个元素x，与堆顶元素比较，若x&gt;kmin，则更新堆（x入堆，用时logk），否则不更新堆。这样下来，总费时O（k*logk+（n-k）*logk）=O（n*logk）。此方法得益于在堆中，查找等各项操作时间复杂度均为logk。’--第三章续、Top K算法问题的实现。</p>
-</blockquote>
-<blockquote>
 <p>当然，你也可以采用trie树，关键字域存该查询串出现的次数，没有出现为0。最后用10个元素的最小推来对出现频率进行排序。</p>
-</blockquote>
 <p>相信，如此，也就不难理解开头所提出的方法了：Trie树+ TOP K「hashmap+堆，hashmap+堆 统计出如10个近似的热词，也就是说，只存与关键词近似的比如10个热词」。</p>
 <p>而且你以后就可以告诉你身边的伙伴们，为何输入“结构之”，会提示出来一堆以“结构之”为前缀的词了：</p>
 <figure>
@@ -9873,20 +8902,15 @@ bool isValid(<span class="dt">int</span> step, <span class="dt">int</span> x1, <
 <p><strong>R树的数据结构</strong></p>
 <p>R树是B树在高维空间的扩展，是一棵平衡树。每个R树的叶子结点包含了多个指向不同数据的指针，这些数据可以是存放在硬盘中的，也可以是存在内存中。根据R树的这种数据结构，当我们需要进行一个高维空间查询时，我们只需要遍历少数几个叶子结点所包含的指针，查看这些指针指向的数据是否满足要求即可。这种方式使我们不必遍历所有数据即可获得答案，效率显著提高。下图1是R树的一个简单实例：</p>
 </blockquote>
-<blockquote>
 <figure>
 <img src="../images/36~37/37.2.jpg" />
 </figure>
-</blockquote>
 <blockquote>
 <p>我们在上面说过，R树运用了空间分割的理念，这种理念是如何实现的呢？R树采用了一种称为MBR(Minimal Bounding Rectangle)的方法，在此我把它译作“最小边界矩形”。从叶子结点开始用矩形（rectangle）将空间框起来，结点越往上，框住的空间就越大，以此对空间进行分割。有点不懂？没关系，继续往下看。在这里我还想提一下，R树中的R应该代表的是Rectangle（此处参考wikipedia上关于<a href="http://en.wikipedia.org/wiki/R-tree">R树</a>的介绍），而不是大多数国内教材中所说的Region（很多书把R树称为区域树，这是有误的）。我们就拿二维空间来举例。下图是Guttman论文中的一幅图：</p>
 </blockquote>
-<blockquote>
 <figure>
 <img src="../images/36~37/37.3.jpg" />
 </figure>
-</blockquote>
-<blockquote>
 <p>我来详细解释一下这张图。</p>
 <ol type="1">
 <li>先来看图（b），首先我们假设所有数据都是二维空间下的点，图中仅仅标志了R8区域中的数据，也就是那个shape of data object。别把那一块不规则图形看成一个数据，我们把它看作是多个数据围成的一个区域。为了实现R树结构，我们用一个最小边界矩形恰好框住这个不规则区域，这样，我们就构造出了一个区域：R8。R8的特点很明显，就是正正好好框住所有在此区域中的数据。</li>
@@ -9894,37 +8918,21 @@ bool isValid(<span class="dt">int</span> step, <span class="dt">int</span> x1, <
 <li>下一步操作就是进行高一层次的处理。我们发现R8，R9，R10三个矩形距离最为靠近，因此就可以用一个更大的矩形R3恰好框住这3个矩形。</li>
 <li>同样道理，R15，R16被R6恰好框住，R11，R12被R4恰好框住，等等。所有最基本的最小边界矩形被框入更大的矩形中之后，再次迭代，用更大的框去框住这些矩形。</li>
 </ol>
-</blockquote>
-<blockquote>
 <p>我想大家都应该理解这个数据结构的特征了。用地图的例子来解释，就是所有的数据都是餐厅所对应的地点，先把相邻的餐厅划分到同一块区域，划分好所有餐厅之后，再把邻近的区域划分到更大的区域，划分完毕后再次进行更高层次的划分，直到划分到只剩下两个最大的区域为止。要查找的时候就方便了。</p>
-</blockquote>
-<blockquote>
 <p>下面就可以把这些大大小小的矩形存入我们的R树中去了。根结点存放的是两个最大的矩形，这两个最大的矩形框住了所有的剩余的矩形，当然也就框住了所有的数据。下一层的结点存放了次大的矩形，这些矩形缩小了范围。每个叶子结点都是存放的最小的矩形，这些矩形中可能包含有n个数据。</p>
-</blockquote>
-<blockquote>
 <p><strong>地图查找的实例</strong></p>
 <p>讲完了基本的数据结构，我们来讲个实例，如何查询特定的数据。又以餐厅为例，假设我要查询广州市天河区天河城附近一公里的所有餐厅地址怎么办？</p>
-</blockquote>
-<blockquote>
 <ol type="1">
 <li>打开地图（也就是整个R树），先选择国内还是国外（也就是根结点）；</li>
 <li>然后选择华南地区（对应第一层结点），选择广州市（对应第二层结点），</li>
 <li>再选择天河区（对应第三层结点）；</li>
 <li>最后选择天河城所在的那个区域（对应叶子结点，存放有最小矩形）；</li>
 </ol>
-</blockquote>
-<blockquote>
 <p>遍历所有在此区域内的结点，看是否满足我们的要求即可。怎么样，其实R树的查找规则跟查地图很像吧？对应下图：</p>
-</blockquote>
-<blockquote>
 <figure>
 <img src="../images/36~37/37.4.jpg" />
 </figure>
-</blockquote>
-<blockquote>
 <p><strong>一棵R树满足如下的性质：</strong></p>
-</blockquote>
-<blockquote>
 <ol type="1">
 <li>除非它是根结点之外，所有叶子结点包含有m至M个记录索引（条目）。作为根结点的叶子结点所具有的记录个数可以少于m。通常，m=M/2。</li>
 <li>对于所有在叶子中存储的记录（条目），I是最小的可以在空间中完全覆盖这些记录所代表的点的矩形（注意：此处所说的“矩形”是可以扩展到高维空间的）。</li>
@@ -9932,110 +8940,57 @@ bool isValid(<span class="dt">int</span> step, <span class="dt">int</span> x1, <
 <li>对于在非叶子结点上的每一个条目，i是最小的可以在空间上完全覆盖这些条目所代表的店的矩形（同性质2）。</li>
 <li>所有叶子结点都位于同一层，因此R树为平衡树。</li>
 </ol>
-</blockquote>
-<blockquote>
 <p><strong>叶子结点的结构</strong></p>
-</blockquote>
-<blockquote>
 <p>先来探究一下叶子结点的结构。叶子结点所保存的数据形式为：(I, tuple-identifier)。</p>
-</blockquote>
-<blockquote>
 <p>其中，tuple-identifier表示的是一个存放于数据库中的tuple，也就是一条记录，它是n维的。I是一个n维空间的矩形，并可以恰好框住这个叶子结点中所有记录代表的n维空间中的点。I=(I0,I1,…,In-1)。其结构如下图所示：</p>
-</blockquote>
-<blockquote>
 <figure>
 <img src="../images/36~37/37.5.jpg" />
 </figure>
-</blockquote>
-<blockquote>
 <p>下图描述的就是在二维空间中的叶子结点所要存储的信息。</p>
-</blockquote>
-<blockquote>
 <figure>
 <img src="../images/36~37/37.6.jpg" />
 </figure>
-</blockquote>
-<blockquote>
 <p>在这张图中，I所代表的就是图中的矩形，其范围是a&lt;=I0&lt;=b，c&lt;=I1&lt;=d。有两个tuple-identifier，在图中即表示为那两个点。这种形式完全可以推广到高维空间。大家简单想想三维空间中的样子就可以了。这样，叶子结点的结构就介绍完了。</p>
-</blockquote>
-<blockquote>
 <p><strong>非叶子结点</strong></p>
-</blockquote>
-<blockquote>
 <p>非叶子结点的结构其实与叶子结点非常类似。想象一下B树就知道了，B树的叶子结点存放的是真实存在的数据，而非叶子结点存放的是这些数据的“边界”，或者说也算是一种索引（有疑问的读者可以回顾一下上述第一节中讲解B树的部分）。</p>
-</blockquote>
-<blockquote>
 <p>同样道理，R树的非叶子结点存放的数据结构为：(I, child-pointer)。</p>
-</blockquote>
-<blockquote>
 <p>其中，child-pointer是指向孩子结点的指针，I是覆盖所有孩子结点对应矩形的矩形。这边有点拗口，但我想不是很难懂？给张图：</p>
-</blockquote>
-<blockquote>
 <figure>
 <img src="../images/36~37/37.7.jpg" />
 </figure>
-</blockquote>
-<blockquote>
 <p>D,E,F,G为孩子结点所对应的矩形。A为能够覆盖这些矩形的更大的矩形。这个A就是这个非叶子结点所对应的矩形。这时候你应该悟到了吧？无论是叶子结点还是非叶子结点，它们都对应着一个矩形。树形结构上层的结点所对应的矩形能够完全覆盖它的孩子结点所对应的矩形。根结点也唯一对应一个矩形，而这个矩形是可以覆盖所有我们拥有的数据信息在空间中代表的点的。</p>
-</blockquote>
-<blockquote>
 <p>我个人感觉这张图画的不那么精确，应该是矩形A要恰好覆盖D,E,F,G，而不应该再留出这么多没用的空间了。但为尊重原图的绘制者，特不作修改。</p>
-</blockquote>
 <p>但R树有些什么问题呢？如@宋枭_CD所说：“单纯用R树来作索引，搜索附近的地点，可能会遍历树的很多个分支。而且当全国的地图或者全省的地图时候，树的叶节点数目很多，树的深度也会是一个问题。一般会把地理位置上附近的节点（二维地图中点线面）预处理成page(大小为4K的倍数)，在这些page上建立R树的索引。”</p>
 <h3 id="解法二geohash算法索引地理位置信息">解法二、GeoHash算法索引地理位置信息</h3>
 <p>我在微博上跟一些朋友讨论这个附近点搜索的问题时，除了谈到R树，有几个朋友都指出GeoHash算法可以解决，故才了解了下GeoHash算法，<a href="http://blog.nosqlfan.com/html/1811.html">此文</a> 清晰阐述了MongoDB借助GeoHash算法实现地理位置索引的原理，特引用其内容加以说明，如下：</p>
-<blockquote>
 <p>支持地理位置索引是MongoDB的一大亮点，这也是全球最流行的LBS服务foursquare 选择MongoDB的原因之一。我们知道，通常的数据库索引结构是B+ Tree，如何将地理位置转化为可建立B+Tree的形式。首先假设我们将需要索引的整个地图分成16×16的方格，如下图（左下角为坐标0,0 右上角为坐标16,16）：</p>
-</blockquote>
-<blockquote>
 <figure>
 <img src="../images/36~37/37.8.png" />
 </figure>
-</blockquote>
-<blockquote>
 <p>单纯的［x，y］的数据是无法建立索引的，所以MongoDB在建立索引的时候，会根据相应字段的坐标计算一个可以用来做索引的hash值，这个值叫做geohash，下面我们以地图上坐标为［4，6］的点（图中红叉位置）为例。我们第一步将整个地图分成等大小的四块，如下图：</p>
-</blockquote>
-<blockquote>
 <figure>
 <img src="../images/36~37/37.9.png" />
 </figure>
-</blockquote>
-<blockquote>
 <p>划分成四块后我们可以定义这四块的值，如下（左下为00，左上为01，右下为10，右上为11）：</p>
-</blockquote>
-<blockquote>
 <figure>
 <img src="../images/36~37/37.10.jpg" />
 </figure>
-</blockquote>
-<blockquote>
 <p>这样［4，6］点的geohash值目前为 00然后再将四个小块每一块进行切割，如下：</p>
-</blockquote>
-<blockquote>
 <figure>
 <img src="../images/36~37/37.11.png" />
 </figure>
-</blockquote>
-<blockquote>
 <p>这时［4，6］点位于右上区域，右上的值为11，这样［4，6］点的geohash值变为：0011继续往下做两次切分：</p>
-</blockquote>
-<blockquote>
 <figure>
 <img src="../images/36~37/37.12.png" />
 </figure>
-</blockquote>
-<blockquote>
 <figure>
 <img src="../images/36~37/37.13.png" />
 </figure>
-</blockquote>
-<blockquote>
 <p>最终得到［4，6］点的geohash值为：00110100</p>
 <p>这样我们用这个值来做索引，则地图上点相近的点就可以转化成有相同前缀的geohash值了。</p>
 <p>我们可以看到，这个geohash值的精确度是与划分地图的次数成正比的，上例对地图划分了四次。而MongoDB默认是进行26次划分，这个值在建立索引时是可控的。具体建立二维地理位置索引的命令如下：</p>
 <p>db.map.ensureIndex({point : &quot;2d&quot;}, {min : 0, max : 16, bits : 4})</p>
 <p>其中的bits参数就是划分几次，默认为26次。</p>
-</blockquote>
 <p>读者点评@yuotulck：首先多谢博主的文章，不过如果是新手（例如我）看到geohash那里可能会有误解：是否相邻可以靠前缀来比较？其实这是错的，例如边界那一块的相邻区域编码的前缀从第一个就不一样了，也就是说在geohash里相近的点hash值不一定相近。</p>
 <p>上面的知识点了解自<a href="http://www.cnblogs.com/step1/archive/2009/04/22/1441689.html">这篇文章</a>，而geohash的进一步用法在<a href="http://tech.idv2.com/2011/07/05/geohash-intro/">这里</a>可以了解到。</p>
 <p>本章完。</p>
@@ -10049,7 +9004,7 @@ bool isValid(<span class="dt">int</span> step, <span class="dt">int</span> x1, <
 <li>《Hbase实战》第8章、在HBase上查询地理信息系统；</li>
 </ol>
 <h1 id="第三十八章hero在线编程判题出题系统的演进与优化">第三十八章：Hero在线编程判题、出题系统的演进与优化</h1>
-<h2 id="前言-6">前言</h2>
+<h2 id="前言-5">前言</h2>
 <p>以前出门在外玩的时候，经常跑去网吧，去网吧也不干啥事，看看博客，改改博客，但若想修改博客上的一段代码，却发觉网吧没有装编译器这个东西，可一想到安装它需要不少时间，所以每次想在网吧写代码都作罢。</p>
 <p>当时，便想，如果某一天打开浏览器，便能在网页上直接敲代码，那该有多好，随时随地，不受编译器限制。好事多磨，今年3月终于来CSDN来做这样一个在线编程网站Hero了：<a href="http://hero.csdn.net">http://hero.csdn.net</a>，以项目负责人的身份总体负责它的产品和运营、包括出题。</p>
 <p>为何要写此文？本文不谈Hero如何实现，也不谈今年3月至今，它的PV涨了多少倍，不谈每一道题的具体解法、思路、代码是怎样的（日后可能会写），更不谈它的界面是如何一步步优化的，只谈谈它的判题系统、出题系统是如何一步步演进和优化的，即它背后是怎样的一种判题机制（用来判断每天几千个用户提交的程序正确与否），以及如何做到让每一个用户都可以来Hero上出题的。</p>
@@ -10237,8 +9192,5 @@ bool isValid(<span class="dt">int</span> step, <span class="dt">int</span> x1, <
 <li>本文2.1节问题的在线挑战地址：http://hero.csdn.net/Question/Details?ID=54&amp;ExamID=52</li>
 <li>本文2.2节问题的在线编程地址：http://hero.csdn.net/Question/Details?ID=74&amp;ExamID=72</li>
 </ul>
-<p>July、二零一三年十二月二十八日。</p>
-<p><strong>原文链接</strong></p>
-<p>http://blog.csdn.net/v_july_v/article/details/17632221</p>
 </body>
 </html>
