@@ -3692,94 +3692,100 @@ end;   </code></pre>
 <p>回文的内容还有不少，但主要的部分通过上面的内容相信大家已经掌握，希望大家能抓住实质，在实践中灵活运用，回文的内容我就暂时介绍到这里了，谢谢大家--well。</p>
 <h1 id="第十六第二十章全排列跳台阶奇偶排序第一个只出现一次等问题">第十六~第二十章：全排列，跳台阶，奇偶排序，第一个只出现一次等问题</h1>
 <h2 id="第十六章全排列问题">第十六章、全排列问题</h2>
-<p>53.字符串的排列。</p>
 <p>题目：输入一个字符串，打印出该字符串中字符的所有排列。</p>
 <p>例如输入字符串abc，则输出由字符a、b、c 所能排列出来的所有字符串</p>
-<p>abc、acb、bac、bca、cab 和cba。</p>
+<p>abc、acb、bac、bca、cab 和 cba。</p>
 <p>分析：此题最初整理于去年的微软面试100题中第53题，第二次整理于微软、Google等公司非常好的面试题及解答[第61-70题] 第67题。无独有偶，这个问题今年又出现于今年的2011.10.09百度笔试题中。ok，接下来，咱们先好好分析这个问题。</p>
 <p><strong>解法一、递归实现</strong></p>
 <p>从集合中依次选出每一个元素，作为排列的第一个元素，然后对剩余的元素进行全排列，如此递归处理，从而得到所有元素的全排列。以对字符串abc进行全排列为例，我们可以这么做：以abc为例</p>
 <p>固定a，求后面bc的排列：abc，acb，求好后，a和b交换，得到bac</p>
 <p>固定b，求后面ac的排列：bac，bca，求好后，c放到第一位置，得到cba</p>
 <p>固定c，求后面ba的排列：cba，cab。代码可如下编写所示：</p>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">template</span> &lt;<span class="kw">typename</span> T&gt;  
-<span class="dt">void</span> CalcAllPermutation_R(T perm[], <span class="dt">int</span> first, <span class="dt">int</span> num)  
-{  
-    <span class="kw">if</span> (num &lt;= <span class="dv">1</span>) {  
-        <span class="kw">return</span>;  
-    }  
-      
-    <span class="kw">for</span> (<span class="dt">int</span> i = first; i &lt; first + num; ++i) {  
-        swap(perm[i], perm[first]);  
-        CalcAllPermutation_R(perm, first + <span class="dv">1</span>, num - <span class="dv">1</span>);  
-        swap(perm[i], perm[first]);  
-    }  
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">template</span> &lt;<span class="kw">typename</span> T&gt;
+<span class="dt">void</span> CalcAllPermutation_R(T perm[], <span class="dt">int</span> first, <span class="dt">int</span> num)
+{
+    <span class="kw">if</span> (num &lt;= <span class="dv">1</span>)
+    {
+        <span class="kw">return</span>;
+    }
+
+    <span class="kw">for</span> (<span class="dt">int</span> i = first; i &lt; first + num; ++i)
+    {
+        swap(perm[i], perm[first]);
+        CalcAllPermutation_R(perm, first + <span class="dv">1</span>, num - <span class="dv">1</span>);
+        swap(perm[i], perm[first]);
+    }
 }</code></pre>
 <p>或者如此编写，亦可：</p>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="dt">void</span> Permutation(<span class="dt">char</span>* pStr, <span class="dt">char</span>* pBegin);  
-  
-<span class="dt">void</span> Permutation(<span class="dt">char</span>* pStr)  
-{  
-      Permutation(pStr, pStr);  
-}  
-  
-<span class="dt">void</span> Permutation(<span class="dt">char</span>* pStr, <span class="dt">char</span>* pBegin)  
-{  
-    <span class="kw">if</span>(!pStr || !pBegin)  
-        <span class="kw">return</span>;  
-      
-    <span class="kw">if</span>(*pBegin == &#39;\<span class="dv">0</span>&#39;)  
-    {  
-        printf(<span class="st">&quot;%s</span><span class="ch">\n</span><span class="st">&quot;</span>, pStr);  
-    }  
-    <span class="kw">else</span>  
-    {  
-        <span class="kw">for</span>(<span class="dt">char</span>* pCh = pBegin; *pCh != &#39;\<span class="dv">0</span>&#39;; ++ pCh)  
-        {  
-            <span class="co">// swap pCh and pBegin  </span>
-            <span class="dt">char</span> temp = *pCh;  
-            *pCh = *pBegin;  
-            *pBegin = temp;  
-              
-            Permutation(pStr, pBegin + <span class="dv">1</span>);    
-            <span class="co">// restore pCh and pBegin  </span>
-            temp = *pCh;  
-            *pCh = *pBegin;  
-            *pBegin = temp;  
-        }  
-    }  
-} </code></pre>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="dt">void</span> Permutation(<span class="dt">char</span>* pStr, <span class="dt">char</span>* pBegin);
+
+<span class="dt">void</span> Permutation(<span class="dt">char</span>* pStr)
+{
+    Permutation(pStr, pStr);
+}
+
+<span class="dt">void</span> Permutation(<span class="dt">char</span>* pStr, <span class="dt">char</span>* pBegin)
+{
+    <span class="kw">if</span> (!pStr || !pBegin)
+        <span class="kw">return</span>;
+
+    <span class="kw">if</span> (*pBegin == &#39;\<span class="dv">0</span>&#39;)
+    {
+        printf(<span class="st">&quot;%s</span><span class="ch">\n</span><span class="st">&quot;</span>, pStr);
+    }
+    <span class="kw">else</span>
+    {
+        <span class="kw">for</span> (<span class="dt">char</span>* pCh = pBegin; *pCh != &#39;\<span class="dv">0</span>&#39;; ++ pCh)
+        {
+            <span class="co">// swap pCh and pBegin</span>
+            <span class="dt">char</span> temp = *pCh;
+            *pCh = *pBegin;
+            *pBegin = temp;
+
+            Permutation(pStr, pBegin + <span class="dv">1</span>);
+            <span class="co">// restore pCh and pBegin</span>
+            temp = *pCh;
+            *pCh = *pBegin;
+            *pBegin = temp;
+        }
+    }
+}</code></pre>
 <p><strong>解法二、字典序排列</strong></p>
 <p>把升序的排列（当然，也可以实现为降序）作为当前排列开始，然后依次计算当前排列的下一个字典序排列。</p>
 <p>对当前排列从后向前扫描，找到一对为升序的相邻元素，记为i和j（i &lt; j）。如果不存在这样一对为升序的相邻元素，则所有排列均已找到，算法结束；否则，重新对当前排列从后向前扫描，找到第一个大于i的元素k，交换i和k，然后对从j开始到结束的子序列反转，则此时得到的新排列就为下一个字典序排列。这种方式实现得到的所有排列是按字典序有序的，这也是C++ STL算法next_permutation的思想。算法实现如下：</p>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">template</span> &lt;<span class="kw">typename</span> T&gt;  
-<span class="dt">void</span> CalcAllPermutation(T perm[], <span class="dt">int</span> num)  
-{  
-    <span class="kw">if</span> (num &lt; <span class="dv">1</span>)  
-        <span class="kw">return</span>;  
-          
-    <span class="kw">while</span> (<span class="kw">true</span>) {  
-        <span class="dt">int</span> i;  
-        <span class="kw">for</span> (i = num - <span class="dv">2</span>; i &gt;= <span class="dv">0</span>; --i) {  
-            <span class="kw">if</span> (perm[i] &lt; perm[i + <span class="dv">1</span>])  
-                <span class="kw">break</span>;  
-        }  
-          
-        <span class="kw">if</span> (i &lt; <span class="dv">0</span>)  
-            <span class="kw">break</span>;  <span class="co">// 已经找到所有排列  </span>
-      
-        <span class="dt">int</span> k;  
-        <span class="kw">for</span> (k = num - <span class="dv">1</span>; k &gt; i; --k) {  
-            <span class="kw">if</span> (perm[k] &gt; perm[i])  
-                <span class="kw">break</span>;  
-        }  
-          
-        swap(perm[i], perm[k]);  
-        reverse(perm + i + <span class="dv">1</span>, perm + num);  
-         
-    }  
-} </code></pre>
-<p>扩展：如果不是求字符的所有排列，而是求字符的所有组合，应该怎么办呢？当输入的字符串中含有相同的字符串时，相同的字符交换位置是不同的排列，但是同一个组合。举个例子，如果输入abc，它的组合有a、b、c、ab、ac、bc、abc。 ## 第十七章、跳台阶问题 ### 27.跳台阶问题 题目：一个台阶总共有n 级，如果一次可以跳1 级，也可以跳2 级。</p>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">template</span> &lt;<span class="kw">typename</span> T&gt;
+<span class="dt">void</span> CalcAllPermutation(T perm[], <span class="dt">int</span> num)
+{
+    <span class="kw">if</span> (num &lt; <span class="dv">1</span>)
+        <span class="kw">return</span>;
+
+    <span class="kw">while</span> (<span class="kw">true</span>)
+    {
+        <span class="dt">int</span> i;
+        <span class="kw">for</span> (i = num - <span class="dv">2</span>; i &gt;= <span class="dv">0</span>; --i)
+        {
+            <span class="kw">if</span> (perm[i] &lt; perm[i + <span class="dv">1</span>])
+                <span class="kw">break</span>;
+        }
+
+        <span class="kw">if</span> (i &lt; <span class="dv">0</span>)
+            <span class="kw">break</span>;  <span class="co">// 已经找到所有排列</span>
+
+        <span class="dt">int</span> k;
+        <span class="kw">for</span> (k = num - <span class="dv">1</span>; k &gt; i; --k)
+        {
+            <span class="kw">if</span> (perm[k] &gt; perm[i])
+                <span class="kw">break</span>;
+        }
+
+        swap(perm[i], perm[k]);
+        reverse(perm + i + <span class="dv">1</span>, perm + num);
+
+    }
+}</code></pre>
+<p>扩展：如果不是求字符的所有排列，而是求字符的所有组合，应该怎么办呢？当输入的字符串中含有相同的字符串时，相同的字符交换位置是不同的排列，但是同一个组合。举个例子，如果输入abc，它的组合有a、b、c、ab、ac、bc、abc。</p>
+<h2 id="第十七章跳台阶问题">第十七章、跳台阶问题</h2>
+<p>题目：一个台阶总共有n 级，如果一次可以跳1 级，也可以跳2 级。</p>
 <p>求总共有多少总跳法，并分析算法的时间复杂度。</p>
 <p>分析：在九月腾讯，创新工场，淘宝等公司最新面试十三题中第23题又出现了这个问题，题目描述如下：23、人人笔试1：一个人上台阶可以一次上1个，2个，或者3个，问这个人上n层的台阶，总共有几种走法？咱们先撇开这个人人笔试的问题（其实差别就在于人人笔试题中多了一次可以跳三级的情况而已），先来看这个第27题。</p>
 <p>首先考虑最简单的情况。如果只有1级台阶，那显然只有一种跳法。如果有2级台阶，那就有两种跳的方法了：一种是分两次跳，每次跳1级；另外一种就是一次跳2级。</p>
@@ -3789,13 +3795,13 @@ end;   </code></pre>
 f(n)=      2                             n = 2
         \  f(n-1) + f(n-2)               n &gt; 2</code></pre>
 <p>原来上述问题就是我们平常所熟知的Fibonacci数列问题。可编写代码，如下：</p>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="dt">long</span> <span class="dt">long</span> Fibonacci_Solution1(<span class="dt">unsigned</span> <span class="dt">int</span> n)  
-{  
-    <span class="dt">int</span> result[<span class="dv">2</span>] = {<span class="dv">0</span>, <span class="dv">1</span>};  
-    <span class="kw">if</span>(n &lt; <span class="dv">2</span>)  
-        <span class="kw">return</span> result[n];  
-      
-    <span class="kw">return</span> Fibonacci_Solution1(n - <span class="dv">1</span>) + Fibonacci_Solution1(n - <span class="dv">2</span>);  
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="dt">long</span> <span class="dt">long</span> Fibonacci_Solution1(<span class="dt">unsigned</span> <span class="dt">int</span> n)
+{
+    <span class="dt">int</span> result[<span class="dv">2</span>] = {<span class="dv">0</span>, <span class="dv">1</span>};
+    <span class="kw">if</span> (n &lt; <span class="dv">2</span>)
+        <span class="kw">return</span> result[n];
+
+    <span class="kw">return</span> Fibonacci_Solution1(n - <span class="dv">1</span>) + Fibonacci_Solution1(n - <span class="dv">2</span>);
 }</code></pre>
 <p>那么，如果是人人笔试那道题呢?一个人上台阶可以一次上1个，2个，或者3个，岂不是可以轻而易举的写下如下公式：</p>
 <pre><code>        / 1                                      n = 1
@@ -3806,13 +3812,15 @@ f(n)=     2                                      n = 2
 <p>用递归方法计算的时间复杂度是以n的指数的方式递增的，我们可以尝试用递推方法解决。具体如何操作，读者自行思考。</p>
 <p>有一种方法，能在O(logn)的时间复杂度内求解Fibonacci数列问题，你能想到么?</p>
 <p>同时，有朋友指出对于这个台阶问题只需求幂就可以了（求复数幂C++库里有），不用任何循环且复杂度为O（1），如下图所示，是否真如此?:</p>
-<p><img src="../images/16~20/17.1.gif" /> ##第十八章、奇偶调序</p>
-<p>54.调整数组顺序使奇数位于偶数前面。</p>
+<figure>
+<img src="../images/16~20/17.1.gif" />
+</figure>
+<h2 id="第十八章奇偶调序">第十八章、奇偶调序</h2>
 <p>题目：输入一个整数数组，调整数组中数字的顺序，使得所有奇数位于数组的前半部分，</p>
 <p>所有偶数位于数组的后半部分。要求时间复杂度为O(n)。</p>
 <p>分析：</p>
 <ol type="1">
-<li><p>你当然可以从头扫描这个数组，每碰到一个偶数时，拿出这个数字，并把位于这个数字后面的所有数字往前挪动一位。挪完之后在数组的末尾有一个空位，这时把该偶数放入这个空位。由于碰到一个偶数，需要移动O(n)个数字，只是这种方法总的时间复杂度是O(n２)，不符合要求，pass</p></li>
+<li><p>你当然可以从头扫描这个数组，每碰到一个偶数时，拿出这个数字，并把位于这个数字后面的所有数字往前挪动一位。挪完之后在数组的末尾有一个空位，这时把该偶数放入这个空位。由于碰到一个偶数，需要移动O(n)个数字，只是这种方法总的时间复杂度是O(n^2)，不符合要求，pass</p></li>
 <li><p>很简单，维护两个指针，一个指针指向数组的第一个数字，向后移动；一个个指针指向最后一个数字，向前移动。如果第一个指针指向的数字是偶数而第二个指针指向的数字是奇数，我们就交换这两个数字。</p></li>
 </ol>
 <p>思路有了，接下来，写代码实现：</p>
@@ -3826,115 +3834,115 @@ f(n)=     2                                      n = 2
   
 <span class="co">//如果限制空间复杂度为O（1），时间为O（N），且奇偶数之间相对顺序不变，就相当于正负数间顺序调整的那道题了。  </span>
   
-<span class="co">//copyright@2010 zhedahht。  </span>
-<span class="dt">void</span> Reorder(<span class="dt">int</span> *pData, <span class="dt">unsigned</span> <span class="dt">int</span> length, <span class="dt">bool</span> (*func)(<span class="dt">int</span>));  
-<span class="dt">bool</span> isEven(<span class="dt">int</span> n);  
-<span class="dt">void</span> ReorderOddEven(<span class="dt">int</span> *pData, <span class="dt">unsigned</span> <span class="dt">int</span> length)  
-{  
-    <span class="kw">if</span>(pData == NULL || length == <span class="dv">0</span>)  
-        <span class="kw">return</span>;  
-      
-    Reorder(pData, length, isEven);  
-}  
-<span class="dt">void</span> Reorder(<span class="dt">int</span> *pData, <span class="dt">unsigned</span> <span class="dt">int</span> length, <span class="dt">bool</span> (*func)(<span class="dt">int</span>))  
-{  
-    <span class="kw">if</span>(pData == NULL || length == <span class="dv">0</span>)  
-        <span class="kw">return</span>;  
-    <span class="dt">int</span> *pBegin = pData;  
-    <span class="dt">int</span> *pEnd = pData + length - <span class="dv">1</span>;  
-    <span class="kw">while</span>(pBegin &lt; pEnd)  
-    {  
-        <span class="co">// if *pBegin does not satisfy func, move forward  </span>
-        <span class="kw">if</span>(!func(*pBegin))   <span class="co">//偶数  </span>
-        {  
-            pBegin ++;  
-            <span class="kw">continue</span>;  
-        }  
-          
-        <span class="co">// if *pEnd does not satisfy func, move backward  </span>
-        <span class="kw">if</span>(func(*pEnd))      <span class="co">//奇数  </span>
-        {  
-            pEnd --;  
-            <span class="kw">continue</span>;  
-        }  
-        <span class="co">// if *pBegin satisfy func while *pEnd does not,  </span>
-        <span class="co">// swap these integers  </span>
-        <span class="dt">int</span> temp = *pBegin;  
-        *pBegin = *pEnd;  
-        *pEnd = temp;  
-    }  
-}  
-<span class="dt">bool</span> isEven(<span class="dt">int</span> n)  
-{  
-    <span class="kw">return</span> (n &amp; <span class="dv">1</span>) == <span class="dv">0</span>;  
-} </code></pre>
+<span class="co">//copyright@2010 zhedahht。</span>
+<span class="dt">void</span> Reorder(<span class="dt">int</span> *pData, <span class="dt">unsigned</span> <span class="dt">int</span> length, <span class="dt">bool</span> (*func)(<span class="dt">int</span>));
+<span class="dt">bool</span> isEven(<span class="dt">int</span> n);
+<span class="dt">void</span> ReorderOddEven(<span class="dt">int</span> *pData, <span class="dt">unsigned</span> <span class="dt">int</span> length)
+{
+    <span class="kw">if</span> (pData == NULL || length == <span class="dv">0</span>)
+        <span class="kw">return</span>;
+
+    Reorder(pData, length, isEven);
+}
+<span class="dt">void</span> Reorder(<span class="dt">int</span> *pData, <span class="dt">unsigned</span> <span class="dt">int</span> length, <span class="dt">bool</span> (*func)(<span class="dt">int</span>))
+{
+    <span class="kw">if</span> (pData == NULL || length == <span class="dv">0</span>)
+        <span class="kw">return</span>;
+    <span class="dt">int</span> *pBegin = pData;
+    <span class="dt">int</span> *pEnd = pData + length - <span class="dv">1</span>;
+    <span class="kw">while</span> (pBegin &lt; pEnd)
+    {
+        <span class="co">// if *pBegin does not satisfy func, move forward</span>
+        <span class="kw">if</span> (!func(*pBegin))  <span class="co">//偶数</span>
+        {
+            pBegin ++;
+            <span class="kw">continue</span>;
+        }
+
+        <span class="co">// if *pEnd does not satisfy func, move backward</span>
+        <span class="kw">if</span> (func(*pEnd))     <span class="co">//奇数</span>
+        {
+            pEnd --;
+            <span class="kw">continue</span>;
+        }
+        <span class="co">// if *pBegin satisfy func while *pEnd does not,</span>
+        <span class="co">// swap these integers</span>
+        <span class="dt">int</span> temp = *pBegin;
+        *pBegin = *pEnd;
+        *pEnd = temp;
+    }
+}
+<span class="dt">bool</span> isEven(<span class="dt">int</span> n)
+{
+    <span class="kw">return</span> (n &amp; <span class="dv">1</span>) == <span class="dv">0</span>;
+}</code></pre>
 <p>细心的读者想必注意到了上述程序注释中所说的“如果限制空间复杂度为O（1），时间为O（N）就相当于正负数间顺序调整的那道题了”，没错，它与个人之前整理的一文中的第5题极其类似：5、一个未排序整数数组，有正负数，重新排列使负数排在正数前面，并且要求不改变原来的正负数之间相对顺序 比如： input: 1,7,-5,9,-12,15 ans: -5,-12,1,7,9,15 要求时间复杂度O(N),空间O(1) 。（<strong>此题一直没看到令我满意的答案，一般达不到题目所要求的：时间复杂度O(N),空间O(1)，且保证原来正负数之间的相对位置不变</strong>）。</p>
 <p>如果你想到了绝妙的解决办法，不妨在本文评论下告知于我，或者来信指导（zhoulei0907@yahoo.cn），谢谢。</p>
-<h3 id="第十九章第一个只出现一次的字符">第十九章、第一个只出现一次的字符</h3>
-<p>第17 题：题目：在一个字符串中找到第一个只出现一次的字符。如输入abaccdeff，则输出b。</p>
-<p>分析：这道题是2006 年google 的一道笔试题。它在今年又出现了，不过换了一种形式。即最近的搜狐笔试大题：数组非常长，如何找到第一个只出现一次的数字，说明算法复杂度。此问题已经在程序员编程艺术系列第二章中有所阐述，在此不再作过多讲解。</p>
+<h2 id="第十九章第一个只出现一次的字符">第十九章、第一个只出现一次的字符</h2>
+<p>题目：在一个字符串中找到第一个只出现一次的字符。如输入abaccdeff，则输出b。</p>
+<p>分析：这道题是2006年google 的一道笔试题。它在今年又出现了，不过换了一种形式。即最近的搜狐笔试大题：数组非常长，如何找到第一个只出现一次的数字，说明算法复杂度。此问题已经在程序员编程艺术系列第二章中有所阐述，在此不再作过多讲解。</p>
 <p>代码，可编写如下：</p>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include &lt;iostream&gt;  </span>
-<span class="kw">using</span> <span class="kw">namespace</span> std;  
-  
-<span class="co">//查找第一个只出现一次的字符，第1个程序  </span>
-<span class="co">//copyright@ Sorehead &amp;&amp; July  </span>
-<span class="co">//July、updated，2011.04.24.  </span>
-<span class="dt">char</span> find_first_unique_char(<span class="dt">char</span> *str)  
-{  
-    <span class="dt">int</span> data[<span class="dv">256</span>];  
-    <span class="dt">char</span> *p;  
-      
-    <span class="kw">if</span> (str == NULL)  
-        <span class="kw">return</span> &#39;\<span class="dv">0</span>&#39;;  
-      
-    memset(data, <span class="dv">0</span>, <span class="kw">sizeof</span>(data));    <span class="co">//数组元素先全部初始化为0  </span>
-    p = str;  
-    <span class="kw">while</span> (*p != &#39;\<span class="dv">0</span>&#39;)  
-        data[(<span class="dt">unsigned</span> <span class="dt">char</span>)*p++]++;  <span class="co">//遍历字符串，在相应位置++，（同时，下标强制转换）  </span>
-      
-    <span class="kw">while</span> (*str != &#39;\<span class="dv">0</span>&#39;)  
-    {  
-        <span class="kw">if</span> (data[(<span class="dt">unsigned</span> <span class="dt">char</span>)*str] == <span class="dv">1</span>)  <span class="co">//最后，输出那个第一个只出现次数为1的字符  </span>
-            <span class="kw">return</span> *str;  
-          
-        str++;  
-    }  
-      
-    <span class="kw">return</span> &#39;\<span class="dv">0</span>&#39;;  
-}  
-  
-<span class="dt">int</span> main()  
-{  
-    <span class="dt">char</span> *str = <span class="st">&quot;afaccde&quot;</span>;  
-    cout &lt;&lt; find_first_unique_char(str) &lt;&lt; endl;  
-    <span class="kw">return</span> <span class="dv">0</span>;  
-} </code></pre>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include &lt;iostream&gt;</span>
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="co">//查找第一个只出现一次的字符，第1个程序</span>
+<span class="co">//copyright@ Sorehead &amp;&amp; July</span>
+<span class="co">//July、updated，2011.04.24.</span>
+<span class="dt">char</span> find_first_unique_char(<span class="dt">char</span> *str)
+{
+    <span class="dt">int</span> data[<span class="dv">256</span>];
+    <span class="dt">char</span> *p;
+
+    <span class="kw">if</span> (str == NULL)
+        <span class="kw">return</span> &#39;\<span class="dv">0</span>&#39;;
+
+    memset(data, <span class="dv">0</span>, <span class="kw">sizeof</span>(data));    <span class="co">//数组元素先全部初始化为0</span>
+    p = str;
+    <span class="kw">while</span> (*p != &#39;\<span class="dv">0</span>&#39;)
+        data[(<span class="dt">unsigned</span> <span class="dt">char</span>)*p++]++;  <span class="co">//遍历字符串，在相应位置++，（同时，下标强制转换）</span>
+
+    <span class="kw">while</span> (*str != &#39;\<span class="dv">0</span>&#39;)
+    {
+        <span class="kw">if</span> (data[(<span class="dt">unsigned</span> <span class="dt">char</span>)*str] == <span class="dv">1</span>)  <span class="co">//最后，输出那个第一个只出现次数为1的字符</span>
+            <span class="kw">return</span> *str;
+
+        str++;
+    }
+
+    <span class="kw">return</span> &#39;\<span class="dv">0</span>&#39;;
+}
+
+<span class="dt">int</span> main()
+{
+    <span class="dt">char</span> *str = <span class="st">&quot;afaccde&quot;</span>;
+    cout &lt;&lt; find_first_unique_char(str) &lt;&lt; endl;
+    <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre>
 <p>当然，代码也可以这么写（测试正确）：</p>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">//查找第一个只出现一次的字符，第2个程序  </span>
-<span class="co">//copyright@ yansha  </span>
-<span class="co">//July、updated，2011.04.24.  </span>
-<span class="dt">char</span> FirstNotRepeatChar(<span class="dt">char</span>* pString)  
-{  
-    <span class="kw">if</span>(!pString)  
-        <span class="kw">return</span> &#39;\<span class="dv">0</span>&#39;;  
-      
-    <span class="dt">const</span> <span class="dt">int</span> tableSize = <span class="dv">256</span>;  
-    <span class="dt">int</span> hashTable[tableSize] = {<span class="dv">0</span>}; <span class="co">//存入数组，并初始化为0  </span>
-      
-    <span class="dt">char</span>* pHashKey = pString;  
-    <span class="kw">while</span>(*(pHashKey) != &#39;\<span class="dv">0</span>&#39;)  
-        hashTable[*(pHashKey++)]++;  
-      
-    <span class="kw">while</span>(*pString != &#39;\<span class="dv">0</span>&#39;)  
-    {  
-        <span class="kw">if</span>(hashTable[*pString] == <span class="dv">1</span>)  
-            <span class="kw">return</span> *pString;  
-          
-        pString++;  
-    }  
-    <span class="kw">return</span> &#39;\<span class="dv">0</span>&#39;;  <span class="co">//没有找到满足条件的字符，退出  </span>
-} </code></pre>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">//查找第一个只出现一次的字符，第2个程序</span>
+<span class="co">//copyright@ yansha</span>
+<span class="co">//July、updated，2011.04.24.</span>
+<span class="dt">char</span> FirstNotRepeatChar(<span class="dt">char</span>* pString)
+{
+    <span class="kw">if</span> (!pString)
+        <span class="kw">return</span> &#39;\<span class="dv">0</span>&#39;;
+
+    <span class="dt">const</span> <span class="dt">int</span> tableSize = <span class="dv">256</span>;
+    <span class="dt">int</span> hashTable[tableSize] = {<span class="dv">0</span>}; <span class="co">//存入数组，并初始化为0</span>
+
+    <span class="dt">char</span>* pHashKey = pString;
+    <span class="kw">while</span> (*(pHashKey) != &#39;\<span class="dv">0</span>&#39;)
+        hashTable[*(pHashKey++)]++;
+
+    <span class="kw">while</span> (*pString != &#39;\<span class="dv">0</span>&#39;)
+    {
+        <span class="kw">if</span> (hashTable[*pString] == <span class="dv">1</span>)
+            <span class="kw">return</span> *pString;
+
+        pString++;
+    }
+    <span class="kw">return</span> &#39;\<span class="dv">0</span>&#39;;  <span class="co">//没有找到满足条件的字符，退出</span>
+}</code></pre>
 <h2 id="第二十章一致性哈希算法">第二十章、一致性哈希算法</h2>
 <p>tencent2012笔试题附加题</p>
 <p>问题描述： 例如手机朋友网有n个服务器，为了方便用户的访问会在服务器上缓存数据，因此用户每次访问的时候最好能保持同一台服务器。</p>
@@ -3957,7 +3965,7 @@ f(n)=     2                                      n = 2
 <p>在Memcached、Key-Value Store、Bittorrent DHT、LVS中都采用了Consistent Hashing算法，可以说Consistent Hashing 是分布式系统负载均衡的首选算法。 ### Consistent Hashing算法描述</p>
 <p>下面以Memcached中的Consisten Hashing算法为例说明。</p>
 <p>consistent hashing 算法早在 1997 年就在论文 <a href="http://dl.acm.org/citation.cfm?id=258660">Consistent hashing and random trees</a> 中被提出，目前在 cache 系统中应用越来越广泛；</p>
-<h4 id="基本场景">1 基本场景</h4>
+<h3 id="基本场景">基本场景</h3>
 <p>比如你有 N 个 cache 服务器（后面简称 cache ），那么如何将一个对象 object 映射到 N 个 cache 上呢，你很可能会采用类似下面的通用方法计算 object 的 hash 值，然后均匀的映射到到 N 个 cache ；</p>
 <p>hash(object)%N</p>
 <p>一切都运行正常，再考虑如下的两种情况；</p>
@@ -3967,20 +3975,20 @@ f(n)=     2                                      n = 2
 </ol>
 <p>1 和 2 意味着什么？这意味着突然之间几乎所有的 cache 都失效了。对于服务器而言，这是一场灾难，洪水般的访问都会直接冲向后台服务器；再来考虑第三个问题，由于硬件能力越来越强，你可能想让后面添加的节点多做点活，显然上面的 hash 算法也做不到。</p>
 <p>有什么方法可以改变这个状况呢，这就是consistent hashing。</p>
-<h4 id="hash-算法和单调性">2 hash 算法和单调性</h4>
+<h3 id="hash-算法和单调性">hash 算法和单调性</h3>
 <p>Hash 算法的一个衡量指标是单调性（ Monotonicity ），定义如下：</p>
 <p>单调性是指如果已经有一些内容通过哈希分派到了相应的缓冲中，又有新的缓冲加入到系统中。哈希的结果应能够保证原有已分配的内容可以被映射到新的缓冲中去，而不会被映射到旧的缓冲集合中的其他缓冲区。</p>
 <p>容易看到，上面的简单 hash 算法 hash(object)%N 难以满足单调性要求。</p>
-<h4 id="consistent-hashing-算法的原理">3 consistent hashing 算法的原理</h4>
+<h3 id="consistent-hashing-算法的原理">consistent hashing 算法的原理</h3>
 <p>consistent hashing 是一种 hash 算法，简单的说，在移除 / 添加一个 cache 时，它能够尽可能小的改变已存在 key 映射关系，尽可能的满足单调性的要求。</p>
 <p>下面就来按照 5 个步骤简单讲讲 consistent hashing 算法的基本原理。</p>
-<h5 id="环形hash-空间">3.1 环形hash 空间</h5>
+<h5 id="环形hash-空间">环形hash 空间</h5>
 <p>考虑通常的 hash 算法都是将 value 映射到一个 32 为的 key 值，也即是 0~2^32-1 次方的数值空间；我们可以将这个空间想象成一个首（ 0 ）尾（ 2^32-1 ）相接的圆环，如下面图 1 所示的那样。</p>
 <figure>
 <img src="../images/16~20/20.1.jpg" title="图 1 环形 hash 空间" />
 </figure>
 <p>图 1 环形 hash 空间</p>
-<h5 id="把对象映射到hash-空间">3.2 把对象映射到hash 空间</h5>
+<h5 id="把对象映射到hash-空间">把对象映射到hash 空间</h5>
 <p>接下来考虑 4 个对象 object1~object4 ，通过 hash 函数计算出的 hash 值 key 在环上的分布如图 2 所示。</p>
 <p>hash(object1) = key1;</p>
 <p>… …</p>
@@ -3989,7 +3997,7 @@ f(n)=     2                                      n = 2
 <img src="../images/16~20/20.2.jpg" title="图 2 4 个对象的 key 值分布" />
 </figure>
 <p>图 2 4 个对象的 key 值分布</p>
-<h5 id="把cache-映射到hash-空间">3.3 把cache 映射到hash 空间</h5>
+<h5 id="把cache-映射到hash-空间">把cache 映射到hash 空间</h5>
 <p>Consistent hashing 的基本思想就是将对象和 cache 都映射到同一个 hash 数值空间中，并且使用相同的hash 算法。</p>
 <p>假设当前有 A,B 和 C 共 3 台 cache ，那么其映射结果将如图 3 所示，他们在 hash 空间中，以对应的 hash值排列。</p>
 <p>hash(cache A) = key A;</p>
@@ -4000,27 +4008,27 @@ f(n)=     2                                      n = 2
 </figure>
 <p>图 3 cache 和对象的 key 值分布</p>
 <p>说到这里，顺便提一下 cache 的 hash 计算，一般的方法可以使用 cache 机器的 IP 地址或者机器名作为hash 输入。</p>
-<h5 id="把对象映射到cache">3.4 把对象映射到cache</h5>
+<h5 id="把对象映射到cache">把对象映射到cache</h5>
 <p>现在 cache 和对象都已经通过同一个 hash 算法映射到 hash 数值空间中了，接下来要考虑的就是如何将对象映射到 cache 上面了。</p>
 <p>在这个环形空间中，如果沿着顺时针方向从对象的 key 值出发，直到遇见一个 cache ，那么就将该对象存储在这个 cache 上，因为对象和 cache 的 hash 值是固定的，因此这个 cache 必然是唯一和确定的。这样不就找到了对象和 cache 的映射方法了吗？！</p>
 <p>依然继续上面的例子（参见图 3 ），那么根据上面的方法，对象 object1 将被存储到 cache A 上； object2和 object3 对应到 cache C ； object4 对应到 cache B ；</p>
-<h5 id="考察cache-的变动">3.5 考察cache 的变动</h5>
+<h5 id="考察cache-的变动">考察cache 的变动</h5>
 <p>前面讲过，通过 hash 然后求余的方法带来的最大问题就在于不能满足单调性，当 cache 有所变动时，cache 会失效，进而对后台服务器造成巨大的冲击，现在就来分析分析 consistent hashing 算法。</p>
-<h6 id="移除-cache">3.5.1 移除 cache</h6>
+<h6 id="移除-cache">移除 cache</h6>
 <p>考虑假设 cache B 挂掉了，根据上面讲到的映射方法，这时受影响的将仅是那些沿 cache B 顺时针遍历直到下一个 cache （ cache C ）之间的对象，也即是本来映射到 cache B 上的那些对象。</p>
 <p>因此这里仅需要变动对象 object4 ，将其重新映射到 cache C 上即可；参见图 4 。</p>
 <figure>
 <img src="../images/16~20/20.4.jpg" title="图 4 Cache B 被移除后的 cache 映射" />
 </figure>
 <p>图 4 Cache B 被移除后的 cache 映射</p>
-<h6 id="添加-cache">3.5.2 添加 cache</h6>
+<h6 id="添加-cache">添加 cache</h6>
 <p>再考虑添加一台新的 cache D 的情况，假设在这个环形 hash 空间中， cache D 被映射在对象 object2 和object3 之间。这时受影响的将仅是那些沿 cache D 逆时针遍历直到下一个 cache （ cache B ）之间的对象（它们是也本来映射到 cache C 上对象的一部分），将这些对象重新映射到 cache D 上即可。</p>
 <p>因此这里仅需要变动对象 object2 ，将其重新映射到 cache D 上；参见图 5 。</p>
 <figure>
 <img src="../images/16~20/20.5.jpg" title="图 5 添加 cache D 后的映射关系" />
 </figure>
 <p>图 5 添加 cache D 后的映射关系</p>
-<h4 id="虚拟节点">4 虚拟节点</h4>
+<h4 id="虚拟节点">虚拟节点</h4>
 <p>考量 Hash 算法的另一个指标是平衡性 (Balance) ，定义如下：</p>
 <h5 id="平衡性">平衡性</h5>
 <p>平衡性是指哈希的结果能够尽可能分布到所有的缓冲中去，这样可以使得所有的缓冲空间都得到利用。</p>
@@ -4050,7 +4058,6 @@ f(n)=     2                                      n = 2
 <ol type="1">
 <li>以上部分代码思路有参考自此博客：(<a href="http://zhedahht.blog.163.com/blog/">http://zhedahht.blog.163.com/blog/</a>)。特此注明下。<br /></li>
 <li>上文第五部分来源：(<a href="http://blog.csdn.net/sparkliang/article/details/5279393">http://blog.csdn.net/sparkliang/article/details/5279393</a>)；</li>
-<li>行文仓促，若有任何问题或漏洞，欢迎不吝指正或赐教。谢谢。转载，请注明出处。完。</li>
 </ol>
 <h1 id="第二十一章出现次数超过一半的数字">第二十一章：出现次数超过一半的数字</h1>
 <h2 id="前言-1">前言</h2>

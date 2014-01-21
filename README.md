@@ -2,7 +2,7 @@
 
 This repo contains ebooks generated using tools from [The Art Of Programming By July](https://github.com/julycoding/The-Art-Of-Programming-By-July).
 
-It's for you who want to read this execellent work by [July](https://github.com/julycoding) offline but has no intention / tools to build book on you own.
+It's for you who want to read this execellent work by [July](https://github.com/julycoding) offline but has no intention / tools to build book by yourself.
 
 Build script havn't support **pdf** format. I'll try to fix it lately.
 
@@ -26,7 +26,7 @@ For windows users, instead of using git, you can download [github for windows](h
 
 ##Current Version
 
-updated 2014/01/20
+updated 2014/01/21
 
 ##TODO
 Add Pdf format.
