@@ -16,6 +16,14 @@ Build script havn't support **pdf** format. I'll try to fix it lately.
 
 html is generated using pandoc. Pandoc doesn't build image into html files, so, while copy html into somewhere, you need to copy images directory as well
 
+##Usage
+
+To download, you need install git first.Then open terminal & clone it.
+
+`git clone https://github.com/marchtea/TAOP_By_July_ebooks.git`
+
+For windows users, instead of using git, you can download [github for windows](http://windows.github.com/), click `clone in desktop` button besides.
+
 ##Current Version
 
 updated 2014/01/20
