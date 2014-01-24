@@ -39,9 +39,8 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="#第三章再续快速选择select算法的深入分析与实现">第三章再续：快速选择SELECT算法的深入分析与实现</a></li>
 <li><a href="#第三章三续求数组中给定下标区间内的第-k-小大元素">第三章三续：求数组中给定下标区间内的第 K 小(大)元素</a></li>
 <li><a href="#第三章四续动态数据中求第-k-小大元素">第三章四续：动态数据中求第 K 小(大)元素</a></li>
-<li><a href="#第四章现场编写类似strstrstrcpystrpbrk的函数">第四章：现场编写类似strstr/strcpy/strpbrk的函数</a></li>
-<li><a href="#第五章寻找和为定值的两个或多个数">第五章：寻找和为定值的两个或多个数</a></li>
-<li><a href="#解法二">解法二</a></li>
+<li><a href="#第四章寻找和为定值的两个数">第四章：寻找和为定值的两个数</a></li>
+<li><a href="#第五章寻找和为定值的多个数">第五章、寻找和为定值的多个数</a></li>
 <li><a href="#第六章亲和数问题--求解500万以内的亲和数">第六章：亲和数问题--求解500万以内的亲和数</a></li>
 <li><a href="#第七章求连续子数组的最大和">第七章：求连续子数组的最大和</a></li>
 <li><a href="#第十章如何给107个数据量的磁盘文件排序">第十章：如何给10^7个数据量的磁盘文件排序</a></li>
@@ -69,9 +68,9 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </nav>
 <h1 id="第一章左旋转字符串">第一章：左旋转字符串</h1>
 <h2 id="题目描述">题目描述</h2>
-<p>定义字符串的左旋转操作:把字符串前面的若干个字符移动到字符串的尾部,如把字符串 abcdef 左旋转 2 位得到字符串 cdefab。请实现字符串左旋转的函数,要求对长度为 n 的字符串操作的时间复杂度为 O(n),空间复杂度为 O(1)。</p>
+<p>定义字符串左旋转操作:把字符串前面的若干个字符移动到字符串尾部,如把字符串 abcdef 左旋转 2 位得到字符串 cdefab。请实现字符串左旋转的函数,要求对长度为 n 的字符串操作的时间复杂度为 O(n),空间复杂度为 O(1)。</p>
 <h2 id="解法一暴力移位法">解法一、暴力移位法</h2>
-<p>初看此题,咱们最先想到的笨方法可能就是一位一位移动,故咱们写一个函数叫做 <code>left_shift_one(char *s, int n)</code> 完成左移动一位的功能</p>
+<p>初看此题,最先想到的方法可能就是一位一位移动,姑且将此函数叫做 <code>left_shift_one(char *s, int n)</code> ，以完成左移动一位的功能</p>
 <pre class="sourceCode c"><code class="sourceCode c"><span class="dt">void</span> left_shift_one(<span class="dt">char</span> *s, <span class="dt">int</span> n)
 {
     assert(s != NULL);
@@ -82,7 +81,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
     }
     s[n - <span class="dv">1</span>] = t;
 }</code></pre>
-<p>如此,左移 m 位的话,可以如下实现:</p>
+<p>若向左移 m 位,方法如下:</p>
 <pre class="sourceCode c"><code class="sourceCode c"><span class="dt">void</span> left_shift_m(<span class="dt">char</span> *s, <span class="dt">int</span> n, <span class="dt">int</span> m)
 {
     <span class="kw">while</span> (m--)
@@ -90,21 +89,21 @@ code > span.er { color: #ff0000; font-weight: bold; }
         left_shift_one(s, n);
     }
 }</code></pre>
-<h2 id="解法二三步翻转法">解法二、三步翻转法</h2>
-<p>对于这个问题，咱们换一个角度，可以这么做：</p>
-<p>将一个字符串分成两部分，X和Y两个部分，在字符串上定义反转的操作X<sup>T，即把X的所有字符反转（如，X=&quot;abc&quot;，那么X</sup>T=&quot;cba&quot;），那么我们可以得到下面的结论：(X<sup>TY</sup>T)^T=YX。显然我们这就可以转化为字符串的反转的问题了。</p>
-<p>不是么? ok,就拿abcdef 这个例子来说，若要让def翻转到abc的前头，那么只要按下述3个步骤操作即可：</p>
+<h2 id="解法二三步反转法">解法二、三步反转法</h2>
+<p>对于这个问题，换一个角度：</p>
+<p>将一个字符串分成X和Y两个部分，在每部分字符串上定义反转操作，如X<sup>T，即把X的所有字符反转（如，X=&quot;abc&quot;，那么X</sup>T=&quot;cba&quot;），那么就得到下面的结论：(X<sup>TY</sup>T)^T=YX。显然这解决了字符串的反转问题。</p>
+<p>例如字符串 abcdef ，若要让def翻转到abc的前头，只要按下述3个步骤操作即可：</p>
 <ol type="1">
 <li>首先分为俩部分，X:abc，Y:def；</li>
-<li>X-&gt;X^T，abc-&gt;cba， Y-&gt;Y^T，def-&gt;fed。</li>
-<li>(X<sup>TY</sup>T)^T=YX，cbafed-&gt;defabc，即整个翻转。</li>
+<li>将X反转，X-&gt;X<sup>T，即得：abc-&gt;cba；将Y反转，Y-&gt;Y</sup>T，即得：def-&gt;fed。</li>
+<li>反转上述得到的结果字符串X<sup>TY</sup>T，即字符串cbafed的两部分（cba和fed）给予反转，得到：cbafed-&gt;fedcba，形式化表示为(X<sup>TY</sup>T)^T=YX，这就实现了整个反转。</li>
 </ol>
-<p>我想，这下，你应该一目了然了。</p>
-<p>其次，在《编程珠玑》上也有这样一个类似的问题，它的解法同本思路一致，如下图所示：</p>
+<p>是不是一目了然了？</p>
+<p>在《编程珠玑》上也有这样一个类似的问题，它的解法同本思路一致，如下图所示：</p>
 <figure>
 <img src="../images/1/3.jpeg" />
 </figure>
-<p>然后，代码可以这么写：</p>
+<p>代码可以这么写：</p>
 <pre class="sourceCode c"><code class="sourceCode c"><span class="co">//updated@caopengcs &amp;&amp; July</span>
 <span class="co">//2014-1-6</span>
 <span class="dt">void</span> reverse(<span class="dt">char</span> *s,<span class="dt">int</span> from,<span class="dt">int</span> to)
@@ -120,32 +119,33 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <span class="dt">void</span> leftshift(<span class="dt">char</span> *s,<span class="dt">int</span> n,<span class="dt">int</span> m)
 {
     m %= n;               <span class="co">//左移动大于n位和 %n是等价的</span>
-    reverse(s, <span class="dv">0</span>, m - <span class="dv">1</span>); <span class="co">//翻转[0..m - 1]，套用到上面举的例子中，就是X-&gt;X^T，即 abc-&gt;cba</span>
-    reverse(s, m, n - <span class="dv">1</span>); <span class="co">//翻转[m..n - 1]，例如Y-&gt;Y^T，即 def-&gt;fed</span>
-    reverse(s, <span class="dv">0</span>, n - <span class="dv">1</span>); <span class="co">//翻转[0..n - 1]，即如整个翻转，(X^TY^T)^T=YX，即 cbafed-&gt;defabc。</span>
+    reverse(s, <span class="dv">0</span>, m - <span class="dv">1</span>); <span class="co">//反转[0..m - 1]，套用到上面举的例子中，就是X-&gt;X^T，即 abc-&gt;cba</span>
+    reverse(s, m, n - <span class="dv">1</span>); <span class="co">//反转[m..n - 1]，例如Y-&gt;Y^T，即 def-&gt;fed</span>
+    reverse(s, <span class="dv">0</span>, n - <span class="dv">1</span>); <span class="co">//反转[0..n - 1]，即如整个反转，(X^TY^T)^T=YX，即 cbafed-&gt;defabc。</span>
 }</code></pre>
 <h1 id="第二章字符串是否包含问题">第二章：字符串是否包含问题</h1>
 <h2 id="题目描述-1">题目描述</h2>
-<p>假设这有一个各种字母组成的字符串A，和另外一个字符串B，字符串里B的字母数相对少一些。什么方法能最快的查出所有小字符串B里的字母在大字符串A里都有？为了简单起见，我们规定输入的字符串只包含大写英文字母。 实现函数bool compare(string &amp;A,string &amp;B)</p>
+<p>假设这有两个分别由字母组成的字符串A另外字符串B，字符串B的字母数较字符串A少一些。什么方法能最快地查出字符串B所有字母是不是都在字符串A里？也就是说判断字符串B是不是字符串A的真子集（为了简化，姑且认为两个集合都不是空集，即字符串都不为空。）。为了简单起见，我们规定输入的字符串只包含大写英文字母。</p>
+<p>实现函数bool compare(string &amp;A,string &amp;B)</p>
 <p>比如，如果是下面两个字符串：</p>
 <p>String 1: ABCDEFGHLMNOPQRS</p>
 <p>String 2: DCGSRQPO</p>
-<p>答案是true，所有在string2里的字母string1也都有。</p>
+<p>答案是true，即String2里的字母在String1里也都有，或者说String2是String1的真子集。</p>
 <p>如果是下面两个字符串：</p>
 <p>String 1: ABCDEFGHLMNOPQRS</p>
 <p>String 2: DCGSRQPZ</p>
-<p>答案是false，因为第二个字符串里的Z字母不在第一个字符串里。</p>
+<p>答案是false，因为字符串String2里的Z字母不在字符串String1里。</p>
 <p>点评：</p>
 <ol type="1">
-<li><p>题目描述虽长，但题意简单明了，就是给定一长一短的俩个字符串A，B，假设A长B短，现在，要你判断B是否包含在字符串A中，即B?(-A。</p></li>
-<li><p>题意虽简单，但实现起来并不轻松，且当如果面试官步步紧逼，一个一个否决你能想到的方法，要你给出更好、最好的方案时，你恐怕就要伤不少脑筋了。</p></li>
+<li><p>题目描述虽长，但题意很明了，就是给定一长一短的两个字符串A，B，假设A长B短，要求判断B是否包含在字符串A中，即B?(-A。</p></li>
+<li><p>似乎简单，但实现起来并不轻松，且如果面试官步步紧逼，一个一个否决你能想到的方法，要你给出更好、最好的方案时，恐怕就要伤不少脑筋了。</p></li>
 </ol>
-<p>ok，在继续往下阅读之前，您最好先想个几分钟，看你能想到的最好方案是什么，是否与本文最后实现的方法一致。</p>
+<p>在揭晓答案之前，读者最好先想一想，看看自己能想到的最好方案是什么，是否与本文作者所见略同。</p>
 <h2 id="解法一暴力轮询">解法一、暴力轮询</h2>
 <p>判断string2中的字符是否在string1中?：</p>
 <p>String 1: ABCDEFGHLMNOPQRS</p>
 <p>String 2: DCGSRQPO</p>
-<p>判断一个字符串是否在另一个字符串中，最直观也是最简单的思路是，针对第二个字符串string2中每一个字符，一一与第一个字符串string1中每个字符依次轮询比较，看它是否在第一个字符串string1中。</p>
+<p>最直观也是最简单的思路是，针对string2中每一个字符，一一与string1中每个字符依次轮询比较，看它是否在String1中。</p>
 <p>代码可如下编写：</p>
 <pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">//copyright@caopengcs 2013-01-14</span>
 <span class="dt">bool</span> compare(string &amp;a,string &amp;b)
@@ -161,11 +161,11 @@ code > span.er { color: #ff0000; font-weight: bold; }
     }
     <span class="kw">return</span> <span class="kw">true</span>;
 }</code></pre>
-<p>假设n是字符串string1的长度，m是字符串string2的长度，那么此算法，需要O（n<em>m）次操作，拿上面的例子来说，最坏的情况下将会有16</em>8 = 128次操作。显然，时间开销太大，我们需要找到一种更好的办法。</p>
+<p>假设n是字符串String1的长度，m是字符串String2的长度，那么此算法，需要O（n<em>m）次操作，以上面的例子来说，将会有16</em>8 = 128次操作。显然，时间开销太大，应该找到一种更好的办法。</p>
 <h2 id="解法二普通排序">解法二、普通排序</h2>
 <p>一个稍微好一点的方案是先对这两个字符串的字母进行排序，然后同时对两个字串依次轮询。两个字串的排序需要(常规情况)O(m log m) + O(n log n)次操作，之后的线性扫描需要O(m+n)次操作。</p>
 <p>同样拿上面的字串做例子，将会需要16<em>4 + 8</em>3 = 88，再加上对两个字串线性扫描的16 + 8 = 24的操作。(随着字串长度的增长，你会发现这个算法的效果会越来越好)</p>
-<p>关于采用何种排序方法，我们采用最常用的快速排序，C有库函数qsort,C++有库函数sort，很方便，排序不是我们这里的终点，因此使用库函数好一些。</p>
+<p>关于排序方法，可采用最常用的快速排序，C有库函数qsort,C++有库函数sort，排序不是重点，因此使用库函数好一些。</p>
 <pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">//copyright@caopengcs 2014-01-14 </span>
 <span class="co">//注意A B中可能包含重复字符，所以注意A下标不要轻易移动。这种方法改变了字符串。如不想改变请自己复制</span>
 <span class="dt">bool</span> compare(string &amp;a,string &amp;b)
@@ -188,7 +188,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
     <span class="kw">return</span> <span class="kw">true</span>;
 }</code></pre>
 <h2 id="解法三计数比较">解法三、计数比较</h2>
-<p>此方案与上述思路相比，就是不需要排序。采用线性时间的计数方法，假设需要比较字符串A（n）中是否包含字符串B（m），统计A中出现的字符O(n)，比较B中是否有出现的字符O(m)，总计时间复杂度为：O(n+m)。</p>
+<p>此方案与上述相比，区别在于不用排序。采用线性时间的计数方法，假设需要比较字符串A（n）中是否包含字符串B（m），统计A中出现的字符O(n)，比较B中是否有出现的字符O(m)，总计时间复杂度为：O(n+m)。</p>
 <p>代码如下：</p>
 <pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">// copyright@caopengcs 2014-01-14</span>
 <span class="co">// modified by @古道西风 2014-01-14</span>
@@ -218,11 +218,12 @@ code > span.er { color: #ff0000; font-weight: bold; }
     <span class="kw">return</span> <span class="kw">true</span>;
 }</code></pre>
 <h2 id="解法四巧用hashtable">解法四、巧用hashtable</h2>
-<p>上述方案中，较好的方法是先对字符串进行排序，然后再线性扫描，总的时间复杂度已经优化到了：O(m+n)，貌似到了极限，还有没有更好的办法列?</p>
-<p>我们可以对短字串进行轮询（此思路的叙述可能与网上的一些叙述有出入，因为我们最好是应该把短的先存储，那样，会降低题目的时间复杂度），把其中的每个字母都放入一个Hashtable里（我们始终设m为短字符串的长度，那么此项操作成本是O(m)或8次操作）。然后轮询长字符串，在Hashtable里查询短字符串的每个字符，看能否找到。如果找不到，说明没有匹配成功，轮询长字符串将消耗掉16次操作，这样两项操作加起来一共只有8+16=24次。</p>
+<p>上述方案中，较好的方法是先对字符串进行排序，然后再线性扫描，总的时间已经优化到了：O(m+n)，貌似到了极限，还有没有更好的办法?</p>
+<p>可以对短字符串进行轮询（此思路的叙述可能与网上的一些叙述有出入。最好是把短的先存储，那样，会降低时间复杂度），把其中的每个字母都放入一个Hashtable里（始终设m为短字符串的长度，那么此项操作成本是O(m)或8次操作）。然后轮询长字符串，在Hashtable里查询短字符串的每个字符，看能否找到。如果找不到，说明没有匹配成功，轮询长字符串将消耗掉16次操作，这样两项操作加起来一共只有8+16=24次。</p>
 <p>当然，理想情况是如果长字串的前缀就为短字串，只需消耗8次操作，这样总共只需8+8=16次。</p>
 <p>或如梦想天窗所说： 我之前用散列表做过一次，算法如下： 1. hash[26]，先全部清零，然后扫描短的字符串，若有相应的置1， 2. 计算hash[26]中1的个数，记为m 3. 扫描长字符串的每个字符a；若原来hash[a] == 1 ，则修改hash[a] = 0，并将m减1；若hash[a] == 0，则不做处理 4. 若m == 0 or 扫描结束，退出循环。</p>
-<p>这种方法其实和1.3节方法类似。 代码实现，也不难，如下：</p>
+<p>这种方法其实和1.3节方法类似。</p>
+<p>代码实现，也不难，如下：</p>
 <pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">// copyright@caopengcs 2014-01-14</span>
 <span class="dt">bool</span> compare(string &amp;a,string &amp;b)
 {
@@ -250,17 +251,18 @@ code > span.er { color: #ff0000; font-weight: bold; }
     <span class="kw">return</span> m == <span class="dv">0</span>;
 }</code></pre>
 <h2 id="解法五素数相乘">解法五、素数相乘</h2>
-<p>我想问的是，还有更好的方案么?</p>
-<p>你可能会这么想：O(n+m)是你能得到的最好的结果了，至少要对每个字母至少访问一次才能完成这项操作，而上一节最后的俩个方案是刚好是对每个字母只访问一次。</p>
-<p>ok，下面给出一个更好的方案：</p>
-<p>假设我们有一个一定个数的字母组成字串，我给每个字母分配一个素数，从2开始，往后类推。这样A将会是2，B将会是3，C将会是5，等等。现在我遍历第一个字串，把每个字母代表的素数相乘。你最终会得到一个很大的整数，对吧？</p>
-<p>然后——轮询第二个字符串，用每个字母除它。如果除的结果有余数，这说明有不匹配的字母。如果整个过程中没有余数，你应该知道它是第一个字串恰好的子集了。</p>
-<p>思路总结如下： 1. 定义最小的26个素数分别与字符'A'到'Z'对应。 2. 遍历长字符串，求得每个字符对应素数的乘积。 3. 遍历短字符串，判断乘积能否被短字符串中的字符对应的素数整除。 4. 输出结果。</p>
-<p>至此，如上所述，上述算法的时间复杂度为O(m+n)，时间复杂度最好的情况为O(n)（遍历短的字符串的第一个数，与长字符串素数的乘积相除，即出现余数，便可退出程序，返回false），n为长字串的长度，空间复杂度为O(1)。如你所见，我们已经优化到了最好的程度。</p>
+<p>继续追问，还有更好的方案么?</p>
+<p>或许想到：O(n+m)已经是能得到的最好结果了，对每个字母至少访问一次才能完成这项操作，而前述的后两个方案是刚好是对每个字母只访问一次。</p>
+<p>ok，下面给出的方案更让人思路大开：</p>
+<p>假设有一个仅由字母组成字串，让每个每个字母与一个素数对应，从2开始，往后类推，A对应2，B对应3，C对应5，......。遍历第一个字串，把每个字母对应素数相乘。最终会得到一个整数。</p>
+<p>利用上面字母和素数的对应关系，对应第二个字符串中的字母，然后轮询，用每个字母对应的素数除前面得到的整数。如果结果有余数，说明结果为false。如果整个过程中没有余数，则说明第二个字符串是第一个的子集了（判断是不是真子集，可以比较两个字符串对应的素数乘积，若相等则不是真子集）。</p>
+<p>思路总结如下： 1. 按照从小到大的顺序，用26个素数分别与字符'A'到'Z'一一对应。 2. 遍历长字符串，求得每个字符对应素数的乘积。 3. 遍历短字符串，判断乘积能否被短字符串中的字符对应的素数整除。 4. 输出结果。</p>
+<p>如前所述，算法的时间复杂度为O(m+n)的最好的情况为O(n)（遍历短的字符串的第一个数，与长字符串素数的乘积相除，即出现余数，便可退出程序，返回false），n为长字串的长度，空间复杂度为O(1)。</p>
 <p>不过，正如原文中所述：“现在我想告诉你 —— Guy的方案在算法上并不能说就比我的好。而且在实际操作中，你很可能仍会使用我的方案，因为它更通用，无需跟麻烦的大型数字打交道。但从”巧妙水平“上讲，Guy提供的是一种更、更、更有趣的方案。”</p>
-<p>ok，如果你有更好的思路，欢迎在本文的评论中给出，非常感谢。 这种方法的缺点是可能整数溢出……</p>
+<p>ok，如果你有更好的思路，欢迎在本文的评论中给出，非常感谢。</p>
+<p>这种方法的缺点是可能整数溢出……</p>
 <pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">// copyright@caopengcs </span>
-<span class="co">//此方法只有理论意义 因为整数乘积很大 会溢出</span>
+<span class="co">//此方法只有理论意义，因为整数乘积很大，有溢出风险</span>
 <span class="dt">bool</span> compare(string &amp;a,string &amp;b)
 {
     <span class="dt">const</span> <span class="dt">int</span> p[<span class="dv">26</span>] = {<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">11</span>, <span class="dv">13</span>, <span class="dv">17</span>, <span class="dv">19</span>, <span class="dv">23</span>, <span class="dv">29</span>, <span class="dv">31</span>, <span class="dv">37</span>, <span class="dv">41</span>, <span class="dv">43</span>, <span class="dv">47</span>, <span class="dv">53</span>, <span class="dv">59</span>,<span class="dv">61</span>, <span class="dv">67</span>, <span class="dv">71</span>, <span class="dv">73</span>, <span class="dv">79</span>, <span class="dv">83</span>, <span class="dv">89</span>, <span class="dv">97</span>, <span class="dv">101</span>};
@@ -284,7 +286,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
     <span class="kw">return</span> <span class="kw">true</span>;
 }</code></pre>
 <h2 id="解法六位运算">解法六、位运算</h2>
-<p>最好的思路是对字符串A,用位运算（26bit整数表示)计算出一个“签名”，再用B中的字符A里面进行查找。这个方法的实质是用一个整数代替了hashtable，空间复杂度可以降低为O(1)。时间复杂度还是O(n + m)。</p>
+<p>最好的思路是对字符串A,用位运算（26bit整数表示)计算出一个“签名”，再用B中的字符到A里面进行查找。这个方法的实质是用一个整数代替了hashtable，空间复杂度可以降低为O(1)。时间复杂度还是O(n + m)。</p>
 <pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">// copyright@caopengcs </span>
 <span class="co">// “最好的方法”，时间复杂度O(n + m)，空间复杂度O(1)</span>
 <span class="dt">bool</span> compare(string &amp;a,string &amp;b)
@@ -1311,244 +1313,23 @@ node p[<span class="dv">100001</span>];
 </ul>
 <h2 id="算法总结">算法总结：</h2>
 <p>插入、删除、查找算法都是在原红黑树的基础上进行适当修改，因此时间复杂度均为O(logN)。</p>
-<h1 id="第四章现场编写类似strstrstrcpystrpbrk的函数">第四章：现场编写类似strstr/strcpy/strpbrk的函数</h1>
-<h2 id="第一节字符串查找">第一节、字符串查找</h2>
-<h3 id="题目描述-3">1.1题目描述：</h3>
-<p>给定一个字符串A，要求在A中查找一个子串B。 如A=&quot;ABCDF&quot;，要你在A中查找子串B=“CD”。</p>
-<p>分析：比较简单，相当于实现strstr库函数，主体代码如下：</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="co">//在字符串中查找指定字符串的第一次出现，不能找到则返回-1</span>
-<span class="dt">int</span> strstr(<span class="dt">char</span> *string, <span class="dt">char</span> *substring)
-{
-    <span class="kw">if</span> (string == NULL || substring == NULL)
-        <span class="kw">return</span> -<span class="dv">1</span>;
-
-    <span class="dt">int</span> lenstr = strlen(string);
-    <span class="dt">int</span> lensub = strlen(substring);
-
-    <span class="kw">if</span> (lenstr &lt; lensub)
-        <span class="kw">return</span> -<span class="dv">1</span>;
-
-    <span class="dt">int</span> len = lenstr - lensub;
-    <span class="dt">int</span> i,j;
-    <span class="kw">for</span> (i = <span class="dv">0</span>; i &lt;= len; i++)   <span class="co">//复杂度为O(m*n)</span>
-    {
-        <span class="kw">for</span> (j = <span class="dv">0</span>; j &lt; lensub; j++)
-        {
-            <span class="kw">if</span> (string[i+j] != substring[j])
-                <span class="kw">break</span>;
-        }
-        <span class="kw">if</span> (j == lensub)
-            <span class="kw">return</span> i + <span class="dv">1</span>;
-    }
-    <span class="kw">return</span> -<span class="dv">1</span>;
-}</code></pre>
-<p>读者反馈@xiaohui5319：楼主啊，对于你那个strstr的函数，我觉得有点小问题。我查了一下C标准库的源码，它给的声明是这样的，两个参数都有const。</p>
-<pre class="sourceCode c"><code class="sourceCode c">    <span class="dt">char</span> *
-    STRSTR (<span class="dt">const</span> <span class="dt">char</span> *haystack_start, <span class="dt">const</span> <span class="dt">char</span> *needle_start)</code></pre>
-<p>而且标准库中没有调用strlen函数，因为假如你是标准库的设计者，strlen()函数还没设计出来，你怎么去计算两个字符串的长度？是不是只能通过指针移动来实现，我觉得这些都是微软要考察的地方。</p>
-<p>此外：还有<code>int lenstr=strlen(string);</code>这是不安全的？ strlen函数的返回类型是size_t型，也就是无符号整型，假如我的数组长度很长（假如是用堆分配的，可以很大很大），长过2的31次方减1的话，会发生溢出，你这lenstr就会变成负值了用size_t类型最保险。</p>
-<p>以后，<strong>本编程艺术系列中有任何问题，暂未来得及及时修正，请读者多加思考，多加辨明</strong>。</p>
-<p>上述程序已经实现了在字符串中查找第一个子串的功能，时间复杂度为O(n*m)，也可以用KMP算法，复杂度为O(m+n)。为人打通思路，提高他人创造力，我想，这是狂想曲与其它的面试解答所不同的地方，也是我们写狂想曲系列文章的意义与价值之所在。</p>
-<h3 id="题目描述-4">1.2、题目描述</h3>
-<p>在一个字符串中找到第一个只出现一次的字符。如输入abaccdeff，则输出b。</p>
-<p>代码则可以如下编写：</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="co">//查找第一个只出现一次的字符，</span>
-<span class="co">//copyright@ yansha</span>
-<span class="co">//July、updated，2011.04.24.</span>
-<span class="dt">char</span> FirstNotRepeatChar(<span class="dt">char</span>* pString)
-{
-    <span class="kw">if</span>(!pString)
-        <span class="kw">return</span> &#39;\<span class="dv">0</span>&#39;;
-
-    <span class="dt">const</span> <span class="dt">int</span> tableSize = <span class="dv">256</span>;
-    <span class="co">//有点要提醒各位注意，一般常数的空间消耗，如这里的256，我们也认为此空间复杂度为O（1）。</span>
-    <span class="dt">int</span> hashTable[tableSize] = {<span class="dv">0</span>}; <span class="co">//存入数组，并初始化为0</span>
-
-    <span class="dt">char</span>* pHashKey = pString;
-    <span class="kw">while</span>(*(pHashKey) != &#39;\<span class="dv">0</span>&#39;)
-        hashTable[*(pHashKey++)]++;
-
-    <span class="kw">while</span>(*pString != &#39;\<span class="dv">0</span>&#39;)
-    {
-        <span class="kw">if</span>(hashTable[*pString] == <span class="dv">1</span>)
-            <span class="kw">return</span> *pString;
-
-        pString++;
-    }
-    <span class="kw">return</span> &#39;\<span class="dv">0</span>&#39;;  <span class="co">//没有找到满足条件的字符，退出</span>
-}</code></pre>
-<p>代码二，bitmap：</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="ot"># include&lt;stdio.h&gt;</span>
-<span class="ot"># include&lt;string.h&gt;</span>
-
-<span class="dt">const</span> <span class="dt">int</span> N = <span class="dv">26</span>;
-<span class="dt">int</span> bit_map[N];
-
-<span class="dt">void</span> findNoRepeat(<span class="dt">char</span> *src)
-{
-    <span class="dt">int</span> pos;
-    <span class="dt">char</span> *str = src;
-    <span class="dt">int</span> i ,len = strlen(src);
-
-    <span class="co">//统计</span>
-    <span class="kw">for</span>(i = <span class="dv">0</span> ; i &lt; len ;i ++)
-        bit_map[str[i]-&#39;a&#39;] ++;
-
-    <span class="co">//从字符串开始遍历 其bit_map==1 那么就是结果</span>
-    <span class="kw">for</span>(i = <span class="dv">0</span> ; i &lt; len ; i ++)
-    {
-        <span class="kw">if</span>(bit_map[str[i]-&#39;a&#39;] == <span class="dv">1</span>)
-        {
-            printf(<span class="st">&quot;%c&quot;</span>, str[i]);
-            <span class="kw">return</span>;
-        }
-    }
-}
-
-<span class="dt">int</span> main()
-{
-    <span class="dt">char</span> *src = <span class="st">&quot;abaccdeff&quot;</span>;
-    findNoRepeat(src);
-    printf(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>);
-    <span class="kw">return</span> <span class="dv">0</span>;
-}</code></pre>
-<h2 id="第二节字符串拷贝">第二节、字符串拷贝</h2>
-<p>题目描述：</p>
-<p>要求实现库函数strcpy</p>
-<p>原型声明: <code>extern char *strcpy(char *dest, char *src);</code></p>
-<p>功能: 把src所指由NULL结束的字符串复制到dest所指的数组中。</p>
-<p>说明: src和dest所指内存区域不可以重叠且dest必须有足够的空间来容纳src的字符串。 　</p>
-<p>返回: 指向dest的指针。</p>
-<p>分析: 如果编写一个标准strcpy函数的总分值为10，<strong>下面给出几个不同得分的答案</strong>:</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="co">//得2分</span>
-<span class="dt">void</span> strcpy( <span class="dt">char</span> *strDest, <span class="dt">char</span> *strSrc )
-{
-    <span class="kw">while</span>( (*strDest++ = * strSrc++) != &#39;\<span class="dv">0</span>&#39; );
-}
-
-<span class="co">//得4分</span>
-<span class="dt">void</span> strcpy( <span class="dt">char</span> *strDest, <span class="dt">const</span> <span class="dt">char</span> *strSrc )
-{
-    <span class="co">//将源字符串加const，表明其为输入参数，加2分</span>
-    <span class="kw">while</span>( (*strDest++ = * strSrc++) != &#39;\<span class="dv">0</span>&#39; );
-}
-
-<span class="co">//得7分</span>
-<span class="dt">void</span> strcpy(<span class="dt">char</span> *strDest, <span class="dt">const</span> <span class="dt">char</span> *strSrc)
-{
-    <span class="co">//对源地址和目的地址加非0断言，加3分</span>
-    assert( (strDest != NULL) &amp;&amp; (strSrc != NULL) );
-    <span class="kw">while</span>( (*strDest++ = * strSrc++) != &#39;\<span class="dv">0</span>&#39; );
-}
-
-<span class="co">//得9分</span>
-<span class="co">//为了实现链式操作，将目的地址返回，加2分！</span>
-<span class="dt">char</span> * strcpy( <span class="dt">char</span> *strDest, <span class="dt">const</span> <span class="dt">char</span> *strSrc )
-{
-    assert( (strDest != NULL) &amp;&amp; (strSrc != NULL) );
-    <span class="dt">char</span> *address = strDest;
-    <span class="kw">while</span>( (*strDest++ = * strSrc++) != &#39;\<span class="dv">0</span>&#39; );
-    <span class="kw">return</span> address;
-}
-
-<span class="co">//得10分，基本上所有的情况，都考虑到了</span>
-<span class="co">//如果有考虑到源目所指区域有重叠的情况，加1分！</span>
-<span class="dt">char</span> * strcpy( <span class="dt">char</span> *strDest, <span class="dt">const</span> <span class="dt">char</span> *strSrc )
-{
-    <span class="kw">if</span>(strDest == strSrc) { <span class="kw">return</span> strDest; }
-    assert( (strDest != NULL) &amp;&amp; (strSrc != NULL) );
-    <span class="dt">char</span> *address = strDest;
-    <span class="kw">while</span>( (*strDest++ = * strSrc++) != &#39;\<span class="dv">0</span>&#39; );
-    <span class="kw">return</span> address;
-}</code></pre>
-<h2 id="第三节其余库函数的实现">第三节、其余库函数的实现</h2>
-<p>考察此类编写同库函数一样功能的函数经常见于大大小小的IT公司的面试题目中，以下是常见的字符串库函数的实现，希望，对你有所帮助，有任何问题，欢迎不吝指正：</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="co">//@heyaming</span>
-<span class="co">//对原 strtok 的修改，根据MSDN,strToken可以为NULL.实际上第一次call strtok给定一字串，</span>
-<span class="co">//再call strtok时可以输入NULL代表要接着处理给定字串。</span>
-<span class="co">//所以需要用一 static 保存没有处理完的字串。同时也需要处理多个分隔符在一起的情况。</span>
-<span class="dt">char</span> *strtok(<span class="dt">char</span> *strToken, <span class="dt">const</span> <span class="dt">char</span> *str)
-{
-    assert(str != NULL);
-    <span class="dt">static</span> <span class="dt">char</span> *last;
-
-    <span class="kw">if</span> (strToken == NULL &amp;&amp; (strToken = last) == NULL)
-        <span class="kw">return</span> (NULL);
-
-    <span class="dt">char</span> *s = strToken;
-    <span class="dt">const</span> <span class="dt">char</span> *t = str;
-    <span class="kw">while</span> (*s != &#39;\<span class="dv">0</span>&#39;)
-    {
-        t = str;
-        <span class="kw">while</span> (*t != &#39;\<span class="dv">0</span>&#39;)
-        {
-            <span class="kw">if</span> (*s == *t)
-            {
-                last = s + <span class="dv">1</span>;
-                <span class="kw">if</span> (s - strToken == <span class="dv">0</span>) {
-                    strToken = last;
-                    <span class="kw">break</span>;
-                }
-                *(strToken + (s - strToken)) = &#39;\<span class="dv">0</span>&#39;;
-                <span class="kw">return</span> strToken;
-            }
-            ++ t;
-        }
-        ++ s;
-    }
-    <span class="kw">return</span> NULL;
-}
-
-<span class="co">//@big：</span>
-<span class="co">//要处理src和dest有重叠的情况，不是从尾巴开始移动就没问题了。</span>
-<span class="co">//一种情况是dest小于src有重叠，这个时候要从头开始移动，</span>
-<span class="co">//另一种是dest大于src有重叠，这个时候要从尾开始移动。</span>
-<span class="dt">void</span> *memmove(<span class="dt">void</span> *dest, <span class="dt">const</span> <span class="dt">void</span> *src, <span class="dt">unsigned</span> <span class="dt">int</span> count)
-{
-    assert(dest != NULL &amp;&amp; src != NULL);
-    <span class="dt">char</span>* pdest = (<span class="dt">char</span>*) dest;
-    <span class="dt">char</span>* psrc = (<span class="dt">char</span>*) src;
-
-    <span class="co">//pdest在psrc后面，且两者距离小于count时，从尾部开始移动. 其他情况从头部开始移动</span>
-    <span class="kw">if</span> (pdest &gt; psrc &amp;&amp; pdest - psrc &lt; count)
-    {
-        <span class="kw">while</span> (count--)
-        {
-            *(pdest + count) = *(psrc + count);
-        }
-    } 
-    <span class="kw">else</span>
-    {
-        <span class="kw">while</span> (count--)
-        {
-            *pdest++ = *psrc++;
-        }
-    }
-    <span class="kw">return</span> dest;
-}</code></pre>
-<p><strong>测试</strong>：以上所有的函数，都待进一步测试，有任何问题，欢迎任何人随时不吝指出。</p>
-<h1 id="第五章寻找和为定值的两个或多个数">第五章：寻找和为定值的两个或多个数</h1>
-<h2 id="前奏">前奏</h2>
-<p>希望此编程艺术系列能给各位带来的是一种方法，一种创造力，一种举一反三的能力。本章依然同第四章一样，选取比较简单的面试题，恭祝各位旅途愉快。同样，有任何问题，欢迎不吝指正。谢谢。</p>
-<h2 id="第一节寻找和为定值的两个数">第一节、寻找和为定值的两个数</h2>
-<p>第14题（数组）：</p>
+<h1 id="第四章寻找和为定值的两个数">第四章：寻找和为定值的两个数</h1>
+<h2 id="题目描述-3">题目描述</h2>
 <p>题目：输入一个数组和一个数字，在数组中查找两个数，使得它们的和正好是输入的那个数字。</p>
 <p>要求时间复杂度是O(N)。如果有多对数字的和等于输入的数字，输出任意一对即可。</p>
 <p>例如输入数组1、2、4、7、11、15和数字15。由于4+11=15，因此输出4和11。</p>
-<p>分析：</p>
+<h2 id="解法一">解法一</h2>
 <p>咱们试着一步一步解决这个问题（注意阐述中数列有序无序的区别）：</p>
 <p>直接穷举，从数组中任意选取两个数，判定它们的和是否为输入的那个数字。此举复杂度为O(N^2)。很显然，我们要寻找效率更高的解法。</p>
-<p>题目相当于，对每个a[i]，查找sum-a[i]是否也在原始序列中，每一次要查找的时间都要花费为O(N)，这样下来，最终找到两个数还是需要O（N^2）的复杂度。那如何提高查找判断的速度呢？ 答案是二分查找，可以将O(N)的查找时间提高到O(log N)，这样对于N个a[i]，都要花logN的时间去查找相对应的sum-a[i]是否在原始序列中，总的时间复杂度已降为O(N log N)，且空间复杂度为O(1)。 （如果有序，直接二分O(N log N)，如果无序，先排序后二分，复杂度同样为O（N log N + N log N）=O(N log N)，空间总为O(1)）。</p>
+<h2 id="解法二">解法二</h2>
+<p>题目相当于，对每个a[i]，查找sum-a[i]是否也在原始序列中，每一次要查找的时间都要花费为O(N)，这样下来，最终找到两个数还是需要O（N^2）的复杂度。那如何提高查找判断的速度呢？</p>
+<p>答案是二分查找，可以将O(N)的查找时间提高到O(log N)，这样对于N个a[i]，都要花logN的时间去查找相对应的sum-a[i]是否在原始序列中，总的时间复杂度已降为O(N log N)，且空间复杂度为O(1)。 （如果有序，直接二分O(N log N)，如果无序，先排序后二分，复杂度同样为O（N log N + N log N）=O(N log N)，空间总为O(1)）。</p>
+<h2 id="解法三">解法三</h2>
 <p>有没有更好的办法呢？咱们可以依据上述思路2的思想，a[i]在序列中，如果a[i]+a[k]=sum的话，那么sum-a[i]（a[k])也必然在序列中。 举个例子，如下： 原始序列： 1、 2、 4、 7、11、15 用输入数字15减一下各个数，得到对应的序列为： 14、13、11、8、4、 0</p>
-<p>第一个数组以一指针i 从数组最左端开始向右扫描，第二个数组以一指针j 从数组最右端开始向左扫描，如果下面出现了和上面一样的数，即a[*i]=a[*j]，就找出这俩个数来了。 如上，i，j最终在第一个，和第二个序列中找到了相同的数4和11，所以符合条件的两个数，即为4+11=15。 怎么样，两端同时查找，时间复杂度瞬间缩短到了O(N)，但却同时需要O(N)的空间存储第二个数组（<span class="citation" data-cites="飞羽">@飞羽</span>：要达到O(N)的复杂度，第一个数组以一指针i 从数组最左端开始向右扫描，第二个数组以一指针j 从数组最右端开始向左扫描，首先初始i指向元素1，j指向元素0，谁指的元素小，谁先移动，由于1(i)&gt; 0(j)，所以i不动，j向左移动。然后j移动到元素4发现大于元素1，故而停止移动j，开始移动i，直到i指向4，这时,i指向的元素与j指向的元素相，故而判断4是满足条件的第一个数；然后同时移动i,j再进行判断，直到它们到达边界）。</p>
-<p>当然，你还可以构造hash表，正如编程之美上的所述，给定一个数字，根据hash映射查找另一个数字是否也在数组中，只需用O(1)的时间，这样的话，总体的算法通上述思路3 一样，也能降到O(N)，但有个缺陷，就是构造hash额外增加了O(N)的空间，此点同上述思路 3。不过，空间换时间，仍不失为在时间要求较严格的情况下的一种好办法。</p>
-<p>如果数组是无序的，先排序(N log N)，然后用两个指针i，j，各自指向数组的首尾两端，令i=0，j=n-1，然后i++，j--，逐次判断a[i]+a[j]?=sum，如果某一刻a[i]+a[j] &gt; sum，则要想办法让sum的值减小，所以此刻i不动，j--，如果某一刻a[i]+a[j] &lt; sum，则要想办法让sum的值增大，所以此刻i++，j不动。所以，数组无序的时候，时间复杂度最终为O(N log N + N）=O(N log N)，若原数组是有序的，则不需要事先的排序，直接O(N)搞定，且空间复杂度还是O(1)，此思路是相对于上述所有思路的一种改进。（如果有序，直接两个指针两端扫描，时间O(N)，如果无序，先排序后两端扫描，时间O(N log N + N)=O(N log N)，空间始终都为O(1)）。（与上述思路2相比，排序后的时间开销由之前的二分的n*logn降到了扫描的O(N)）。</p>
-<p>总结：</p>
-<p>不论原序列是有序还是无序，解决这类题有以下三种办法：1、二分（若无序，先排序后二分），时间复杂度总为O(N log N)，空间复杂度为O（1）；2、扫描一遍X-S[i] 映射到一个数组或构造hash表，时间复杂度为O(N)，空间复杂度为O(N)；3、两个指针两端扫描（若无序，先排序后扫描），时间复杂度最后为：有序O(N)，无序O(N log N + N)=O(N log N)，空间复杂度都为O(1)。</p>
-<p>所以，要想达到时间O(N)，空间O(1)的目标，除非原数组是有序的（指针扫描法），不然，当数组无序的话，就只能先排序，后指针扫描法或二分（时间 O(N log N)，空间O(1)），或映射或hash（时间O(N)，空间O(N)）。时间或空间，必须牺牲一个，自个权衡吧。</p>
-<p>综上，若是数组有序的情况下，优先考虑两个指针两端扫描法，以达到最佳的时（O(N)），空（O(1)）效应。否则，如果要排序的话，时间复杂度最快当然是只能达到O(N log N)，空间O(1)则是不在话下。</p>
-<p>代码：</p>
-<p>ok，在进入第二节之前，咱们先来实现思路5（这里假定数组已经是有序的），代码可以如下编写（两段代码实现）：</p>
+<p>第一个数组以一指针i 从数组最左端开始向右扫描，第二个数组以一指针j 从数组最右端开始向左扫描，如果下面出现了和上面一样的数，即a[*i]=a[*j]，就找出这俩个数来了。 如上，i，j最终在第一个，和第二个序列中找到了相同的数4和11，所以符合条件的两个数，即为4+11=15。 怎么样，两端同时查找，时间复杂度瞬间缩短到了O(N)，但却同时需要O(N)的空间存储第二个数组（<span class="citation" data-cites="飞羽">@飞羽</span>：要达到O(N)的复杂度，第一个数组以一指针i 从数组最左端开始向右扫描，第二个数组以一指针j 从数组最右端开始向左扫描，首先初始i指向元素1，j指向元素0，谁指的元素小，谁先移动，由于1(i)&gt; 0(j)，所以i不动，j向左移动。然后j移动到元素4发现大于元素1，故而停止移动j，开始移动i，直到i指向4，这时,i指向的元素与j指向的元素相，故而判断4是满足条件的第一个数；然后同时移动i,j再进行判断，直到它们到达边界）。 ## 解法四 当然，你还可以构造hash表，正如编程之美上的所述，给定一个数字，根据hash映射查找另一个数字是否也在数组中，只需用O(1)的时间，这样的话，总体的算法通上述思路3 一样，也能降到O(N)，但有个缺陷，就是构造hash额外增加了O(N)的空间，此点同上述思路 3。不过，空间换时间，仍不失为在时间要求较严格的情况下的一种好办法。</p>
+<h2 id="解法五">解法五</h2>
+<p>如果数组是无序的，先排序(N log N)，然后用两个指针i，j，各自指向数组的首尾两端，令i=0，j=n-1，然后i++，j--，逐次判断a[i]+a[j]?=sum，如果某一刻a[i]+a[j] &gt; sum，则要想办法让sum的值减小，所以此刻i不动，j--，如果某一刻a[i]+a[j] &lt; sum，则要想办法让sum的值增大，所以此刻i++，j不动。所以，数组无序的时候，时间复杂度最终为O(N log N + N）=O(N log N)，若原数组是有序的，则不需要事先的排序，直接O(N)搞定，且空间复杂度还是O(1)，此思路是相对于上述所有思路的一种改进。（如果有序，直接两个指针两端扫描，时间O(N)，如果无序，先排序后两端扫描，时间O(N log N + N)=O(N log N)，空间始终都为O(1)）。（与上述解法二相比，排序后的时间开销由之前的二分的n*logn降到了扫描的O(N)）。</p>
+<p>下面，咱们先来实现思路5（这里假定数组已经是有序的），代码可以如下编写（两段代码实现）：</p>
 <pre class="sourceCode c"><code class="sourceCode c"><span class="co">//代码一</span>
 <span class="co">//O（N）</span>
 Pair findSum(<span class="dt">int</span> *s, <span class="dt">int</span> n, <span class="dt">int</span> x)
@@ -1606,7 +1387,11 @@ bool find_num(<span class="dt">int</span> data[], <span class="dt">unsigned</spa
     }
     <span class="kw">return</span> false;
 }</code></pre>
-<p>扩展：</p>
+<h2 id="解法总结">解法总结</h2>
+<p>不论原序列是有序还是无序，解决这类题有以下三种办法：1、二分（若无序，先排序后二分），时间复杂度总为O(N log N)，空间复杂度为O（1）；2、扫描一遍X-S[i] 映射到一个数组或构造hash表，时间复杂度为O(N)，空间复杂度为O(N)；3、两个指针两端扫描（若无序，先排序后扫描），时间复杂度最后为：有序O(N)，无序O(N log N + N)=O(N log N)，空间复杂度都为O(1)。</p>
+<p>所以，要想达到时间O(N)，空间O(1)的目标，除非原数组是有序的（指针扫描法），不然，当数组无序的话，就只能先排序，后指针扫描法或二分（时间 O(N log N)，空间O(1)），或映射或hash（时间O(N)，空间O(N)）。时间或空间，必须牺牲一个，自个权衡吧。</p>
+<p>综上，若是数组有序的情况下，优先考虑两个指针两端扫描法，以达到最佳的时（O(N)），空（O(1)）效应。否则，如果要排序的话，时间复杂度最快当然是只能达到O(N log N)，空间O(1)则是不在话下。</p>
+<h2 id="问题扩展">问题扩展</h2>
 <ol type="1">
 <li>如果在返回找到的两个数的同时，还要求你返回这两个数的位置列?</li>
 <li>如果把题目中的要你寻找的两个数改为“多个数”，或任意个数列?（请看下面第二节）</li>
@@ -1669,13 +1454,11 @@ bool find_num(<span class="dt">int</span> data[], <span class="dt">unsigned</spa
 
     <span class="kw">return</span> -<span class="dv">1</span>;
 }</code></pre>
-<h2 id="第二节寻找和为定值的多个数">第二节、寻找和为定值的多个数</h2>
-<p>第21题（数组）</p>
-<p>2010年中兴面试题</p>
-<p>编程求解：</p>
+<h1 id="第五章寻找和为定值的多个数">第五章、寻找和为定值的多个数</h1>
+<h2 id="题目描述-4">题目描述</h2>
 <p>输入两个整数 n 和 m，从数列1，2，3.......n 中 随意取几个数,</p>
 <p>使其和等于 m ,要求将其中所有的可能组合列出来。</p>
-<p>解法一</p>
+<h2 id="解法一-1">解法一</h2>
 <p>我想，稍后给出的程序已经足够清楚了，就是要注意到放n，和不放n个区别，即可，代码如下：</p>
 <pre class="sourceCode c"><code class="sourceCode c"><span class="co">// 21题递归方法</span>
 <span class="co">//copyright@ July &amp;&amp; yansha</span>
@@ -1719,7 +1502,7 @@ list&lt;<span class="dt">int</span>&gt;list1;
     find_factor(sum,n);
     <span class="kw">return</span> <span class="dv">0</span>;
 }</code></pre>
-<h1 id="解法二">解法二</h1>
+<h2 id="解法二-1">解法二</h2>
 <p><span class="citation" data-cites="zhouzhenren">@zhouzhenren</span>：</p>
 <p>这个问题属于子集和问题（也是背包问题）。本程序采用 回溯法+剪枝</p>
 <p>X数组是解向量，t=∑(1,..,k-1)Wi*Xi, r=∑(k,..,n)Wi</p>
@@ -1797,7 +1580,7 @@ list&lt;<span class="dt">int</span>&gt;list1;
     search(N, M);
     <span class="kw">return</span> <span class="dv">0</span>;
 }</code></pre>
-<p>扩展：</p>
+<h2 id="问题扩展-1">问题扩展</h2>
 <p>1、从一列数中筛除尽可能少的数使得从左往右看，这些数是从小到大再从大到小的（网易）。</p>
 <p>2、有两个序列a,b，大小都为n,序列元素的值任意整数，无序；</p>
 <p>要求：通过交换a,b中的元素，使[序列a元素的和]与[序列b元素的和]之间的差最小。</p>
@@ -1896,13 +1679,10 @@ main()
 <p>除此之外，受本文读者xiafei1987128启示，有朋友在stacoverflow上也问过一个类似的题，:-)，见此：<a href="http://stackoverflow.com/questions/9047908/swap-the-elements-of-two-sequences-such-that-the-difference-of-the-element-sums">http://stackoverflow.com/questions/9047908/swap-the-elements-of-two-sequences-such-that-the-difference-of-the-element-sums</a>。感兴趣的可以看看。</p>
 <h1 id="第六章亲和数问题--求解500万以内的亲和数">第六章：亲和数问题--求解500万以内的亲和数</h1>
 <p>作者：上善若水、July、yansha</p>
-<h2 id="前奏-1">前奏</h2>
-<p>本章陆续开始，除了继续保持原有的字符串、数组等面试题之外，会有意识的间断性节选一些有关数字趣味小而巧的面试题目，重在突出思路的“巧”，和“妙”。本章亲和数问题之关键字，“500万”，“线性复杂度”。</p>
-<h2 id="第一节亲和数问题">第一节、亲和数问题</h2>
-<p>题目描述：</p>
+<h2 id="题目描述-5">题目描述</h2>
 <p>求500万以内的所有亲和数</p>
 <p>如果两个数a和b，a的所有真因数之和等于b,b的所有真因数之和等于a,则称a,b是一对亲和数。 例如220和284，1184和1210，2620和2924。</p>
-<p><strong>分析</strong>：</p>
+<h2 id="思路分析">思路分析</h2>
 <p>首先得明确到底是什么是亲和数?</p>
 <p>亲和数问题最早是由毕达哥拉斯学派发现和研究的。他们在研究数字的规律的时候发现有以下性质特点的两个数:</p>
 <p>220的真因子是：1、2、4、5、10、11、20、22、44、55、110；</p>
@@ -1919,8 +1699,8 @@ main()
 <li>一个不错的算法应该在半小时之内搞定这个问题，当然这样的算法有很多。节约时间的做法是可以生成伴随数组，也就是空间换时间，但是那样，空间代价太大，因为数据规模庞大。</li>
 <li>在稍后的算法中，依然使用的伴随数组，只不过，因为题目的特殊性，只是它方便和巧妙地利用了下标作为伴随数组，来节约时间。同时，将回溯的思想换成递推的思想(预处理数组的时间复杂度为<strong>O(N*logN)</strong>(logN为调和级数)，扫描数组的时间复杂度为线性<strong>O(N)</strong>。所以，总的时间复杂度为<strong>O(N*logN+N)</strong>(其中logN为调和级数))。</li>
 </ol>
-<h2 id="第二节伴随数组线性遍历">第二节、伴随数组线性遍历</h2>
-<p>依据上文中的第3点思路，编写如下代码：</p>
+<h2 id="解法一伴随数组线性遍历">解法一、伴随数组线性遍历</h2>
+<p>依据上文的思路分析，可以编写如下代码：</p>
 <pre class="sourceCode c"><code class="sourceCode c"><span class="co">//求解亲和数问题</span>
 
 <span class="co">//第一个for和第二个for循环是logN*N（调和级数）次遍历,第三个for循环扫描O(N)。</span>
@@ -1975,7 +1755,7 @@ main()
 <blockquote>
 <p>3、把最简单的东西运用的最巧妙的人，要比用复杂方法解决复杂问题的人要头脑清晰。</p>
 </blockquote>
-<h2 id="第三节程序的构造与解释">第三节、程序的构造与解释</h2>
+<h3 id="解法一的构造与解释">解法一的构造与解释</h3>
 <p>我再来具体解释下上述程序的原理，ok，举个例子，假设是求10以内的亲和数，求解步骤如下：</p>
 <p>因为所有数的真因数都包含1，所以，先在各个数的下方全部置1</p>
 <p>1. 然后取i=2,3,4,5（i&lt;=10/2），j依次对应的位置为j=（4、6、8、10），（6、9）,（8）,（10）各数所对应的位置。依据j所找到的位置，在j所指的各个数的下面加上各个真因子i（i=2、3、4、5）。</p>
@@ -1986,7 +1766,7 @@ main()
 <p>3. 然后一次遍历i从220开始到5000000，i每遍历一个数后, 将i对应的数下面的各个真因子加起来得到一个和sum[i]，如果这个和sum[i]==某个i’，且sum[i‘]=i， 那么这两个数i和i’，即为一对亲和数。</p>
 <p>4. i=2；sum[4]+=2，sum[6]+=2，sum[8]+=2，sum[10]+=2，sum[12]+=2... i=3，sum[6]+=3，sum[9]+=3...</p>
 <p>5. i=220时，sum[220]=284，i=284时，sum[284]=220；即sum[220]=sum[sum[284]]=284， 得出220与284是一对亲和数。所以，最终输出220、284，...</p>
-<p><strong>特别鸣谢</strong></p>
+<h2 id="解法二-2">解法二</h2>
 <blockquote>
 <p>litaoye专门为本亲和数问题开帖子继续阐述，有兴趣的朋友可继续参见<a href="http://topic.csdn.net/u/20110526/21/129c2235-1f44-42e9-a55f-878920c21e19.html">这里</a>。同时，任何人对本亲和数问题有任何问题，也可以回复到上述帖子上。</p>
 </blockquote>
@@ -2068,11 +1848,11 @@ namespace CSharpTest
 单位second。
 */</code></pre>
 <h1 id="第七章求连续子数组的最大和">第七章：求连续子数组的最大和</h1>
-<h2 id="第一节-求子数组的最大和">第一节 求子数组的最大和</h2>
-<p><strong>题目描述：</strong> 输入一个整形数组，数组里有正数也有负数。 数组中连续的一个或多个整数组成一个子数组，每个子数组都有一个和。 求所有子数组的和的最大值。要求时间复杂度为O(n)。</p>
+<h2 id="题目描述-6">题目描述</h2>
+<p>输入一个整形数组，数组里有正数也有负数。 数组中连续的一个或多个整数组成一个子数组，每个子数组都有一个和。 求所有子数组的和的最大值。要求时间复杂度为O(n)。</p>
 <p>例如输入的数组为<code>1, -2, 3, 10, -4, 7, 2, -5</code>，和最大的子数组为<code>3, 10, -4, 7, 2</code>， 因此输出为该子数组的和18。</p>
-<p>这个问题在各大公司面试中出现频率之频繁，被人引用次数之多，非一般面试题可与之匹敌。单凭这点，就没有理由不入选狂想曲系列中了。此题曾作为本人之前整理的微软100题中的第3题，至今反响也很大。ok，下面，咱们来一步一步分析这个题。</p>
-<p><strong>分析：</strong> 1、求一个数组的最大子数组和，如此序列<code>1, -2, 3, 10, -4, 7, 2, -5</code>，我想最最直观也是最野蛮的办法便是，三个for循环三层遍历，求出数组中每一个子数组的和，最终求出这些子数组的最大的一个值。 记Sum[i, …, j]为数组A中第i个元素到第j个元素的和（其中0 &lt;= i &lt;= j &lt; n），遍历所有可能的Sum[i, …, j]，那么时间复杂度为O(N^3)：</p>
+<h2 id="解法一暴力循环">解法一、暴力循环</h2>
+<p>求一个数组的最大子数组和，如此序列<code>1, -2, 3, 10, -4, 7, 2, -5</code>，我想最最直观也是最野蛮的办法便是，三个for循环三层遍历，求出数组中每一个子数组的和，最终求出这些子数组的最大的一个值。 记Sum[i, …, j]为数组A中第i个元素到第j个元素的和（其中0 &lt;= i &lt;= j &lt; n），遍历所有可能的Sum[i, …, j]，那么时间复杂度为O(N^3)：</p>
 <pre class="sourceCode c"><code class="sourceCode c"><span class="co">//本段代码引自编程之美</span>
 <span class="dt">int</span> MaxSum(<span class="dt">int</span>* A, <span class="dt">int</span> n)
 {
@@ -2094,7 +1874,8 @@ namespace CSharpTest
     }
     <span class="kw">return</span> maximum;
 }</code></pre>
-<p>2、其实这个问题，在我之前上传的微软100题，答案V0.2版[第1-20题答案]，便直接给出了以下O(N)的算法：</p>
+<h2 id="解法二on遍历">解法二、O(N)遍历</h2>
+<p>其实这个问题，在我之前上传的微软100题，答案V0.2版[第1-20题答案]，便直接给出了以下O(N)的算法：</p>
 <pre class="sourceCode c"><code class="sourceCode c"><span class="co">//copyright@ July 2010/10/18</span>
 <span class="co">//updated，2011.05.25.</span>
 <span class="ot">#include &lt;iostream.h&gt;</span>
@@ -2142,7 +1923,8 @@ namespace CSharpTest
 <span class="co">  当b&gt;sum，则更新sum=b;</span>
 <span class="co">  若b&lt;sum，则sum保持原值，不更新。。July、10/31。</span>
 <span class="co">  ----------------------------------*/</span></code></pre>
-<p>3、不少朋友看到上面的答案之后，认为上述思路2的代码，没有处理全是负数的情况，当全是负数的情况时，我们可以让程序返回0，也可以让其返回最大的那个负数，下面便是前几日重写的，修改后的处理全是负数情况（返回最大的负数）的代码：</p>
+<h2 id="解法三处理负数">解法三、处理负数</h2>
+<p>不少朋友看到上面的答案之后，认为上述思路2的代码，没有处理全是负数的情况，当全是负数的情况时，我们可以让程序返回0，也可以让其返回最大的那个负数，下面便是前几日重写的，修改后的处理全是负数情况（返回最大的负数）的代码：</p>
 <pre class="sourceCode c"><code class="sourceCode c"><span class="co">//copyright@ July</span>
 <span class="co">//July、updated，2011.05.25。</span>
 <span class="ot">#include &lt;iostream.h&gt;</span>
@@ -2171,16 +1953,16 @@ namespace CSharpTest
     cout &lt;&lt; maxsum(a) &lt;&lt; endl;
     <span class="kw">return</span> <span class="dv">0</span>;
 }</code></pre>
-<p>4、DP解法的具体方程：@ flyinghearts：设sum[i] 为前i个元素中，包含第i个元素且和最大的连续子数组，result 为已找到的子数组中和最大的。对第i+1个元素有两种选择：做为新子数组的第一个元素、放入前面找到的子数组。</p>
+<p>解法四、动态规划 DP解法的具体方程：@ flyinghearts：设sum[i] 为前i个元素中，包含第i个元素且和最大的连续子数组，result 为已找到的子数组中和最大的。对第i+1个元素有两种选择：做为新子数组的第一个元素、放入前面找到的子数组。</p>
 <pre><code>sum[i+1] = max(a[i+1], sum[i] + a[i+1])
 result = max(result, sum[i])</code></pre>
-<p><strong>扩展：</strong></p>
+<h2 id="问题扩展-2">问题扩展</h2>
 <ol type="1">
 <li>如果数组是二维数组，同样要你求最大子数组的和列?</li>
 <li>如果是要你求子数组的最大乘积列?</li>
 <li>如果同时要求输出子段的开始和结束列?</li>
 </ol>
-<h2 id="第二节-data-structures-and-algorithm-analysis-in-c">第二节 Data structures and Algorithm analysis in C</h2>
+<h2 id="data-structures-and-algorithm-analysis-in-c">Data structures and Algorithm analysis in C</h2>
 <p>下面给出《Data structures and Algorithm analysis in C》中4种实现。</p>
 <pre class="sourceCode c"><code class="sourceCode c"><span class="co">//感谢网友firo</span>
 <span class="co">//July、2010.06.05。</span>
@@ -2281,7 +2063,7 @@ result = max(result, sum[i])</code></pre>
 <p>原第9章：http://blog.csdn.net/v_JULY_v/article/details/6447013， 将废掉，重新写新的议题。</p>
 <h1 id="第十章如何给107个数据量的磁盘文件排序">第十章：如何给10^7个数据量的磁盘文件排序</h1>
 <p>作者:July，yansha，5，编程艺术室。</p>
-<h2 id="前奏-2">前奏</h2>
+<h2 id="前奏">前奏</h2>
 <p>经过几天的痛苦沉思，最终决定，把原程序员面试题狂想曲系列正式更名为程序员编程艺术系列，同时，狂想曲创作组更名为编程艺术室。之所以要改名，我们考虑到三点：1、为面试服务不能成为我们最终或最主要的目的，2、我更愿把解答一道道面试题，ACM题等各类程序设计题目的过程，当做一种艺术来看待，3、艺术的提炼本身是一个非常非常艰难的过程，但我们乐意接受这个挑战。</p>
 <p>ok，如果任何人对本编程艺术系列有任何意见，或发现了本编程艺术系列任何问题，漏洞，bug，欢迎随时提出，我们将虚心接受并感激不尽，以为他人创造更好的价值，更好的服务。</p>
 <h2 id="第一节如何给磁盘文件排序">第一节、如何给磁盘文件排序</h2>
@@ -4438,7 +4220,7 @@ Type Find(Type* a, <span class="dt">int</span> N)  <span class="co">//a代表数
 <li><p>定位法，时间复杂度O（m+n）。首先直接定位到最右上角的元素，再配以二分查找，比要找的数（6）大就往左走，比要找数（6）的小就往下走，直到找到要找的数字（6）为止，如下图所示：<br /><img src="../images/23~24/23.3.gif" alt="img" /></p></li>
 </ol>
 <p>上述方法二的关键代码+程序运行如下图所示：<br /><img src="../images/23~24/23.4.gif" alt="img" /></p>
-<p>试问，上述算法复杂么？不复杂，只要稍微动点脑筋便能想到，还可以参看友人老梦的文章，Young氏矩阵：<a href="http://blog.csdn.net/zhanglei8893/article/details/6234564">http://blog.csdn.net/zhanglei8893/article/details/6234564</a>，以及IT练兵场的：<a href="http://www.jobcoding.com/array/matrix/young-tableau-problem/">http://www.jobcoding.com/array/matrix/young-tableau-problem/</a>，除此之外，何海涛先生一书剑指offer中也收集了此题，感兴趣的朋友也可以去看看。</p>
+<p>试问，上述算法复杂么？不复杂，只要稍微动点脑筋便能想到，还可以参看友人老梦的文章，Young氏矩阵：<a href="http://blog.csdn.net/zhanglei8893/article/details/6234564">http://blog.csdn.net/zhanglei8893/article/details/6234564</a>，除此之外，何海涛先生一书剑指offer中也收集了此题，感兴趣的朋友也可以去看看。</p>
 <h1 id="第二十四章倒排索引关键词不重复hash编码">第二十四章：倒排索引关键词不重复Hash编码</h1>
 <p>作者：July、yansha。编程艺术室出品。</p>
 <p>出处：结构之法算法之道</p>
@@ -4986,31 +4768,17 @@ middle的计算不能写在while循环外，否则无法得到更新。</code></
 <h1 id="第二十六章基于给定的文档生成倒排索引的编码与实践">第二十六章：基于给定的文档生成倒排索引的编码与实践</h1>
 <p>作者：July、yansha。</p>
 <p>出处：结构之法算法之道</p>
-<p>** 第二十六章基于给定的文档生成倒排索引的编码与实践 **</p>
-<ul>
-<li>引言</li>
-<li>第一节索引的构建方法</li>
-<li>第二节Hash表的构建与实现</li>
-<li>第三节倒排索引文件的生成与实现</li>
-<li>第四节程序需求功能的改进</li>
-<li>对相同日期与不同日期的处理</li>
-<li>为关键词添上编码</li>
-<li>第五节算法的二次改进</li>
-<li>省去二次Hash</li>
-<li>除去排序针对不同日期的记录直接插入</li>
-<li>后记</li>
-</ul>
-<h4 id="引言-1">引言</h4>
+<h2 id="引言-1">引言</h2>
 <p>本周实现倒排索引。实现过程中，寻找资料，结果发现找份资料诸多不易：1、网上搜倒排索引实现，结果千篇一律，例子都是那几个同样的单词；2、到谷歌学术上想找点稍微有价值水平的资料，结果下篇论文还收费或者要求注册之类；3、大部分技术书籍只有理论，没有实践。于是，朋友戏言：网上一般有价值的东西不多。希望，本blog的出现能改变此现状。</p>
 <p>在第二十四章、倒排索引关键词不重复Hash编码中，我们针对一个给定的倒排索引文件，提取出其中的关键词，然后针对这些关键词进行Hash不重复编码。本章，咱们再倒退一步，即给定一个正排文档（暂略过文本解析，分词等步骤，日后会慢慢考虑这些且一并予以实现），要求生成对应的倒排索引文件。同时，本章还是基于Hash索引之上（运用暴雪的Hash函数可以比较完美的解决大数据量下的冲突问题），日后自会实现B+树索引。</p>
 <p>与此同时，本编程艺术系列逐步从为面试服务而转到实战性的编程当中了，教初学者如何编程，如何运用高效的算法解决实际应用中的编程问题，将逐步成为本编程艺术系列的主旨之一。</p>
 <p>OK，接下来，咱们针对给定的正排文档一步一步来生成倒排索引文件，有任何问题，欢迎随时不吝赐教或批评指正。谢谢。</p>
-<h4 id="第一节索引的构建方法">第一节、索引的构建方法</h4>
+<h2 id="第一节索引的构建方法">第一节、索引的构建方法</h2>
 <ul>
 <li>根据信息检索导论（Christtopher D.Manning等著，王斌译）一书给的提示，我们可以选择两种构建索引的算法：BSBI算法，与SPIMI算法。</li>
 </ul>
 <p>BSBI算法，基于磁盘的外部排序算法，此算法首先将词项映射成其ID的数据结构，如Hash映射。而后将文档解析成词项ID-文档ID对，并在内存中一直处理，直到累积至放满一个固定大小的块空间为止，我们选择合适的块大小，使之能方便加载到内存中并允许在内存中快速排序，快速排序后的块转换成倒排索引格式后写入磁盘。</p>
-<pre><code>建立倒排索引的步骤如下：</code></pre>
+<p>建立倒排索引的步骤如下：</p>
 <ul>
 <li>将文档分割成几个大小相等的部分；</li>
 <li>对词项ID-文档ID进行排序；</li>
@@ -5031,7 +4799,7 @@ while(all documents have not been processed)
 <figure>
 <img src="../images/26/26.1.gif" />
 </figure>
-<p>读入该词项的倒排记录表并合并，合并结果写回磁盘中。需要时，再次从文件中读入数据到每个读缓冲区（基于磁盘的外部排序算法的更多可以参考：程序员编程艺术 <a href="10.0.md">第十章、如何给10^7个数据量的磁盘文件排序</a>）。</p>
+<p>读入该词项的倒排记录表并合并，合并结果写回磁盘中。需要时，再次从文件中读入数据到每个读缓冲区。</p>
 <p>BSBI算法主要的时间消耗在排序上，选择什么排序方法呢，简单的快速排序足矣，其时间复杂度为O（N*logN），其中N是所需要排序的项（词项ID-文档ID对）的数目的上界。</p>
 <p>SPIMI算法，内存式单遍扫描索引算法</p>
 <p>与上述BSBI算法不同的是：SPIMI使用词项而不是其ID，它将每个块的词典写入磁盘，对于写一块则重新采用新的词典，只要硬盘空间足够大，它能索引任何大小的文档集。</p>
@@ -5074,7 +4842,7 @@ return output_file</code></pre>
 </ul>
 <p>建立索引的模块根据当时运行系统所在的计算机的内存大小，将索引分为 k 组，使得每组运算所需内存都小于系统能够提供的最大使用内存的大小。 按照倒排索引的生成算法，生成 k 组倒排索引。 然后将这 k 组索引归并，即将相同索引词对应的数据合并到一起，就得到了以索引词为主键的最终的倒排文件索引，即反向索引。</p>
 <p>为了测试的方便，本文针对小数据量进行从正排文档到倒排索引文件的实现。而且针对大数量的K路归并算法或基于磁盘的外部排序算法本编程艺术系列第十章中已有详细阐述。</p>
-<h4 id="第二节hash表的构建与实现">第二节、Hash表的构建与实现</h4>
+<h2 id="第二节hash表的构建与实现">第二节、Hash表的构建与实现</h2>
 <p>如下，给定如下图所示的正排文档，每一行的信息分别为（中间用##########隔开）：文档ID、订阅源（子频道）、 频道分类、 网站类ID（大频道）、时间、 md5、文档权值、关键词、作者等等。 <img src="../images/26/26.2.gif" /></p>
 <p>要求基于给定的上述正排文档。生成如第二十四章所示的倒排索引文件（注，关键词所在的文章如果是同一个日期的话，是挨在同一行的，用“#”符号隔开）： <img src="../images/26/26.3.gif" /></p>
 <p>我们知道：为网页建立全文索引是网页预处理的核心部分，包括分析网页和建立倒排文件。二者是顺序进行，先分析网页，后建立倒排文件（也称为反向索引），如图所示：</p>
@@ -5258,7 +5026,7 @@ key_list SearchByIndex(<span class="dt">unsigned</span> <span class="dt">int</sp
     <span class="kw">return</span> -<span class="dv">1</span>;
 }</code></pre>
 <p>有了这个Hash表，接下来，我们就可以把词插入Hash表进行存储了。</p>
-<h4 id="第三节倒排索引文件的生成与实现">第三节、倒排索引文件的生成与实现</h4>
+<h2 id="第三节倒排索引文件的生成与实现">第三节、倒排索引文件的生成与实现</h2>
 <p>Hash表实现了（存于HashSearch.h中），还得编写一系列的函数，如下所示（所有代码还只是初步实现了功能，稍后在第四部分中将予以改进与优化）：</p>
 <pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">//处理空白字符和空白行</span>
 <span class="dt">int</span> GetRealString(<span class="dt">char</span> *pbuf)
@@ -5499,8 +5267,8 @@ FILE* OpenWriteFile(<span class="dt">const</span> <span class="dt">char</span> *
 }</code></pre>
 <p>程序编译运行后，生成的倒排索引文件为index.txt，其与原来给定的正排文档对照如下： <img src="../images/26/26.5.gif" /></p>
 <p>有没有发现关键词奥恰洛夫出现在的三篇文章是同一个日期1210的，貌似与本文开头指定的倒排索引格式要求不符？因为第二部分开头中，已明确说明：“注，关键词所在的文章如果是同一个日期的话，是挨在同一行的，用“#”符号隔开”。OK，有疑问是好事，代表你思考了，请直接转至下文第4部分。</p>
-<h4 id="第四节程序需求功能的改进">第四节、程序需求功能的改进</h4>
-<h6 id="对相同日期与不同日期的处理">4.1、对相同日期与不同日期的处理</h6>
+<h2 id="第四节程序需求功能的改进">第四节、程序需求功能的改进</h2>
+<h3 id="对相同日期与不同日期的处理">对相同日期与不同日期的处理</h3>
 <p>细心的读者可能还是会注意到：在第二部分开头中，要求基于给定的上述正排文档。生成如第二十四章所示的倒排索引文件是下面这样子的，即是： <img src="../images/26/26.6.gif" /></p>
 <p>也就是说，上面建索引的过程本该是如下的： <img src="../images/26/26.7.gif" /></p>
 <p>与第一部分所述的SMIPI算法有什么区别？对的，就在于对在同一个日期的出现的关键词的处理。如果是遇一旧词，则找到其倒排记录表的位置：相同日期，添加到之前同一日期的记录之后（第一个记录的后面记下同一日期的记录数目）；不同日期，另起一行新增记录。</p>
@@ -5652,10 +5420,10 @@ FILE* OpenWriteFile(<span class="dt">const</span> <span class="dt">char</span> *
     <span class="kw">return</span> <span class="dv">0</span>;
 }</code></pre>
 <p>修改后编译运行，生成的index.txt文件如下： <img src="../images/26/26.8.gif" /></p>
-<h6 id="为关键词添上编码">4.2、为关键词添上编码</h6>
+<h3 id="为关键词添上编码">为关键词添上编码</h3>
 <p>如上图所示，已经满足需求了。但可以再在每个关键词的背后添加一个计数表示索引到了第多少个关键词： <img src="../images/26/26.9.gif" /></p>
-<h4 id="第五节算法的二次改进">第五节、算法的二次改进</h4>
-<h6 id="省去二次hash">5.1、省去二次Hash</h6>
+<h2 id="第五节算法的二次改进">第五节、算法的二次改进</h2>
+<h3 id="省去二次hash">省去二次Hash</h3>
 <p>针对本文评论下读者的留言，做了下思考，自觉可以省去二次hash：</p>
 <pre class="sourceCode cpp"><code class="sourceCode cpp">        <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">7</span>; i &lt; count; i++)
         {
@@ -5690,7 +5458,7 @@ FILE* OpenWriteFile(<span class="dt">const</span> <span class="dt">char</span> *
 }
 <span class="co">// 通过快排对关键字进行排序</span>
 qsort(words, WORD_MAX_NUM, WORD_MAX_LEN, strcoll);</code></pre>
-<h6 id="除去排序针对不同日期的记录直接插入">5.2、除去排序，针对不同日期的记录直接插入</h6>
+<h3 id="除去排序针对不同日期的记录直接插入">除去排序，针对不同日期的记录直接插入</h3>
 <pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">//对链表进行冒泡排序。这里可以改成快速排序：等到统计完所有有关这个关键词的文章之后，才能对他集体快排。</span>
 <span class="co">//但其实完全可以用插入排序，不同日期的，根据时间的先后找到插入位置进行插入：</span>
 <span class="co">//假如说已有三条不同日期的记录 A B C</span>
@@ -5718,7 +5486,7 @@ qsort(words, WORD_MAX_NUM, WORD_MAX_LEN, strcoll);</code></pre>
         }
     }
 }</code></pre>
-<p>综上5.1、5.2两节免去冒泡排序和，省去二次hash和免去冒泡排序，修改后如下：</p>
+<p>综上两节免去冒泡排序和，省去二次hash和免去冒泡排序，修改后如下：</p>
 <pre class="sourceCode cpp"><code class="sourceCode cpp">        <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">7</span>; i &lt; count; i++) {
             <span class="co">// 将关键字对应的文档内容加入文档结点链表中</span>
             <span class="co">// 如果关键字第一次出现，则将其加入hash表</span>
@@ -5765,16 +5533,6 @@ qsort(words, WORD_MAX_NUM, WORD_MAX_LEN, strcoll);</code></pre>
 <span class="co">// 通过快排对关键字进行排序</span>
 qsort(words, WORD_MAX_NUM, WORD_MAX_LEN, strcoll);</code></pre>
 <p>修改后编译运行的效果图如下（用了另外一份更大的数据文件进行测试）： <img src="../images/26/26.10.gif" /></p>
-<p>本章全部源码请到以下两处任一一处下载（欢迎读者朋友们继续优化，若能反馈于我，则幸甚不过了）：</p>
-<ul>
-<li>http://download.csdn.net/detail/v_july_v/4012605（csdn下载处）</li>
-<li>https://github.com/fuxiang90/CreateInvertedIndex.（github下载处）</li>
-</ul>
-<h4 id="后记-1">后记</h4>
-<p>本文代码还有很多的地方可以改进和优化，请待后续更新。当然，代码看起来也很青嫩，亟待提高阿。</p>
-<p>近几日后，准备编程艺术室内38位兄弟的靓照和blog或空间地址公布在博客内，给读者一个联系他们的方式，顺便还能替他们征征友 招招婚之类的。ys，土豆，水哥，老梦，3，飞羽，风清扬，well，weedge，xiaolin，555等等三十八位兄弟皆都对编程艺术系列贡献卓著。</p>
-<p>最后说一句，读者朋友们中如果是初学编程的话切勿跟风学算法，夯实编程基础才是最重要的。预祝各位元旦快乐。谢谢，本章完。</p>
-<p>原文链接：<a href="http://blog.csdn.net/v_july_v/article/details/7109500">http://blog.csdn.net/v_july_v/article/details/7109500</a></p>
 <h1 id="第二十七章不改变正负数相对顺序重新排列数组">第二十七章：不改变正负数相对顺序重新排列数组</h1>
 <h2 id="时间on空间o1-无解">时间O(N)，空间O(1) (无解?)</h2>
 <h2 id="前言-2">前言</h2>
@@ -5909,9 +5667,8 @@ pos的计算扫描2遍num数组即可，有了pos数组当然排序不成问题�
 <h1 id="第二十八章最大连续乘积子串">第二十八章：最大连续乘积子串</h1>
 <h2 id="前言-3">前言</h2>
 <p>这一章和下一章的问题皆是各大IT公司最喜欢出的笔试面试题之一，比如说前者是小米2013年校招笔试原题，而后者则更是反复出现，如去年9月26日百度一二面试题，10月9日腾讯面试题第1小题，10月13日百度2013校招北京站笔试题第二 大道题第3小题，及去年10月15日2013年Google校招笔试最后一道大题皆是考察下一章的字符串编辑距离问题。</p>
-<p>OK，欢迎朋友们在本文下参与讨论，如果在线编译自己的代码（编程语言任选C/C++/Java/C#），可以上英雄会提交你的代码，有任何问题，欢迎随时不吝批评或指正，感谢。</p>
-<h2 id="题目描述-5">题目描述：</h2>
-<p>**给一个浮点数序列，取最大乘积连续子串的值，例如 -2.5，4，0，3，0.5，8，-1，则取出的最大乘积连续子串为3，0.5，8。也就是说，上述数组中，3 0.5 8这3个数的乘积3<em>0.5</em>8=12是最大的，而且是连续的。</p>
+<h2 id="题目描述-7">题目描述：</h2>
+<p>给一个浮点数序列，取最大乘积连续子串的值，例如 -2.5，4，0，3，0.5，8，-1，则取出的最大乘积连续子串为3，0.5，8。也就是说，上述数组中，3 0.5 8这3个数的乘积3<em>0.5</em>8=12是最大的，而且是连续的。</p>
 <p>提醒：此最大乘积连续子串与最大乘积子序列不同，请勿混淆，前者子串要求连续，后者子序列不要求连续。也就是说：最长公共子串（Longest CommonSubstring）和最长公共子序列（LongestCommon Subsequence，LCS）的区别：</p>
 <ul>
 <li><p>子串（Substring）是串的一个连续的部分，</p></li>
@@ -5921,20 +5678,20 @@ pos的计算扫描2遍num数组即可，有了pos数组当然排序不成问题�
 <p><strong>解答：</strong></p>
 <p><strong>解法一、</strong> 穷举，所有的计算组合：</p>
 <p>或许，读者初看此题，自然会想到最大乘积子序列问题类似于<a href="http://blog.csdn.net/v_JULY_v/article/details/6444021">最大子数组和问题</a>，可能立马会想到用最简单粗暴的方式：两个for循环直接轮询。</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="dt">double</span> max=<span class="dv">0</span>;
-<span class="dt">double</span> start=<span class="dv">0</span>;
-<span class="dt">double</span> end=<span class="dv">0</span>;
-<span class="kw">for</span> (<span class="dt">int</span> i=<span class="dv">0</span>;i&lt;num;i++)
+<pre class="sourceCode c"><code class="sourceCode c"><span class="dt">double</span> max = <span class="dv">0</span>;
+<span class="dt">double</span> start = <span class="dv">0</span>;
+<span class="dt">double</span> end = <span class="dv">0</span>;
+<span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; num; i++)
 {
-    <span class="dt">double</span> x=arrs[i];
-    <span class="kw">for</span> (<span class="dt">int</span> j = i<span class="dv">+1</span>; j &lt; num; j++)
+    <span class="dt">double</span> x = arrs[i];
+    <span class="kw">for</span> (<span class="dt">int</span> j = i + <span class="dv">1</span>; j &lt; num; j++)
     {
-        x*=arrs[j];
-        <span class="kw">if</span>(x&gt;max)
+        x *= arrs[j];
+        <span class="kw">if</span> (x &gt; max)
         {
-            max=x;
-            start=arrs[i];
-            end=arrs[j];
+            max = x;
+            start = arrs[i];
+            end = arrs[j];
         }
     }
 }</code></pre>
@@ -5945,193 +5702,195 @@ pos的计算扫描2遍num数组即可，有了pos数组当然排序不成问题�
 <li>而maxProduct则记录到目前为止所有最大乘积candidates的最大值。 （以上用candidate这个词是因为只是可能成为新一轮的最大/最小乘积）</li>
 </ul>
 <p>由于空集的乘积定义为1，在搜索数组前，maxCurrent，minCurrent，maxProduct都赋为1。 假设在任何时刻你已经有了maxCurrent和minCurrent这两个最大/最小乘积的candidates，新读入数组的元素x(i)后，新的最大乘积candidate只可能是maxCurrent或者minCurrent与x(i)的乘积中的较大者，如果x(i) &lt; 0导致maxCurrent &lt; minCurrent，需要交换这两个candidates的值。</p>
-<p>当任何时候maxCurrent &lt; 1，由于1（空集）是比maxCurrent更好的candidate，所以更新maxCurrent为1，类似的可以更新minCurrent。任何时候maxCurrent如果比最好的maxProduct大，更新maxProduct。</p>
+<p>当任何时候maxCurrent&lt;1，由于1（空集）是比maxCurrent更好的candidate，所以更新maxCurrent为1，类似的可以更新minCurrent。任何时候maxCurrent如果比最好的maxProduct大，更新maxProduct。</p>
 <p>代码一：</p>
-<pre class="sourceCode c"><code class="sourceCode c">template &lt;typename Comparable&gt;    
-Comparable maxprod( <span class="dt">const</span> vector&lt;Comparable&gt;&amp;v)    
-{    
-    <span class="dt">int</span> i;    
-    Comparable maxProduct = <span class="dv">1</span>;    
-    Comparable minProduct = <span class="dv">1</span>;    
-    Comparable maxCurrent = <span class="dv">1</span>;    
-    Comparable minCurrent = <span class="dv">1</span>;    
-    <span class="co">//Comparable t;    </span>
-    
-    <span class="kw">for</span>( i=<span class="dv">0</span>; i&lt; v.size() ;i++)    
-    {    
-        maxCurrent *= v[i];    
-        minCurrent *= v[i];    
-        <span class="kw">if</span>(maxCurrent &gt; maxProduct)     
-            maxProduct = maxCurrent;    
-        <span class="kw">if</span>(minCurrent &gt; maxProduct)    
-            maxProduct = minCurrent;    
-        <span class="kw">if</span>(maxCurrent &lt; minProduct)    
-            minProduct = maxCurrent;    
-        <span class="kw">if</span>(minCurrent &lt; minProduct)    
-            minProduct = minCurrent;    
-        <span class="kw">if</span>(minCurrent &gt; maxCurrent)    
-            swap(maxCurrent,minCurrent);    
-        <span class="kw">if</span>(maxCurrent&lt;<span class="dv">1</span>)    
-            maxCurrent = <span class="dv">1</span>;    
-        <span class="co">//if(minCurrent&gt;1)    </span>
-        <span class="co">//    minCurrent =1;    </span>
-    }    
-    <span class="kw">return</span> maxProduct;     
-}    </code></pre>
-<p>代码二：思路，记录以第i个结尾的最大乘积M和最小乘积m，并且记录这两个区间的起点（终点都是i），不断更新，<a href="http://www.51weixue.com/thread-246-1-1.html">来源</a>：</p>
-<pre><code>pair&lt;int,int&gt; maxproduct(double *f,int n)
-{   //返回最大乘积的起点终点
-    int R = 0, r = 0;   //最大最小区间的 起点
-    pair&lt;int,int&gt; ret = make_pair(0, 0);   //最大 最小的区间下标
-    double M = f[0], m = f[0], answer = f[0];     // 最大 最小值
-    for (int i = 1; i &lt; n; ++i)
+<pre class="sourceCode c"><code class="sourceCode c">template &lt;typename Comparable&gt;
+Comparable maxprod( <span class="dt">const</span> vector&lt;Comparable&gt;&amp;v)
+{
+    <span class="dt">int</span> i;
+    Comparable maxProduct = <span class="dv">1</span>;
+    Comparable minProduct = <span class="dv">1</span>;
+    Comparable maxCurrent = <span class="dv">1</span>;
+    Comparable minCurrent = <span class="dv">1</span>;
+    <span class="co">//Comparable t;</span>
+
+    <span class="kw">for</span> ( i = <span class="dv">0</span>; i &lt; v.size() ; i++)
     {
-        double t0 = f[i] * M, t1 = f[i] * m;  
-        if (t0 &gt; t1)
+        maxCurrent *= v[i];
+        minCurrent *= v[i];
+        <span class="kw">if</span> (maxCurrent &gt; maxProduct)
+            maxProduct = maxCurrent;
+        <span class="kw">if</span> (minCurrent &gt; maxProduct)
+            maxProduct = minCurrent;
+        <span class="kw">if</span> (maxCurrent &lt; minProduct)
+            minProduct = maxCurrent;
+        <span class="kw">if</span> (minCurrent &lt; minProduct)
+            minProduct = minCurrent;
+        <span class="kw">if</span> (minCurrent &gt; maxCurrent)
+            swap(maxCurrent, minCurrent);
+        <span class="kw">if</span> (maxCurrent &lt; <span class="dv">1</span>)
+            maxCurrent = <span class="dv">1</span>;
+        <span class="co">//if(minCurrent&gt;1)</span>
+        <span class="co">//    minCurrent =1;</span>
+    }
+    <span class="kw">return</span> maxProduct;
+}</code></pre>
+<p>代码二：思路，记录以第i个结尾的最大乘积M和最小乘积m，并且记录这两个区间的起点（终点都是i），不断更新，<a href="http://www.51weixue.com/thread-246-1-1.html">来源</a>：</p>
+<pre class="sourceCode cpp"><code class="sourceCode cpp">pair&lt;<span class="dt">int</span>, <span class="dt">int</span>&gt; maxproduct(<span class="dt">double</span> *f, <span class="dt">int</span> n)
+{
+    <span class="co">//返回最大乘积的起点终点</span>
+    <span class="dt">int</span> R = <span class="dv">0</span>, r = <span class="dv">0</span>;   <span class="co">// 最大最小区间的 起点</span>
+    pair&lt;<span class="dt">int</span>, <span class="dt">int</span>&gt; ret = make_pair(<span class="dv">0</span>, <span class="dv">0</span>);     <span class="co">// 最大 最小的区间下标</span>
+    <span class="dt">double</span> M = f[<span class="dv">0</span>], m = f[<span class="dv">0</span>], answer = f[<span class="dv">0</span>]; <span class="co">// 最大 最小值</span>
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt; n; ++i)
+    {
+        <span class="dt">double</span> t0 = f[i] * M, t1 = f[i] * m;
+        <span class="kw">if</span> (t0 &gt; t1)
         {
-            M = t0;  
-            m = t1;  
-        }  
-        else
+            M = t0;
+            m = t1;
+        }
+        <span class="kw">else</span>
         {
-            int t = R;  
-            R = r;  
-            r = t;  
-            M = t1;  
-            m = t0;  
-        }  
-        if (M &lt; f[i])
+            <span class="dt">int</span> t = R;
+            R = r;
+            r = t;
+            M = t1;
+            m = t0;
+        }
+        <span class="kw">if</span> (M &lt; f[i])
         {
-            M = f[i];  
-            R = i;  
-        }  
-        if (m &gt; f[i])
+            M = f[i];
+            R = i;
+        }
+        <span class="kw">if</span> (m &gt; f[i])
         {
-            m = f[i];  
-            r = i;  
-        }  
-        if (answer &lt; M)
+            m = f[i];
+            r = i;
+        }
+        <span class="kw">if</span> (answer &lt; M)
         {
-            answer = M;  
-            ret = make_pair(R, i);  
-        }  
-    }  
-    return ret;  
-}  </code></pre>
+            answer = M;
+            ret = make_pair(R, i);
+        }
+    }
+    <span class="kw">return</span> ret;
+}</code></pre>
 <p><strong>解法三、</strong> 本题除了上述类似最大子数组和的解法，也可以直接用动态规划求解（其实，上述的解法一本质上也是动态规划，只是解题所表现出来的具体形式与接下来的解法二不同罢了。这个不同就在于下面的解法二会写出动态规划问题中经典常见的DP方程，而解法一是直接求解）。具体解法如下：</p>
 <p>假设数组为a[]，直接利用动归来求解，考虑到可能存在负数的情况，我们用Max来表示以a结尾的最大连续子串的乘积值，用Min表示以a结尾的最小的子串的乘积值，那么状态转移方程为：</p>
-<p>Max=max{a, Max[i-1]<em>a, Min[i-1]</em>a};<br /> Min=min{a, Max[i-1]<em>a, Min[i-1]</em>a};</p>
+<pre><code>  Max=max{a, Max[i-1]*a, Min[i-1]*a};  
+  Min=min{a, Max[i-1]*a, Min[i-1]*a};  </code></pre>
 <p>初始状态为Max[1]=Min[1]=a[1]。</p>
 <p>C/C++代码一，很简洁的一小段代码：</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="dt">double</span> func(<span class="dt">double</span> *a,<span class="dt">const</span> <span class="dt">int</span> n)  
-{  
-    <span class="dt">double</span> *maxA = new <span class="dt">double</span>[n];  
-    <span class="dt">double</span> *minA = new <span class="dt">double</span>[n];  
-    maxA[<span class="dv">0</span>] = minA[<span class="dv">0</span>] =a[<span class="dv">0</span>];  
-    <span class="dt">double</span> value = maxA[<span class="dv">0</span>];  
-    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span> ; i &lt; n ; ++i)  
-    {  
-        maxA[i] = max(max(a[i],maxA[i<span class="dv">-1</span>]*a[i]),minA[i<span class="dv">-1</span>]*a[i]);  
-        minA[i] = min(min(a[i],maxA[i<span class="dv">-1</span>]*a[i]),minA[i<span class="dv">-1</span>]*a[i]);  
-        value=max(value,maxA[i]);  
-    }  
-    <span class="kw">return</span> value;  
-}  </code></pre>
-<p>C/C++代码二：</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="co">/*  </span>
-<span class="co"> 给定一个浮点数数组，有正有负数，0，正数组成,数组下标从1算起  </span>
-<span class="co"> 求最大连续子序列乘积，并输出这个序列，如果最大子序列乘积为负数，那么就输出-1  </span>
-<span class="co"> 用Max[i]表示以a[i]结尾乘积最大的连续子序列  </span>
-<span class="co"> 用Min[i]表示以a[i]结尾乘积最小的连续子序列  因为有复数，所以保存这个是必须的  </span>
-<span class="co">*/</span>    
-<span class="dt">void</span> longest_multiple(<span class="dt">double</span> *a,<span class="dt">int</span> n)
+<pre class="sourceCode c"><code class="sourceCode c"><span class="dt">double</span> func(<span class="dt">double</span> *a, <span class="dt">const</span> <span class="dt">int</span> n)
 {
-    <span class="dt">double</span> *Min=new <span class="dt">double</span>[n<span class="dv">+1</span>]();
-    <span class="dt">double</span> *Max=new <span class="dt">double</span>[n<span class="dv">+1</span>]();
-    <span class="dt">double</span> *p=new <span class="dt">double</span>[n<span class="dv">+1</span>]();
+    <span class="dt">double</span> *maxA = new <span class="dt">double</span>[n];
+    <span class="dt">double</span> *minA = new <span class="dt">double</span>[n];
+    maxA[<span class="dv">0</span>] = minA[<span class="dv">0</span>] = a[<span class="dv">0</span>];
+    <span class="dt">double</span> value = maxA[<span class="dv">0</span>];
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">1</span> ; i &lt; n ; ++i)
+    {
+        maxA[i] = max(max(a[i], maxA[i - <span class="dv">1</span>] * a[i]), minA[i - <span class="dv">1</span>] * a[i]);
+        minA[i] = min(min(a[i], maxA[i - <span class="dv">1</span>] * a[i]), minA[i - <span class="dv">1</span>] * a[i]);
+        value = max(value, maxA[i]);
+    }
+    <span class="kw">return</span> value;
+}</code></pre>
+<p>C/C++代码二：</p>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="co">/*</span>
+<span class="co"> 给定一个浮点数数组，有正有负数，0，正数组成,数组下标从1算起</span>
+<span class="co"> 求最大连续子序列乘积，并输出这个序列，如果最大子序列乘积为负数，那么就输出-1</span>
+<span class="co"> 用Max[i]表示以a[i]结尾乘积最大的连续子序列</span>
+<span class="co"> 用Min[i]表示以a[i]结尾乘积最小的连续子序列  因为有复数，所以保存这个是必须的</span>
+<span class="co">*/</span>
+<span class="dt">void</span> longest_multiple(<span class="dt">double</span> *a, <span class="dt">int</span> n)
+{
+    <span class="dt">double</span> *Min = new <span class="dt">double</span>[n + <span class="dv">1</span>]();
+    <span class="dt">double</span> *Max = new <span class="dt">double</span>[n + <span class="dv">1</span>]();
+    <span class="dt">double</span> *p = new <span class="dt">double</span>[n + <span class="dv">1</span>]();
     <span class="co">//初始化</span>
-    <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">0</span>;i&lt;=n;i++)
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt;= n; i++)
     {
-        p[i]=-<span class="dv">1</span>;
+        p[i] = -<span class="dv">1</span>;
     }
-    Min[<span class="dv">1</span>]=a[<span class="dv">1</span>];
-    Max[<span class="dv">1</span>]=a[<span class="dv">1</span>];
-    <span class="dt">double</span> max_val=Max[<span class="dv">1</span>];
-    <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">2</span>;i&lt;=n;i++)
+    Min[<span class="dv">1</span>] = a[<span class="dv">1</span>];
+    Max[<span class="dv">1</span>] = a[<span class="dv">1</span>];
+    <span class="dt">double</span> max_val = Max[<span class="dv">1</span>];
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">2</span>; i &lt;= n; i++)
     {
-        Max[i]=max(Max[i<span class="dv">-1</span>]*a[i],Min[i<span class="dv">-1</span>]*a[i],a[i]);
-        Min[i]=min(Max[i<span class="dv">-1</span>]*a[i],Min[i<span class="dv">-1</span>]*a[i],a[i]);
-        <span class="kw">if</span>(max_val&lt;Max[i])
-        max_val=Max[i];
+        Max[i] = max(Max[i - <span class="dv">1</span>] * a[i], Min[i - <span class="dv">1</span>] * a[i], a[i]);
+        Min[i] = min(Max[i - <span class="dv">1</span>] * a[i], Min[i - <span class="dv">1</span>] * a[i], a[i]);
+        <span class="kw">if</span> (max_val &lt; Max[i])
+            max_val = Max[i];
     }
-    <span class="kw">if</span>(max_val&lt;<span class="dv">0</span>)
-        printf(<span class="st">&quot;%d&quot;</span>,-<span class="dv">1</span>);
+    <span class="kw">if</span> (max_val &lt; <span class="dv">0</span>)
+        printf(<span class="st">&quot;%d&quot;</span>, -<span class="dv">1</span>);
     <span class="kw">else</span>
-        printf(<span class="st">&quot;%d&quot;</span>,max_val);
+        printf(<span class="st">&quot;%d&quot;</span>, max_val);
     <span class="co">//内存释放</span>
     delete [] Max;
     delete [] Min;
-}  </code></pre>
+}</code></pre>
 <p>C#版完整代码(代码来自参加英雄会在线编程挑战之<a href="http://hero.pongo.cn/Question/Details?ID=19&amp;ExamID=19">1019、最大乘积连续子串</a>的在线提交代码的用户)：</p>
-<pre><code>//答题英雄：danielqkj  
-using System;  
-public class Test   
-{  
-    void Max(double a, double b, double c)  
-    {  
-        double d = (a&gt;b)?a:b;  
-        return (d&gt;c)?d:c;      
-    }  
-      
-    void Min(double a, double b, double c)  
-    {  
-        double d = (a&gt;b)?b:a;  
-        return (d&gt;c)?c:d;  
-    }  
-      
-      
-    public static void Main()  
-    {  
-        int n = Int32.parse(Console.readline());  
-        double[] a = new double[n];  
-        double maxvalue = a[0];  
-        double[] max = new double[n];  
-        double[] min = new double[n];  
-        double start, end;  
-          
-        String[] s = Console.readline().split(&#39; &#39;);  
-        for (int i = 0; i &lt; n; i++)  
-        {  
-            a[i] = Double.parse(s[i])  
-        }  
-          
-        max[0] = a[0];  
-        min[0] = a[0];  
-        start = 0, end = 0;  
-          
-        for (int i = 1; i &lt; n; i++)  
-        {  
-            max[i]=Max(a[i], a[i]*max[i-1], a[i]*min[i-1]);  
-            min[i]=Min(a[i], a[i]*max[i-1], a[i]*min[i-1]);  
-              
-            if (max[i] &gt; maxvalue)  
-            {  
-                maxvalue = max[i];  
-                end = i;  
-            }  
-        }  
-          
-        double mmm = maxvalue;  
-        while ( (mmm - 0.0) &gt; 0.00001 )  
-        {  
-            start = end;  
-            mmm = mmm / a[start];  
-        }  
-          
-        Console.Writeline(a[start] + &quot; &quot; + a[end] + &quot; &quot; + maxvalue);  
-          
-    }  
-}  </code></pre>
+<pre class="csharp"><code>//答题英雄：danielqkj
+using System;
+public class Test
+{
+    void Max(double a, double b, double c)
+    {
+        double d = (a &gt; b) ? a : b;
+        return (d &gt; c) ? d : c;
+    }
+
+    void Min(double a, double b, double c)
+    {
+        double d = (a &gt; b) ? b : a;
+        return (d &gt; c) ? c : d;
+    }
+
+
+    public static void Main()
+    {
+        int n = Int32.parse(Console.readline());
+        double[] a = new double[n];
+        double maxvalue = a[0];
+        double[] max = new double[n];
+        double[] min = new double[n];
+        double start, end;
+
+        String[] s = Console.readline().split(&#39; &#39;);
+        for (int i = 0; i &lt; n; i++)
+        {
+            a[i] = Double.parse(s[i])
+        }
+
+               max[0] = a[0];
+        min[0] = a[0];
+        start = 0, end = 0;
+
+        for (int i = 1; i &lt; n; i++)
+        {
+            max[i] = Max(a[i], a[i] * max[i - 1], a[i] * min[i - 1]);
+            min[i] = Min(a[i], a[i] * max[i - 1], a[i] * min[i - 1]);
+
+            if (max[i] &gt; maxvalue)
+            {
+                maxvalue = max[i];
+                end = i;
+            }
+        }
+
+        double mmm = maxvalue;
+        while ( (mmm - 0.0) &gt; 0.00001 )
+        {
+            start = end;
+            mmm = mmm / a[start];
+        }
+
+        Console.Writeline(a[start] + &quot; &quot; + a[end] + &quot; &quot; + maxvalue);
+
+    }
+}</code></pre>
 <p><strong>变种</strong></p>
 <p>此外，此题还有另外的一个变种形式，即给定一个长度为N的整数数组，只允许用乘法，不能用除法，计算任意（N-1）个数的组合中乘积最大的一组，并写出算法的时间复杂度。</p>
 <p>我们可以把所有可能的（N-1）个数的组合找出来，分别计算它们的乘积，并比较大小。由于总共有N个（N-1）个数的组合，总的时间复杂度为O（N2），显然这不是最好的解法。</p>
@@ -6142,12 +5901,18 @@ public class Test
 </figure>
 <p><strong>解法2、</strong></p>
 <p>此外，还可以通过分析，进一步减少解答问题的计算量。假设N个整数的乘积为P，针对P的正负性进行如下分析（其中，AN-1表示N-1个数的组合，PN-1表示N-1个数的组合的乘积）。</p>
-<p>1.P为0</p>
+<ol type="1">
+<li>P为0</li>
+</ol>
 <p>那么，数组中至少包含有一个0。假设除去一个0之外，其他N-1个数的乘积为Q，根据Q的正负性进行讨论：</p>
-<p>Q为0<br /> 说明数组中至少有两个0，那么N-1个数的乘积只能为0，返回0；<br /> Q为正数<br /> 返回Q，因为如果以0替换此时AN-1中的任一个数，所得到的PN-1为0，必然小于Q；<br /> Q为负数<br /> 如果以0替换此时AN-1中的任一个数，所得到的PN-1为0，大于Q，乘积最大值为0。</p>
-<p>2.P为负数</p>
+<p>Q为0<br />说明数组中至少有两个0，那么N-1个数的乘积只能为0，返回0；<br />Q为正数<br />返回Q，因为如果以0替换此时AN-1中的任一个数，所得到的PN-1为0，必然小于Q；<br />Q为负数<br />如果以0替换此时AN-1中的任一个数，所得到的PN-1为0，大于Q，乘积最大值为0。</p>
+<ol start="2" type="1">
+<li>P为负数</li>
+</ol>
 <p>根据“负负得正”的乘法性质，自然想到从N个整数中去掉一个负数，使得PN-1为一个正数。而要使这个正数最大，这个被去掉的负数的绝对值必须是数组中最小的。我们只需要扫描一遍数组，把绝对值最小的负数给去掉就可以了。</p>
-<p>3.P为正数</p>
+<ol start="3" type="1">
+<li>P为正数</li>
+</ol>
 <p>类似地，如果数组中存在正数值，那么应该去掉最小的正数值，否则去掉绝对值最大的负数值。<br />上面的解法采用了直接求N个整数的乘积P，进而判断P的正负性的办法，但是直接求乘积在编译环境下往往会有溢出的危险（这也就是本题要求不使用除法的潜在用意），事实上可做一个小的转变，不需要直接求乘积，而是求出数组中正数（+）、负数（-）和0的个数，从而判断P的正负性，其余部分与以上面的解法相同。</p>
 <p>在时间复杂度方面，由于只需要遍历数组一次，在遍历数组的同时就可得到数组中正数（+）、负数（-）和0的个数，以及数组中绝对值最小的正数和负数，时间复杂度为O（N）。</p>
 <h2 id="参考文献及推荐阅读">参考文献及推荐阅读</h2>
@@ -6155,7 +5920,6 @@ public class Test
 <li>杨氏矩阵查找、最大乘积连续子串、字符串循环右移、社区很忙等5题集中<a href="http://bbs.csdn.net/topics/390398519">讨论地址</a>；<br /></li>
 <li><a href="">http://www.bjwilly.com/archives/395.html</a>；</li>
 </ol>
-<p>July、二零一三年三月二十一日。</p>
 <h1 id="第二十九章字符串编辑距离">第二十九章：字符串编辑距离</h1>
 <h2 id="前言-4">前言</h2>
 <p>上一章和这一章的问题皆是各大IT公司最喜欢出的笔试面试题之一，比如说前者是小米2013年校招笔试原题，而后者则更是反复出现，如去年9月26日百度一二面试题，10月9日腾讯面试题第1小题，10月13日百度2013校招北京站笔试题第二 大道题第3小题，及去年10月15日2013年Google校招笔试最后一道大题皆是考察的这个字符串编辑距离问题。</p>
@@ -7249,7 +7013,8 @@ EXPORT_SYMBOL(simple_strtol);  </code></pre>
 <img src="../images/30~31/31.1.jpg" alt="31.1.jpg" /><figcaption>31.1.jpg</figcaption>
 </figure>
 <p>注意事项：<br />1. 自行实现函数my_find，勿在my_find函数里夹杂输出，且不准用C、C++库，和Java的String对象；<br />2. 请注意代码的时间，空间复杂度，及可读性，简洁性；<br />3. input=aaa，rule=aa时，返回一个结果aa，即可。</p>
-<p><em><strong>1</strong></em>. 本题与上述第三十章的题不同，上题字符串转换成整数更多考察对思维的全面性和对细节的处理，本题则更多的是编程技巧。闲不多说，直接上代码：</p>
+<h2 id="解法一-2">解法一</h2>
+<p>本题与上述第三十章的题不同，上题字符串转换成整数更多考察对思维的全面性和对细节的处理，本题则更多的是编程技巧。闲不多说，直接上代码：</p>
 <pre class="sourceCode c"><code class="sourceCode c"><span class="co">//copyright@cao_peng 2013/4/23  </span>
 <span class="dt">int</span> str_len(<span class="dt">char</span> *a)
 {  <span class="co">//字符串长度</span>
@@ -7363,7 +7128,8 @@ EXPORT_SYMBOL(simple_strtol);  </code></pre>
     free(match);
     <span class="kw">return</span> output;
 }</code></pre>
-<p><em><strong>2</strong></em>. 本题也可以直接写出DP(Dynamic Programming, 动态规划)方程，如下代码所示：</p>
+<h2 id="解法二动态规划">解法二、动态规划</h2>
+<p>本题也可以直接写出DP(Dynamic Programming, 动态规划)方程，如下代码所示：</p>
 <pre class="sourceCode c"><code class="sourceCode c"><span class="co">//copyright@chpeih 2013/4/23  </span>
 <span class="dt">char</span>* my_find(<span class="dt">char</span> input[], <span class="dt">char</span> rule[])  
 {  
@@ -8335,7 +8101,7 @@ EXPORT_SYMBOL(simple_strtol);  </code></pre>
     cout &lt;&lt; sumMax - map[N - <span class="dv">1</span>][N - <span class="dv">1</span>] &lt;&lt; endl;
     <span class="kw">return</span> <span class="dv">0</span>;
 }</code></pre>
-<h3 id="解法二动态规划">解法二、动态规划</h3>
+<h3 id="解法二动态规划-1">解法二、动态规划</h3>
 <p>上述解法一的搜索解法是的时间复杂度是指数型的，如果是只走一次的话，是经典的dp。</p>
 <h4 id="dp思路详解">2.1、DP思路详解</h4>
 <p>故正如@绿色夹克衫所说：此题也可以用动态规划求解，主要思路就是同时DP 2次所走的状态。</p>
@@ -8818,7 +8584,7 @@ bool isValid(<span class="dt">int</span> step, <span class="dt">int</span> x1, <
 <p><a href="http://blog.csdn.net/caopengcs/article/details/10521603">完美洗牌问题的几个扩展</a></p>
 <p><a href="http://wenku.baidu.com/view/bbb88ffc910ef12d2af9e738">原根与指数的介绍</a></p>
 <p>《数论概论》Joseph H. Silverman著，推荐理由：因写上文中的完美洗牌算法遇到了一堆数论定理受了刺激，故推荐此书；</p>
-<h3 id="后记-2">后记</h3>
+<h3 id="后记-1">后记</h3>
 <p>以上第35章可能是整个系列迄今为止我最满意的一篇，不仅仅是因为此章思路清晰，过渡自然，代码风格良好，更因为有了@曹鹏博士 的加入，编程艺术如虎添翼，质量更上一层！</p>
 <p>编程艺术通过解决一个个实际的编程面试题，让广大初学者一步步学会分析问题解决问题优化问题的能力，且每个问题的讲解足够通俗，希望后续我(们)做得越来越好！July、二零一三年八月二十四日凌晨零点三十七分。</p>
 <h1 id="第三十六三十七章搜索智能提示suggestion附近点搜索">第三十六~三十七章：搜索智能提示suggestion，附近点搜索</h1>
