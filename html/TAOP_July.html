@@ -64,6 +64,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="#第三十五章完美洗牌算法">第三十五章：完美洗牌算法</a></li>
 <li><a href="#第三十六三十七章搜索智能提示suggestion附近点搜索">第三十六~三十七章：搜索智能提示suggestion，附近点搜索</a></li>
 <li><a href="#第三十八章hero在线编程判题出题系统的演进与优化">第三十八章：Hero在线编程判题、出题系统的演进与优化</a></li>
+<li><a href="#第四十三章加权区间调度">第四十三章：加权区间调度</a></li>
 </ul>
 </nav>
 <h1 id="第一章左旋转字符串">第一章：左旋转字符串</h1>
@@ -96,7 +97,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <ol type="1">
 <li>首先分为俩部分，X:abc，Y:def；</li>
 <li>将X反转，X-&gt;X<sup>T，即得：abc-&gt;cba；将Y反转，Y-&gt;Y</sup>T，即得：def-&gt;fed。</li>
-<li>反转上述得到的结果字符串X<sup>TY</sup>T，即字符串cbafed的两部分（cba和fed）给予反转，得到：cbafed-&gt;fedcba，形式化表示为(X<sup>TY</sup>T)^T=YX，这就实现了整个反转。</li>
+<li>反转上述得到的结果字符串X<sup>TY</sup>T，即字符串cbafed的两部分（cba和fed）给予反转，得到：cbafed-&gt;defabc，形式化表示为(X<sup>TY</sup>T)^T=YX，这就实现了整个反转。</li>
 </ol>
 <p>是不是一目了然了？</p>
 <p>在《编程珠玑》上也有这样一个类似的问题，它的解法同本思路一致，如下图所示：</p>
@@ -669,7 +670,7 @@ ptr_no_space head[HASHLEN];
 <figure>
 <img src="../images/3/3.1/3.1.3.jpg" />
 </figure>
-<p><strong>读者反馈from 杨忠胜</strong>：3.1节的代码第38行 hash_function(char const *p)有误吧，这样的话，不能修改p的值（但是函数需要修改指针的值），要想不修改*p指向的内容，应该是const char *p; 此外，您程序中的/t, /n有误，C语言是,。<br />  感谢这位读者的来信，日后统一订正。谢谢。</p>
+<p><strong>读者反馈from 杨忠胜</strong>：3.1节的代码第38行 hash_function(char const *p)有误吧，这样的话，不能修改p的值（但是函数需要修改指针的值），要想不修改*p指向的内容，应该是const char *p; 此外，您程序中的/t, /n有误，C语言是\t,\n。<br />  感谢这位读者的来信，日后统一订正。谢谢。</p>
 <h3 id="扩展统计出现次数最多的数据">扩展、统计出现次数最多的数据</h3>
 <p><strong>题目描述</strong>： 给你上千万或上亿数据（有重复），统计其中出现次数最多的前N个数据。</p>
 <p>分析：上千万或上亿的数据，现在的机器的内存应该能存下（也许可以，也许不可以）。所以考虑采用hash_map/搜索二叉树/红黑树等来进行统计次数。然后就是取出前N个出现次数最多的数据了。当然，也可以堆实现。</p>
@@ -3842,28 +3843,29 @@ f(n)=     2                                      n = 2
 <li>上文第五部分来源：(<a href="http://blog.csdn.net/sparkliang/article/details/5279393">http://blog.csdn.net/sparkliang/article/details/5279393</a>)；</li>
 </ol>
 <h1 id="第二十一章出现次数超过一半的数字">第二十一章：出现次数超过一半的数字</h1>
-<h2 id="前言-1">前言</h2>
-<p>这个问题来自编程之美上，Tango是微软亚洲研究院的一个试验项目，如图1所示。研究院的员工和实习生们都很喜欢在Tango上面交流灌水。传说，Tango有一大“水王”，他不但喜欢发帖，还会回复其他ID发的每个帖子。坊间风闻该“水王”发帖数目超过了帖子总数的一半。如果你有一个当前论坛上所有帖子（包括回帖）的列表，其中帖子作者的ID也在表中，你能快速找出这个传说中的Tango水王吗？</p>
+<h2 id="题目描述-7">题目描述</h2>
+<p>题目：数组中有一个数字出现的次数超过了数组长度的一半，找出这个数字。</p>
+<p>分析：编程之美上也有这道题，不过它变换了题目的表述形，如下：</p>
+<p>Tango是微软亚洲研究院的一个试验项目，如图1所示。研究院的员工和实习生们都很喜欢在Tango上面交流灌水。传说，Tango有一大“水王”，他不但喜欢发帖，还会回复其他ID发的每个帖子。坊间风闻该“水王”发帖数目超过了帖子总数的一半。如果你有一个当前论坛上所有帖子（包括回帖）的列表，其中帖子作者的ID也在表中，你能快速找出这个传说中的Tango水王吗？</p>
 <figure>
 <img src="../images/21~22/21.1.gif" />
 </figure>
 <p>图1 Tango</p>
-<p>ok，看本文之前，你尚不知道怎么解决上述两个问题的话不要紧，本文即要阐述上述两个问题。若有任何问题，欢迎随时不吝指正。谢谢。</p>
-<h2 id="第二十一章发帖水王及其扩展">第二十一章：发帖水王及其扩展</h2>
-<h4 id="第一节74.数组中超过出现次数超过一半的数字">第一节：74.数组中超过出现次数超过一半的数字</h4>
-<p>题目：数组中有一个数字出现的次数超过了数组长度的一半，找出这个数字。</p>
-<p>分析：编程之美上也有这道题，不过它变换了题目的表述形式，即是如本文前言所述的寻找发帖水王的问题。</p>
-<p>ok，咱们来解决上述这道题，以微软面试100题第74题的阐述为准（本程序员编程艺术系列就是按照之前整理的微软100题一题一题展开而来的）。</p>
-<p>一个数组中有很多数，现在我们要找出这个数组中那个超过出现次数一半的数字，怎么找呢?大凡当我们碰到某一个杂乱无序的东西时，我们人的内心本质期望是希望把它梳理成有序的。所以，我们得分两种情况来讨论，无序和有序：</p>
-<p><strong>1.</strong>如果<strong>无序</strong>，那么我们是不是可以先把数组中所有这些数字<strong>先进行排序</strong>，至于选取什么排序方法则不在话下，最常用的快速排序O（N<em>logN）即可。排完序呢，直接遍历。在遍历整个数组的同时统计每个数字的出现次数，然后把那个出现次数超过一半的数字直接输出，题目便解答完成了。总的时间复杂度为O（N</em>logN+N）。</p>
-<p><strong>2.</strong>但各位再想想，<strong>如果是有序的数组呢</strong>或者经过上述由无序的数组变成有序后的数组呢？是否在排完序O（N<em>logN）后，真的还需要再遍历一次整个数组么?我们知道，既然是数组的话，那么我们可以根据数组索引支持直接定向到某一个数。我们发现，一个数字在数组中的出现次数超过了一半，那么在已排好序的数组索引的N/2处（从零开始编号），就一定是这个数字。自此，我们只需要对整个数组排完序之后，然后直接输出数组中的第N/2处的数字即可，这个数字即是整个数组中出现次数超过一半的数字，总的时间复杂度由于少了最后一次整个数组的遍历，缩小到O（N</em>logN）。</p>
-<p><strong>3.</strong>然不论是上述思路一的O（N<em>logN+N），还是思路二的O（N</em>logN），时间复杂度并无本质性的改变。我们需要找到一种更为有效的思路或方法。既要缩小总的时间复杂度，那么就用查找时间复杂度为O（1），事先预处理时间复杂度为O（N）的<strong>hash表</strong>。哈希表的键值（Key）为数组中的数字，值（Value）为该数字对应的次数。然后直接遍历整个<strong>hash表</strong>，找出每一个数字在对应的位置处出现的次数，输出那个出现次数超过一半的数字即可。</p>
-<p><strong>4.</strong>Hash表需要O（N）的开销空间，且要设计hash函数，还有没有更好的办法呢?我们可以试着这么考虑，如果<strong>每次删除两个不同的数</strong>（不管是不是我们要查找的那个出现次数超过一半的数字），那么，在剩下的数中，我们要查找的数（出现次数超过一半）出现的次数仍然超过总数的一半。通过不断重复这个过程，不断排除掉其它的数，最终找到那个出现次数超过一半的数字。这个方法，免去了上述思路一、二的排序，也避免了思路三空间O（N）的开销，总得说来，时间复杂度只有O（N），空间复杂度为O（1），不失为最佳方法。</p>
+<p>一个数组中有很多数，现在我们要找出这个数组中那个超过出现次数一半的数字，怎么找呢?大凡当我们碰到某一个杂乱无序的东西时，我们人的内心本质期望是希望把它梳理成有序的。所以，我们得分两种情况来讨论，无序和有序。</p>
+<h2 id="解法一-2">解法一</h2>
+<p>如果<strong>无序</strong>，那么我们是不是可以先把数组中所有这些数字<strong>先进行排序</strong>，至于选取什么排序方法则不在话下，最常用的快速排序O（N<em>logN）即可。排完序呢，直接遍历。在遍历整个数组的同时统计每个数字的出现次数，然后把那个出现次数超过一半的数字直接输出，题目便解答完成了。总的时间复杂度为O（N</em>logN+N）。</p>
+<h2 id="解法二-3">解法二</h2>
+<p>但各位再想想，<strong>如果是有序的数组呢</strong>或者经过上述由无序的数组变成有序后的数组呢？是否在排完序O（N<em>logN）后，真的还需要再遍历一次整个数组么?我们知道，既然是数组的话，那么我们可以根据数组索引支持直接定向到某一个数。我们发现，一个数字在数组中的出现次数超过了一半，那么在已排好序的数组索引的N/2处（从零开始编号），就一定是这个数字。自此，我们只需要对整个数组排完序之后，然后直接输出数组中的第N/2处的数字即可，这个数字即是整个数组中出现次数超过一半的数字，总的时间复杂度由于少了最后一次整个数组的遍历，缩小到O（N</em>logN）。</p>
+<h2 id="解法三-1">解法三</h2>
+<p>然不论是上述思路一的O（N<em>logN+N），还是思路二的O（N</em>logN），时间复杂度并无本质性的改变。我们需要找到一种更为有效的思路或方法。既要缩小总的时间复杂度，那么就用查找时间复杂度为O（1），事先预处理时间复杂度为O（N）的<strong>hash表</strong>。哈希表的键值（Key）为数组中的数字，值（Value）为该数字对应的次数。然后直接遍历整个<strong>hash表</strong>，找出每一个数字在对应的位置处出现的次数，输出那个出现次数超过一半的数字即可。</p>
+<h2 id="解法四">解法四</h2>
+<p>Hash表需要O（N）的开销空间，且要设计hash函数，还有没有更好的办法呢?我们可以试着这么考虑，如果<strong>每次删除两个不同的数</strong>（不管是不是我们要查找的那个出现次数超过一半的数字），那么，在剩下的数中，我们要查找的数（出现次数超过一半）出现的次数仍然超过总数的一半。通过不断重复这个过程，不断排除掉其它的数，最终找到那个出现次数超过一半的数字。这个方法，免去了上述思路一、二的排序，也避免了思路三空间O（N）的开销，总得说来，时间复杂度只有O（N），空间复杂度为O（1），不失为最佳方法。</p>
 <p>或许，你还没有明白上述思路4的意思，举个简单的例子吧，如数组a[5]={0,1,2,1,1};</p>
 <p>很显然，若我们要找出数组a中出现次数超过一半的数字，这个数字便是1，若根据上述思路4所述的方法来查找，我们应该怎么做呢?通过一次性遍历整个数组，然后每次删除不相同的两个数字，过程如下简单表示：</p>
 <pre><code>0 1 2 1 1 =&gt;2 1 1=&gt;1,最终，1即为所找。</code></pre>
 <p>但是如果是5，5，5，5，1，还能运用上述思路么？额，别急，请看下文思路5。</p>
-<p><strong>5.</strong>咱们根据数组的特性进一步考虑@zhedahht： 数组中有个数字出现的次数超过了数组长度的一半。也就是说，有个数字出现的次数比其他所有数字出现次数的和还要多。因此我们可以考虑在遍历数组的时候保存两个值：一个是数组中的一个数字，一个是次数。当我们遍历到下一个数字的时候，如果下一个数字和我们之前保存的数字相同，则次数加1。如果下一个数字和我们之前保存的数字不同，则次数减1。如果次数为零，我们需要保存下一个数字，并把次数重新设为1。</p>
+<h2 id="解法五-1">解法五</h2>
+<p>咱们根据数组的特性进一步考虑@zhedahht： 数组中有个数字出现的次数超过了数组长度的一半。也就是说，有个数字出现的次数比其他所有数字出现次数的和还要多。因此我们可以考虑在遍历数组的时候保存两个值：一个是数组中的一个数字，一个是次数。当我们遍历到下一个数字的时候，如果下一个数字和我们之前保存的数字相同，则次数加1。如果下一个数字和我们之前保存的数字不同，则次数减1。如果次数为零，我们需要保存下一个数字，并把次数重新设为1。</p>
 <p>下面，举二个例子：</p>
 <ul>
 <li><p>第一个例子，5，5，5，5，1 ：</p>
@@ -3962,8 +3964,8 @@ Type Find(Type* a, <span class="dt">int</span> N)  <span class="co">//a代表数
 <p>这段代码与上段代码本质上并无二致，不过有几个问题，还是需要我们注意：</p>
 <p><strong>1.</strong>当输入无效性时，要处理。比如数组长度为0。</p>
 <p><strong>2.</strong>最后，上述代码加了一个判断，如果数组中并不包含这么一个数字，那么输入也是无效的。因此在函数结束前还加了一段代码来验证输入是不是有效的。</p>
-<h4 id="第二节加强版水王.找出出现次数刚好是一半的数字">第二节：加强版水王.找出出现次数刚好是一半的数字</h4>
-<p><strong>1.问题扩展@BrainDeveloper</strong></p>
+<h2 id="问题扩展-3">问题扩展</h2>
+<p>加强版水王.找出出现次数刚好是一半的数字</p>
 <p>我们知道，水王问题：有N个数，其中有一个数出现超过一半，要求在线性时间求出这个数。那么，我的问题是，加强版水王：有N个数，其中有一个数刚好出现一半次数，要求在线性时间内求出这个数。</p>
 <p>因为，很明显，如果是刚好出现一半的话，如此例： 0，1，2，1 ：</p>
 <pre><code>遍历到0 时 candidate为0，times为1
@@ -4015,7 +4017,6 @@ Type Find(Type* a, <span class="dt">int</span> N)  <span class="co">//a代表数
 <span class="co">//  int a[6]={1,0,2,1,2,1};  </span>
 <span class="co">//  cout&lt;&lt;Find(a,6)&lt;&lt;endl;  </span>
 }</code></pre>
-<p><strong>4.读者反馈</strong></p>
 <p>当然也可以如<a href="http://blog.csdn.net/v_july_v/article/details/6890054">本文</a>评论下第16楼dalong7所述：</p>
 <pre><code>易知总数必定是偶数，同时删除不同数字，最后剩余的两个数字必有其一为水王，只需简单判断一下即可</code></pre>
 <p>代码如下（测试正确）：</p>
@@ -4050,7 +4051,7 @@ Type Find(Type* a, <span class="dt">int</span> N)  <span class="co">//a代表数
     
     <span class="kw">return</span> cTimes == N/<span class="dv">2</span> ? candidate : candidate2;       
 }</code></pre>
-<h4 id="第三节这个问题的美国选举版本和论文">第三节：这个问题的美国选举版本和论文</h4>
+<h2 id="继续深入">继续深入</h2>
 <p><strong>1. 谁是选举中得票超半数的人？</strong></p>
 <p>美国选举一般要求找到的票数超过一半的人。于是有人就开始研究如何用线性时间找到这个人或者证明这个人不存在。Robert S. Boyer 和 J Strother Moore 发表了一片关于这个算法的论文。内容和上文提到的算法是一致的，只是多了理论分析和FORTRAN实现部分。</p>
 <p>MJRTY - A Fast Majority Vote Algorithm, with R.S. Boyer. In R.S. Boyer (ed.), Automated Reasoning: Essays in Honor of Woody Bledsoe, Automated Reasoning Series, Kluwer Academic Publishers, Dordrecht, The Netherlands, 1981, pp. 105-117.</p>
@@ -4214,11 +4215,10 @@ Type Find(Type* a, <span class="dt">int</span> N)  <span class="co">//a代表数
 <figure>
 <img src="../images/23~24/23.1.gif" alt="img" /><figcaption>img</figcaption>
 </figure>
-<p>本Young问题解法有二（如查找数字6）：</p>
-<ol type="1">
-<li><p>分治法，分为四个矩形，配以二分查找，如果要找的数是6介于对角线上相邻的两个数4、10，可以排除掉左上和右下的两个矩形，而递归在左下和右上的两个矩形继续找，如下图所示：<br /><img src="../images/23~24/23.2.gif" alt="img" /></p></li>
-<li><p>定位法，时间复杂度O（m+n）。首先直接定位到最右上角的元素，再配以二分查找，比要找的数（6）大就往左走，比要找数（6）的小就往下走，直到找到要找的数字（6）为止，如下图所示：<br /><img src="../images/23~24/23.3.gif" alt="img" /></p></li>
-</ol>
+<h2 id="解法一分治法">解法一、分治法</h2>
+<p>以查找数字6为例，把整个矩阵，分为四个小矩阵，配以二分查找，如果要找的数是6介于对角线上相邻的两个数4、10，可以排除掉左上和右下的两个矩形，而递归在左下和右上的两个矩形继续找，如下图所示：<br /><img src="../images/23~24/23.2.gif" alt="img" /></p>
+<h2 id="解法二定位法">解法二、定位法</h2>
+<p>首先直接定位到最右上角的元素，再配以二分查找，比要找的数（6）大就往左走，比要找数（6）的小就往下走，直到找到要找的数字（6）为止，这个方法的时间复杂度O（m+n）。如下图所示：<br /><img src="../images/23~24/23.3.gif" alt="img" /></p>
 <p>上述方法二的关键代码+程序运行如下图所示：<br /><img src="../images/23~24/23.4.gif" alt="img" /></p>
 <p>试问，上述算法复杂么？不复杂，只要稍微动点脑筋便能想到，还可以参看友人老梦的文章，Young氏矩阵：<a href="http://blog.csdn.net/zhanglei8893/article/details/6234564">http://blog.csdn.net/zhanglei8893/article/details/6234564</a>，除此之外，何海涛先生一书剑指offer中也收集了此题，感兴趣的朋友也可以去看看。</p>
 <h1 id="第二十四章倒排索引关键词不重复hash编码">第二十四章：倒排索引关键词不重复Hash编码</h1>
@@ -5535,7 +5535,7 @@ qsort(words, WORD_MAX_NUM, WORD_MAX_LEN, strcoll);</code></pre>
 <p>修改后编译运行的效果图如下（用了另外一份更大的数据文件进行测试）： <img src="../images/26/26.10.gif" /></p>
 <h1 id="第二十七章不改变正负数相对顺序重新排列数组">第二十七章：不改变正负数相对顺序重新排列数组</h1>
 <h2 id="时间on空间o1-无解">时间O(N)，空间O(1) (无解?)</h2>
-<h2 id="前言-2">前言</h2>
+<h2 id="前言-1">前言</h2>
 <p>在这篇文章：九月腾讯，创新工场，淘宝等公司最新面试十三题的第5题(一个未排序整数数组，有正负数，重新排列使负数排在正数前面，并且要求不改变原来的正负数之间相对顺序)，自从去年九月收录了此题至今，一直未曾看到令人满意的答案，为何呢?</p>
 <p>因为一般达不到题目所要求的：时间复杂度O(N),空间O(1)，且保证原来正负数之间的相对位置不变。本编程艺术系列第27章就来阐述这个问题，若有任何漏洞，欢迎随时不吝指正。谢谢。</p>
 <h2 id="重新排列使负数排在正数前面">重新排列使负数排在正数前面</h2>
@@ -5665,9 +5665,9 @@ pos的计算扫描2遍num数组即可，有了pos数组当然排序不成问题�
 <p>但本题统统与这些无关，因为追根究底，本题实质性上只是一个排列，重新组合问题，与排序无关。</p>
 <p>更多还可参考此论文：《STABLE MINIMUM SPACE PARTITIONING IN LINEAR TIME》。待后续验证。</p>
 <h1 id="第二十八章最大连续乘积子串">第二十八章：最大连续乘积子串</h1>
-<h2 id="前言-3">前言</h2>
+<h2 id="前言-2">前言</h2>
 <p>这一章和下一章的问题皆是各大IT公司最喜欢出的笔试面试题之一，比如说前者是小米2013年校招笔试原题，而后者则更是反复出现，如去年9月26日百度一二面试题，10月9日腾讯面试题第1小题，10月13日百度2013校招北京站笔试题第二 大道题第3小题，及去年10月15日2013年Google校招笔试最后一道大题皆是考察下一章的字符串编辑距离问题。</p>
-<h2 id="题目描述-7">题目描述：</h2>
+<h2 id="题目描述-8">题目描述：</h2>
 <p>给一个浮点数序列，取最大乘积连续子串的值，例如 -2.5，4，0，3，0.5，8，-1，则取出的最大乘积连续子串为3，0.5，8。也就是说，上述数组中，3 0.5 8这3个数的乘积3<em>0.5</em>8=12是最大的，而且是连续的。</p>
 <p>提醒：此最大乘积连续子串与最大乘积子序列不同，请勿混淆，前者子串要求连续，后者子序列不要求连续。也就是说：最长公共子串（Longest CommonSubstring）和最长公共子序列（LongestCommon Subsequence，LCS）的区别：</p>
 <ul>
@@ -5921,35 +5921,29 @@ public class Test
 <li><a href="">http://www.bjwilly.com/archives/395.html</a>；</li>
 </ol>
 <h1 id="第二十九章字符串编辑距离">第二十九章：字符串编辑距离</h1>
-<h2 id="前言-4">前言</h2>
+<h2 id="前言-3">前言</h2>
 <p>上一章和这一章的问题皆是各大IT公司最喜欢出的笔试面试题之一，比如说前者是小米2013年校招笔试原题，而后者则更是反复出现，如去年9月26日百度一二面试题，10月9日腾讯面试题第1小题，10月13日百度2013校招北京站笔试题第二 大道题第3小题，及去年10月15日2013年Google校招笔试最后一道大题皆是考察的这个字符串编辑距离问题。</p>
-<p><strong>题目描述:</strong>给定一个源串和目标串，能够对源串进行如下操作：<br />1.在给定位置上插入一个字符<br />2.替换任意字符<br />3.删除任意字符</p>
+<p><strong>题目描述:</strong> 给定一个源串和目标串，能够对源串进行如下操作：<br />1. 在给定位置上插入一个字符<br />2. 替换任意字符<br />3. 删除任意字符</p>
 <p>写一个程序，返回最小操作数，使得对源串进行这些操作后等于目标串，源串和目标串的长度都小于2000。</p>
 <p><strong>提醒：</strong>上文前言中已经说过了，此题反复出现，最近考的最多的是百度和Google的笔试面试经常考察。下图则是2013年Google的校招试题原景重现：</p>
 <figure>
 <img src="../images/28~29/29.1.jpg" />
 </figure>
 <p><strong>解法一、</strong>此题跟上面的最大连续乘积子串类似，常见的思路是动态规划，下面是简单的DP状态方程：</p>
-<pre><code>//动态规划：    
-    
-//f[i,j]表示s[0...i]与t[0...j]的最小编辑距离。    
-f[i,j] = min { f[i-1,j]+1,  f[i,j-1]+1,  f[i-1,j-1]+(s[i]==t[j]?0:1) }    
-    
-//分别表示：添加1个，删除1个，替换1个（相同就不用替换）。  </code></pre>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="co">// 动态规划：</span>
+
+<span class="co">// f[i,j]表示s[0...i]与t[0...j]的最小编辑距离。</span>
+f[i, j] = min { f[i - <span class="dv">1</span>, j] + <span class="dv">1</span>,  f[i, j - <span class="dv">1</span>] + <span class="dv">1</span>,  f[i - <span class="dv">1</span>, j - <span class="dv">1</span>] + (s[i] == t[j] ? <span class="dv">0</span> : <span class="dv">1</span>) }
+
+<span class="co">// 分别表示：添加1个，删除1个，替换1个（相同就不用替换）。</span></code></pre>
 <p><strong>解法二、</strong>本解法来自<a href="http://www.51weixue.com/thread-482-1-1.html">为学论坛</a>。</p>
 <p>编辑距离的定义和计算方法如下：<br />Given two strings A and B, edit A to B with the minimum number of edit operations:</p>
-<ul>
-<li><ol type="a">
+<ol type="a">
 <li>.Replace a letter with another letter</li>
-</ol></li>
-<li><ol start="2" type="a">
 <li>.Insert a letter</li>
-</ol></li>
-<li><ol start="3" type="a">
 <li>.Delete a letter</li>
-</ol></li>
-</ul>
-<p>E.g.<br />A = interestingly _i<strong>nterestingly<br />B = bioinformatics bioinformatics</strong><br /> 1011011011001111<br />Edit distance = 11<br /> Instead of minimizing the number of edge operations, we can associate a cost function to the operations and minimize the total cost. Such cost is called edit distance. Instead of using string edit, in computational biology, people like to use string alignment.We use similarity function, instead of cost function, to evaluate the goodness of the alignment.<br /> E.g. of similarity function: match – 2, mismatch, insert, delete – -1.<br />Consider two strings ACAATCC and AGCATGC.<br />One of their alignment is</p>
+</ol>
+<p>e.g.<br />A = interestingly _i<strong>nterestingly<br />B = bioinformatics bioinformatics</strong><br /> 1011011011001111<br />Edit distance = 11<br />Instead of minimizing the number of edge operations, we can associate a cost function to the operations and minimize the total cost. Such cost is called edit distance. Instead of using string edit, in computational biology, people like to use string alignment.We use similarity function, instead of cost function, to evaluate the goodness of the alignment.<br />e.g. of similarity function: match – 2, mismatch, insert, delete – -1.<br />Consider two strings ACAATCC and AGCATGC.<br />One of their alignment is</p>
 <figure>
 <img src="../images/28~29/29.2.jpg" />
 </figure>
@@ -5962,161 +5956,205 @@ f[i,j] = min { f[i-1,j]+1,  f[i,j-1]+1,  f[i-1,j-1]+(s[i]==t[j]?0:1) }
 <img src="../images/28~29/29.4.jpg" />
 </figure>
 <p>下面是代码，测试数据比较少，若有问题请指正：</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="co">//copyright@ peng_weida  </span>
-<span class="co">//实现代码如下：  </span>
-<span class="co">//头文件StrEditDistance.h  </span>
-<span class="ot">#pragma once  </span>
-<span class="ot">#include &lt;string&gt;  </span>
-class CStrEditDistance  
-{  
-public:  
-    CStrEditDistance(std::string&amp; vStrRow, std::string&amp; vStrColumn);  
-    ~CStrEditDistance(<span class="dt">void</span>);  
-    <span class="dt">int</span>  getScore()    { <span class="kw">return</span> m_Score;   }  
-    <span class="dt">int</span>  getEditDis()  { <span class="kw">return</span> m_EditDis; }  
-    <span class="dt">void</span> setEditDis(<span class="dt">int</span> vDis) { m_EditDis = vDis; }  
-    <span class="dt">void</span> setScore(<span class="dt">int</span> vScore) { m_Score = vScore; }  
-private:  
-    <span class="dt">void</span> process(<span class="dt">const</span> std::string&amp; vStrRow, <span class="dt">const</span> std::string&amp; vStrColumn);  
-    <span class="dt">int</span> getMaxValue(<span class="dt">int</span> a, <span class="dt">int</span> b, <span class="dt">int</span> c)  
-    {  
-        <span class="kw">if</span> (a &lt; b){ <span class="kw">if</span> (b &lt; c) <span class="kw">return</span> c; <span class="kw">return</span> b; }  
-        <span class="kw">else</span> { <span class="kw">if</span> (b &gt; c) <span class="kw">return</span> a; <span class="kw">return</span> a &lt; c ? c : a; }  
-    }  
-private:  
-    <span class="dt">int</span>   m_EditDis;  
-    <span class="dt">int</span>   m_Score;  
-};  
-<span class="co">//源文件StrEditDistance.cpp  </span>
-<span class="ot">#include &quot;StrEditDistance.h&quot;  </span>
-<span class="ot">#include &lt;iostream&gt;  </span>
-<span class="ot">#include &lt;iomanip&gt;  </span>
-<span class="ot">#define MATCH        2  </span>
-<span class="ot">#define MISS_MATCH   -1  </span>
-<span class="ot">#define INSERT       -1  </span>
-<span class="ot">#define DELETE       -1  </span>
-CStrEditDistance::CStrEditDistance(std::string&amp; vStrRow, std::string&amp; vStrColumn)  
-{  
-    process(vStrRow, vStrColumn);  
-}  
-CStrEditDistance::~CStrEditDistance(<span class="dt">void</span>)  
-{  
-}  
-<span class="co">//FUNCTION:  </span>
-<span class="dt">void</span> CStrEditDistance::process(<span class="dt">const</span> std::string&amp; vStrRow, <span class="dt">const</span> std::string&amp; vStrColumn)  
-{  
-    <span class="dt">int</span> editDis = <span class="dv">0</span>;     <span class="co">//编辑距离  </span>
-    <span class="dt">int</span> row = vStrColumn.length();    
-    <span class="dt">int</span> column = vStrRow.length();  
-    <span class="dt">const</span> <span class="dt">int</span> sizeR = row + <span class="dv">1</span>;  
-    <span class="dt">const</span> <span class="dt">int</span> sizeC = column + <span class="dv">1</span>;  
-   
-    <span class="dt">int</span> **pScore = new <span class="dt">int</span>*[sizeR];  <span class="co">//二维指针  </span>
-    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt;= row; i++)  
-    pScore = new <span class="dt">int</span>[sizeC];  
-   
-    <span class="co">//初始化第一行和第一列  </span>
-    <span class="kw">for</span> (<span class="dt">int</span> c = <span class="dv">0</span>; c &lt;= column; c++)  
-        pScore[<span class="dv">0</span>][c] = <span class="dv">0</span> - c;  
-    <span class="kw">for</span> (<span class="dt">int</span> r = <span class="dv">0</span>; r &lt;= row; r++)  
-        pScore[r][<span class="dv">0</span>] = <span class="dv">0</span> - r;  
-   
-    <span class="co">//从v(1,1)开始每列计算  </span>
-    <span class="kw">for</span> (<span class="dt">int</span> c = <span class="dv">1</span>; c &lt;= column; c++)  
-    {  
-        <span class="kw">for</span> (<span class="dt">int</span> r = <span class="dv">1</span>; r &lt;= row; r++)  
-        {  
-          <span class="co">//计算v(i,j)  </span>
-          <span class="dt">int</span> valueMatch;  
-          <span class="kw">if</span> (vStrColumn[r<span class="dv">-1</span>] == vStrRow[c<span class="dv">-1</span>])  
-              valueMatch = MATCH;  
-          <span class="kw">else</span>  
-              valueMatch = MISS_MATCH;    
-          <span class="dt">int</span> A = pScore[r<span class="dv">-1</span>][c] + INSERT;  
-          <span class="dt">int</span> B = pScore[r][c<span class="dv">-1</span>] + DELETE;  
-          <span class="dt">int</span> C = pScore[r<span class="dv">-1</span>][c<span class="dv">-1</span>] + valueMatch;  
-          pScore[r][c] = getMaxValue(A, B, C);  
-        }  
-    }  
-   
-    <span class="co">//计算编辑距离  </span>
-    <span class="dt">int</span> r = row, c = column;  
-    <span class="kw">while</span>(r &gt; <span class="dv">0</span> &amp;&amp; c &gt; <span class="dv">0</span>)  
-    {  
-        <span class="kw">if</span> (pScore[r][c]+<span class="dv">1</span> == pScore[r<span class="dv">-1</span>][c])      { editDis++; r--; <span class="kw">continue</span>; }  
-        <span class="kw">else</span> <span class="kw">if</span> (pScore[r][c]+<span class="dv">1</span> == pScore[r][c<span class="dv">-1</span>]) { editDis++; c--; <span class="kw">continue</span>; }  
-        <span class="kw">else</span> <span class="kw">if</span> (pScore[r][c]+<span class="dv">1</span> == pScore[r<span class="dv">-1</span>][c<span class="dv">-1</span>]){ editDis++; r--; c--; <span class="kw">continue</span>; }  
-        <span class="kw">else</span> { r--; c--; }  
-    }  
-    <span class="kw">if</span> (r &gt; <span class="dv">0</span> &amp;&amp; c == <span class="dv">0</span>)  editDis += r;  
-    <span class="kw">else</span> <span class="kw">if</span> (c &gt; <span class="dv">0</span> &amp;&amp; r == <span class="dv">0</span>) editDis += c;  
-   
-    std::cout &lt;&lt; std::endl;  
-    <span class="co">//----------------DEBUG-------------------//  </span>
-    <span class="co">//打印数据  </span>
-    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt;= row; i++)  
-    {  
-         <span class="kw">for</span> (<span class="dt">int</span> j = <span class="dv">0</span>; j &lt;= column; j++)  
-         std::cout &lt;&lt; std::setw(<span class="dv">2</span>) &lt;&lt; pScore[j] &lt;&lt; <span class="st">&quot;  &quot;</span>;  
-         std::cout &lt;&lt; std::endl;  
-    }  
-    std::cout &lt;&lt; std::endl;  
-   
-    <span class="co">//设置编辑距离和得分  </span>
-    setEditDis(editDis);  
-    setScore(pScore[row][column]);  
-   
-    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt;= row; i++)   <span class="co">//释放内存  </span>
-    {  
-        delete pScore;  
-        pScore = NULL;  
-    }  
-    delete[] pScore;  
-}  </code></pre>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">//copyright@ peng_weida</span>
+<span class="co">//实现代码如下：</span>
+<span class="co">//头文件StrEditDistance.h</span>
+<span class="ot">#pragma once</span>
+<span class="ot">#include &lt;string&gt;</span>
+<span class="kw">class</span> CStrEditDistance
+{
+<span class="kw">public</span>:
+    CStrEditDistance(std::string&amp; vStrRow, std::string&amp; vStrColumn);
+    ~CStrEditDistance(<span class="dt">void</span>);
+    <span class="dt">int</span>  getScore()
+    {
+        <span class="kw">return</span> m_Score;
+    }
+    <span class="dt">int</span>  getEditDis()
+    {
+        <span class="kw">return</span> m_EditDis;
+    }
+    <span class="dt">void</span> setEditDis(<span class="dt">int</span> vDis)
+    {
+        m_EditDis = vDis;
+    }
+    <span class="dt">void</span> setScore(<span class="dt">int</span> vScore)
+    {
+        m_Score = vScore;
+    }
+<span class="kw">private</span>:
+    <span class="dt">void</span> process(<span class="dt">const</span> std::string&amp; vStrRow, <span class="dt">const</span> std::string&amp; vStrColumn);
+    <span class="dt">int</span> getMaxValue(<span class="dt">int</span> a, <span class="dt">int</span> b, <span class="dt">int</span> c)
+    {
+        <span class="kw">if</span> (a &lt; b)
+        {
+            <span class="kw">if</span> (b &lt; c) <span class="kw">return</span> c;
+            <span class="kw">return</span> b;
+        }
+        <span class="kw">else</span>
+        {
+            <span class="kw">if</span> (b &gt; c) <span class="kw">return</span> a;
+            <span class="kw">return</span> a &lt; c ? c : a;
+        }
+    }
+<span class="kw">private</span>:
+    <span class="dt">int</span>   m_EditDis;
+    <span class="dt">int</span>   m_Score;
+};
+<span class="co">//源文件StrEditDistance.cpp</span>
+<span class="ot">#include &quot;StrEditDistance.h&quot;</span>
+<span class="ot">#include &lt;iostream&gt;</span>
+<span class="ot">#include &lt;iomanip&gt;</span>
+<span class="ot">#define MATCH        2</span>
+<span class="ot">#define MISS_MATCH   -1</span>
+<span class="ot">#define INSERT       -1</span>
+<span class="ot">#define DELETE       -1</span>
+CStrEditDistance::CStrEditDistance(std::string&amp; vStrRow, std::string&amp; vStrColumn)
+{
+    process(vStrRow, vStrColumn);
+}
+CStrEditDistance::~CStrEditDistance(<span class="dt">void</span>)
+{
+}
+<span class="co">//FUNCTION:</span>
+<span class="dt">void</span> CStrEditDistance::process(<span class="dt">const</span> std::string&amp; vStrRow, <span class="dt">const</span> std::string&amp; vStrColumn)
+{
+    <span class="dt">int</span> editDis = <span class="dv">0</span>;     <span class="co">//编辑距离</span>
+    <span class="dt">int</span> row = vStrColumn.length();
+    <span class="dt">int</span> column = vStrRow.length();
+    <span class="dt">const</span> <span class="dt">int</span> sizeR = row + <span class="dv">1</span>;
+    <span class="dt">const</span> <span class="dt">int</span> sizeC = column + <span class="dv">1</span>;
+
+    <span class="dt">int</span> **pScore = <span class="kw">new</span> <span class="dt">int</span>*[sizeR];  <span class="co">//二维指针</span>
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt;= row; i++)
+        pScore = <span class="kw">new</span> <span class="dt">int</span>[sizeC];
+
+    <span class="co">//初始化第一行和第一列</span>
+    <span class="kw">for</span> (<span class="dt">int</span> c = <span class="dv">0</span>; c &lt;= column; c++)
+        pScore[<span class="dv">0</span>][c] = <span class="dv">0</span> - c;
+    <span class="kw">for</span> (<span class="dt">int</span> r = <span class="dv">0</span>; r &lt;= row; r++)
+        pScore[r][<span class="dv">0</span>] = <span class="dv">0</span> - r;
+
+    <span class="co">//从v(1,1)开始每列计算</span>
+    <span class="kw">for</span> (<span class="dt">int</span> c = <span class="dv">1</span>; c &lt;= column; c++)
+    {
+        <span class="kw">for</span> (<span class="dt">int</span> r = <span class="dv">1</span>; r &lt;= row; r++)
+        {
+            <span class="co">//计算v(i,j)</span>
+            <span class="dt">int</span> valueMatch;
+            <span class="kw">if</span> (vStrColumn[r - <span class="dv">1</span>] == vStrRow[c - <span class="dv">1</span>])
+                valueMatch = MATCH;
+            <span class="kw">else</span>
+                valueMatch = MISS_MATCH;
+            <span class="dt">int</span> A = pScore[r - <span class="dv">1</span>][c] + INSERT;
+            <span class="dt">int</span> B = pScore[r][c - <span class="dv">1</span>] + DELETE;
+            <span class="dt">int</span> C = pScore[r - <span class="dv">1</span>][c - <span class="dv">1</span>] + valueMatch;
+            pScore[r][c] = getMaxValue(A, B, C);
+        }
+    }
+
+    <span class="co">//计算编辑距离</span>
+    <span class="dt">int</span> r = row, c = column;
+    <span class="kw">while</span> (r &gt; <span class="dv">0</span> &amp;&amp; c &gt; <span class="dv">0</span>)
+    {
+        <span class="kw">if</span> (pScore[r][c] + <span class="dv">1</span> == pScore[r - <span class="dv">1</span>][c])
+        {
+            editDis++;
+            r--;
+            <span class="kw">continue</span>;
+        }
+        <span class="kw">else</span> <span class="kw">if</span> (pScore[r][c] + <span class="dv">1</span> == pScore[r][c - <span class="dv">1</span>])
+        {
+            editDis++;
+            c--;
+            <span class="kw">continue</span>;
+        }
+        <span class="kw">else</span> <span class="kw">if</span> (pScore[r][c] + <span class="dv">1</span> == pScore[r - <span class="dv">1</span>][c - <span class="dv">1</span>])
+        {
+            editDis++;
+            r--;
+            c--;
+            <span class="kw">continue</span>;
+        }
+        <span class="kw">else</span>
+        {
+            r--;
+            c--;
+        }
+    }
+    <span class="kw">if</span> (r &gt; <span class="dv">0</span> &amp;&amp; c == <span class="dv">0</span>)  editDis += r;
+    <span class="kw">else</span> <span class="kw">if</span> (c &gt; <span class="dv">0</span> &amp;&amp; r == <span class="dv">0</span>) editDis += c;
+
+    std::cout &lt;&lt; std::endl;
+    <span class="co">//----------------DEBUG-------------------//</span>
+    <span class="co">//打印数据</span>
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt;= row; i++)
+    {
+        <span class="kw">for</span> (<span class="dt">int</span> j = <span class="dv">0</span>; j &lt;= column; j++)
+            std::cout &lt;&lt; std::setw(<span class="dv">2</span>) &lt;&lt; pScore[j] &lt;&lt; <span class="st">&quot;  &quot;</span>;
+        std::cout &lt;&lt; std::endl;
+    }
+    std::cout &lt;&lt; std::endl;
+
+    <span class="co">//设置编辑距离和得分</span>
+    setEditDis(editDis);
+    setScore(pScore[row][column]);
+
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt;= row; i++)   <span class="co">//释放内存</span>
+    {
+        <span class="kw">delete</span> pScore;
+        pScore = NULL;
+    }
+    <span class="kw">delete</span>[] pScore;
+}</code></pre>
 <p><strong>类似</strong><br />上述问题类似于编程之美上的下述一题「以下内容摘自编程之美第3.3节」：</p>
 <p>许多程序会大量使用字符串。对于不同的字符串，我们希望能够有办法判断其相似程度。我们定义了一套操作方法来把两个不相同的字符串变得相同，具体的操作方法为：</p>
-<p>1.修改一个字符（如把“a”替换为“b”）；<br />2.增加一个字符（如把“abdd ”变为“aebdd ”）；<br />3.删除一个字符（如把“travelling”变为“traveling”）。</p>
+<ol type="1">
+<li>修改一个字符（如把“a”替换为“b”）；<br /></li>
+<li>增加一个字符（如把“abdd ”变为“aebdd ”）；<br /></li>
+<li>删除一个字符（如把“travelling”变为“traveling”）。</li>
+</ol>
 <p>比如，对于“abcdefg”和“abcdef ”两个字符串来说，我们认为可以通过增加/减少一个“g”的方式来达到目的。上面的两种方案，都仅需要一次操作。把这个操作所需要的次数定义为两个字符串的距离，而相似度等于“距离+1”的倒数。也就是说，“abcdefg”和“abcdef”的距离为1，相似度为1 / 2 = 0.5。<br />给定任意两个字符串，你是否能写出一个算法来计算出它们的相似度呢？</p>
 <figure>
 <img src="../images/28~29/29.5.jpg" />
 </figure>
 <p>这样，很快就可以完成一个递归程序，如下所示：</p>
-<pre class="sourceCode c"><code class="sourceCode c">Int CalculateStringDistance(string strA, <span class="dt">int</span> pABegin, <span class="dt">int</span> pAEnd,    
-   string strB, <span class="dt">int</span> pBBegin, <span class="dt">int</span> pBEnd)     
-{    
-     <span class="kw">if</span>(pABegin &gt; pAEnd)    
-     {    
-          <span class="kw">if</span>(pBBegin &gt; pBEnd)    
-               <span class="kw">return</span> <span class="dv">0</span>;     
-          <span class="kw">else</span>    
-     
-               <span class="kw">return</span> pBEnd – pBBegin + <span class="dv">1</span>;    
-     }    
-    
-     <span class="kw">if</span>(pBBegin &gt; pBEnd)    
-     {    
-          <span class="kw">if</span>(pABegin &gt; pAEnd)    
-               <span class="kw">return</span> <span class="dv">0</span>;    
-          <span class="kw">else</span>    
-               <span class="kw">return</span> pAEnd – pABegin + <span class="dv">1</span>;    
-     }    
-    
-     <span class="kw">if</span>(strA[pABegin] == strB[pBBegin])    
-     {    
-          <span class="kw">return</span> CalculateStringDistance(strA, pABegin + <span class="dv">1</span>, pAEnd,    
-            strB, pBBegin + <span class="dv">1</span>, pBEnd);    
-     }    
-     <span class="kw">else</span>    
-     {    
-          <span class="dt">int</span> t1 = CalculateStringDistance(strA, pABegin, pAEnd, strB,     
-            pBBegin + <span class="dv">1</span>, pBEnd);    
-          <span class="dt">int</span> t2 = CalculateStringDistance(strA, pABegin + <span class="dv">1</span>, pAEnd,     
-            strB,pBBegin, pBEnd);    
-          <span class="dt">int</span> t3 = CalculateStringDistance(strA, pABegin + <span class="dv">1</span>, pAEnd,    
-            strB,pBBegin + <span class="dv">1</span>, pBEnd);    
-          <span class="kw">return</span> minValue(t1,t2,t3) + <span class="dv">1</span>;    
-     }    
-}    </code></pre>
+<pre class="sourceCode java"><code class="sourceCode java">Int <span class="fu">CalculateStringDistance</span>(string strA, <span class="dt">int</span> pABegin, <span class="dt">int</span> pAEnd,
+                            string strB, <span class="dt">int</span> pBBegin, <span class="dt">int</span> pBEnd)
+{
+    <span class="kw">if</span> (pABegin &gt; pAEnd)
+    {
+        <span class="kw">if</span> (pBBegin &gt; pBEnd)
+            <span class="kw">return</span> <span class="dv">0</span>;
+        <span class="kw">else</span>
+
+            <span class="kw">return</span> pBEnd – pBBegin + <span class="dv">1</span>;
+    }
+
+    <span class="kw">if</span> (pBBegin &gt; pBEnd)
+    {
+        <span class="kw">if</span> (pABegin &gt; pAEnd)
+            <span class="kw">return</span> <span class="dv">0</span>;
+        <span class="kw">else</span>
+            <span class="kw">return</span> pAEnd – pABegin + <span class="dv">1</span>;
+    }
+
+    <span class="kw">if</span> (strA[pABegin] == strB[pBBegin])
+    {
+        <span class="kw">return</span> <span class="fu">CalculateStringDistance</span>(strA, pABegin + <span class="dv">1</span>, pAEnd,
+                                       strB, pBBegin + <span class="dv">1</span>, pBEnd);
+    }
+    <span class="kw">else</span>
+    {
+        <span class="dt">int</span> t1 = <span class="fu">CalculateStringDistance</span>(strA, pABegin, pAEnd, strB,
+                                         pBBegin + <span class="dv">1</span>, pBEnd);
+        <span class="dt">int</span> t2 = <span class="fu">CalculateStringDistance</span>(strA, pABegin + <span class="dv">1</span>, pAEnd,
+                                         strB, pBBegin, pBEnd);
+        <span class="dt">int</span> t3 = <span class="fu">CalculateStringDistance</span>(strA, pABegin + <span class="dv">1</span>, pAEnd,
+                                         strB, pBBegin + <span class="dv">1</span>, pBEnd);
+        <span class="kw">return</span> <span class="fu">minValue</span>(t1, t2, t3) + <span class="dv">1</span>;
+    }
+}</code></pre>
 <p>上面的递归程序，有什么地方需要改进呢？在递归的过程中，有些数据被重复计算了。比如，如果开始我们调用CalculateStringDistance(strA,1, 2, strB, 1, 2)，下图是部分展开的递归调用。</p>
 <figure>
 <img src="../images/28~29/29.6.jpg" />
@@ -6130,85 +6168,90 @@ CStrEditDistance::~CStrEditDistance(<span class="dt">void</span>)
 <p>但这个拼写错误检查的原理是什么呢？Google是基于贝叶斯统计推断的方法，相关原理详情可以看下Google的研发总监Peter Norvig写的<a href="http://norvig.com/spell-correct.html">这篇文章</a>，以及fuanyif写的<a href="http://www.ruanyifeng.com/blog/2012/10/spelling_corrector.html">这篇</a>。</p>
 <p>2.关于什么是“编辑距离”：一个快速、高效的Levenshtein算法实现，这个是计算两个字符串的算法，Levenshtein距离又称为“编辑距离”，是指两个字符串之间，由一个转换成另一个所需的最少编辑操作次数。当然，次数越小越相似。这里有一个BT树的<a href="http://blog.notdot.net/2007/4/Damn-Cool-Algorithms-Part-1-BK-Trees">数据结构</a>，挺有意思的。</p>
 <p>3.最后，Lucene中也有这个算法的实现(我想，一般的搜索引擎一般都应该会有此项拼写错误检查功能的实现)，下面是lucene的源码(并没有太多优化，与实际工程中java注重实用性的原则并不背离)：</p>
-<pre><code>public final class LevensteinDistance {  
-   
-    public LevensteinDistance () {  
-    }  
-      
-// Compute Levenshtein distance:   
-// see org.apache.commons.lang.StringUtils#getLevenshteinDistance(String, String)  
-      
-    public float getDistance (String target, String other) {  
-      char[] sa;  
-      int n;  
-      int p[];   
-//&#39;previous&#39; cost array, horizontally  
-      int d[];   
-// cost array, horizontally  
-      int _d[];   
-//placeholder to assist in swapping p and d  
-   
-        sa = target.toCharArray();  
-        n = sa.length;  
-        p = new int[n+1];   
-        d = new int[n+1];   
-         
-        final int m = other.length();  
-        if (n == 0 || m == 0) {  
-          if (n == m) {  
-            return 1;  
-          }  
-          else {  
-            return 0;  
-          }  
-        }   
-          
-// indexes into strings s and t  
-        int i;   
-// iterates through s  
-        int j;   
-// iterates through t  
-   
-        char t_j;   
-// jth character of t  
-   
-        int cost;   
-// cost  
-   
-        for (i = 0; i&lt;=n; i++) {  
-            p[i] = i;  
-        }  
-   
-        for (j = 1; j&lt;=m; j++) {  
-            t_j = other.charAt(j-1);  
-            d[0] = j;  
-   
-            for (i=1; i&lt;=n; i++) {  
-                cost = sa[i-1]==t_j ? 0 : 1;  
-                  
-// minimum of cell to the left+1, to the top+1, diagonally left and up +cost  
-                d[i] = Math.min(Math.min(d[i-1]+1, p[i]+1),  p[i-1]+cost);  
-            }  
-   
-              
-// copy current distance counts to &#39;previous row&#39; distance counts  
-            _d = p;  
-            p = d;  
-            d = _d;  
-        }  
-   
-          
-// our last action in the above loop was to switch d and p, so p now  
-          
-// actually has the most recent cost counts  
-        return 1.0f - ((float) p[n] / Math.max(other.length(), sa.length));  
-    }  
-   
-}  </code></pre>
+<pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">final</span> <span class="kw">class</span> LevensteinDistance
+{
+
+    <span class="kw">public</span> <span class="fu">LevensteinDistance</span> () { }
+
+    <span class="co">// Compute Levenshtein distance:</span>
+    <span class="co">// see org.apache.commons.lang.StringUtils#getLevenshteinDistance(String, String)</span>
+
+    <span class="kw">public</span> <span class="dt">float</span> <span class="fu">getDistance</span> (String target, String other)
+    {
+        <span class="dt">char</span>[] sa;
+        <span class="dt">int</span> n;
+        <span class="dt">int</span> p[];
+        <span class="co">//&#39;previous&#39; cost array, horizontally</span>
+        <span class="dt">int</span> d[];
+        <span class="co">// cost array, horizontally</span>
+        <span class="dt">int</span> _d[];
+        <span class="co">//placeholder to assist in swapping p and d</span>
+
+        sa = target.<span class="fu">toCharArray</span>();
+        n = sa.<span class="fu">length</span>;
+        p = <span class="kw">new</span> <span class="dt">int</span>[n + <span class="dv">1</span>];
+        d = <span class="kw">new</span> <span class="dt">int</span>[n + <span class="dv">1</span>];
+
+        <span class="dt">final</span> <span class="dt">int</span> m = other.<span class="fu">length</span>();
+        <span class="kw">if</span> (n == <span class="dv">0</span> || m == <span class="dv">0</span>)
+        {
+            <span class="kw">if</span> (n == m)
+            {
+                <span class="kw">return</span> <span class="dv">1</span>;
+            }
+            <span class="kw">else</span>
+            {
+                <span class="kw">return</span> <span class="dv">0</span>;
+            }
+        }
+
+        <span class="co">// indexes into strings s and t</span>
+        <span class="dt">int</span> i;
+        <span class="co">// iterates through s</span>
+        <span class="dt">int</span> j;
+        <span class="co">// iterates through t</span>
+        <span class="dt">char</span> t_j;
+        <span class="co">// jth character of t</span>
+        <span class="dt">int</span> cost;
+
+        <span class="kw">for</span> (i = <span class="dv">0</span>; i &lt;= n; i++)
+        {
+            p[i] = i;
+        }
+
+        <span class="kw">for</span> (j = <span class="dv">1</span>; j &lt;= m; j++)
+        {
+            t_j = other.<span class="fu">charAt</span>(j - <span class="dv">1</span>);
+            d[<span class="dv">0</span>] = j;
+
+            <span class="kw">for</span> (i = <span class="dv">1</span>; i &lt;= n; i++)
+            {
+                cost = sa[i - <span class="dv">1</span>] == t_j ? <span class="dv">0</span> : <span class="dv">1</span>;
+
+                <span class="co">// minimum of cell to the left+1, to the top+1, diagonally left and up +cost</span>
+                d[i] = Math.<span class="fu">min</span>(Math.<span class="fu">min</span>(d[i - <span class="dv">1</span>] + <span class="dv">1</span>, p[i] + <span class="dv">1</span>),  p[i - <span class="dv">1</span>] + cost);
+            }
+
+
+            <span class="co">// copy current distance counts to &#39;previous row&#39; distance counts</span>
+            _d = p;
+            p = d;
+            d = _d;
+        }
+
+
+        <span class="co">// our last action in the above loop was to switch d and p, so p now</span>
+
+        <span class="co">// actually has the most recent cost counts</span>
+        <span class="kw">return</span> <span class="fl">1.</span>0f - ((<span class="dt">float</span>) p[n] / Math.<span class="fu">max</span>(other.<span class="fu">length</span>(), sa.<span class="fu">length</span>));
+    }
+
+}</code></pre>
 <h2 id="扩展">扩展</h2>
 <p>当然，面试官还可以继续问下去，如请问，如何设计一个比较这篇文章和上一篇文章相似性的算法？这个问题的讨论可以看看<a href="http://t.cn/zl82CAH">这里</a>。OK，字符串编辑距离这个问题实用性很强，限于篇幅，详情读者自己深入吧。</p>
 <h1 id="第三十章字符串转换成整数">第三十章：字符串转换成整数</h1>
-<p>输入一个表示整数的字符串，把该字符串转换成整数并输出，例如输入字符串&quot;345&quot;，则输出整数345。 给定函数原型<code>int StrToInt(const char *str)</code> ，完成函数StrToInt，实现字符串转换成整数的功能，不得用库函数atoi（即便准许使用，其对于溢出情况的处理也达不到题目的要求，详情请参看下文第7节末）。</p>
+<p>输入一个表示整数的字符串，把该字符串转换成整数并输出，例如输入字符串&quot;345&quot;，则输出整数345。</p>
+<p>给定函数原型<code>int StrToInt(const char *str)</code> ，完成函数StrToInt，实现字符串转换成整数的功能，不得用库函数atoi（即便准许使用，其对于溢出情况的处理也达不到题目的要求，详情请参看下文第7节末）。</p>
 <p>我们来一步一步分析（共9小节，重点在下文第8小节及后续内容），直至写出第一份准确的代码：</p>
 <p><em><strong>1</strong></em>. 本题考查的实际上就是字符串转换成整数的问题，或者说是要你自行实现atoi函数。那如何实现把表示整数的字符串正确地转换成整数呢？以&quot;345&quot;作为例子：</p>
 <ol type="1">
@@ -6228,63 +6271,63 @@ CStrEditDistance::~CStrEditDistance(<span class="dt">void</span>)
 <img src="../images/30~31/30.1.jpg" />
 </figure>
 <p><em><strong>3</strong></em>. 很快，可能你就会写下如下代码：</p>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">//copyright@zhedahht 2007    </span>
-<span class="kw">enum</span> Status {kValid = <span class="dv">0</span>, kInvalid};  
-<span class="dt">int</span> g_nStatus = kValid;  
-  
-<span class="co">// Convert a string into an integer  </span>
-<span class="dt">int</span> StrToInt(<span class="dt">const</span> <span class="dt">char</span>* str)  
-{  
-    g_nStatus = kInvalid;  
-    <span class="dt">long</span> <span class="dt">long</span> num = <span class="dv">0</span>;  
-  
-    <span class="kw">if</span>(str != NULL)  
-    {  
-        <span class="dt">const</span> <span class="dt">char</span>* digit = str;  
-  
-        <span class="co">// the first char in the string can be &#39;+&#39; or &#39;-&#39;  </span>
-        <span class="dt">bool</span> minus = <span class="kw">false</span>;  
-        <span class="kw">if</span>(*digit == &#39;+&#39;)  
-            digit ++;  
-        <span class="kw">else</span> <span class="kw">if</span>(*digit == &#39;-&#39;)  
-        {  
-            digit ++;  
-            minus = <span class="kw">true</span>;  
-        }  
-  
-        <span class="co">// the remaining chars in the string  </span>
-        <span class="kw">while</span>(*digit != &#39;\<span class="dv">0</span>&#39;)  
-        {  
-            <span class="kw">if</span>(*digit &gt;= &#39;<span class="dv">0</span>&#39; &amp;&amp; *digit &lt;= &#39;<span class="dv">9</span>&#39;)  
-            {  
-                num = num * <span class="dv">10</span> + (*digit - &#39;<span class="dv">0</span>&#39;);  
-  
-                <span class="co">// overflow    </span>
-                <span class="kw">if</span>(num &gt; std::numeric_limits&lt;<span class="dt">int</span>&gt;::max())  
-                {  
-                    num = <span class="dv">0</span>;  
-                    <span class="kw">break</span>;  
-                }  
-  
-                digit ++;  
-            }  
-            <span class="co">// if the char is not a digit, invalid input  </span>
-            <span class="kw">else</span>  
-            {  
-                num = <span class="dv">0</span>;  
-                <span class="kw">break</span>;  
-            }  
-        }  
-  
-        <span class="kw">if</span>(*digit == &#39;\<span class="dv">0</span>&#39;)  
-        {  
-            g_nStatus = kValid;  
-            <span class="kw">if</span>(minus)  
-                num = <span class="dv">0</span> - num;  
-        }  
-    }  
-    <span class="kw">return</span> <span class="kw">static_cast</span>&lt;<span class="dt">int</span>&gt;(num);  
-}  </code></pre>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">//copyright@zhedahht 2007</span>
+<span class="kw">enum</span> Status {kValid = <span class="dv">0</span>, kInvalid};
+<span class="dt">int</span> g_nStatus = kValid;
+
+<span class="co">// Convert a string into an integer</span>
+<span class="dt">int</span> StrToInt(<span class="dt">const</span> <span class="dt">char</span>* str)
+{
+    g_nStatus = kInvalid;
+    <span class="dt">long</span> <span class="dt">long</span> num = <span class="dv">0</span>;
+
+    <span class="kw">if</span> (str != NULL)
+    {
+        <span class="dt">const</span> <span class="dt">char</span>* digit = str;
+
+        <span class="co">// the first char in the string can be &#39;+&#39; or &#39;-&#39;</span>
+        <span class="dt">bool</span> minus = <span class="kw">false</span>;
+        <span class="kw">if</span> (*digit == &#39;+&#39;)
+            digit ++;
+        <span class="kw">else</span> <span class="kw">if</span> (*digit == &#39;-&#39;)
+        {
+            digit ++;
+            minus = <span class="kw">true</span>;
+        }
+
+        <span class="co">// the remaining chars in the string</span>
+        <span class="kw">while</span> (*digit != &#39;\<span class="dv">0</span>&#39;)
+        {
+            <span class="kw">if</span> (*digit &gt;= &#39;<span class="dv">0</span>&#39; &amp;&amp; *digit &lt;= &#39;<span class="dv">9</span>&#39;)
+            {
+                num = num * <span class="dv">10</span> + (*digit - &#39;<span class="dv">0</span>&#39;);
+
+                <span class="co">// overflow</span>
+                <span class="kw">if</span> (num &gt; std::numeric_limits&lt;<span class="dt">int</span>&gt;::max())
+                {
+                    num = <span class="dv">0</span>;
+                    <span class="kw">break</span>;
+                }
+
+                digit ++;
+            }
+            <span class="co">// if the char is not a digit, invalid input</span>
+            <span class="kw">else</span>
+            {
+                num = <span class="dv">0</span>;
+                <span class="kw">break</span>;
+            }
+        }
+
+        <span class="kw">if</span> (*digit == &#39;\<span class="dv">0</span>&#39;)
+        {
+            g_nStatus = kValid;
+            <span class="kw">if</span> (minus)
+                num = <span class="dv">0</span> - num;
+        }
+    }
+    <span class="kw">return</span> <span class="kw">static_cast</span>&lt;<span class="dt">int</span>&gt;(num);
+}</code></pre>
 <p>run下上述程序，会发现当输入字符串是下图中红叉叉部分所对应的时候，程序结果出错:</p>
 <figure>
 <img src="../images/30~31/30.2.jpg" />
@@ -6299,57 +6342,57 @@ CStrEditDistance::~CStrEditDistance(<span class="dt">void</span>)
                   } </code></pre>
 <p>2.处理溢出时，有问题。因为它遇到溢出情况时，直接返回了0：</p>
 <pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">// overflow    </span>
-                <span class="kw">if</span>(num &gt; std::numeric_limits&lt;<span class="dt">int</span>&gt;::max())  
+                <span class="kw">if</span> (num &gt; std::numeric_limits&lt;<span class="dt">int</span>&gt;::max())  
                 {  
                     num = <span class="dv">0</span>;  
                     <span class="kw">break</span>;  
                 }  </code></pre>
 <p><em><strong>4</strong></em>. 把代码做下微调，如下（注：库函数atoi规定超过int值，按最大值maxint：2147483647来，超过-int按最小值minint：-2147483648来）：</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="co">//copyright@SP_daiyq 2013/5/29  </span>
-<span class="dt">int</span> StrToInt(<span class="dt">const</span> <span class="dt">char</span>* str)  
-{  
-    <span class="dt">int</span> res = <span class="dv">0</span>; <span class="co">// result  </span>
-    <span class="dt">int</span> i = <span class="dv">0</span>; <span class="co">// index of str  </span>
-    <span class="dt">int</span> signal = &#39;+&#39;; <span class="co">// signal &#39;+&#39; or &#39;-&#39;  </span>
-    <span class="dt">int</span> cur; <span class="co">// current digit  </span>
-  
-    <span class="kw">if</span> (!str)  
-        <span class="kw">return</span> <span class="dv">0</span>;  
-  
-    <span class="co">// skip backspace  </span>
-    <span class="kw">while</span> (isspace(str[i]))  
-        i++;  
-  
-    <span class="co">// skip signal  </span>
-    <span class="kw">if</span> (str[i] == &#39;+&#39; || str[i] == &#39;-&#39;)  
-    {  
-        signal = str[i];  
-        i++;  
-    }  
-  
-    <span class="co">// get result  </span>
-    <span class="kw">while</span> (str[i] &gt;= &#39;<span class="dv">0</span>&#39; &amp;&amp; str[i] &lt;= &#39;<span class="dv">9</span>&#39;)  
-    {  
-        cur = str[i] - &#39;<span class="dv">0</span>&#39;;  
-  
-        <span class="co">// judge overlap or not  </span>
-        <span class="kw">if</span> ( (signal == &#39;+&#39;) &amp;&amp; (cur &gt; INT_MAX - res*<span class="dv">10</span>) )  
-        {  
-            res = INT_MAX;  
-            <span class="kw">break</span>;  
-        }  
-        <span class="kw">else</span> <span class="kw">if</span> ( (signal == &#39;-&#39;) &amp;&amp; (cur -<span class="dv">1</span> &gt; INT_MAX - res*<span class="dv">10</span>) )  
-        {  
-            res = INT_MIN;  
-            <span class="kw">break</span>;  
-        }  
-  
-        res = res * <span class="dv">10</span> + cur;  
-        i++;  
-    }  
-  
-    <span class="kw">return</span> (signal == &#39;-&#39;) ? -res : res;  
-}  </code></pre>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="co">//copyright@SP_daiyq 2013/5/29</span>
+<span class="dt">int</span> StrToInt(<span class="dt">const</span> <span class="dt">char</span>* str)
+{
+    <span class="dt">int</span> res = <span class="dv">0</span>; <span class="co">// result</span>
+    <span class="dt">int</span> i = <span class="dv">0</span>; <span class="co">// index of str</span>
+    <span class="dt">int</span> signal = &#39;+&#39;; <span class="co">// signal &#39;+&#39; or &#39;-&#39;</span>
+    <span class="dt">int</span> cur; <span class="co">// current digit</span>
+
+    <span class="kw">if</span> (!str)
+        <span class="kw">return</span> <span class="dv">0</span>;
+
+    <span class="co">// skip backspace</span>
+    <span class="kw">while</span> (isspace(str[i]))
+        i++;
+
+    <span class="co">// skip signal</span>
+    <span class="kw">if</span> (str[i] == &#39;+&#39; || str[i] == &#39;-&#39;)
+    {
+        signal = str[i];
+        i++;
+    }
+
+    <span class="co">// get result</span>
+    <span class="kw">while</span> (str[i] &gt;= &#39;<span class="dv">0</span>&#39; &amp;&amp; str[i] &lt;= &#39;<span class="dv">9</span>&#39;)
+    {
+        cur = str[i] - &#39;<span class="dv">0</span>&#39;;
+
+        <span class="co">// judge overlap or not</span>
+        <span class="kw">if</span> ( (signal == &#39;+&#39;) &amp;&amp; (cur &gt; INT_MAX - res * <span class="dv">10</span>) )
+        {
+            res = INT_MAX;
+            <span class="kw">break</span>;
+        }
+        <span class="kw">else</span> <span class="kw">if</span> ( (signal == &#39;-&#39;) &amp;&amp; (cur - <span class="dv">1</span> &gt; INT_MAX - res * <span class="dv">10</span>) )
+        {
+            res = INT_MIN;
+            <span class="kw">break</span>;
+        }
+
+        res = res * <span class="dv">10</span> + cur;
+        i++;
+    }
+
+    <span class="kw">return</span> (signal == &#39;-&#39;) ? -res : res;
+}</code></pre>
 <p>此时会发现，上面第3小节末所述的第1个小问题（当输入的字符串不是数字，而是字符的时候）解决了：</p>
 <figure>
 <img src="../images/30~31/30.3.jpg" />
@@ -6360,12 +6403,12 @@ CStrEditDistance::~CStrEditDistance(<span class="dt">void</span>)
 </figure>
 <p>什么问题呢？比如说用上述代码转换这个字符串：&quot; 10522545459&quot;，它本应得到的正确结果应该是2147483647，但程序实际得到的结果却是：1932610867。故很明显，程序没有解决好上面的第2个小问题：溢出问题。原因是什么呢？咱们来分析下代码，看是如何具体处理溢出情况的：</p>
 <pre class="sourceCode c"><code class="sourceCode c"><span class="co">// judge overlap or not  </span>
-        <span class="kw">if</span> ( (signal == &#39;+&#39;) &amp;&amp; (cur &gt; INT_MAX - res*<span class="dv">10</span>) )  
+        <span class="kw">if</span> ( (signal == &#39;+&#39;) &amp;&amp; (cur &gt; INT_MAX - res * <span class="dv">10</span>) )  
         {  
             res = INT_MAX;  
             <span class="kw">break</span>;  
         }  
-        <span class="kw">else</span> <span class="kw">if</span> ( (signal == &#39;-&#39;) &amp;&amp; (cur -<span class="dv">1</span> &gt; INT_MAX - res*<span class="dv">10</span>) )  
+        <span class="kw">else</span> <span class="kw">if</span> ( (signal == &#39;-&#39;) &amp;&amp; (cur - <span class="dv">1</span> &gt; INT_MAX - res * <span class="dv">10</span>) )  
         {  
             res = INT_MIN;  
             <span class="kw">break</span>;  
@@ -6375,54 +6418,54 @@ CStrEditDistance::~CStrEditDistance(<span class="dt">void</span>)
 <p>也就是说，对于字符串&quot;10522545459&quot;, 当扫描到最后一个字符‘9’时，根据上文第1小节的字符串转换成整数的思路：“每扫描到一个字符，我们便把在之前得到的数字乘以10，然后再加上当前字符表示的数字”，为了得到最终的整数，我们得如此计算：<br />1052254545*10 + 4，<br />实际上当程序计算到1052254545*10时，<br />1052254545*10 &gt; 2147483647<br />此时已经溢出了,若再执意计算，则程序逻辑将出错，故此后也就不能再判断字串的最后一位4是否大于2147483647%10了（耐不得烦想尽快看到最终正确代码的读者可以直接跳到下文第8节）。</p>
 <p><em><strong>5</strong></em>. 上面说给的程序没有“很好的解决溢出问题。由于输入的数字是以字符串的形式输入，因此有可能输入一个很大的数字转换之后会超过能够表示的最大的整数而溢出”。那么，到底代码该如何写呢？</p>
 <p>像下面这样？：</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="co">//copyright@fuwutu 2013/5/29  </span>
-<span class="dt">int</span> StrToInt(<span class="dt">const</span> <span class="dt">char</span>* str)  
-{  
-    bool negative = false;  
-    <span class="dt">long</span> <span class="dt">long</span> result = <span class="dv">0</span>;  
-    <span class="kw">while</span> (*str == &#39; &#39; || *str == <span class="ch">&#39;\t&#39;</span>)  
-    {  
-        ++str;  
-    }  
-    <span class="kw">if</span> (*str == &#39;-&#39;)  
-    {  
-        negative = true;  
-        ++str;  
-    }  
-    <span class="kw">else</span> <span class="kw">if</span> (*str == &#39;+&#39;)  
-    {  
-        ++str;  
-    }  
-  
-    <span class="kw">while</span> (*str != &#39;\<span class="dv">0</span>&#39;)  
-    {  
-        <span class="dt">int</span> n = *str - &#39;<span class="dv">0</span>&#39;;  
-        <span class="kw">if</span> (n &lt; <span class="dv">0</span> || n &gt; <span class="dv">9</span>)  
-        {  
-            <span class="kw">break</span>;  
-        }  
-  
-        <span class="kw">if</span> (negative)  
-        {  
-            result = result * <span class="dv">10</span> - n;  
-            <span class="kw">if</span> (result &lt; -2147483648LL)  
-            {  
-                result = -2147483648LL;  
-            }  
-        }  
-        <span class="kw">else</span>  
-        {  
-            result = result * <span class="dv">10</span> + n;  
-            <span class="kw">if</span> (result &gt; 2147483647LL)  
-            {  
-                result = 2147483647LL;  
-            }  
-        }  
-        ++str;  
-    }  
-  
-  <span class="kw">return</span> result;  
-}  </code></pre>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="co">//copyright@fuwutu 2013/5/29</span>
+<span class="dt">int</span> StrToInt(<span class="dt">const</span> <span class="dt">char</span>* str)
+{
+    bool negative = false;
+    <span class="dt">long</span> <span class="dt">long</span> result = <span class="dv">0</span>;
+    <span class="kw">while</span> (*str == &#39; &#39; || *str == <span class="ch">&#39;\t&#39;</span>)
+    {
+        ++str;
+    }
+    <span class="kw">if</span> (*str == &#39;-&#39;)
+    {
+        negative = true;
+        ++str;
+    }
+    <span class="kw">else</span> <span class="kw">if</span> (*str == &#39;+&#39;)
+    {
+        ++str;
+    }
+
+    <span class="kw">while</span> (*str != &#39;\<span class="dv">0</span>&#39;)
+    {
+        <span class="dt">int</span> n = *str - &#39;<span class="dv">0</span>&#39;;
+        <span class="kw">if</span> (n &lt; <span class="dv">0</span> || n &gt; <span class="dv">9</span>)
+        {
+            <span class="kw">break</span>;
+        }
+
+        <span class="kw">if</span> (negative)
+        {
+            result = result * <span class="dv">10</span> - n;
+            <span class="kw">if</span> (result &lt; -2147483648LL)
+            {
+                result = -2147483648LL;
+            }
+        }
+        <span class="kw">else</span>
+        {
+            result = result * <span class="dv">10</span> + n;
+            <span class="kw">if</span> (result &gt; 2147483647LL)
+            {
+                result = 2147483647LL;
+            }
+        }
+        ++str;
+    }
+
+    <span class="kw">return</span> result;
+}</code></pre>
 <p>run下程序，看看运行结果：</p>
 <figure>
 <img src="../images/30~31/30.5.jpg" />
@@ -6656,42 +6699,42 @@ EXPORT_SYMBOL(simple_strtol);  </code></pre>
 <p>也就是说，计算n*10前,先比较n与MAX_INT/10大小，若n&gt;MAX_INT/10，那么n*10肯定大于MAX_INT，即代表最后得到的整数n肯定溢出，既然溢出，不能再计算n*10，直接提前返回MAX_INT就行了。</p>
 <p>一直以来，我们努力的目的归根结底是为了更好的处理溢出，但上述做法最重要的是巧妙的规避了计算n*10这一乘法步骤，转换成计算除法MAX_INT/10代替，不能不说此法颇妙。</p>
 <p>他的代码如下，如有问题请指出：</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="co">//copyright@njnu_mjn 2013  </span>
-<span class="dt">int</span> StrToDecInt(<span class="dt">const</span> <span class="dt">char</span>* str)      
-{      
-    <span class="dt">static</span> <span class="dt">const</span> <span class="dt">int</span> MAX = (<span class="dt">int</span>)((<span class="dt">unsigned</span>)~<span class="dv">0</span> &gt;&gt; <span class="dv">1</span>);      
-    <span class="dt">static</span> <span class="dt">const</span> <span class="dt">int</span> MIN = -(<span class="dt">int</span>)((<span class="dt">unsigned</span>)~<span class="dv">0</span> &gt;&gt; <span class="dv">1</span>) - <span class="dv">1</span>;      
-    <span class="dt">unsigned</span> <span class="dt">int</span> n = <span class="dv">0</span>;      
-    <span class="dt">int</span> sign = <span class="dv">1</span>;      
-    <span class="dt">int</span> c;      
-      
-    <span class="kw">while</span> (isspace(*str))      
-        ++str;      
-    <span class="kw">if</span> (*str == &#39;+&#39; || *str == &#39;-&#39;)      
-    {      
-        <span class="kw">if</span> (*str == &#39;-&#39;)      
-            sign = -<span class="dv">1</span>;      
-        ++str;      
-    }      
-    <span class="kw">while</span> (isdigit(*str))      
-    {      
-        c = *str - &#39;<span class="dv">0</span>&#39;;      
-        <span class="kw">if</span> (sign &gt; <span class="dv">0</span> &amp;&amp; (n &gt; MAX/<span class="dv">10</span> || (n == MAX/<span class="dv">10</span> &amp;&amp; c &gt; MAX%<span class="dv">10</span>)))      
-        {      
-            n = MAX;      
-            <span class="kw">break</span>;      
-        }      
-        <span class="kw">else</span> <span class="kw">if</span> (sign &lt; <span class="dv">0</span> &amp;&amp; (n &gt; (<span class="dt">unsigned</span>)MIN/<span class="dv">10</span>       
-                              || (n == (<span class="dt">unsigned</span>)MIN/<span class="dv">10</span> &amp;&amp; c &gt; (<span class="dt">unsigned</span>)MIN%<span class="dv">10</span>)))      
-        {      
-            n = MIN;      
-            <span class="kw">break</span>;      
-        }      
-        n = n * <span class="dv">10</span> + c;      
-        ++str;      
-    }      
-    <span class="kw">return</span> sign &gt; <span class="dv">0</span> ? n : -n;      
-}    </code></pre>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="co">//copyright@njnu_mjn 2013</span>
+<span class="dt">int</span> StrToDecInt(<span class="dt">const</span> <span class="dt">char</span>* str)
+{
+    <span class="dt">static</span> <span class="dt">const</span> <span class="dt">int</span> MAX = (<span class="dt">int</span>)((<span class="dt">unsigned</span>)~<span class="dv">0</span> &gt;&gt; <span class="dv">1</span>);
+    <span class="dt">static</span> <span class="dt">const</span> <span class="dt">int</span> MIN = -(<span class="dt">int</span>)((<span class="dt">unsigned</span>)~<span class="dv">0</span> &gt;&gt; <span class="dv">1</span>) - <span class="dv">1</span>;
+    <span class="dt">unsigned</span> <span class="dt">int</span> n = <span class="dv">0</span>;
+    <span class="dt">int</span> sign = <span class="dv">1</span>;
+    <span class="dt">int</span> c;
+
+    <span class="kw">while</span> (isspace(*str))
+        ++str;
+    <span class="kw">if</span> (*str == &#39;+&#39; || *str == &#39;-&#39;)
+    {
+        <span class="kw">if</span> (*str == &#39;-&#39;)
+            sign = -<span class="dv">1</span>;
+        ++str;
+    }
+    <span class="kw">while</span> (isdigit(*str))
+    {
+        c = *str - &#39;<span class="dv">0</span>&#39;;
+        <span class="kw">if</span> (sign &gt; <span class="dv">0</span> &amp;&amp; (n &gt; MAX / <span class="dv">10</span> || (n == MAX / <span class="dv">10</span> &amp;&amp; c &gt; MAX % <span class="dv">10</span>)))
+        {
+            n = MAX;
+            <span class="kw">break</span>;
+        }
+        <span class="kw">else</span> <span class="kw">if</span> (sign &lt; <span class="dv">0</span> &amp;&amp; (n &gt; (<span class="dt">unsigned</span>)MIN / <span class="dv">10</span>
+                  || (n == (<span class="dt">unsigned</span>)MIN / <span class="dv">10</span> &amp;&amp; c &gt; (<span class="dt">unsigned</span>)MIN % <span class="dv">10</span>)))
+        {
+            n = MIN;
+            <span class="kw">break</span>;
+        }
+        n = n * <span class="dv">10</span> + c;
+        ++str;
+    }
+    <span class="kw">return</span> sign &gt; <span class="dv">0</span> ? n : -n;
+}</code></pre>
 <p>上述代码从测试结果来看，暂未发现什么问题</p>
 <figure>
 <img src="../images/30~31/30.7.jpg" />
@@ -6701,63 +6744,63 @@ EXPORT_SYMBOL(simple_strtol);  </code></pre>
 <li>一种是诸如2147483650，即n &gt; MAX/10 的；<br /></li>
 <li>一种是诸如2147483649，即n == MAX/10 &amp;&amp; c &gt; MAX%10。<br />故咱们上面处理溢出情况的代码便是：</li>
 </ol>
-<pre class="sourceCode c"><code class="sourceCode c">c = *str - &#39;<span class="dv">0</span>&#39;;    
-<span class="kw">if</span> (sign &gt; <span class="dv">0</span> &amp;&amp; (n &gt; MAX/<span class="dv">10</span> || (n == MAX/<span class="dv">10</span> &amp;&amp; c &gt; MAX%<span class="dv">10</span>)))    
-{    
-    n = MAX;    
-    <span class="kw">break</span>;    
-}    
-<span class="kw">else</span> <span class="kw">if</span> (sign &lt; <span class="dv">0</span> &amp;&amp; (n &gt; (<span class="dt">unsigned</span>)MIN/<span class="dv">10</span>     
-                  || (n == (<span class="dt">unsigned</span>)MIN/<span class="dv">10</span> &amp;&amp; c &gt; (<span class="dt">unsigned</span>)MIN%<span class="dv">10</span>)))    
-{    
-    n = MIN;    
-    <span class="kw">break</span>;    
-}    </code></pre>
+<pre class="sourceCode c"><code class="sourceCode c">c = *str - &#39;<span class="dv">0</span>&#39;;
+<span class="kw">if</span> (sign &gt; <span class="dv">0</span> &amp;&amp; (n &gt; MAX / <span class="dv">10</span> || (n == MAX / <span class="dv">10</span> &amp;&amp; c &gt; MAX % <span class="dv">10</span>)))
+{
+    n = MAX;
+    <span class="kw">break</span>;
+}
+<span class="kw">else</span> <span class="kw">if</span> (sign &lt; <span class="dv">0</span> &amp;&amp; (n &gt; (<span class="dt">unsigned</span>)MIN / <span class="dv">10</span>
+          || (n == (<span class="dt">unsigned</span>)MIN / <span class="dv">10</span> &amp;&amp; c &gt; (<span class="dt">unsigned</span>)MIN % <span class="dv">10</span>)))
+{
+    n = MIN;
+    <span class="kw">break</span>;
+}</code></pre>
 <p>不过，即便如此，有些细节是改进的，如他自己所说：</p>
 <p>1.n的声明及定义应该为</p>
 <pre class="sourceCode c"><code class="sourceCode c"><span class="dt">int</span> n = <span class="dv">0</span>; </code></pre>
 <p>2.将MAX/10,MAX%10,(unsigned)MIN/10及(unsigned)MIN%10保存到变量中, 防止重复计算</p>
 <p>这样，优化后的代码为：</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="co">//copyright@njnu_mjn 2013  </span>
-<span class="dt">int</span> StrToDecInt(<span class="dt">const</span> <span class="dt">char</span>* str)    
-{    
-    <span class="dt">static</span> <span class="dt">const</span> <span class="dt">int</span> MAX = (<span class="dt">int</span>)((<span class="dt">unsigned</span>)~<span class="dv">0</span> &gt;&gt; <span class="dv">1</span>);    
-    <span class="dt">static</span> <span class="dt">const</span> <span class="dt">int</span> MIN = -(<span class="dt">int</span>)((<span class="dt">unsigned</span>)~<span class="dv">0</span> &gt;&gt; <span class="dv">1</span>) - <span class="dv">1</span>;    
-    <span class="dt">static</span> <span class="dt">const</span> <span class="dt">int</span> MAX_DIV = (<span class="dt">int</span>)((<span class="dt">unsigned</span>)~<span class="dv">0</span> &gt;&gt; <span class="dv">1</span>) / <span class="dv">10</span>;    
-    <span class="dt">static</span> <span class="dt">const</span> <span class="dt">int</span> MIN_DIV = (<span class="dt">int</span>)((((<span class="dt">unsigned</span>)~<span class="dv">0</span> &gt;&gt; <span class="dv">1</span>) + <span class="dv">1</span>) / <span class="dv">10</span>);    
-    <span class="dt">static</span> <span class="dt">const</span> <span class="dt">int</span> MAX_R = (<span class="dt">int</span>)((<span class="dt">unsigned</span>)~<span class="dv">0</span> &gt;&gt; <span class="dv">1</span>) % <span class="dv">10</span>;    
-    <span class="dt">static</span> <span class="dt">const</span> <span class="dt">int</span> MIN_R = (<span class="dt">int</span>)((((<span class="dt">unsigned</span>)~<span class="dv">0</span> &gt;&gt; <span class="dv">1</span>) + <span class="dv">1</span>) % <span class="dv">10</span>);    
-    <span class="dt">int</span> n = <span class="dv">0</span>;    
-    <span class="dt">int</span> sign = <span class="dv">1</span>;    
-    <span class="dt">int</span> c;    
-    
-    <span class="kw">while</span> (isspace(*str))    
-        ++str;    
-    <span class="kw">if</span> (*str == &#39;+&#39; || *str == &#39;-&#39;)    
-    {    
-        <span class="kw">if</span> (*str == &#39;-&#39;)    
-            sign = -<span class="dv">1</span>;    
-        ++str;    
-    }    
-    <span class="kw">while</span> (isdigit(*str))    
-    {    
-        c = *str - &#39;<span class="dv">0</span>&#39;;    
-        <span class="kw">if</span> (sign &gt; <span class="dv">0</span> &amp;&amp; (n &gt; MAX_DIV || (n == MAX_DIV &amp;&amp; c &gt;= MAX_R)))    
-        {    
-            n = MAX;    
-            <span class="kw">break</span>;    
-        }    
-        <span class="kw">else</span> <span class="kw">if</span> (sign &lt; <span class="dv">0</span> &amp;&amp; (n &gt; MIN_DIV     
-                          || (n == MIN_DIV &amp;&amp; c &gt;= MIN_R)))    
-        {    
-            n = MIN;    
-            <span class="kw">break</span>;    
-        }    
-        n = n * <span class="dv">10</span> + c;    
-        ++str;    
-    }    
-    <span class="kw">return</span> sign &gt; <span class="dv">0</span> ? n : -n;    
-}    </code></pre>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="co">//copyright@njnu_mjn 2013</span>
+<span class="dt">int</span> StrToDecInt(<span class="dt">const</span> <span class="dt">char</span>* str)
+{
+    <span class="dt">static</span> <span class="dt">const</span> <span class="dt">int</span> MAX = (<span class="dt">int</span>)((<span class="dt">unsigned</span>)~<span class="dv">0</span> &gt;&gt; <span class="dv">1</span>);
+    <span class="dt">static</span> <span class="dt">const</span> <span class="dt">int</span> MIN = -(<span class="dt">int</span>)((<span class="dt">unsigned</span>)~<span class="dv">0</span> &gt;&gt; <span class="dv">1</span>) - <span class="dv">1</span>;
+    <span class="dt">static</span> <span class="dt">const</span> <span class="dt">int</span> MAX_DIV = (<span class="dt">int</span>)((<span class="dt">unsigned</span>)~<span class="dv">0</span> &gt;&gt; <span class="dv">1</span>) / <span class="dv">10</span>;
+    <span class="dt">static</span> <span class="dt">const</span> <span class="dt">int</span> MIN_DIV = (<span class="dt">int</span>)((((<span class="dt">unsigned</span>)~<span class="dv">0</span> &gt;&gt; <span class="dv">1</span>) + <span class="dv">1</span>) / <span class="dv">10</span>);
+    <span class="dt">static</span> <span class="dt">const</span> <span class="dt">int</span> MAX_R = (<span class="dt">int</span>)((<span class="dt">unsigned</span>)~<span class="dv">0</span> &gt;&gt; <span class="dv">1</span>) % <span class="dv">10</span>;
+    <span class="dt">static</span> <span class="dt">const</span> <span class="dt">int</span> MIN_R = (<span class="dt">int</span>)((((<span class="dt">unsigned</span>)~<span class="dv">0</span> &gt;&gt; <span class="dv">1</span>) + <span class="dv">1</span>) % <span class="dv">10</span>);
+    <span class="dt">int</span> n = <span class="dv">0</span>;
+    <span class="dt">int</span> sign = <span class="dv">1</span>;
+    <span class="dt">int</span> c;
+
+    <span class="kw">while</span> (isspace(*str))
+        ++str;
+    <span class="kw">if</span> (*str == &#39;+&#39; || *str == &#39;-&#39;)
+    {
+        <span class="kw">if</span> (*str == &#39;-&#39;)
+            sign = -<span class="dv">1</span>;
+        ++str;
+    }
+    <span class="kw">while</span> (isdigit(*str))
+    {
+        c = *str - &#39;<span class="dv">0</span>&#39;;
+        <span class="kw">if</span> (sign &gt; <span class="dv">0</span> &amp;&amp; (n &gt; MAX_DIV || (n == MAX_DIV &amp;&amp; c &gt;= MAX_R)))
+        {
+            n = MAX;
+            <span class="kw">break</span>;
+        }
+        <span class="kw">else</span> <span class="kw">if</span> (sign &lt; <span class="dv">0</span> &amp;&amp; (n &gt; MIN_DIV
+                  || (n == MIN_DIV &amp;&amp; c &gt;= MIN_R)))
+        {
+            n = MIN;
+            <span class="kw">break</span>;
+        }
+        n = n * <span class="dv">10</span> + c;
+        ++str;
+    }
+    <span class="kw">return</span> sign &gt; <span class="dv">0</span> ? n : -n;
+}</code></pre>
 <p>部分数据的测试结果如下图所示：</p>
 <figure>
 <img src="../images/30~31/30.8.jpg" />
@@ -6972,13 +7015,13 @@ EXPORT_SYMBOL(simple_strtol);  </code></pre>
 <li>一种是诸如2147483649，即n == MAX/10 &amp;&amp; c &gt; MAX%10。</li>
 </ol>
 <p>也就是说无论是&quot;10522545459&quot;，还是&quot;10522545454&quot;，都是属于第1种情况，即“诸如2147483650，即n &gt; MAX/10的”，此时直接返回MAX_INT即可，所以不需要也不能再去判断n == MAX/10的情况。 这个处理思路类似于上文第8节处理溢出情况的代码：</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="kw">if</span> (sign &gt; <span class="dv">0</span> &amp;&amp; (n &gt; MAX/<span class="dv">10</span> || (n == MAX/<span class="dv">10</span> &amp;&amp; c &gt; MAX%<span class="dv">10</span>)))      
+<pre class="sourceCode c"><code class="sourceCode c"><span class="kw">if</span> (sign &gt; <span class="dv">0</span> &amp;&amp; (n &gt; MAX / <span class="dv">10</span> || (n == MAX / <span class="dv">10</span> &amp;&amp; c &gt; MAX % <span class="dv">10</span>)))
 {
     n = MAX;
     <span class="kw">break</span>;
 }
-<span class="kw">else</span> <span class="kw">if</span> (sign &lt; <span class="dv">0</span> &amp;&amp; (n &gt; (<span class="dt">unsigned</span>)MIN/<span class="dv">10</span>
-                              || (n == (<span class="dt">unsigned</span>)MIN/<span class="dv">10</span> &amp;&amp; c &gt; (<span class="dt">unsigned</span>)MIN%<span class="dv">10</span>)))
+<span class="kw">else</span> <span class="kw">if</span> (sign &lt; <span class="dv">0</span> &amp;&amp; (n &gt; (<span class="dt">unsigned</span>)MIN / <span class="dv">10</span>
+          || (n == (<span class="dt">unsigned</span>)MIN / <span class="dv">10</span> &amp;&amp; c &gt; (<span class="dt">unsigned</span>)MIN % <span class="dv">10</span>)))
 {
     n = MIN;
     <span class="kw">break</span>;
@@ -7013,32 +7056,35 @@ EXPORT_SYMBOL(simple_strtol);  </code></pre>
 <img src="../images/30~31/31.1.jpg" alt="31.1.jpg" /><figcaption>31.1.jpg</figcaption>
 </figure>
 <p>注意事项：<br />1. 自行实现函数my_find，勿在my_find函数里夹杂输出，且不准用C、C++库，和Java的String对象；<br />2. 请注意代码的时间，空间复杂度，及可读性，简洁性；<br />3. input=aaa，rule=aa时，返回一个结果aa，即可。</p>
-<h2 id="解法一-2">解法一</h2>
+<h2 id="解法一-3">解法一</h2>
 <p>本题与上述第三十章的题不同，上题字符串转换成整数更多考察对思维的全面性和对细节的处理，本题则更多的是编程技巧。闲不多说，直接上代码：</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="co">//copyright@cao_peng 2013/4/23  </span>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="co">//copyright@cao_peng 2013/4/23</span>
 <span class="dt">int</span> str_len(<span class="dt">char</span> *a)
-{  <span class="co">//字符串长度</span>
+{
+    <span class="co">//字符串长度</span>
     <span class="kw">if</span> (a == <span class="dv">0</span>)
     {
         <span class="kw">return</span> <span class="dv">0</span>;
     }
     <span class="dt">char</span> *t = a;
-    <span class="kw">for</span> (;*t;++t)
+    <span class="kw">for</span> (; *t; ++t)
         ;
     <span class="kw">return</span> (<span class="dt">int</span>) (t - a);
 }
 
-<span class="dt">void</span> str_copy(<span class="dt">char</span> *a,<span class="dt">const</span> <span class="dt">char</span> *b,<span class="dt">int</span> len)
-{  <span class="co">//拷贝字符串 a = b</span>
-    <span class="kw">for</span> (;len &gt; <span class="dv">0</span>; --len, ++b,++a)
+<span class="dt">void</span> str_copy(<span class="dt">char</span> *a, <span class="dt">const</span> <span class="dt">char</span> *b, <span class="dt">int</span> len)
+{
+    <span class="co">//拷贝字符串 a = b</span>
+    <span class="kw">for</span> (; len &gt; <span class="dv">0</span>; --len, ++b, ++a)
     {
         *a = *b;
     }
     *a = <span class="dv">0</span>;
 }
 
-<span class="dt">char</span> *str_join(<span class="dt">char</span> *a,<span class="dt">const</span> <span class="dt">char</span> *b,<span class="dt">int</span> lenb)
-{ <span class="co">//连接字符串 第一个字符串被回收</span>
+<span class="dt">char</span> *str_join(<span class="dt">char</span> *a, <span class="dt">const</span> <span class="dt">char</span> *b, <span class="dt">int</span> lenb)
+{
+    <span class="co">//连接字符串 第一个字符串被回收</span>
     <span class="dt">char</span> *t;
     <span class="kw">if</span> (a == <span class="dv">0</span>)
     {
@@ -7059,12 +7105,14 @@ EXPORT_SYMBOL(simple_strtol);  </code></pre>
 }
 
 <span class="dt">int</span> canMatch(<span class="dt">char</span> *input, <span class="dt">char</span> *rule)
-{ <span class="co">// 返回最长匹配长度 -1表示不匹配</span>
+{
+    <span class="co">// 返回最长匹配长度 -1表示不匹配</span>
     <span class="kw">if</span> (*rule == <span class="dv">0</span>)
-    { <span class="co">//已经到rule尾端</span>
+    {
+        <span class="co">//已经到rule尾端</span>
         <span class="kw">return</span> <span class="dv">0</span>;
     }
-    <span class="dt">int</span> r = -<span class="dv">1</span> ,may;
+    <span class="dt">int</span> r = -<span class="dv">1</span> , may;
     <span class="kw">if</span> (*rule == &#39;*&#39;)
     {
         r = canMatch(input, rule + <span class="dv">1</span>);  <span class="co">// *匹配0个字符</span>
@@ -7078,7 +7126,8 @@ EXPORT_SYMBOL(simple_strtol);  </code></pre>
         }
     }
     <span class="kw">if</span> (*input == <span class="dv">0</span>)
-    {  <span class="co">//到尾端</span>
+    {
+        <span class="co">//到尾端</span>
         <span class="kw">return</span> r;
     }
     <span class="kw">if</span> ((*rule == &#39;?&#39;) || (*rule == *input))
@@ -7096,7 +7145,7 @@ EXPORT_SYMBOL(simple_strtol);  </code></pre>
 {
     <span class="dt">int</span> len = str_len(input);
     <span class="dt">int</span> *match = (<span class="dt">int</span> *) malloc(<span class="kw">sizeof</span>(<span class="dt">int</span>) * len);  <span class="co">//input第i位最多能匹配多少位 匹配不上是-1</span>
-    <span class="dt">int</span> i,max_pos = - <span class="dv">1</span>;
+    <span class="dt">int</span> i, max_pos = - <span class="dv">1</span>;
     <span class="dt">char</span> *output = <span class="dv">0</span>;
 
     <span class="kw">for</span> (i = <span class="dv">0</span>; i &lt; len; ++i)
@@ -7108,7 +7157,8 @@ EXPORT_SYMBOL(simple_strtol);  </code></pre>
         }
     }
     <span class="kw">if</span> ((max_pos &lt; <span class="dv">0</span>) || (match[max_pos] &lt;= <span class="dv">0</span>))
-    {  <span class="co">//不匹配</span>
+    {
+        <span class="co">//不匹配</span>
         output = (<span class="dt">char</span> *) malloc(<span class="kw">sizeof</span>(<span class="dt">char</span>));
         *output = <span class="dv">0</span>;   <span class="co">// \0</span>
         <span class="kw">return</span> output;
@@ -7116,7 +7166,8 @@ EXPORT_SYMBOL(simple_strtol);  </code></pre>
     <span class="kw">for</span> (i = <span class="dv">0</span>; i &lt; len;)
     {
         <span class="kw">if</span> (match[i] == match[max_pos])
-        { <span class="co">//找到匹配</span>
+        {
+            <span class="co">//找到匹配</span>
             output = str_join(output, input + i, match[i]);
             i += match[i];
         }
@@ -7130,104 +7181,110 @@ EXPORT_SYMBOL(simple_strtol);  </code></pre>
 }</code></pre>
 <h2 id="解法二动态规划">解法二、动态规划</h2>
 <p>本题也可以直接写出DP(Dynamic Programming, 动态规划)方程，如下代码所示：</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="co">//copyright@chpeih 2013/4/23  </span>
-<span class="dt">char</span>* my_find(<span class="dt">char</span> input[], <span class="dt">char</span> rule[])  
-{  
-    <span class="co">//write your code here  </span>
-    <span class="dt">int</span> len1, len2;  
-    <span class="kw">for</span>(len1 = <span class="dv">0</span>; input[len1]; len1++);  
-    <span class="kw">for</span>(len2 = <span class="dv">0</span>; rule[len2]; len2++);  
-    <span class="dt">int</span> MAXN = len1 &gt; len2 ? (len1<span class="dv">+1</span>) : (len2<span class="dv">+1</span>);  
-    <span class="dt">int</span>  **dp;  
-  
-    <span class="co">//dp[i][j]表示字符串1和字符串2分别以i j结尾匹配的最大长度  </span>
-    <span class="co">//记录dp[i][j]是由之前那个节点推算过来  i*MAXN+j  </span>
-    dp = new <span class="dt">int</span> *[len1<span class="dv">+1</span>];  
-    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>;i&lt;=len1;i++)  
-    {  
-        dp[i] = new <span class="dt">int</span>[len2<span class="dv">+1</span>];  
-  
-    }  
-  
-    dp[<span class="dv">0</span>][<span class="dv">0</span>] = <span class="dv">0</span>;  
-    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= len2; i++)  
-        dp[<span class="dv">0</span>][i] = -<span class="dv">1</span>;  
-    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= len1; i++)  
-        dp[i][<span class="dv">0</span>] = <span class="dv">0</span>;  
-  
-    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= len1; i++)  
-    {  
-        <span class="kw">for</span> (<span class="dt">int</span> j = <span class="dv">1</span>; j &lt;= len2; j++)  
-        {  
-            <span class="kw">if</span>(rule[j<span class="dv">-1</span>] == &#39;*&#39;){  
-                dp[i][j] = -<span class="dv">1</span>;  
-                <span class="kw">if</span> (dp[i<span class="dv">-1</span>][j<span class="dv">-1</span>] != -<span class="dv">1</span>)  
-                {  
-                    dp[i][j] = dp[i<span class="dv">-1</span>][j<span class="dv">-1</span>] + <span class="dv">1</span>;  
-  
-                }  
-                <span class="kw">if</span> (dp[i<span class="dv">-1</span>][j] != -<span class="dv">1</span> &amp;&amp; dp[i][j] &lt; dp[i<span class="dv">-1</span>][j] + <span class="dv">1</span>)  
-                {
-                    dp[i][j] = dp[i<span class="dv">-1</span>][j] + <span class="dv">1</span>;  
-                }  
-            }
-            <span class="kw">else</span> <span class="kw">if</span> (rule[j<span class="dv">-1</span>] == &#39;?&#39;)
-            {  
-                <span class="kw">if</span>(dp[i<span class="dv">-1</span>][j<span class="dv">-1</span>] != -<span class="dv">1</span>){  
-                    dp[i][j] = dp[i<span class="dv">-1</span>][j<span class="dv">-1</span>] + <span class="dv">1</span>;  
-  
-                }<span class="kw">else</span> dp[i][j] = -<span class="dv">1</span>;  
-            }   
-            <span class="kw">else</span>  
-            {  
-                <span class="kw">if</span>(dp[i<span class="dv">-1</span>][j<span class="dv">-1</span>] != -<span class="dv">1</span> &amp;&amp; input[i<span class="dv">-1</span>] == rule[j<span class="dv">-1</span>]){  
-                    dp[i][j] = dp[i<span class="dv">-1</span>][j<span class="dv">-1</span>] + <span class="dv">1</span>;  
-                }<span class="kw">else</span> dp[i][j] = -<span class="dv">1</span>;  
-            }  
-        }  
-    }  
-  
-    <span class="dt">int</span> m = -<span class="dv">1</span>;<span class="co">//记录最大字符串长度  </span>
-    <span class="dt">int</span> *ans = new <span class="dt">int</span>[len1];  
-    <span class="dt">int</span> count_ans = <span class="dv">0</span>;<span class="co">//记录答案个数  </span>
-    <span class="dt">char</span> *returnans = new <span class="dt">char</span>[len1<span class="dv">+1</span>];  
-    <span class="dt">int</span> count = <span class="dv">0</span>;  
-    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= len1; i++)  
-        <span class="kw">if</span> (dp[i][len2] &gt; m){  
-            m = dp[i][len2];  
-            count_ans = <span class="dv">0</span>;  
-            ans[count_ans++] = i-m;  
-        }
-        <span class="kw">else</span> <span class="kw">if</span>(dp[i][len2] != -<span class="dv">1</span> &amp;&amp; dp[i][len2] == m)
+<pre class="sourceCode c"><code class="sourceCode c"><span class="co">//copyright@chpeih 2013/4/23</span>
+<span class="dt">char</span>* my_find(<span class="dt">char</span> input[], <span class="dt">char</span> rule[])
+{
+    <span class="co">//write your code here</span>
+    <span class="dt">int</span> len1, len2;
+    <span class="kw">for</span> (len1 = <span class="dv">0</span>; input[len1]; len1++);
+    <span class="kw">for</span> (len2 = <span class="dv">0</span>; rule[len2]; len2++);
+    <span class="dt">int</span> MAXN = len1 &gt; len2 ? (len1 + <span class="dv">1</span>) : (len2 + <span class="dv">1</span>);
+    <span class="dt">int</span>  **dp;
+
+    <span class="co">//dp[i][j]表示字符串1和字符串2分别以i j结尾匹配的最大长度</span>
+    <span class="co">//记录dp[i][j]是由之前那个节点推算过来  i*MAXN+j</span>
+    dp = new <span class="dt">int</span> *[len1 + <span class="dv">1</span>];
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt;= len1; i++)
+    {
+        dp[i] = new <span class="dt">int</span>[len2 + <span class="dv">1</span>];
+
+    }
+
+    dp[<span class="dv">0</span>][<span class="dv">0</span>] = <span class="dv">0</span>;
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= len2; i++)
+        dp[<span class="dv">0</span>][i] = -<span class="dv">1</span>;
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= len1; i++)
+        dp[i][<span class="dv">0</span>] = <span class="dv">0</span>;
+
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= len1; i++)
+    {
+        <span class="kw">for</span> (<span class="dt">int</span> j = <span class="dv">1</span>; j &lt;= len2; j++)
         {
-            ans[count_ans++] = i-m;  
-        }  
-  
-        <span class="kw">if</span> (count_ans!=<span class="dv">0</span>)  
-        {      
-            <span class="dt">int</span> len = ans[<span class="dv">0</span>];  
-            <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>;i &lt; m;i++)  
-            {  
-                printf(<span class="st">&quot;%c&quot;</span>,input[i+ans[<span class="dv">0</span>]]);  
-                returnans[count++] = input[i+ans[<span class="dv">0</span>]];  
-            }  
-            <span class="kw">for</span> (<span class="dt">int</span> j = <span class="dv">1</span>;j&lt;count_ans;j++)  
-            {  
-                printf(<span class="st">&quot; &quot;</span>);  
-                returnans[count++] = &#39; &#39;;  
-                len = ans[j];  
-                <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>;i&lt;m;i++)  
-                {  
-                    printf(<span class="st">&quot;%c&quot;</span>,input[i+ans[j]]);  
-                    returnans[count++] = input[i+ans[j]];  
-                }  
-            }  
-            printf(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>);  
-            returnans[count++] = &#39;\<span class="dv">0</span>&#39;;  
-        }  
-  
-        <span class="kw">return</span> returnans;  
-}  </code></pre>
+            <span class="kw">if</span> (rule[j - <span class="dv">1</span>] == &#39;*&#39;)
+            {
+                dp[i][j] = -<span class="dv">1</span>;
+                <span class="kw">if</span> (dp[i - <span class="dv">1</span>][j - <span class="dv">1</span>] != -<span class="dv">1</span>)
+                {
+                    dp[i][j] = dp[i - <span class="dv">1</span>][j - <span class="dv">1</span>] + <span class="dv">1</span>;
+
+                }
+                <span class="kw">if</span> (dp[i - <span class="dv">1</span>][j] != -<span class="dv">1</span> &amp;&amp; dp[i][j] &lt; dp[i - <span class="dv">1</span>][j] + <span class="dv">1</span>)
+                {
+                    dp[i][j] = dp[i - <span class="dv">1</span>][j] + <span class="dv">1</span>;
+                }
+            }
+            <span class="kw">else</span> <span class="kw">if</span> (rule[j - <span class="dv">1</span>] == &#39;?&#39;)
+            {
+                <span class="kw">if</span> (dp[i - <span class="dv">1</span>][j - <span class="dv">1</span>] != -<span class="dv">1</span>)
+                {
+                    dp[i][j] = dp[i - <span class="dv">1</span>][j - <span class="dv">1</span>] + <span class="dv">1</span>;
+
+                }
+                <span class="kw">else</span> dp[i][j] = -<span class="dv">1</span>;
+            }
+            <span class="kw">else</span>
+            {
+                <span class="kw">if</span> (dp[i - <span class="dv">1</span>][j - <span class="dv">1</span>] != -<span class="dv">1</span> &amp;&amp; input[i - <span class="dv">1</span>] == rule[j - <span class="dv">1</span>])
+                {
+                    dp[i][j] = dp[i - <span class="dv">1</span>][j - <span class="dv">1</span>] + <span class="dv">1</span>;
+                }
+                <span class="kw">else</span> dp[i][j] = -<span class="dv">1</span>;
+            }
+        }
+    }
+
+    <span class="dt">int</span> m = -<span class="dv">1</span>;<span class="co">//记录最大字符串长度</span>
+    <span class="dt">int</span> *ans = new <span class="dt">int</span>[len1];
+    <span class="dt">int</span> count_ans = <span class="dv">0</span>;<span class="co">//记录答案个数</span>
+    <span class="dt">char</span> *returnans = new <span class="dt">char</span>[len1 + <span class="dv">1</span>];
+    <span class="dt">int</span> count = <span class="dv">0</span>;
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= len1; i++)
+        <span class="kw">if</span> (dp[i][len2] &gt; m)
+        {
+            m = dp[i][len2];
+            count_ans = <span class="dv">0</span>;
+            ans[count_ans++] = i - m;
+        }
+        <span class="kw">else</span> <span class="kw">if</span> (dp[i][len2] != -<span class="dv">1</span> &amp;&amp; dp[i][len2] == m)
+        {
+            ans[count_ans++] = i - m;
+        }
+
+    <span class="kw">if</span> (count_ans != <span class="dv">0</span>)
+    {
+        <span class="dt">int</span> len = ans[<span class="dv">0</span>];
+        <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; m; i++)
+        {
+            printf(<span class="st">&quot;%c&quot;</span>, input[i + ans[<span class="dv">0</span>]]);
+            returnans[count++] = input[i + ans[<span class="dv">0</span>]];
+        }
+        <span class="kw">for</span> (<span class="dt">int</span> j = <span class="dv">1</span>; j &lt; count_ans; j++)
+        {
+            printf(<span class="st">&quot; &quot;</span>);
+            returnans[count++] = &#39; &#39;;
+            len = ans[j];
+            <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; m; i++)
+            {
+                printf(<span class="st">&quot;%c&quot;</span>, input[i + ans[j]]);
+                returnans[count++] = input[i + ans[j]];
+            }
+        }
+        printf(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>);
+        returnans[count++] = &#39;\<span class="dv">0</span>&#39;;
+    }
+
+    <span class="kw">return</span> returnans;
+}</code></pre>
 <h2 id="参考文献及推荐阅读-2">参考文献及推荐阅读</h2>
 <p>1.字符串匹配问题题目<a href="http://hero.pongo.cn/Question/Details?ID=28&amp;ExamID=28">完整描述</a>；</p>
 <h1 id="第三十二章最小操作数">第三十二章：最小操作数</h1>
@@ -8777,7 +8834,7 @@ bool isValid(<span class="dt">int</span> step, <span class="dt">int</span> x1, <
 <li>《Hbase实战》第8章、在HBase上查询地理信息系统；</li>
 </ol>
 <h1 id="第三十八章hero在线编程判题出题系统的演进与优化">第三十八章：Hero在线编程判题、出题系统的演进与优化</h1>
-<h2 id="前言-5">前言</h2>
+<h2 id="前言-4">前言</h2>
 <p>以前出门在外玩的时候，经常跑去网吧，去网吧也不干啥事，看看博客，改改博客，但若想修改博客上的一段代码，却发觉网吧没有装编译器这个东西，可一想到安装它需要不少时间，所以每次想在网吧写代码都作罢。</p>
 <p>当时，便想，如果某一天打开浏览器，便能在网页上直接敲代码，那该有多好，随时随地，不受编译器限制。好事多磨，今年3月终于来CSDN来做这样一个在线编程网站Hero了：<a href="http://hero.csdn.net">http://hero.csdn.net</a>，以项目负责人的身份总体负责它的产品和运营、包括出题。</p>
 <p>为何要写此文？本文不谈Hero如何实现，也不谈今年3月至今，它的PV涨了多少倍，不谈每一道题的具体解法、思路、代码是怎样的（日后可能会写），更不谈它的界面是如何一步步优化的，只谈谈它的判题系统、出题系统是如何一步步演进和优化的，即它背后是怎样的一种判题机制（用来判断每天几千个用户提交的程序正确与否），以及如何做到让每一个用户都可以来Hero上出题的。</p>
@@ -8965,5 +9022,118 @@ bool isValid(<span class="dt">int</span> step, <span class="dt">int</span> x1, <
 <li>本文2.1节问题的在线挑战地址：http://hero.csdn.net/Question/Details?ID=54&amp;ExamID=52</li>
 <li>本文2.2节问题的在线编程地址：http://hero.csdn.net/Question/Details?ID=74&amp;ExamID=72</li>
 </ul>
+<h1 id="第四十三章加权区间调度">第四十三章：加权区间调度</h1>
+<p>作者: <a href="https://github.com/wihoho">wihoho</a> 时间：2014/2/21</p>
+<h2 id="题目描述-9">题目描述</h2>
+<p>给定一组时间间隔<br /><span class="math">(<em>s</em><sub><em>i</em></sub>, <em>f</em><sub><em>i</em></sub>)</span><br /> 每一个时间间隔的价值为<span class="math"><em>v</em><sub><em>i</em></sub></span><br /><span class="math">, <em>现</em><em>在</em><em>需</em><em>要</em><em>找</em><em>到</em><em>这</em><em>组</em><em>时</em><em>间</em><em>的</em><em>子</em><em>集</em></span><br />S<br /><span class="math"><em>使</em><em>得</em></span><br /><em>{i S}^{i} v</em>i$$最大，并且这个子集的所有间隔都不相交。</p>
+<p>举一个简单的例子，如下图所示 <img src="../images/43/example1.png" /></p>
+<p>那么对于这个例子，正确答案是只选择<code>v2</code>，最大的价值为3。</p>
+<h2 id="思路与分析">思路与分析</h2>
+<p>此标题对应准确的英文是 <code>Weighted Interval Scheduling</code>。个人觉得这是一个dynamic programing相关并且相对容易的问题，LCS都需要 2-D 数组，而这个只需要 1-D 数组。</p>
+<h2 id="解法一-4">解法一</h2>
+<p>既然已经知道需要使用动态规划，那么我们需要做的就是找到相关的公式。在此之前，让我们先定义几个变量。</p>
+<p><br /><span class="math"><em>O</em><em>P</em><em>T</em>(<em>j</em>)</span><br />: 当只有从<code>1,2...j</code>个时间间隔时的最优解 <br /><span class="math"><em>p</em>(<em>j</em>)</span><br />: 第j个时间间隔左边的第一个不跟它相交的时间间隔的位置 <br /><span class="math"><em>v</em><sub><em>j</em></sub></span><br />:第j个时间间隔的价值</p>
+<p>现在我们就进入到正确的解法当中，需要进行以下几步：</p>
+<ol type="1">
+<li>根据每个时间间隔的结束时间来对所有的时间间隔进行排序</li>
+<li>动态规划的公式如下 <br /><span class="math"><em>O</em><em>P</em><em>T</em>(<em>j</em>) = <em>m</em><em>a</em><em>x</em>(<em>v</em><sub><em>j</em></sub> + <em>O</em><em>P</em><em>T</em>(<em>p</em>(<em>j</em>)), <em>O</em><em>P</em><em>T</em>(<em>j</em> − 1))</span><br /></li>
+<li>OPT这个数组的最后一个值为最优解</li>
+</ol>
+<p>相对来说，还是比较好理解的，对于第j个时间间隔而言，我们会有2个选择：</p>
+<ol type="1">
+<li>把第j个时间间隔加到子集S当中去，那么<br /><span class="math"><em>O</em><em>P</em><em>T</em>(<em>j</em>) = <em>v</em><sub><em>j</em></sub> + <em>O</em><em>P</em><em>T</em>(<em>p</em>(<em>j</em>))</span><br /></li>
+<li>不加第j个时间间隔，此时<br /><span class="math"><em>O</em><em>P</em><em>T</em>(<em>j</em>) = <em>O</em><em>P</em><em>T</em>(<em>j</em> − 1)</span><br /></li>
+</ol>
+<h2 id="代码一">代码一</h2>
+<pre><code> public int getMaxWorkingTime(List&lt;Interval&gt; intervals) {
+
+        if (intervals == null || intervals.size() == 0)
+            return 0;
+        
+        int numberOfInterval = intervals.size();
+        Interval[] arrayOfIntervals = new Interval[numberOfInterval];
+        for(int i = 0; i &lt; numberOfInterval; i ++){
+            if (intervals.get(i) == null)
+                throw new IllegalArgumentException(&quot;The argument (a list of intervals) must not contain null!&quot;);
+
+            arrayOfIntervals[i] = intervals.get(i);
+        }
+
+        // Sort these intervals according to their finishing time
+        Arrays.sort(arrayOfIntervals, new Comparator&lt;Interval&gt;() {
+            @Override
+            public int compare(Interval interval, Interval interval2) {
+                return ((Integer)interval.getEndMinuteUnit()).compareTo(interval2.getEndMinuteUnit());
+            }
+        });
+
+        // Get the array, where each value represents the nearest interval of the current interval without overlapping
+        int[] nearestNonOverlappedIndexes = getNearestNonOverlappedInterval(arrayOfIntervals);
+
+        // Cache the optimal value for each index
+        int[] longestWorkingTimeSoFar = new int[numberOfInterval];
+
+        longestWorkingTimeSoFar[0] = arrayOfIntervals[0].getIntervalMinute();
+        for(int i = 1; i &lt; numberOfInterval; i ++){
+
+            // count the current interval arrayOfIntervals[i]
+            int value1 = 0;
+            if(nearestNonOverlappedIndexes[i] &gt; -1)
+                value1 = arrayOfIntervals[i].getIntervalMinute() + longestWorkingTimeSoFar[nearestNonOverlappedIndexes[i]];
+            else
+                value1 = arrayOfIntervals[i].getIntervalMinute();
+
+            // do not count the current interval arrayOfIntervals[i]
+            int value2 = longestWorkingTimeSoFar[i -1];
+
+            longestWorkingTimeSoFar[i] = Math.max(value1,value2);
+        }
+
+        // Return the last value in the array of longestWorkingTimeSoFar as the optimal solution
+        return longestWorkingTimeSoFar[numberOfInterval-1];
+    }
+
+
+    /**
+     * This method calculates an array of indexes.
+     * For instance, the jth value of the returned array indicates the interval which is nearest to jth interval without overlapping.
+     *
+     * @param intervals a list of sorted intervals according to their finishing time
+     * @return an array of indexes
+     */
+    public int[] getNearestNonOverlappedInterval(Interval[] intervals){
+        if(intervals == null || intervals.length == 0)
+            throw new IllegalArgumentException(&quot;The argument can not be null or empty!&quot;);
+
+        int[] indexTable = new int[intervals.length];
+        for(int i = 0; i &lt; intervals.length; i ++){
+            Interval interval = intervals[i];
+
+            // Traverses the left side and find the first interval which does  not overlap with intervals[i]
+            int j = i - 1;
+            for(; j &gt;= 0; j --){
+                if(! checkOverlap(interval, intervals[j]))
+                    break;
+            }
+
+            indexTable[i] = j;
+        }
+
+        return indexTable;
+
+    }
+
+    /**
+     * Checks whether two intervals overlap with each other or not
+     * @param one an interval
+     * @param two another interval
+     * @return true or false
+     */
+    public boolean checkOverlap(Interval one, Interval two){
+        return one.getBeginMinuteUnit() &lt;= two.getEndMinuteUnit() &amp;&amp; two.getBeginMinuteUnit() &lt;= one.getEndMinuteUnit();
+    }
+}</code></pre>
+<h2 id="参考与引用">参考与引用</h2>
+<p><a href="http://www.cs.cmu.edu/~ckingsf/bioinfo-lectures/dynamicp.pdf">CMU</a></p>
 </body>
 </html>
