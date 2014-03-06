@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title><link rel="stylesheet" href="style_cache/github-ce7ab9b7dbd81fa8f2eeff348bc97553a3eaf80c.css" />
+  <link rel="stylesheet" href="style_cache/github2-729e3ebdf8b0ec6ed54532c398dc8bd48d25ea1f.css" />
+  <style>
+    .file-box {
+      margin: 64px auto;
+      width: 920px;
+    }
+	body {
+		font-size: 14px;
+		line-height: 22px;
+		<!--font-family: "adelle",Georgia,"Times New Roman",serif;-->
+		color: #4e443c;
+		background: #f0efe7;
+	}
+
+	.book-toc {
+
+	}
+	a {
+		color: #0388a6;
+		text-decoration: none;
+	}
+	a:hover {
+		color: #04b1d8;
+		text-decoration: none;
+	}
+	ol.book-toc li.chapter{
+		margin-bottom:0.6em
+	}
+	ol.book-toc, ol{
+		list-style-type: disc
+	}
+	ol.book-toc{
+		margin:30px 36px
+	}
+	ol.book-toc a{
+		padding-left:4px
+	}
+	li {
+		line-height: 22px;
+	}
+	h1, h2, h3, h4, h5, h6, li, p, a, ol, div{
+		margin: 0;
+		padding: 0;
+		border: 0;
+		vertical-align: baseline;
+	}
+	ul, ol {
+		padding: 0;
+		margin: 0 0 11px 25px;
+	}
+	h1 {
+		font-size: 36px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	h2 {
+		font-size: 18px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h1{
+		font-size: 22px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	ol.book-toc h2 {
+		font-size: 16px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	p {
+		margin: 0 0 11px;
+		font-size: 14px;
+		line-height: 22px;
+	}
+	div {
+		display: block;
+	}
+	div#nav{
+		padding: 30px
+	}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="file-box">
+	<div class="file">
+		<div id="readme" class="blob instapaper_body announce md">
+		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
+			<h1>
+<a name="%E7%AC%AC%E4%B8%89%E7%AB%A0%E5%9B%9B%E7%BB%AD%E5%8A%A8%E6%80%81%E6%95%B0%E6%8D%AE%E4%B8%AD%E6%B1%82%E7%AC%AC-k-%E5%B0%8F%E5%A4%A7%E5%85%83%E7%B4%A0" class="anchor" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0%E5%9B%9B%E7%BB%AD%E5%8A%A8%E6%80%81%E6%95%B0%E6%8D%AE%E4%B8%AD%E6%B1%82%E7%AC%AC-k-%E5%B0%8F%E5%A4%A7%E5%85%83%E7%B4%A0"><span class="octicon octicon-link"></span></a>第三章四续：动态数据中求第 K 小(大)元素</h1>
+
+<h2>
+<a name="%E9%97%AE%E9%A2%98%E5%BC%95%E5%85%A5" class="anchor" href="#%E9%97%AE%E9%A2%98%E5%BC%95%E5%85%A5"><span class="octicon octicon-link"></span></a>问题引入：</h2>
+
+<p>前面总结了怎么在一个静态数组中找出第i小的元素(TopK)，那么如果在一个动态数据集合，可以支持动态插入、删除，如何及时查找第i小的元素(TopK)？</p>
+
+<h2>
+<a name="%E8%A7%A3%E5%86%B3%E6%80%9D%E8%B7%AF" class="anchor" href="#%E8%A7%A3%E5%86%B3%E6%80%9D%E8%B7%AF"><span class="octicon octicon-link"></span></a>解决思路：</h2>
+
+<p>可以回想所学过的典型动态的数据结构：搜索二叉树，而红黑树是对搜索二叉树的改进，在保持了搜索二叉树的性质基础上保持了整棵树的平衡。我们可以通过红黑树这个已经存在的动态数据结构进行改进来设计一个求第i小(TopK)的算法。</p>
+
+<h2>
+<a name="%E7%AE%97%E6%B3%95%E6%80%9D%E8%80%83" class="anchor" href="#%E7%AE%97%E6%B3%95%E6%80%9D%E8%80%83"><span class="octicon octicon-link"></span></a>算法思考：</h2>
+
+<p>为了实现求第i小的树，最直接的想法是能否在每个树节点上维护自身的排名，但这种思路显然不行，因为这样一来当插入或删除一个节点时，最差情况是每个节点的排名信息都要被更新（插入或删除一个最小值的情况），时间复杂度O(N)，无法发挥树的优势。</p>
+
+<p>利用搜索二叉树的性质，每个节点的左子树都是比自身小的节点，右子树都是比自身大的节点，因此左子树节点+1就是以自身为根节点的树中自身节点的排名，这个规律正好符合查找第i小元素的需求，因此想到可以在每个节点维护其左子树节点数，然后再根据以自己为根节点进行查找的树递归算法。</p>
+
+<p>以下图为例：</p>
+
+<ul>
+<li>模型建立：一个节点分2个域，上域用字母表示节点的Key，下域用数字表示其左子树的节点数；</li>
+<li>2、查找Rank(i = 5)：
+
+<ul>
+<li>a) 引入i表示在以自己为根的子树中查找第i（i=5）小的节点，引入k表示该节点在以自己为根的子树中自己的排名；</li>
+<li>b) 首先从整个树的根节点M开始，此时i=5,则k为当前节点M的下域(M左子树节点数)+1(M节点本身)=5+1=6，即M在树M中排名第6，6&gt;5，因此向其左子树中查找第i(i=5)小的节点；</li>
+<li>c) 递归调用Rank(i = i)，此时i=5,则k=1+1=2，即C在树C中排名第2,5&gt;2，因此向其右子树中查找第i=i-k=5-2=3小的节点；</li>
+<li>d) 递归调用Rank(i = i - k)，此时i=3,则k=1+1=2，3&gt;2，因此向其右子树中查找第i=i-k=3-2=1小的节点；</li>
+<li>e) 递归调用Rank(i = i - k)，此时i=1，则k=0+1=1,1=1，即找到，则H就是整棵树中第5小的节点。</li>
+</ul>
+</li>
+</ul><p><a href="../images/3/3.4/1.jpg" target="_blank"><img src="../images/3/3.4/1.jpg" alt="" style="max-width:100%;"></a></p>
+
+<p>图1：下域为其节点左子树总节点数的方案的查找算法</p>
+
+<ul>
+<li>3、插入 Insert()：
+
+<ul>
+<li>a) 下图为例，插入Key=I，在红黑树的插入算法中加入维护节点下域的算法，当心插入的值x比当前节点key小，则先更新该节点的下域+1，再递归插入左子树。 </li>
+</ul>
+</li>
+</ul><p><a href="../images/3/3.4/2.jpg" target="_blank"><img src="../images/3/3.4/2.jpg" alt="" style="max-width:100%;"></a></p>
+
+<p>图2：下域为其节点左子树总节点数的方案的插入算法</p>
+
+<ul>
+<li>b) 而红黑树的插入还有保持红黑树性质的修正操作：1、改变颜色2、旋转。改变颜色不影响下域，而旋转会影响下域，因此需要考虑旋转算法对下域的影响。以下图为例，当正常的旋转算法完成后，需要重新计算A和B的下域，但是B只能获取其左子树的左子树节点数为3，而不知道其左子树的右子树节点数，从而无法计算B的左子树总节点。 </li>
+</ul><p><a href="../images/3/3.4/3.jpg" target="_blank"><img src="../images/3/3.4/3.jpg" alt="" style="max-width:100%;"></a></p>
+
+<p>图3：下域为其节点左子树总节点数的方案的节点旋转改进</p>
+
+<ul>
+<li>c) 因此上面的方案在改造Insert()算法时候失败了，换个方案，考虑更换下域保存的信息，换为下域用（左右子树的总节点数+1）代替（左子树总节点数），这样在旋转以后就可以简单计算出新的下域。</li>
+</ul><p><a href="../images/3/3.4/4.jpg" target="_blank"><img src="../images/3/3.4/4.jpg" alt="" style="max-width:100%;"></a></p>
+
+<p>图4：下域为（其节点左右子树总节点数+1）的方案的节点旋转改进</p>
+
+<p>由于更换下域保存的信息，重新考虑查找操作，根据上面的查找思路得出下图查找算法，过程略。</p>
+
+<p><a href="../images/3/3.4/5.jpg" target="_blank"><img src="../images/3/3.4/5.jpg" alt="" style="max-width:100%;"></a></p>
+
+<p>图5：下域为（其节点左右子树总节点数+1）的方案的查找算法</p>
+
+<ul>
+<li>4、删除：类比插入操作，略。</li>
+</ul><h2>
+<a name="%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93" class="anchor" href="#%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93"><span class="octicon octicon-link"></span></a>算法总结：</h2>
+
+<p>插入、删除、查找算法都是在原红黑树的基础上进行适当修改，因此时间复杂度均为O(logN)。</p>
+		  </article>
+		  
+			<div id="nav">
+				
+					<a href="03.3.html">prev</a>
+					|
+				
+				
+					<a href="03.跟原文不符.html">next</a>
+				
+				<span style="float: right"><a href="index.html">Back to home</a>
+			</div>
+		  
+		</div>
+	</div>
+  </div>
+  
+  <div>&nbsp;</div>
+  </div>
+  <div style="text-align:center; margin-bottom: 30px">
+	  Generated by <a href="https://github.com/marchtea/md_to_github_html">mdtogh</a>
+  </div>
+</body>
+</html>

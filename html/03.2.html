@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title><link rel="stylesheet" href="style_cache/github-ce7ab9b7dbd81fa8f2eeff348bc97553a3eaf80c.css" />
+  <link rel="stylesheet" href="style_cache/github2-729e3ebdf8b0ec6ed54532c398dc8bd48d25ea1f.css" />
+  <style>
+    .file-box {
+      margin: 64px auto;
+      width: 920px;
+    }
+	body {
+		font-size: 14px;
+		line-height: 22px;
+		<!--font-family: "adelle",Georgia,"Times New Roman",serif;-->
+		color: #4e443c;
+		background: #f0efe7;
+	}
+
+	.book-toc {
+
+	}
+	a {
+		color: #0388a6;
+		text-decoration: none;
+	}
+	a:hover {
+		color: #04b1d8;
+		text-decoration: none;
+	}
+	ol.book-toc li.chapter{
+		margin-bottom:0.6em
+	}
+	ol.book-toc, ol{
+		list-style-type: disc
+	}
+	ol.book-toc{
+		margin:30px 36px
+	}
+	ol.book-toc a{
+		padding-left:4px
+	}
+	li {
+		line-height: 22px;
+	}
+	h1, h2, h3, h4, h5, h6, li, p, a, ol, div{
+		margin: 0;
+		padding: 0;
+		border: 0;
+		vertical-align: baseline;
+	}
+	ul, ol {
+		padding: 0;
+		margin: 0 0 11px 25px;
+	}
+	h1 {
+		font-size: 36px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	h2 {
+		font-size: 18px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h1{
+		font-size: 22px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	ol.book-toc h2 {
+		font-size: 16px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	p {
+		margin: 0 0 11px;
+		font-size: 14px;
+		line-height: 22px;
+	}
+	div {
+		display: block;
+	}
+	div#nav{
+		padding: 30px
+	}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="file-box">
+	<div class="file">
+		<div id="readme" class="blob instapaper_body announce md">
+		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
+			<h1>
+<a name="%E7%AC%AC%E4%B8%89%E7%AB%A0%E5%86%8D%E7%BB%AD%E5%BF%AB%E9%80%9F%E9%80%89%E6%8B%A9select%E7%AE%97%E6%B3%95%E7%9A%84%E6%B7%B1%E5%85%A5%E5%88%86%E6%9E%90%E4%B8%8E%E5%AE%9E%E7%8E%B0" class="anchor" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0%E5%86%8D%E7%BB%AD%E5%BF%AB%E9%80%9F%E9%80%89%E6%8B%A9select%E7%AE%97%E6%B3%95%E7%9A%84%E6%B7%B1%E5%85%A5%E5%88%86%E6%9E%90%E4%B8%8E%E5%AE%9E%E7%8E%B0"><span class="octicon octicon-link"></span></a>第三章再续：快速选择SELECT算法的深入分析与实现</h1>
+
+<h2>
+<a name="%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F" class="anchor" href="#%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F"><span class="octicon octicon-link"></span></a>第一部分、快速排序</h2>
+
+<p>关于快速排序算法，本人已经写了3篇文章（可参见其中的两篇：
+1、十二、快速排序算法之所有版本的c/c++实现，
+2、一之续、快速排序算法的深入分析），</p>
+
+<p>为何又要旧事重提列？正如很多事物都有相似的地方，而咱们面临的问题--快速选择算法中的划分过程等同于快速排序，所以，在分析快速选择SELECT算法之前，咱们先再来简单回顾和分析下快速排序，ok，今天看到Mark的数据结构与算法分析-c语言描述一书上对快速排序也有不错的介绍，所以为了增加点新鲜感，就不用自己以前的文章而改为直接引用Mark的叙述了：</p>
+
+<p>As its name implies, quicksort is the fastest known sorting algorithm in practice. Its average running time is O(n log n)（快速排序是实践中已知的最快的排序算法，他的平均运行时间为O(N*logN)）. It is very fast, mainly due to a very tight and highly optimized inner loop. It has O(n^2) worst-case performance（最坏情形的性能为O(N^2)）, but this can be made exponentially unlikely with a little effort.</p>
+
+<p>The quicksort algorithm is simple to understand and prove correct, although for many years it had the reputation of being an algorithm that could in theory be highly optimized but in practice was impossible to code correctly (no doubt because of FORTRAN).</p>
+
+<p>Like mergesort, quicksort is a divide-and-conquer recursive algorithm（像归并排序一样，快速排序也是一种采取分治方法的递归算法）. The basic algorithm to sort an array S consists of the following four easy steps（通过下面的4个步骤将数组S排序的算法如下）:</p>
+
+<ol>
+<li>If the number of elements in S is 0 or 1, then return（如果S中元素个数是0或1，则返回）.</li>
+<li>Pick any element v in S. This is called the pivot（取S中任一元素v，作为枢纽元）.</li>
+<li>Partition S - {v} (the remaining elements in S) into two disjoint groups（枢纽元v将S中其余的元素分成两个不相交的集合）: S1 = {x(- S-{v}| x &lt;= v}, and S2 = {x(- S-{v}| x &gt;= v}.</li>
+<li>Return { quicksort(S1) followed by v followed by quicksort(S2)}.</li>
+</ol><p>下面依据上述步骤对序列13,81,92,43,65,31,57,26,75,0 进行第一趟划分处理，可得到如下图所示的过程：</p>
+
+<p><a href="../images/3/3.2/3.2.1.jpg" target="_blank"><img src="../images/3/3.2/3.2.1.jpg" alt="" style="max-width:100%;"></a></p>
+
+<p>1.2、选取枢纽元的几种方法
+1、糟糕的方法
+通常的做法是选择数组中第一个元素作为枢纽元，如果输入是随机的，那么这是可以接受的。但是，如果输入序列是预排序的或者是反序的，那么依据这样的枢纽元进行划分则会出现相当糟糕的情况，因为可能所有的元素不是被划入S1，就是都被划入S2中。
+2、较好的方法
+一个比较好的做法是随机选取枢纽元，一般来说，这种策略是比较妥当的。
+3、三数取取中值方法
+例如，输入序列为 8, 1, 4, 9, 6, 3, 5, 2, 7, 0 ，它的左边元素为8，右边元素为0，中间位置|<em>left+right）/2</em>|上的元素为6，于是枢纽元为6.显然，使用三数中值分割法消除了预排序输入的坏情形，并且减少了快速排序大约5%（此为前人实验所得数据，无法具体证明）的运行时间。</p>
+
+<p>1.3、划分过程
+下面，我们再对序列8, 1, 4, 9, 6, 3, 5, 2, 7, 0进行第一趟划分，我们要达到的划分目的就是为了把所有小于枢纽元（据三数取中分割法取元素6为枢纽元）的元素移到数组的左边，而把所有大于枢纽元的元素全部移到数组的右边。</p>
+
+<p>此过程，如下述几个图所示：</p>
+
+<pre><code>8  1  4  9  0  3  5  2  7  6
+i                               j
+
+8  1  4  9  0  3  5  2  7  6
+i                           j
+</code></pre>
+
+<pre><code>     After First Swap：
+----------------------------
+2  1  4  9  0  3  5  8  7  6
+i                           j
+</code></pre>
+
+<pre><code>     Before Second Swap：
+----------------------------
+2  1  4  9  0  3  5  8  7  6
+     i           j
+</code></pre>
+
+<pre><code>     After Second Swap：
+----------------------------
+2  1  4  5  0  3  9  8  7  6
+     i           j
+</code></pre>
+
+<pre><code>     Before Third Swap
+----------------------------
+2  1  4  5  0  3  9  8  7  6
+     j   i   //i，j在元素3处碰头之后，i++指向了9，最后与6交换后，得到：
+</code></pre>
+
+<pre><code>2  1  4  5  0  3  6  8  7  9
+     i         pivot
+
+</code></pre>
+
+<p>至此，第一趟划分过程结束，枢纽元6将整个序列划分成了左小右大两个部分。</p>
+
+<p>1.4、四个细节</p>
+
+<p>下面，是4个值得你注意的细节问题：
+    1、我们要考虑一下，就是如何处理那些等于枢纽元的元素，问题在于当i遇到第一个等于枢纽元的关键字时，是否应该停止移动i，或者当j遇到一个等于枢纽元的元素时是否应该停止移动j。
+答案是：如果i，j遇到等于枢纽元的元素，那么我们就让i和j都停止移动。</p>
+
+<p>2、对于很小的数组，如数组的大小N&lt;=20时，快速排序不如插入排序好。</p>
+
+<p>3、只通过元素间进行比较达到排序目的的任何排序算法都需要进行O（N*logN）次比较，如快速排序算法（最坏O（N^2），最好O（N*logN）），归并排序算法（最坏O（N*logN，不过归并排序的问题在于合并两个待排序的序列需要附加线性内存，在整个算法中，还要将数据拷贝到临时数组再拷贝回来这样一些额外的开销，放慢了归并排序的速度）等。</p>
+
+<p>4、下面是实现三数取中的划分方法的程序：</p>
+
+<div class="highlight highlight-c"><pre><span class="c1">//三数取中分割法</span>
+<span class="n">input_type</span> <span class="nf">median3</span><span class="p">(</span> <span class="n">input_type</span> <span class="n">a</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span> <span class="p">)</span>
+<span class="c1">//下面的快速排序算法实现之一，及通过三数取中分割法寻找最小的k个数的快速选择SELECT算法都要调用这个median3函数</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">center</span><span class="p">;</span>
+    <span class="n">center</span> <span class="o">=</span> <span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+
+    <span class="k">if</span><span class="p">(</span> <span class="n">a</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">center</span><span class="p">]</span> <span class="p">)</span>
+        <span class="n">swap</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">left</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">center</span><span class="p">]</span> <span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">a</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="p">)</span>
+        <span class="n">swap</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">left</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">a</span><span class="p">[</span><span class="n">center</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="p">)</span>
+        <span class="n">swap</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">center</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="p">);</span>
+
+    <span class="cm">/* invariant: a[left] &lt;= a[center] &lt;= a[right] */</span>
+    <span class="n">swap</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">center</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">right</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span>     <span class="cm">/* hide pivot */</span>
+    <span class="k">return</span> <span class="n">a</span><span class="p">[</span><span class="n">right</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>                   <span class="cm">/* return pivot */</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>下面的程序是利用上面的三数取中分割法而运行的快速排序算法：</p>
+
+<div class="highlight highlight-c"><pre><span class="c1">//快速排序的实现之一</span>
+<span class="kt">void</span> <span class="nf">q_sort</span><span class="p">(</span> <span class="n">input_type</span> <span class="n">a</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
+    <span class="n">input_type</span> <span class="n">pivot</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">left</span> <span class="o">+</span> <span class="n">CUTOFF</span> <span class="o">&lt;=</span> <span class="n">right</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">pivot</span> <span class="o">=</span> <span class="n">median3</span><span class="p">(</span> <span class="n">a</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="p">);</span>   <span class="c1">//调用上面的实现三数取中分割法的median3函数</span>
+        <span class="n">i</span><span class="o">=</span><span class="n">left</span><span class="p">;</span> <span class="n">j</span><span class="o">=</span><span class="n">right</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>   <span class="c1">//第8句</span>
+        <span class="k">for</span><span class="p">(;;)</span>
+        <span class="p">{</span>
+            <span class="k">while</span><span class="p">(</span> <span class="n">a</span><span class="p">[</span><span class="o">++</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">pivot</span> <span class="p">);</span>
+            <span class="k">while</span><span class="p">(</span> <span class="n">a</span><span class="p">[</span><span class="o">--</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">pivot</span> <span class="p">);</span>
+            <span class="k">if</span><span class="p">(</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span> <span class="p">)</span>
+                <span class="n">swap</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">);</span>
+            <span class="k">else</span>
+                <span class="k">break</span><span class="p">;</span>       <span class="c1">//第16句</span>
+        <span class="p">}</span>
+        <span class="n">swap</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">right</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span>   <span class="cm">/*restore pivot*/</span>
+        <span class="n">q_sort</span><span class="p">(</span> <span class="n">a</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">i</span><span class="o">-</span><span class="mi">1</span> <span class="p">);</span>
+        <span class="n">q_sort</span><span class="p">(</span> <span class="n">a</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">right</span> <span class="p">);</span>
+
+        <span class="c1">//如上所见，在划分过程（partition）后，快速排序需要两次递归，一次对左边递归</span>
+        <span class="c1">//一次对右边递归。下面，你将看到，快速选择SELECT算法始终只对一边进行递归。</span>
+        <span class="c1">//这从直观上也能反应出：此快速排序算法（O（N*logN））明显会比</span>
+        <span class="c1">//下面第二节中的快速选择SELECT算法（O（N））平均花费更多的运行时间。</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>如果上面的第8-16句，改写成以下这样：</p>
+
+<div class="highlight highlight-c"><pre><span class="n">i</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">j</span> <span class="o">=</span> <span class="n">right</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span>
+<span class="k">for</span> <span class="p">(;;)</span>
+<span class="p">{</span>
+    <span class="k">while</span> <span class="p">(</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">pivot</span> <span class="p">)</span> <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">pivot</span> <span class="p">)</span> <span class="n">j</span><span class="o">--</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span> <span class="p">)</span>
+        <span class="n">swap</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">);</span>
+    <span class="k">else</span>
+        <span class="k">break</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>那么，当a[i] = a[j] = pivot则会产生无限，即死循环（相信，不用我多余解释，:D）。ok，接下来，咱们将进入正题--快速选择SELECT算法。</p>
+
+<h2>
+<a name="%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%E7%BA%BF%E6%80%A7%E6%9C%9F%E6%9C%9B%E6%97%B6%E9%97%B4%E7%9A%84%E5%BF%AB%E9%80%9F%E9%80%89%E6%8B%A9select%E7%AE%97%E6%B3%95" class="anchor" href="#%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%E7%BA%BF%E6%80%A7%E6%9C%9F%E6%9C%9B%E6%97%B6%E9%97%B4%E7%9A%84%E5%BF%AB%E9%80%9F%E9%80%89%E6%8B%A9select%E7%AE%97%E6%B3%95"><span class="octicon octicon-link"></span></a>第二部分、线性期望时间的快速选择SELECT算法</h2>
+
+<p>2.1、快速选择SELECT算法的介绍</p>
+
+<p>Quicksort can be modified to solve the selection problem, which we have seen in chapters 1 and 6. Recall that by using a priority queue, we can find the kth largest (or smallest) element in O(n + k log n)（以用最小堆初始化数组，然后取这个优先队列前k个值，复杂度O(n)+k*O(log n)。实际上，最好采用最大堆寻找最小的k个数，那样，此时复杂度为n*logk。更多详情，请参见：狂想曲系列第三章、寻找最小的k个数）. For the special case of finding the median, this gives an O(n log n) algorithm.</p>
+
+<p>Since we can sort the file in O(nlog n) time, one might expect to obtain a better time bound for selection. The algorithm we present to find the kth smallest element in a set S is almost identical to quicksort. In fact, the first three steps are the same. We will call this algorithm quickselect（叫做快速选择）. Let |Si| denote the number of elements in Si（令|Si|为Si中元素的个数）. The steps of quickselect are:</p>
+
+<ol>
+<li>If |S| = 1, then k = 1 and return the elements in S as the answer. If a cutoff for small files is being used and |S| &lt;=CUTOFF, then sort S and return the kth smallest element.</li>
+<li>Pick a pivot element, v (- S.（选取一个枢纽元v属于S）</li>
+<li><p>Partition S - {v} into S1 and S2, as was done with quicksort.
+（ &gt; 集合S-{v}分割成S1和S2，就像我们在快速排序中所作的那样）</p></li>
+<li><p>If k &lt;= |S1|, then the kth smallest element must be in S1. In this case, return quickselect (S1, k). If k = 1 + |S1|, then the pivot is the kth smallest element and we can return it as the answer. Otherwise, the kth smallest element lies in S2, and it is the (k - |S1| - 1)st smallest element in S2. We make a recursive call and return quickselect (S2, k - |S1| - 1).
+（ &gt; 果k&lt;=|S1|，那么第k个最小元素必然在S1中。在这种情况下，返回quickselect（S1,k）。如果k=1+|S1|，那么枢纽元素就是第k个最小元素，即找到，直接返回它。否则，这第k个最小元素就在S2中，即S2中的第（k-|S1|-1）个最小元素，我们递归调用并返回quickselect（S2，k-|S1|-1））（下面几节的程序关于k的表述可能会有所出入，但无碍，抓住原理即ok）。</p></li>
+</ol><p>In contrast to quicksort, quickselect makes only one recursive call instead of two. The worst case of quickselect is identical to that of quicksort and is O(n2). Intuitively, this is because quicksort's worst case is when one of S1 and S2 is empty; thus, quickselect（快速选择） is not really saving a recursive call. The average running time, however, is O(n)（不过，其平均运行时间为O（N）。看到了没，就是平均复杂度为O（N）这句话）. The analysis is similar to quicksort's and is left as an exercise.</p>
+
+<p>The implementation of quickselect is even simpler than the abstract description might imply. The code to do this shown in Figure 7.16. When the algorithm terminates, the kth smallest element is in position k. This destroys the original ordering; if this is not desirable, then a copy must be made.</p>
+
+<p>2.2、三数中值分割法寻找第k小的元素</p>
+
+<p>第一节，已经介绍过此三数中值分割法，有个细节，你要注意，即数组元素索引是从“0...i”开始计数的，所以第k小的元素应该是返回a[i]=a[k-1].即k-1=i。换句话就是说，第k小元素，实际上应该在数组中对应下标为k-1。ok，下面给出三数中值分割法寻找第k小的元素的程序的两个代码实现：</p>
+
+<div class="highlight highlight-c"><pre><span class="c1">//代码实现一</span>
+<span class="c1">//copyright@ mark allen weiss</span>
+<span class="c1">//July、updated，2011.05.05凌晨.</span>
+
+<span class="c1">//三数中值分割法寻找第k小的元素的快速选择SELECT算法</span>
+<span class="kt">void</span> <span class="nf">q_select</span><span class="p">(</span> <span class="n">input_type</span> <span class="n">a</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
+    <span class="n">input_type</span> <span class="n">pivot</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">left</span> <span class="cm">/*+ CUTOFF*/</span> <span class="o">&lt;=</span> <span class="n">right</span> <span class="p">)</span>  <span class="c1">//去掉CUTOFF常量，无用</span>
+    <span class="p">{</span>
+       <span class="n">pivot</span> <span class="o">=</span> <span class="n">median3</span><span class="p">(</span> <span class="n">a</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="p">);</span>   <span class="c1">//调用1、4节里的实现三数取中分割法的median3函数</span>
+       <span class="c1">//取三数中值作为枢纽元，可以消除最坏情况而保证此算法是O（N）的。不过，这还只局限在理论意义上。</span>
+       <span class="c1">//稍后，您将看到另一种选取枢纽元的方法。</span>
+
+       <span class="n">i</span><span class="o">=</span><span class="n">left</span><span class="p">;</span> <span class="n">j</span><span class="o">=</span><span class="n">right</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+       <span class="k">for</span><span class="p">(;;)</span>  <span class="c1">//此句到下面的九行代码，即为快速排序中的partition过程的实现之一</span>
+       <span class="p">{</span>
+           <span class="k">while</span><span class="p">(</span> <span class="n">a</span><span class="p">[</span><span class="o">++</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">pivot</span> <span class="p">){}</span>
+           <span class="k">while</span><span class="p">(</span> <span class="n">a</span><span class="p">[</span><span class="o">--</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">pivot</span> <span class="p">){}</span>
+           <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span> <span class="p">)</span>
+               <span class="n">swap</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">);</span>
+           <span class="k">else</span>
+               <span class="k">break</span><span class="p">;</span>
+       <span class="p">}</span>
+       <span class="n">swap</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">right</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span> <span class="cm">/* restore pivot */</span>
+       <span class="k">if</span><span class="p">(</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">)</span>
+           <span class="n">q_select</span><span class="p">(</span> <span class="n">a</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">i</span><span class="o">-</span><span class="mi">1</span> <span class="p">);</span>
+       <span class="k">else</span>
+           <span class="k">if</span><span class="p">(</span> <span class="n">k</span><span class="o">-</span><span class="mi">1</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="p">)</span>  <span class="c1">//此条语句相当于：if(k&gt;i+1)</span>
+               <span class="n">q</span><span class="o">-</span><span class="n">select</span><span class="p">(</span> <span class="n">a</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">right</span> <span class="p">);</span>
+           <span class="c1">//1、希望你已经看到，通过上面的if-else语句表明，此快速选择SELECT算法始终只对数组的一边进行递归，</span>
+           <span class="c1">//这也是其与第一节中的快速排序算法的本质性区别。</span>
+
+           <span class="c1">//2、这个区别则直接决定了：快速排序算法最快能达到O（N*logN），</span>
+           <span class="c1">//而快速选择SELECT算法则最坏亦能达到O（N）的线性时间复杂度。</span>
+           <span class="c1">//3、而确保快速选择算法最坏情况下能做到O（N）的根本保障在于枢纽元元素的选取，</span>
+           <span class="c1">//即采取稍后的2.3节里的五分化中项的中项，或2.4节里的中位数的中外位数的枢纽元选择方法达到O（N）的目的。</span>
+           <span class="c1">//后天老爸生日，孩儿深深祝福。July、updated，2011.05.19。</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+       <span class="n">insert_sort</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="o">-</span><span class="n">left</span><span class="o">+</span><span class="mi">1</span> <span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<div class="highlight highlight-c"><pre><span class="c1">//代码实现二</span>
+<span class="c1">//copyright @ 飞羽</span>
+<span class="c1">//July、updated，2011.05.11。</span>
+<span class="c1">//三数中值分割法寻找第k小的元素</span>
+<span class="kt">bool</span> <span class="nf">median_select</span><span class="p">(</span><span class="kt">int</span> <span class="n">array</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">//第k小元素，实际上应该在数组中下标为k-1</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span> <span class="o">&gt;</span> <span class="n">right</span> <span class="o">||</span> <span class="n">k</span><span class="o">-</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="n">left</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+
+    <span class="c1">//三数中值作为枢纽元方法，关键代码就是下述六行：</span>
+    <span class="kt">int</span> <span class="n">midIndex</span><span class="o">=</span><span class="p">(</span><span class="n">left</span><span class="o">+</span><span class="n">right</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">left</span><span class="p">]</span><span class="o">&lt;</span><span class="n">array</span><span class="p">[</span><span class="n">midIndex</span><span class="p">])</span>
+        <span class="n">swap</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">left</span><span class="p">],</span><span class="n">array</span><span class="p">[</span><span class="n">midIndex</span><span class="p">]);</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">right</span><span class="p">]</span><span class="o">&lt;</span><span class="n">array</span><span class="p">[</span><span class="n">midIndex</span><span class="p">])</span>
+        <span class="n">swap</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">right</span><span class="p">],</span><span class="n">array</span><span class="p">[</span><span class="n">midIndex</span><span class="p">]);</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">right</span><span class="p">]</span><span class="o">&lt;</span><span class="n">array</span><span class="p">[</span><span class="n">left</span><span class="p">])</span>
+        <span class="n">swap</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">right</span><span class="p">],</span><span class="n">array</span><span class="p">[</span><span class="n">left</span><span class="p">]);</span>
+    <span class="n">swap</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">midIndex</span><span class="p">],</span> <span class="n">array</span><span class="p">[</span><span class="n">right</span><span class="p">]);</span>
+
+    <span class="kt">int</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">partition</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">==</span> <span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>   <span class="c1">//第k小元素，实际上应该在数组中下标为k-1</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">&gt;</span> <span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">median_select</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">pos</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">);</span>
+    <span class="k">else</span> <span class="k">return</span> <span class="n">median_select</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">pos</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">k</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>上述程序使用三数中值作为枢纽元的方法可以使得最坏情况发生的概率几乎可以忽略不计。然而，稍后，您将看到：通过一种更好的方法，如“五分化中项的中项”，或“中位数的中位数”等方法选取枢纽元，我们将能彻底保证在最坏情况下依然是线性O（N）的复杂度。即，如稍后2.3节所示。</p>
+
+<p>2.3、五分化中项的中项，确保O（N）</p>
+
+<p>The selection problem requires us to find the kth smallest element in a list S of n elements（要求我们找出含N个元素的表S中的第k个最小的元素）. Of particular interest is the special case of finding the median. This occurs when k = |-n/2-|（向上取整）.（我们对找出中间元素的特殊情况有着特别的兴趣，这种情况发生在k=|-n/2-|的时候）</p>
+
+<p>In Chapters 1, 6, 7 we have seen several solutions to the selection problem. The solution in Chapter 7 uses a variation of quicksort and runs in O(n) average time（第7章中的解法，即本文上面第1节所述的思路4，用到快速排序的变体并以平均时间O（N）运行）. Indeed, it is described in Hoare's original paper on quicksort.</p>
+
+<p>Although this algorithm runs in linear average time, it has a worst case of O (n2)（但它有一个O（N^2）的最快情况）. Selection can easily be solved in O(n log n) worst-case time by sorting the elements, but for a long time it was unknown whether or not selection could be accomplished in O(n) worst-case time. The quickselect algorithm outlined in Section 7.7.6 is quite efficient in practice, so this was mostly a question of theoretical interest.</p>
+
+<p>Recall that the basic algorithm is a simple recursive strategy. Assuming that n is larger than the cutoff point where elements are simply sorted, an element v, known as the pivot, is chosen. The remaining elements are placed into two sets, S1 and S2. S1 contains elements that are guaranteed to be no larger than v, and S2 contains elements that are no smaller than v. Finally, if k &lt;= |S1|, then the kth smallest element in S can be found by recursively computing the kth smallest element in S1. If k = |S1| + 1, then the pivot is the kth smallest element. Otherwise, the kth smallest element in S is the (k - |S1| -1 )st smallest element in S2. The main difference between this algorithm and quicksort is that there is only one subproblem to solve instead of two（这个快速选择算法与快速排序之间的主要区别在于，这里求解的只有一个子问题，而不是两个子问题）。</p>
+
+<p>定理10.9
+The running time of quickselect using median-of-median-of-five partitioning is O(n)。</p>
+
+<p>The basic idea is still useful. Indeed, we will see that we can use it to improve the expected number of comparisons that quickselect makes. To get a good worst case, however, the key idea is to use one more level of indirection. Instead of finding the median from a sample of random elements, we will find the median from a sample of medians.</p>
+
+<p>The basic pivot selection algorithm is as follows:
+1. Arrange the n elements into |<em>n/5</em>| groups of 5 elements, ignoring the (at most four) extra elements.
+2. Find the median of each group. This gives a list M of |<em>n/5</em>| medians.
+3. Find the median of M. Return this as the pivot, v.</p>
+
+<p>We will use the term median-of-median-of-five partitioning to describe the quickselect algorithm that uses the pivot selection rule given above. （我们将用术语“五分化中项的中项”来描述使用上面给出的枢纽元选择法的快速选择算法）。We will now show that median-of-median-of-five partitioning guarantees that each recursive subproblem is at most roughly 70 percent as large as the original（现在我们要证明，“五分化中项的中项”，得保证每个递归子问题的大小最多为原问题的大约70%）. We will also show that the pivot can be computed quickly enough to guarantee an O (n) running time for the entire selection algorithm（我们还要证明，对于整个选择算法，枢纽元可以足够快的算出，以确保O（N）的运行时间。看到了没，这再次佐证了我们的类似快速排序的partition过程的分治方法为O（N）的观点）（更多详细的证明，请参考：第三章、寻找最小的k个数）。</p>
+
+<p>2.4、中位数的中位数，O（N）的再次论证</p>
+
+<p>以下内容来自算法导论第九章第9.3节全部内容（最坏情况线性时间的选择），如下（我酌情对之参考原中文版做了翻译，下文中括号内的中文解释，为我个人添加）：</p>
+
+<p>9.3 Selection in worst-case linear time（最坏情况下线性时间的选择算法）</p>
+
+<p>We now examine a selection algorithm whose running time is O(n) in the worst case（现在来看，一个最坏情况运行时间为O（N）的选择算法SELECT）. Like RANDOMIZED-SELECT, the algorithm SELECT finds the desired element by recursively partitioning the input array. The idea behind the algorithm, however, is to guarantee a good split when the array is partitioned. SELECT uses the deterministic partitioning algorithm PARTITION from quicksort (see Section 7.1), modified to take the element to partition around as an input parameter（像RANDOMIZED-SELECT一样，SELECTT通过输入数组的递归划分来找出所求元素，但是，该算法的基本思想是要保证对数组的划分是个好的划分。SECLECT采用了取自快速排序的确定性划分算法partition，并做了修改，把划分主元元素作为其参数）.</p>
+
+<p>The SELECT algorithm determines the ith smallest of an input array of n &gt; 1 elements by executing the following steps. (If n = 1, then SELECT merely returns its only input value as the ith smallest.)（算法SELECT通过执行下列步骤来确定一个有n&gt;1个元素的输入数组中的第i小的元素。（如果n=1，则SELECT返回它的唯一输入数值作为第i个最小值。））</p>
+
+<p>Divide the n elements of the input array into ⌊n/5⌋ groups of 5 elements each and at most one group made up of the remaining n mod 5 elements.</p>
+
+<p>Find the median of each of the ⌈n/5⌉ groups by first insertion sorting the elements of each group (of which there are at most 5) and then picking the median from the sorted list of group elements.
+Use SELECT recursively to find the median x of the ⌈n/5⌉ medians found in step 2. (If there are an even number of medians, then by our convention, x is the lower median.)</p>
+
+<p>Partition the input array around the median-of-medians x using the modified version of PARTITION. Let k be one more than the number of elements on the low side of the partition, so that x is the kth smallest element and there are n-k elements on the high side of the partition.（利用修改过的partition过程，按中位数的中位数x对输入数组进行划分，让k比划低去的元素数目多1，所以，x是第k小的元素，并且有n-k个元素在划分的高区）</p>
+
+<p>If i = k, then return x. Otherwise, use SELECT recursively to find the ith smallest element on the low side if i &lt; k, or the (i - k)th smallest element on the high side if i &gt; k.（如果要找的第i小的元素等于程序返回的k，即i=k，则返回x。否则，如果i &lt; k，则在低区递归调用SELECT以找出第i小的元素，如果i &gt; k，则在高区间找第（i-k）个最小元素）</p>
+
+<p>（以上五个步骤，即本文上面的第四节末中所提到的所谓“五分化中项的中项”的方法。）</p>
+
+<p>To analyze the running time of SELECT, we first determine a lower bound on the number of elements that are greater than the partitioning element x. （为了分析SELECT的运行时间，先来确定大于划分主元元素x的的元素数的一个下界）Figure 9.1 is helpful in visualizing this bookkeeping. At least half of the medians found in step 2 are greater than[1] the median-of-medians x. Thus, at least half of the ⌈n/5⌉ groups contribute 3 elements that are greater than x, except for the one group that has fewer than 5 elements if 5 does not divide n exactly, and the one group containing x itself. Discounting these two groups, it follows that the number of elements greater than x is at least：</p>
+
+<p>Figure 9.1: 对上图的解释或称对SELECT算法的分析：n个元素由小圆圈来表示，并且每一个组占一纵列。组的中位数用白色表示，而各中位数的中位数x也被标出。（当寻找偶数数目元素的中位数时，使用下中位数）。箭头从比较大的元素指向较小的元素，从中可以看出，在x的右边，每一个包含5个元素的组中都有3个元素大于x，在x的左边，每一个包含5个元素的组中有3个元素小于x。大于x的元素以阴影背景表示。 ）</p>
+
+<p>Similarly, the number of elements that are less than x is at least 3n/10 - 6. Thus, in the worst case, SELECT is called recursively on at most 7n/10 + 6 elements in step 5.</p>
+
+<p>We can now develop a recurrence for the worst-case running time T(n) of the algorithm SELECT. Steps 1, 2, and 4 take O(n) time. (Step 2 consists of O(n) calls of insertion sort on sets of size O(1).) Step 3 takes time T(⌈n/5⌉), and step 5 takes time at most T(7n/10+ 6), assuming that T is monotonically increasing. We make the assumption, which seems unmotivated at first, that any input of 140 or fewer elements requires O(1) time; the origin of the magic constant 140 will be clear shortly. We can therefore obtain the recurrence：</p>
+
+<p>We show that the running time is linear by substitution. More specifically, we will show that T(n) ≤ cn for some suitably large constant c and all n &gt; 0. We begin by assuming that T(n) ≤ cn for some suitably large constant c and all n ≤ 140; this assumption holds if c is large enough. We also pick a constant a such that the function described by the O(n) term above (which describes the non-recursive component of the running time of the algorithm) is bounded above by an for all n &gt; 0. Substituting this inductive hypothesis into the right-hand side of the recurrence yields</p>
+
+<pre><code>T(n) ≤ c[n/5] + c(7n/10 + 6) + an
+     ≤ cn/5 + c + 7cn/10 + 6c + an
+     = 9cn/10 + 7c + an
+     = cn + (-cn/10 + 7c + an) ,
+</code></pre>
+
+<p>which is at most cn if</p>
+
+<pre><code>-cn/10 + 7c + an &lt;= 0
+</code></pre>
+
+<p>Inequality (9.2) is equivalent to the inequality c ≥ 10a(n/(n - 70)) when n &gt; 70. Because we assume that n ≥ 140, we have n/(n - 70) ≤ 2, and so choosing c ≥ 20a will satisfy inequality (9.2). (Note that there is nothing special about the constant 140; we could replace it by any integer strictly greater than 70 and then choose c accordingly.) The worst-case running time of SELECT is therefore linear（因此，此SELECT的最坏情况的运行时间是线性的）.</p>
+
+<p>As in a comparison sort (see Section 8.1), SELECT and RANDOMIZED-SELECT determine information about the relative order of elements only by comparing elements. Recall from Chapter 8 that sorting requires Ω(n lg n) time in the comparison model, even on average (see Problem 8-1). The linear-time sorting algorithms in Chapter 8 make assumptions about the input. In contrast, the linear-time selection algorithms in this chapter do not require any assumptions about the input. They are not subject to the Ω(n lg n) lower bound because they manage to solve the selection problem without sorting.</p>
+
+<p>（与比较排序（算法导论8.1节）中的一样，SELECT和RANDOMIZED-SELECT仅通过元素间的比较来确定它们之间的相对次序。在算法导论第8章中，我们知道在比较模型中，即使在平均情况下，排序仍然要O（n*logn）的时间。第8章得线性时间排序算法在输入上做了假设。相反地，本节提到的此类似partition过程的SELECT算法不需要关于输入的任何假设，它们不受下界O（n*logn）的约束，因为它们没有使用排序就解决了选择问题（看到了没，道出了此算法的本质阿））</p>
+
+<p>Thus, the running time is linear because these algorithms do not sort; the linear-time behavior is not a result of assumptions about the input, as was the case for the sorting algorithms in Chapter 8. Sorting requires Ω(n lg n) time in the comparison model, even on average (see Problem 8-1), and thus the method of sorting and indexing presented in the introduction to this chapter is asymptotically inefficient.（所以，本节中的选择算法之所以具有线性运行时间，是因为这些算法没有进行排序；线性时间的结论并不需要在输入上所任何假设，即可得到。.....）</p>
+
+<h2>
+<a name="%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86%E5%BF%AB%E9%80%9F%E9%80%89%E6%8B%A9select%E7%AE%97%E6%B3%95%E7%9A%84%E5%AE%9E%E7%8E%B0" class="anchor" href="#%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86%E5%BF%AB%E9%80%9F%E9%80%89%E6%8B%A9select%E7%AE%97%E6%B3%95%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="octicon octicon-link"></span></a>第三部分、快速选择SELECT算法的实现</h2>
+
+<p>本节，咱们将依据下图所示的步骤，采取中位数的中位数选取枢纽元的方法来实现此SELECT算法，</p>
+
+<p>不过，在实现之前，有个细节我还是必须要提醒你，即上文中2.2节开头处所述，“数组元素索引是从“0...i”开始计数的，所以第k小的元素应该是返回a[i]=a[k-1].即k-1=i。换句话就是说，第k小元素，实际上应该在数组中对应下标为k-1”这句话，我想，你应该明白了：返回数组中第k小的元素，实际上就是返回数组中的元素array[i]，即array[k-1]。ok，最后请看此快速选择SELECT算法的完整代码实现（据我所知，在此之前，从没有人采取中位数的中位数选取枢纽元的方法来实现过这个SELECT算法）：</p>
+
+<div class="highlight highlight-c"><pre><span class="c1">//copyright@ yansha &amp;&amp; July &amp;&amp; 飞羽</span>
+<span class="cp">#include &lt;iostream&gt;</span>
+<span class="cp">#include &lt;time.h&gt;</span>
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">const</span> <span class="kt">int</span> <span class="n">num_array</span> <span class="o">=</span> <span class="mi">13</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">num_med_array</span> <span class="o">=</span> <span class="n">num_array</span> <span class="o">/</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">array</span><span class="p">[</span><span class="n">num_array</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">midian_array</span><span class="p">[</span><span class="n">num_med_array</span><span class="p">];</span>
+
+<span class="c1">//冒泡排序（晚些时候将修正为插入排序）</span>
+<span class="o">/*</span><span class="kt">void</span> <span class="n">insert_sort</span><span class="p">(</span><span class="kt">int</span> <span class="n">array</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">loop_times</span><span class="p">,</span> <span class="kt">int</span> <span class="n">compare_times</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">loop_times</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">compare_times</span> <span class="o">-</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">left</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">array</span><span class="p">[</span><span class="n">left</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                <span class="n">swap</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">left</span> <span class="o">+</span> <span class="n">j</span><span class="p">],</span> <span class="n">array</span><span class="p">[</span><span class="n">left</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<div class="highlight highlight-c"><pre><span class="cm">/*</span>
+<span class="cm">//插入排序算法伪代码</span>
+<span class="cm">INSERTION-SORT(A)                              cost    times</span>
+<span class="cm">1  for j ← 2 to length[A]                      c1      n</span>
+<span class="cm">2       do key ← A[j]                          c2      n - 1</span>
+<span class="cm">3          Insert A[j] into the sorted sequence A[1 ‥ j - 1].     0...n - 1</span>
+<span class="cm">4          i ← j - 1                           c4      n - 1</span>
+<span class="cm">5          while i &gt; 0 and A[i] &gt; key           c5</span>
+<span class="cm">6             do A[i + 1] ← A[i]               c6</span>
+<span class="cm">7             i ← i - 1                        c7</span>
+<span class="cm">8          A[i + 1] ← key                      c8      n - 1</span>
+<span class="cm">*/</span>
+<span class="c1">//已修正为插入排序，如下：</span>
+<span class="kt">void</span> <span class="nf">insert_sort</span><span class="p">(</span><span class="kt">int</span> <span class="n">array</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">loop_times</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">left</span><span class="o">+</span><span class="n">loop_times</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">key</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span> <span class="n">i</span><span class="o">&gt;</span><span class="n">left</span> <span class="o">&amp;&amp;</span> <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&gt;</span><span class="n">key</span> <span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="n">i</span><span class="o">--</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">find_median</span><span class="p">(</span><span class="kt">int</span> <span class="n">array</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">left</span> <span class="o">==</span> <span class="n">right</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">array</span><span class="p">[</span><span class="n">left</span><span class="p">];</span>
+
+    <span class="kt">int</span> <span class="n">index</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="n">right</span> <span class="o">-</span> <span class="mi">5</span><span class="p">;</span> <span class="n">index</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">insert_sort</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">num</span> <span class="o">=</span> <span class="n">index</span> <span class="o">-</span> <span class="n">left</span><span class="p">;</span>
+        <span class="n">midian_array</span><span class="p">[</span><span class="n">num</span> <span class="o">/</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="mi">2</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 处理剩余元素</span>
+    <span class="kt">int</span> <span class="n">remain_num</span> <span class="o">=</span> <span class="n">right</span> <span class="o">-</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">remain_num</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">insert_sort</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">remain_num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">num</span> <span class="o">=</span> <span class="n">index</span> <span class="o">-</span> <span class="n">left</span><span class="p">;</span>
+        <span class="n">midian_array</span><span class="p">[</span><span class="n">num</span> <span class="o">/</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="n">remain_num</span> <span class="o">/</span> <span class="mi">2</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">elem_aux_array</span> <span class="o">=</span> <span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span> <span class="o">/</span> <span class="mi">5</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">elem_aux_array</span><span class="o">++</span><span class="p">;</span>
+
+    <span class="c1">// 如果剩余一个元素返回，否则继续递归</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">elem_aux_array</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">midian_array</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="k">else</span>
+        <span class="k">return</span> <span class="n">find_median</span><span class="p">(</span><span class="n">midian_array</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">elem_aux_array</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// 寻找中位数的所在位置</span>
+<span class="kt">int</span> <span class="nf">find_index</span><span class="p">(</span><span class="kt">int</span> <span class="n">array</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span><span class="p">,</span> <span class="kt">int</span> <span class="n">median</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">right</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">median</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">q_select</span><span class="p">(</span><span class="kt">int</span> <span class="n">array</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// 寻找中位数的中位数</span>
+    <span class="kt">int</span> <span class="n">median</span> <span class="o">=</span> <span class="n">find_median</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">);</span>
+
+    <span class="c1">// 将中位数的中位数与最右元素交换</span>
+    <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="n">find_index</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">median</span><span class="p">);</span>
+    <span class="n">swap</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">array</span><span class="p">[</span><span class="n">right</span><span class="p">]);</span>
+
+    <span class="kt">int</span> <span class="n">pivot</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">right</span><span class="p">];</span>
+
+    <span class="c1">// 申请两个移动指针并初始化</span>
+    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">right</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="c1">// 根据枢纽元素的值对数组进行一次划分</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">pivot</span><span class="p">)</span>
+            <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">pivot</span><span class="p">)</span>
+            <span class="n">j</span><span class="o">--</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span><span class="p">)</span>
+            <span class="n">swap</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">array</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+        <span class="k">else</span>
+            <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">swap</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">array</span><span class="p">[</span><span class="n">right</span><span class="p">]);</span>
+
+    <span class="cm">/* 对三种情况进行处理：(m = i - left + 1)</span>
+<span class="cm">    1、如果m=k，即返回的主元即为我们要找的第k小的元素，那么直接返回主元a[i]即可;</span>
+<span class="cm">    2、如果m&gt;k，那么接下来要到低区间A[0....m-1]中寻找，丢掉高区间;</span>
+<span class="cm">    3、如果m&lt;k，那么接下来要到高区间A[m+1...n-1]中寻找，丢掉低区间。</span>
+<span class="cm">    */</span>
+    <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="o">==</span> <span class="n">k</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">m</span> <span class="o">&gt;</span> <span class="n">k</span><span class="p">)</span>
+        <span class="c1">//上条语句相当于if( (i-left+1) &gt;k)，即if( (i-left) &gt; k-1 )，于此就与2.2节里的代码实现一、二相对应起来了。</span>
+        <span class="k">return</span> <span class="n">q_select</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">);</span>
+    <span class="k">else</span>
+        <span class="k">return</span> <span class="n">q_select</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">k</span> <span class="o">-</span> <span class="n">m</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">//srand(unsigned(time(NULL)));</span>
+    <span class="c1">//for (int j = 0; j &lt; num_array; j++)</span>
+    <span class="c1">//array[j] = rand();</span>
+
+    <span class="kt">int</span> <span class="n">array</span><span class="p">[</span><span class="n">num_array</span><span class="p">]</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">45</span><span class="p">,</span><span class="mi">78</span><span class="p">,</span><span class="mi">55</span><span class="p">,</span><span class="mi">47</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">96</span><span class="p">,</span><span class="mi">36</span><span class="p">,</span><span class="mi">45</span><span class="p">};</span>
+    <span class="c1">// 寻找第k最小数</span>
+    <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">q_select</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">num_array</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+		  </article>
+		  
+			<div id="nav">
+				
+					<a href="03.1.html">prev</a>
+					|
+				
+				
+					<a href="03.3.html">next</a>
+				
+				<span style="float: right"><a href="index.html">Back to home</a>
+			</div>
+		  
+		</div>
+	</div>
+  </div>
+  
+  <div>&nbsp;</div>
+  </div>
+  <div style="text-align:center; margin-bottom: 30px">
+	  Generated by <a href="https://github.com/marchtea/md_to_github_html">mdtogh</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title><link rel="stylesheet" href="style_cache/github-ce7ab9b7dbd81fa8f2eeff348bc97553a3eaf80c.css" />
+  <link rel="stylesheet" href="style_cache/github2-729e3ebdf8b0ec6ed54532c398dc8bd48d25ea1f.css" />
+  <style>
+    .file-box {
+      margin: 64px auto;
+      width: 920px;
+    }
+	body {
+		font-size: 14px;
+		line-height: 22px;
+		<!--font-family: "adelle",Georgia,"Times New Roman",serif;-->
+		color: #4e443c;
+		background: #f0efe7;
+	}
+
+	.book-toc {
+
+	}
+	a {
+		color: #0388a6;
+		text-decoration: none;
+	}
+	a:hover {
+		color: #04b1d8;
+		text-decoration: none;
+	}
+	ol.book-toc li.chapter{
+		margin-bottom:0.6em
+	}
+	ol.book-toc, ol{
+		list-style-type: disc
+	}
+	ol.book-toc{
+		margin:30px 36px
+	}
+	ol.book-toc a{
+		padding-left:4px
+	}
+	li {
+		line-height: 22px;
+	}
+	h1, h2, h3, h4, h5, h6, li, p, a, ol, div{
+		margin: 0;
+		padding: 0;
+		border: 0;
+		vertical-align: baseline;
+	}
+	ul, ol {
+		padding: 0;
+		margin: 0 0 11px 25px;
+	}
+	h1 {
+		font-size: 36px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	h2 {
+		font-size: 18px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h1{
+		font-size: 22px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	ol.book-toc h2 {
+		font-size: 16px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	p {
+		margin: 0 0 11px;
+		font-size: 14px;
+		line-height: 22px;
+	}
+	div {
+		display: block;
+	}
+	div#nav{
+		padding: 30px
+	}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="file-box">
+	<div class="file">
+		<div id="readme" class="blob instapaper_body announce md">
+		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
+			<h1>
+<a name="%E7%AC%AC%E4%B8%89%E7%AB%A0%E5%AF%BB%E6%89%BE%E6%9C%80%E5%B0%8F%E7%9A%84-k-%E4%B8%AA%E6%95%B0" class="anchor" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0%E5%AF%BB%E6%89%BE%E6%9C%80%E5%B0%8F%E7%9A%84-k-%E4%B8%AA%E6%95%B0"><span class="octicon octicon-link"></span></a>第三章：寻找最小的 k 个数</h1>
+
+<p>July：本第3章与原文 （<a href="http://blog.csdn.net/v_JULY_v/article/details/6370650">http://blog.csdn.net/v_JULY_v/article/details/6370650</a> ）有太大出入，失去了通俗易懂的特点，哪位朋友重新给同步下？二零一四年一月。</p>
+
+<h3>
+<a name="%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0"><span class="octicon octicon-link"></span></a>题目描述：</h3>
+
+<p>输入一个数组和整数k，从中找到最小的k个数，例如输入数组为A = {1,9,2,4,7,6,3}，整数k为3，则输出最小的3个数分别为{1,2,3}。</p>
+
+<p>分析：学习和掌握了基本排序算法都知道，此问题可以通过排序来解决，即对A数组进行排序，然后输出前k个数即可，时间复杂度为O(n log n)；再者考虑到运行效率，对前k个数进行排序并维护一个长度为k的排序数组，然后向此输入中插入剩下的n-k（假设A数组大小为n）个数，这样做在k较小时效果较好，而当k的大小与n相近时，此方法的效果还不如前者。假设插入n-k的元素的过程采用二分搜索，则时间复杂度为O(k log k+(n-k) log k)。</p>
+
+<p>而最简便的方法是通过构造堆结构来解决问题，即维护一个大小为k的最大堆的数据结构，然后将剩余的n-k个数依次插入此堆结构中，最后输出此数组即可，由于题目并没有要求要对这最小的k个数排序，故可直接输出。</p>
+
+<h3>
+<a name="%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0" class="anchor" href="#%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0"><span class="octicon octicon-link"></span></a>算法实现：</h3>
+
+<div class="highlight highlight-cpp"><pre><span class="cp">#include &lt;iostream&gt;</span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="c1">//获取父节点指针</span>
+<span class="kt">int</span> <span class="nf">GetParent</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">pArray</span><span class="p">,</span> <span class="kt">int</span><span class="o">*</span> <span class="n">pLast</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">pLast</span> <span class="o">&gt;=</span> <span class="n">pArray</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">pLast</span> <span class="o">-</span> <span class="n">pArray</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">//获取左孩子节点指针</span>
+<span class="kt">int</span> <span class="nf">GetLeft</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">pArray</span><span class="p">,</span> <span class="kt">int</span><span class="o">*</span> <span class="n">pLast</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">pLast</span> <span class="o">&gt;=</span> <span class="n">pArray</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">pLast</span> <span class="o">-</span> <span class="n">pArray</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">//获取右孩子节点指针</span>
+<span class="kt">int</span> <span class="nf">GetRight</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">pArray</span><span class="p">,</span> <span class="kt">int</span><span class="o">*</span> <span class="n">pLast</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">pLast</span> <span class="o">&gt;=</span> <span class="n">pArray</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">pLast</span> <span class="o">-</span> <span class="n">pArray</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">//交换两个元素的值</span>
+<span class="kt">void</span> <span class="nf">Swap</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">pa</span><span class="p">,</span> <span class="kt">int</span><span class="o">*</span> <span class="n">pb</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="o">*</span><span class="n">pa</span><span class="p">;</span>
+    <span class="o">*</span><span class="n">pa</span> <span class="o">=</span> <span class="o">*</span><span class="n">pb</span><span class="p">;</span>
+    <span class="o">*</span><span class="n">pb</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">//最大化堆过程，保持最大堆性质，即父节点元素值大于等于其子孙节点元素</span>
+<span class="kt">void</span> <span class="nf">MaxHeapify</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">pArray</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">nLength</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">nI</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span><span class="p">((</span><span class="n">nI</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">pArray</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">nI</span> <span class="o">&gt;</span> <span class="n">nLength</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">nLeft</span> <span class="o">=</span> <span class="n">GetLeft</span><span class="p">(</span><span class="n">pArray</span><span class="p">,</span> <span class="n">pArray</span><span class="o">+</span><span class="n">nI</span><span class="p">);</span>         <span class="c1">//获取当前节点的左儿子索引</span>
+    <span class="kt">int</span> <span class="n">nRight</span> <span class="o">=</span> <span class="n">GetRight</span><span class="p">(</span><span class="n">pArray</span><span class="p">,</span> <span class="n">pArray</span><span class="o">+</span><span class="n">nI</span><span class="p">);</span>       <span class="c1">//获取当前节点的右儿子索引</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">pLargest</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>                           <span class="c1">//初始化记录最大值的指针</span>
+
+    <span class="c1">//若当前元素小于左儿子，则对最大值指针赋值为左儿子指针</span>
+    <span class="k">if</span><span class="p">((</span><span class="n">nLeft</span> <span class="o">&lt;</span> <span class="n">nLength</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">pArray</span> <span class="o">+</span> <span class="n">nI</span><span class="p">)</span> <span class="o">&lt;</span> <span class="o">*</span><span class="p">(</span><span class="n">pArray</span> <span class="o">+</span> <span class="n">nLeft</span><span class="p">)))</span>
+    <span class="p">{</span>
+        <span class="n">pLargest</span> <span class="o">=</span> <span class="n">pArray</span> <span class="o">+</span> <span class="n">nLeft</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">pLargest</span> <span class="o">=</span> <span class="n">pArray</span> <span class="o">+</span> <span class="n">nI</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">//若右儿子元素大于最大值元素，则对最大值指针赋值</span>
+    <span class="k">if</span><span class="p">((</span><span class="n">nRight</span> <span class="o">&lt;</span> <span class="n">nLength</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">pLargest</span><span class="p">)</span> <span class="o">&lt;</span> <span class="o">*</span><span class="p">(</span><span class="n">pArray</span> <span class="o">+</span> <span class="n">nRight</span><span class="p">)))</span>
+    <span class="p">{</span>
+        <span class="n">pLargest</span> <span class="o">=</span> <span class="n">pArray</span> <span class="o">+</span> <span class="n">nRight</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">//当前元素指针不为最大值，则交换最大值与当前元素值</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">pLargest</span> <span class="o">!=</span> <span class="p">(</span><span class="n">pArray</span> <span class="o">+</span> <span class="n">nI</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="n">Swap</span><span class="p">(</span><span class="n">pLargest</span><span class="p">,</span> <span class="p">(</span><span class="n">pArray</span> <span class="o">+</span> <span class="n">nI</span><span class="p">));</span>
+        <span class="p">{</span>
+            <span class="c1">//对交换后后的子堆递归进行堆的最大化过程</span>
+            <span class="n">MaxHeapify</span><span class="p">(</span><span class="n">pArray</span><span class="p">,</span> <span class="n">nLength</span><span class="p">,</span> <span class="n">pLargest</span> <span class="o">-</span> <span class="n">pArray</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">//建立最大堆函数</span>
+<span class="kt">int</span> <span class="nf">BuildMaxHeap</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">pArray</span><span class="p">,</span> <span class="kt">int</span><span class="o">*</span> <span class="n">pLast</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span><span class="p">((</span><span class="n">pArray</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">pLast</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">nLength</span> <span class="o">=</span> <span class="n">pLast</span> <span class="o">-</span> <span class="n">pArray</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>   <span class="c1">//获取当前堆数组长度</span>
+    <span class="kt">int</span> <span class="n">nMid</span> <span class="o">=</span> <span class="n">nLength</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+
+    <span class="c1">//对数组的前半数据进行堆最大化过程，因为后半部分数据为叶子节点数据，已经保持了最大堆性质</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">nMid</span> <span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">MaxHeapify</span><span class="p">(</span><span class="n">pArray</span><span class="p">,</span> <span class="n">nLength</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">//寻找数组中最小的k个数，考虑到对空间的有效利用，这里数组pArray的前k项即为最小的k个数，函数正确返回0，错误返回-1</span>
+<span class="kt">int</span> <span class="nf">FindMinimumK</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">pArray</span><span class="p">,</span> <span class="kt">int</span> <span class="n">nLength</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">nIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">if</span><span class="p">((</span><span class="n">pArray</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">nLength</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">k</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+    <span class="n">BuildMaxHeap</span><span class="p">(</span><span class="n">pArray</span><span class="p">,</span> <span class="n">pArray</span> <span class="o">+</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+
+    <span class="k">for</span><span class="p">(</span><span class="n">nIndex</span> <span class="o">=</span> <span class="n">k</span><span class="p">;</span> <span class="n">nIndex</span> <span class="o">&lt;</span> <span class="n">nLength</span><span class="p">;</span> <span class="n">nIndex</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">pArray</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">pArray</span><span class="p">[</span><span class="n">nIndex</span><span class="p">])</span>
+        <span class="p">{</span>
+            <span class="n">Swap</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pArray</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">pArray</span><span class="p">[</span><span class="n">nIndex</span><span class="p">]);</span>
+            <span class="n">MaxHeapify</span><span class="p">(</span><span class="n">pArray</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">Array</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">9</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">};</span>
+    <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">FindMinimumK</span><span class="p">(</span><span class="n">Array</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">Array</span><span class="p">)</span> <span class="o">/</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">),</span> <span class="n">k</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"The "</span> <span class="o">&lt;&lt;</span> <span class="n">k</span> <span class="o">&lt;&lt;</span> <span class="s">" minimum numbers in Array are:"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">Array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>同样，若想寻找最大的k个数，则可通过构造大小为k的最小堆来实现以上操作，读者可考虑如何通过修改以上代码完成。</p>
+		  </article>
+		  
+			<div id="nav">
+				
+					<a href="03.4.html">prev</a>
+					|
+				
+				
+					<a href="04.0.html">next</a>
+				
+				<span style="float: right"><a href="index.html">Back to home</a>
+			</div>
+		  
+		</div>
+	</div>
+  </div>
+  
+  <div>&nbsp;</div>
+  </div>
+  <div style="text-align:center; margin-bottom: 30px">
+	  Generated by <a href="https://github.com/marchtea/md_to_github_html">mdtogh</a>
+  </div>
+</body>
+</html>

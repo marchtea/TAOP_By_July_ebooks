@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title><link rel="stylesheet" href="style_cache/github-ce7ab9b7dbd81fa8f2eeff348bc97553a3eaf80c.css" />
+  <link rel="stylesheet" href="style_cache/github2-729e3ebdf8b0ec6ed54532c398dc8bd48d25ea1f.css" />
+  <style>
+    .file-box {
+      margin: 64px auto;
+      width: 920px;
+    }
+	body {
+		font-size: 14px;
+		line-height: 22px;
+		<!--font-family: "adelle",Georgia,"Times New Roman",serif;-->
+		color: #4e443c;
+		background: #f0efe7;
+	}
+
+	.book-toc {
+
+	}
+	a {
+		color: #0388a6;
+		text-decoration: none;
+	}
+	a:hover {
+		color: #04b1d8;
+		text-decoration: none;
+	}
+	ol.book-toc li.chapter{
+		margin-bottom:0.6em
+	}
+	ol.book-toc, ol{
+		list-style-type: disc
+	}
+	ol.book-toc{
+		margin:30px 36px
+	}
+	ol.book-toc a{
+		padding-left:4px
+	}
+	li {
+		line-height: 22px;
+	}
+	h1, h2, h3, h4, h5, h6, li, p, a, ol, div{
+		margin: 0;
+		padding: 0;
+		border: 0;
+		vertical-align: baseline;
+	}
+	ul, ol {
+		padding: 0;
+		margin: 0 0 11px 25px;
+	}
+	h1 {
+		font-size: 36px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	h2 {
+		font-size: 18px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h1{
+		font-size: 22px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	ol.book-toc h2 {
+		font-size: 16px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	p {
+		margin: 0 0 11px;
+		font-size: 14px;
+		line-height: 22px;
+	}
+	div {
+		display: block;
+	}
+	div#nav{
+		padding: 30px
+	}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="file-box">
+	<div class="file">
+		<div id="readme" class="blob instapaper_body announce md">
+		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
+			<h1>
+<a name="%E7%AC%AC%E4%B8%89%E5%8D%81%E4%B8%80%E7%AB%A0%E5%B8%A6%E9%80%9A%E9%85%8D%E7%AC%A6%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E9%97%AE%E9%A2%98" class="anchor" href="#%E7%AC%AC%E4%B8%89%E5%8D%81%E4%B8%80%E7%AB%A0%E5%B8%A6%E9%80%9A%E9%85%8D%E7%AC%A6%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E9%97%AE%E9%A2%98"><span class="octicon octicon-link"></span></a>第三十一章：带通配符的字符串匹配问题</h1>
+
+<p>字符串匹配问题，给定一串字符串，按照指定规则对其进行匹配，并将匹配的结果保存至output数组中，多个匹配项用空格间隔，最后一个不需要空格。  </p>
+
+<p>要求：  </p>
+
+<ol>
+<li>匹配规则中包含通配符?和*，其中?表示匹配任意一个字符，*表示匹配任意多个（&gt;=0）字符。<br>
+</li>
+<li>匹配规则要求匹配最大的字符子串，例如a*d,匹配abbdd而非abbd,即最大匹配子串。<br>
+</li>
+<li>匹配后的输入串不再进行匹配，从当前匹配后的字符串重新匹配其他字符串。<br>
+</li>
+</ol><p>请实现函数：  </p>
+
+<div class="highlight highlight-c"><pre>  <span class="kt">char</span><span class="o">*</span> <span class="n">my_find</span><span class="p">(</span><span class="kt">char</span> <span class="n">input</span><span class="p">[],</span> <span class="kt">char</span> <span class="n">rule</span><span class="p">[])</span>
+</pre></div>
+
+<p>举例说明：  </p>
+
+<p><a href="../images/30%7E31/31.1.jpg" target="_blank"><img src="../images/30%7E31/31.1.jpg" alt="31.1.jpg" style="max-width:100%;"></a></p>
+
+<p>注意事项：<br>
+1. 自行实现函数my_find，勿在my_find函数里夹杂输出，且不准用C、C++库，和Java的String对象；<br>
+2. 请注意代码的时间，空间复杂度，及可读性，简洁性；<br>
+3. input=aaa，rule=aa时，返回一个结果aa，即可。  </p>
+
+<h2>
+<a name="%E8%A7%A3%E6%B3%95%E4%B8%80" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80"><span class="octicon octicon-link"></span></a>解法一</h2>
+
+<p>本题与上述第三十章的题不同，上题字符串转换成整数更多考察对思维的全面性和对细节的处理，本题则更多的是编程技巧。闲不多说，直接上代码：  </p>
+
+<div class="highlight highlight-c"><pre><span class="c1">//copyright@cao_peng 2013/4/23</span>
+<span class="kt">int</span> <span class="nf">str_len</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">a</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">//字符串长度</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">t</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(;</span> <span class="o">*</span><span class="n">t</span><span class="p">;</span> <span class="o">++</span><span class="n">t</span><span class="p">)</span>
+        <span class="p">;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="n">a</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">str_copy</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="n">len</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">//拷贝字符串 a = b</span>
+    <span class="k">for</span> <span class="p">(;</span> <span class="n">len</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">len</span><span class="p">,</span> <span class="o">++</span><span class="n">b</span><span class="p">,</span> <span class="o">++</span><span class="n">a</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="o">*</span><span class="n">a</span> <span class="o">=</span> <span class="o">*</span><span class="n">b</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="o">*</span><span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">char</span> <span class="o">*</span><span class="nf">str_join</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="n">lenb</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">//连接字符串 第一个字符串被回收</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">t</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">lenb</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+        <span class="n">str_copy</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">lenb</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">t</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">lena</span> <span class="o">=</span> <span class="n">str_len</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">lena</span> <span class="o">+</span> <span class="n">lenb</span> <span class="o">+</span> <span class="mi">2</span><span class="p">));</span>
+        <span class="n">str_copy</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">lena</span><span class="p">);</span>
+        <span class="o">*</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">lena</span><span class="p">)</span> <span class="o">=</span> <span class="sc">' '</span><span class="p">;</span>
+        <span class="n">str_copy</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">lena</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">lenb</span><span class="p">);</span>
+        <span class="n">free</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">t</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">canMatch</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">input</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">rule</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// 返回最长匹配长度 -1表示不匹配</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">rule</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//已经到rule尾端</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="p">,</span> <span class="n">may</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">rule</span> <span class="o">==</span> <span class="sc">'*'</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">canMatch</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="n">rule</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>  <span class="c1">// *匹配0个字符</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">input</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">may</span> <span class="o">=</span> <span class="n">canMatch</span><span class="p">(</span><span class="n">input</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">rule</span><span class="p">);</span>  <span class="c1">// *匹配非0个字符</span>
+            <span class="k">if</span> <span class="p">((</span><span class="n">may</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">++</span><span class="n">may</span> <span class="o">&gt;</span> <span class="n">r</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="n">may</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">input</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//到尾端</span>
+        <span class="k">return</span> <span class="n">r</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">((</span><span class="o">*</span><span class="n">rule</span> <span class="o">==</span> <span class="sc">'?'</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="o">*</span><span class="n">rule</span> <span class="o">==</span> <span class="o">*</span><span class="n">input</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="n">may</span> <span class="o">=</span> <span class="n">canMatch</span><span class="p">(</span><span class="n">input</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">rule</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">may</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">++</span><span class="n">may</span> <span class="o">&gt;</span> <span class="n">r</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">may</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">r</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">char</span> <span class="o">*</span> <span class="nf">my_find</span><span class="p">(</span><span class="kt">char</span> <span class="n">input</span><span class="p">[],</span> <span class="kt">char</span> <span class="n">rule</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">str_len</span><span class="p">(</span><span class="n">input</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">match</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="o">*</span> <span class="n">len</span><span class="p">);</span>  <span class="c1">//input第i位最多能匹配多少位 匹配不上是-1</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">max_pos</span> <span class="o">=</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">output</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">match</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">canMatch</span><span class="p">(</span><span class="n">input</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="n">rule</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">max_pos</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">match</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">match</span><span class="p">[</span><span class="n">max_pos</span><span class="p">]))</span>
+        <span class="p">{</span>
+            <span class="n">max_pos</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">max_pos</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">match</span><span class="p">[</span><span class="n">max_pos</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="c1">//不匹配</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">));</span>
+        <span class="o">*</span><span class="n">output</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>   <span class="c1">// \0</span>
+        <span class="k">return</span> <span class="n">output</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">match</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">match</span><span class="p">[</span><span class="n">max_pos</span><span class="p">])</span>
+        <span class="p">{</span>
+            <span class="c1">//找到匹配</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">str_join</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">input</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="n">match</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="n">match</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="o">++</span><span class="n">i</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">match</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">output</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<h2>
+<a name="%E8%A7%A3%E6%B3%95%E4%BA%8C%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92"><span class="octicon octicon-link"></span></a>解法二、动态规划</h2>
+
+<p>本题也可以直接写出DP(Dynamic Programming, 动态规划)方程，如下代码所示：  </p>
+
+<div class="highlight highlight-c"><pre><span class="c1">//copyright@chpeih 2013/4/23</span>
+<span class="kt">char</span><span class="o">*</span> <span class="nf">my_find</span><span class="p">(</span><span class="kt">char</span> <span class="n">input</span><span class="p">[],</span> <span class="kt">char</span> <span class="n">rule</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="c1">//write your code here</span>
+    <span class="kt">int</span> <span class="n">len1</span><span class="p">,</span> <span class="n">len2</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">len1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">input</span><span class="p">[</span><span class="n">len1</span><span class="p">];</span> <span class="n">len1</span><span class="o">++</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">len2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">rule</span><span class="p">[</span><span class="n">len2</span><span class="p">];</span> <span class="n">len2</span><span class="o">++</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">MAXN</span> <span class="o">=</span> <span class="n">len1</span> <span class="o">&gt;</span> <span class="n">len2</span> <span class="o">?</span> <span class="p">(</span><span class="n">len1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">:</span> <span class="p">(</span><span class="n">len2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="kt">int</span>  <span class="o">**</span><span class="n">dp</span><span class="p">;</span>
+
+    <span class="c1">//dp[i][j]表示字符串1和字符串2分别以i j结尾匹配的最大长度</span>
+    <span class="c1">//记录dp[i][j]是由之前那个节点推算过来  i*MAXN+j</span>
+    <span class="n">dp</span> <span class="o">=</span> <span class="n">new</span> <span class="kt">int</span> <span class="o">*</span><span class="p">[</span><span class="n">len1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">len1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">len2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+
+    <span class="p">}</span>
+
+    <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">len2</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">len1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">len1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">len2</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">rule</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'*'</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">rule</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'?'</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">input</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">rule</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+                <span class="p">{</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="c1">//记录最大字符串长度</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">ans</span> <span class="o">=</span> <span class="n">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">len1</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">count_ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="c1">//记录答案个数</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">returnans</span> <span class="o">=</span> <span class="n">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">len1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">len1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">len2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">m</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">len2</span><span class="p">];</span>
+            <span class="n">count_ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">ans</span><span class="p">[</span><span class="n">count_ans</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">m</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">len2</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">len2</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">ans</span><span class="p">[</span><span class="n">count_ans</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">m</span><span class="p">;</span>
+        <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">count_ans</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">ans</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">"%c"</span><span class="p">,</span> <span class="n">input</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">ans</span><span class="p">[</span><span class="mi">0</span><span class="p">]]);</span>
+            <span class="n">returnans</span><span class="p">[</span><span class="n">count</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">input</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">ans</span><span class="p">[</span><span class="mi">0</span><span class="p">]];</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">count_ans</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">" "</span><span class="p">);</span>
+            <span class="n">returnans</span><span class="p">[</span><span class="n">count</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="sc">' '</span><span class="p">;</span>
+            <span class="n">len</span> <span class="o">=</span> <span class="n">ans</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">"%c"</span><span class="p">,</span> <span class="n">input</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">ans</span><span class="p">[</span><span class="n">j</span><span class="p">]]);</span>
+                <span class="n">returnans</span><span class="p">[</span><span class="n">count</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">input</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">ans</span><span class="p">[</span><span class="n">j</span><span class="p">]];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="n">returnans</span><span class="p">[</span><span class="n">count</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">returnans</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<h2>
+<a name="%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E5%8F%8A%E6%8E%A8%E8%8D%90%E9%98%85%E8%AF%BB" class="anchor" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E5%8F%8A%E6%8E%A8%E8%8D%90%E9%98%85%E8%AF%BB"><span class="octicon octicon-link"></span></a>参考文献及推荐阅读</h2>
+
+<p>1.字符串匹配问题题目<a href="http://hero.pongo.cn/Question/Details?ID=28&amp;ExamID=28">完整描述</a>； </p>
+		  </article>
+		  
+			<div id="nav">
+				
+					<a href="30.0.html">prev</a>
+					|
+				
+				
+					<a href="32.0.html">next</a>
+				
+				<span style="float: right"><a href="index.html">Back to home</a>
+			</div>
+		  
+		</div>
+	</div>
+  </div>
+  
+  <div>&nbsp;</div>
+  </div>
+  <div style="text-align:center; margin-bottom: 30px">
+	  Generated by <a href="https://github.com/marchtea/md_to_github_html">mdtogh</a>
+  </div>
+</body>
+</html>

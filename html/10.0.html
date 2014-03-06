@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title><link rel="stylesheet" href="style_cache/github-ce7ab9b7dbd81fa8f2eeff348bc97553a3eaf80c.css" />
+  <link rel="stylesheet" href="style_cache/github2-729e3ebdf8b0ec6ed54532c398dc8bd48d25ea1f.css" />
+  <style>
+    .file-box {
+      margin: 64px auto;
+      width: 920px;
+    }
+	body {
+		font-size: 14px;
+		line-height: 22px;
+		<!--font-family: "adelle",Georgia,"Times New Roman",serif;-->
+		color: #4e443c;
+		background: #f0efe7;
+	}
+
+	.book-toc {
+
+	}
+	a {
+		color: #0388a6;
+		text-decoration: none;
+	}
+	a:hover {
+		color: #04b1d8;
+		text-decoration: none;
+	}
+	ol.book-toc li.chapter{
+		margin-bottom:0.6em
+	}
+	ol.book-toc, ol{
+		list-style-type: disc
+	}
+	ol.book-toc{
+		margin:30px 36px
+	}
+	ol.book-toc a{
+		padding-left:4px
+	}
+	li {
+		line-height: 22px;
+	}
+	h1, h2, h3, h4, h5, h6, li, p, a, ol, div{
+		margin: 0;
+		padding: 0;
+		border: 0;
+		vertical-align: baseline;
+	}
+	ul, ol {
+		padding: 0;
+		margin: 0 0 11px 25px;
+	}
+	h1 {
+		font-size: 36px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	h2 {
+		font-size: 18px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h1{
+		font-size: 22px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	ol.book-toc h2 {
+		font-size: 16px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	p {
+		margin: 0 0 11px;
+		font-size: 14px;
+		line-height: 22px;
+	}
+	div {
+		display: block;
+	}
+	div#nav{
+		padding: 30px
+	}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="file-box">
+	<div class="file">
+		<div id="readme" class="blob instapaper_body announce md">
+		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
+			<h1>
+<a name="%E7%AC%AC%E5%8D%81%E7%AB%A0%E5%A6%82%E4%BD%95%E7%BB%99107%E4%B8%AA%E6%95%B0%E6%8D%AE%E9%87%8F%E7%9A%84%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F" class="anchor" href="#%E7%AC%AC%E5%8D%81%E7%AB%A0%E5%A6%82%E4%BD%95%E7%BB%99107%E4%B8%AA%E6%95%B0%E6%8D%AE%E9%87%8F%E7%9A%84%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F"><span class="octicon octicon-link"></span></a>第十章：如何给10^7个数据量的磁盘文件排序</h1>
+
+<p>作者:July，yansha，5，编程艺术室。</p>
+
+<h2>
+<a name="%E5%89%8D%E5%A5%8F" class="anchor" href="#%E5%89%8D%E5%A5%8F"><span class="octicon octicon-link"></span></a>前奏</h2>
+
+<p>经过几天的痛苦沉思，最终决定，把原程序员面试题狂想曲系列正式更名为程序员编程艺术系列，同时，狂想曲创作组更名为编程艺术室。之所以要改名，我们考虑到三点：1、为面试服务不能成为我们最终或最主要的目的，2、我更愿把解答一道道面试题，ACM题等各类程序设计题目的过程，当做一种艺术来看待，3、艺术的提炼本身是一个非常非常艰难的过程，但我们乐意接受这个挑战。</p>
+
+<p>ok，如果任何人对本编程艺术系列有任何意见，或发现了本编程艺术系列任何问题，漏洞，bug，欢迎随时提出，我们将虚心接受并感激不尽，以为他人创造更好的价值，更好的服务。</p>
+
+<h2>
+<a name="%E7%AC%AC%E4%B8%80%E8%8A%82%E5%A6%82%E4%BD%95%E7%BB%99%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F" class="anchor" href="#%E7%AC%AC%E4%B8%80%E8%8A%82%E5%A6%82%E4%BD%95%E7%BB%99%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F"><span class="octicon octicon-link"></span></a>第一节、如何给磁盘文件排序</h2>
+
+<p>问题描述：
+输入：给定一个文件，里面最多含有n个不重复的正整数（也就是说可能含有少于n个不重复正整数），且其中每个数都小于等于n，n=10^7。
+输出：得到按从小到大升序排列的包含所有输入的整数的列表。
+条件：最多有大约1MB的内存空间可用，但磁盘空间足够。且要求运行时间在5分钟以下，10秒为最佳结果。</p>
+
+<p>分析：下面咱们来一步一步的解决这个问题，</p>
+
+<h3>
+<a name="1-%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F" class="anchor" href="#1-%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F"><span class="octicon octicon-link"></span></a>1. 归并排序</h3>
+
+<p>你可能会想到把磁盘文件进行归并排序，但题目要求你只有1MB的内存空间可用，所以，归并排序这个方法不行。</p>
+
+<h3>
+<a name="2-%E4%BD%8D%E5%9B%BE%E6%96%B9%E6%A1%88" class="anchor" href="#2-%E4%BD%8D%E5%9B%BE%E6%96%B9%E6%A1%88"><span class="octicon octicon-link"></span></a>2. 位图方案</h3>
+
+<p>熟悉位图的朋友可能会想到用位图来表示这个文件集合。例如正如编程珠玑一书上所述，用一个20位长的字符串来表示一个所有元素都小于20的简单的非负整数集合，边框用如下字符串来表示集合{1,2,3,5,8,13}：</p>
+
+<pre><code>0 1 1 1 0 1 0 0 1 0 0 0 0 1 0 0 0 0 0 0
+</code></pre>
+
+<p>上述集合中各数对应的位置则置1，没有对应的数的位置则置0。</p>
+
+<p>参考编程珠玑一书上的位图方案，针对我们的10^7个数据量的磁盘文件排序问题，我们可以这么考虑，由于每个7位十进制整数表示一个小于1000万的整数。我们可以使用一个具有1000万个位的字符串来表示这个文件，其中，当且仅当整数i在文件中存在时，第i位为1。采取这个位图的方案是因为我们面对的这个问题的特殊性：</p>
+
+<ol>
+<li>输入数据限制在相对较小的范围内，</li>
+<li>数据没有重复，</li>
+<li>其中的每条记录都是单一的整数，没有任何其它与之关联的数据。</li>
+</ol><p>所以，此问题用位图的方案分为以下三步进行解决：</p>
+
+<ul>
+<li>第一步，将所有的位都置为0，从而将集合初始化为空。</li>
+<li>第二步，通过读入文件中的每个整数来建立集合，将每个对应的位都置为1。</li>
+<li>第三步，检验每一位，如果该位为1，就输出对应的整数。</li>
+</ul><p>经过以上三步后，产生有序的输出文件。令n为位图向量中的位数（本例中为1000 0000），程序可以用伪代码表示如下：</p>
+
+<pre><code>//磁盘文件排序位图方案的伪代码  
+//copyright@ Jon Bentley  
+//July、updated，2011.05.29。  
+
+//第一步，将所有的位都初始化为0  
+for i ={0,....n}      
+   bit[i]=0;  
+//第二步，通过读入文件中的每个整数来建立集合，将每个对应的位都置为1。  
+for each i in the input file     
+   bit[i]=1;  
+
+//第三步，检验每一位，如果该位为1，就输出对应的整数。  
+for i={0...n}      
+  if bit[i]==1        
+    write i on the output file  
+</code></pre>
+
+<p>上面只是为了简单介绍下位图算法的伪代码之抽象级描述。显然，咱们面对的问题，可不是这么简单。下面，我们试着针对这个要分两趟给磁盘文件排序的具体问题编写完整代码，如下。</p>
+
+<div class="highlight highlight-cpp"><pre><span class="c1">//copyright@ yansha  </span>
+<span class="c1">//July、2010.05.30。  </span>
+<span class="c1">//位图方案解决10^7个数据量的文件的排序问题  </span>
+<span class="c1">//如果有重复的数据，那么只能显示其中一个 其他的将被忽略  </span>
+<span class="cp">#include &lt;iostream&gt;  </span>
+<span class="cp">#include &lt;bitset&gt;  </span>
+<span class="cp">#include &lt;assert.h&gt;  </span>
+<span class="cp">#include &lt;time.h&gt;  </span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>  
+
+<span class="k">const</span> <span class="kt">int</span> <span class="n">max_each_scan</span> <span class="o">=</span> <span class="mi">5000000</span><span class="p">;</span>  
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>  
+<span class="p">{</span>  
+    <span class="kt">clock_t</span> <span class="n">begin</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+    <span class="n">bitset</span><span class="o">&lt;</span><span class="n">max_each_scan</span><span class="o">&gt;</span> <span class="n">bit_map</span><span class="p">;</span>
+    <span class="n">bit_map</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span>
+
+    <span class="c1">// open the file with the unsorted data</span>
+    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp_unsort_file</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">"data.txt"</span><span class="p">,</span> <span class="s">"r"</span><span class="p">);</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">fp_unsort_file</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">num</span><span class="p">;</span>
+
+    <span class="c1">// the first time scan to sort the data between 0 - 4999999</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">fscanf</span><span class="p">(</span><span class="n">fp_unsort_file</span><span class="p">,</span> <span class="s">"%d "</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">num</span><span class="p">)</span> <span class="o">!=</span> <span class="n">EOF</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">&lt;</span> <span class="n">max_each_scan</span><span class="p">)</span>
+        <span class="n">bit_map</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp_sort_file</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">"sort.txt"</span><span class="p">,</span> <span class="s">"w"</span><span class="p">);</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">fp_sort_file</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+
+    <span class="c1">// write the sorted data into file</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">max_each_scan</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">bit_map</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">fp_sort_file</span><span class="p">,</span> <span class="s">"%d "</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// the second time scan to sort the data between 5000000 - 9999999</span>
+    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">fseek</span><span class="p">(</span><span class="n">fp_unsort_file</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">SEEK_SET</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"fseek failed!"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">bit_map</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">fscanf</span><span class="p">(</span><span class="n">fp_unsort_file</span><span class="p">,</span> <span class="s">"%d "</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">num</span><span class="p">)</span> <span class="o">!=</span> <span class="n">EOF</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">&gt;=</span> <span class="n">max_each_scan</span> <span class="o">&amp;&amp;</span> <span class="n">num</span> <span class="o">&lt;</span> <span class="mi">10000000</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">num</span> <span class="o">-=</span> <span class="n">max_each_scan</span><span class="p">;</span>
+                <span class="n">bit_map</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">max_each_scan</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">bit_map</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">fprintf</span><span class="p">(</span><span class="n">fp_sort_file</span><span class="p">,</span> <span class="s">"%d "</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">max_each_scan</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">clock_t</span> <span class="n">end</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">"用位图的方法，耗时："</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">begin</span><span class="p">)</span> <span class="o">/</span> <span class="n">CLK_TCK</span> <span class="o">&lt;&lt;</span> <span class="s">"s"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">fclose</span><span class="p">(</span><span class="n">fp_sort_file</span><span class="p">);</span>
+    <span class="n">fclose</span><span class="p">(</span><span class="n">fp_unsort_file</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>而后测试了一下上述程序的运行时间，采取位图方案耗时14s，即14000ms：</p>
+
+<p><a href="../images/10/10.1.jpg" target="_blank"><img src="../images/10/10.1.jpg" alt="" style="max-width:100%;"></a></p>
+
+<p>本章中，生成大数据量（1000w）的程序如下，下文第二节的多路归并算法的c++实现和第三节的磁盘文件排序的编程实现中，生成的1000w数据量也是用本程序产生的，且本章内生成的1000w数据量的数据文件统一命名为“data.txt”。</p>
+
+<div class="highlight highlight-cpp"><pre><span class="c1">//purpose:  生成随机的不重复的测试数据</span>
+<span class="c1">//copyright@ 2011.04.19 yansha</span>
+<span class="c1">//1000w数据量，要保证生成不重复的数据量，一般的程序没有做到。</span>
+<span class="c1">//但，本程序做到了。</span>
+<span class="c1">//July、2010.05.30。</span>
+<span class="cp">#include &lt;iostream&gt;</span>
+<span class="cp">#include &lt;time.h&gt;</span>
+<span class="cp">#include &lt;assert.h&gt;</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">const</span> <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">10000000</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">num</span><span class="p">[</span><span class="n">size</span><span class="p">];</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">"data.txt"</span><span class="p">,</span> <span class="s">"w"</span><span class="p">);</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="n">size</span><span class="p">;</span> <span class="n">n</span><span class="o">++</span><span class="p">)</span>
+        <span class="c1">//之前此处写成了n=0;n&lt;size。导致下面有一段小程序的测试数据出现了0，特此订正。</span>
+        <span class="n">num</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">srand</span><span class="p">((</span><span class="kt">unsigned</span><span class="p">)</span><span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">));</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="n">n</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="p">(</span><span class="n">rand</span><span class="p">()</span> <span class="o">*</span> <span class="n">RAND_MAX</span> <span class="o">+</span> <span class="n">rand</span><span class="p">())</span> <span class="o">%</span> <span class="mi">10000000</span><span class="p">;</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="p">(</span><span class="n">rand</span><span class="p">()</span> <span class="o">*</span> <span class="n">RAND_MAX</span> <span class="o">+</span> <span class="n">rand</span><span class="p">())</span> <span class="o">%</span> <span class="mi">10000000</span><span class="p">;</span>
+        <span class="n">swap</span><span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">num</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="n">n</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%d "</span><span class="p">,</span> <span class="n">num</span><span class="p">[</span><span class="n">n</span><span class="p">]);</span>
+    <span class="n">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>不过很快，我们就将意识到，用此位图方法，严格说来还是不太行，空间消耗10^7/8还是大于1M（1M=1024*1024空间，小于10^7/8）。</p>
+
+<p>既然如果用位图方案的话，我们需要约1.25MB（若每条记录是8位的正整数的话，则10000000/(1024*1024*8) ~= 1.2M）的空间，而现在只有1MB的可用存储空间，那么究竟该作何处理呢?</p>
+
+<p>updated &amp;&amp; correct：</p>
+
+<p>@yansha： 上述的位图方案，共需要扫描输入数据两次，具体执行步骤如下：</p>
+
+<p>第一次，只处理1—4999999之间的数据，这些数都是小于5000000的，对这些数进行位图排序，只需要约5000000/8=625000Byte，也就是0.625M，排序后输出。
+第二次，扫描输入文件时，只处理4999999-10000000的数据项，也只需要0.625M（可以使用第一次处理申请的内存）。
+因此，总共也只需要0.625M
+位图的的方法有必要强调一下，就是位图的适用范围为针对不重复的数据进行排序，若数据有重复，位图方案就不适用了。</p>
+
+<h3>
+<a name="3%E5%A4%9A%E8%B7%AF%E5%BD%92%E5%B9%B6" class="anchor" href="#3%E5%A4%9A%E8%B7%AF%E5%BD%92%E5%B9%B6"><span class="octicon octicon-link"></span></a>3、多路归并</h3>
+
+<p>诚然，在面对本题时，还可以通过计算分析出可以用如2的位图法解决，但实际上，很多的时候，我们都面临着这样一个问题，文件太大，无法一次性放入内存中计算处理，那这个时候咋办呢？分而治之，大而化小，也就是把整个大文件分为若干大小的几块，然后分别对每一块进行排序，最后完成整个过程的排序。k趟算法可以在kn的时间开销内和n/k的空间开销内完成对最多n个小于n的无重复正整数的排序。</p>
+
+<p>比如可分为2块（k=2，1趟反正占用的内存只有1.25/2M），1~4999999，和5000000~9999999。先遍历一趟，首先排序处理1~4999999之间的整数（用5000000/8=625000个字的存储空间来排序0~4999999之间的整数），然后再第二趟，对5000001~1000000之间的整数进行排序处理。在稍后的第二节、第三节、第四节，我们将详细阐述并实现这种多路归并排序磁盘文件的方案。</p>
+
+<h3>
+<a name="4%E8%AF%BB%E8%80%85%E6%80%9D%E8%80%83" class="anchor" href="#4%E8%AF%BB%E8%80%85%E6%80%9D%E8%80%83"><span class="octicon octicon-link"></span></a>4、读者思考</h3>
+
+<p>经过上述思路3的方案之后，现在有两个局部有序的数组了，那么要得到一个完整的排序的数组，接下来改怎么做呢?或者说，如果是K路归并，得到k个排序的子数组，把他们合并成一个完整的排序数组，如何优化？或者，我再问你一个问题，K路归并用败者树 和 胜者树 效率有什么差别?这些问题，请读者思考。</p>
+
+<h2>
+<a name="%E7%AC%AC%E4%BA%8C%E8%8A%82%E5%A4%9A%E8%B7%AF%E5%BD%92%E5%B9%B6%E7%AE%97%E6%B3%95%E7%9A%84c%E5%AE%9E%E7%8E%B0" class="anchor" href="#%E7%AC%AC%E4%BA%8C%E8%8A%82%E5%A4%9A%E8%B7%AF%E5%BD%92%E5%B9%B6%E7%AE%97%E6%B3%95%E7%9A%84c%E5%AE%9E%E7%8E%B0"><span class="octicon octicon-link"></span></a>第二节、多路归并算法的c++实现</h2>
+
+<p>本节咱们暂抛开咱们的问题，阐述下有关多路归并算法的c++实现问题。在稍后的第三节，咱们再来具体针对咱们的磁盘文件排序问题阐述与实现。</p>
+
+<p>在了解多路归并算法之前，你还得了解归并排序的过程，因为下面的多路归并算法就是基于这个流程的。其实归并排序就是2路归并，而多路归并算法就是把2换成了k，即多（k）路归并。下面，举个例子来说明下此归并排序算法，如下图所示，我们对数组8 3 2 6 7 1 5 4进行归并排序：</p>
+
+<p><a href="../images/10/10.2.jpg" target="_blank"><img src="../images/10/10.2.jpg" alt="" style="max-width:100%;"></a></p>
+
+<p><strong>归并排序算法简要介绍：</strong></p>
+
+<p>一、思路描述：</p>
+
+<p>设两个有序的子文件(相当于输入堆)放在同一向量中相邻的位置上：R[low..m]，R[m+1..high]，先将它们合并到一个局部的暂存向量R1(相当于输出堆)中，待合并完成后将R1复制回R[low..high]中。</p>
+
+<p>二路归并排序的过程是：</p>
+
+<pre><code>(1)把无序表中的每一个元素都看作是一个有序表，则有n个有序子表；
+(2)把n个有序子表按相邻位置分成若干对（若n为奇数，则最后一个子表单独作为一组），每对中的两个子表进行归并，归并后子表数减少一半；
+(3)反复进行这一过程，直到归并为一个有序表为止。
+</code></pre>
+
+<p>二路归并排序过程的核心操作是将一维数组中相邻的两个有序表归并为一个有序表。</p>
+
+<p>二、分类：</p>
+
+<p>归并排序可分为：多路归并排序、两路归并排序 。
+若归并的有序表有两个，叫做二路归并。一般地，若归并的有序表有k个，则称为k路归并。二路归并最为简单和常用，既适用于内部排序，也适用于外部排序。本文着重讨论外部排序下的多（K）路归并算法。</p>
+
+<p>三、算法分析：</p>
+
+<pre><code>1、稳定性:归并排序是一种稳定的排序。
+2、存储结构要求:可用顺序存储结构。也易于在链表上实现。
+3、时间复杂度: 对长度为n的文件，需进行lgn趟二路归并，每趟归并的时间为O(n)，故其时间复杂度无论是在最好情况下还是在最坏情况下均是O(nlgn)。。
+4、空间复杂度:需要一个辅助向量来暂存两有序子文件归并的结果，故其辅助空间复杂度为O(n)，显然它不是就地排序。
+   注意:若用单链表做存储结构，很容易给出就地的归并排序。
+</code></pre>
+
+<p>总结：与快速排序相比，归并排序的最大特点是，它是一种稳定的排序方法。归并排序一般多用于外排序。但它在内排方面也占有重要地位，因为它是基于比较的时间复杂度为O(N*Log(N))的排序算法中唯一稳定的排序，所以在需要稳定内排序时通常会选择归并排序。归并排序不要求对序列可以很快地进行随机访问，所以在链表排序的实现中很受欢迎。</p>
+
+<p>好的，介绍完了归并排序后，回到咱们的问题。由第一节，我们已经知道，当数据量大到不适合在内存中排序时，可以利用多路归并算法对磁盘文件进行排序。</p>
+
+<p>我们以一个包含很多个整数的大文件为例，来说明多路归并的外排序算法基本思想。假设文件中整数个数为N(N是亿级的)，整数之间用空格分开。首先分多次从该文件中读取M（十万级）个整数，每次将M个整数在内存中使用快速排序之后存入临时文件，然后使用多路归并将各个临时文件中的数据再次整体排好序后存入输出文件。显然，该排序算法需要对每个整数做2次磁盘读和2次磁盘写。以下是本程序的流程图：</p>
+
+<p><a href="../images/10/10.3.jpg" target="_blank"><img src="../images/10/10.3.jpg" alt="" style="max-width:100%;"></a></p>
+
+<p>本程序是基于以上思想对包含大量整数文件的从小到大排序的一个简单实现，这里没有使用内存缓冲区，在归并时简单使用一个数组来存储每个临时文件的第一个元素。下面是多路归并排序算法的c++实现代码（在第四节，将给出多路归并算法的c实现）： </p>
+
+<div class="highlight highlight-cpp"><pre><span class="c1">//copyright@ 纯净的天空 &amp;&amp; yansha    </span>
+<span class="c1">//5、July，updated，2010.05.28。    </span>
+<span class="cp">#include &lt;iostream&gt;    </span>
+<span class="cp">#include &lt;ctime&gt;    </span>
+<span class="cp">#include &lt;fstream&gt;    </span>
+<span class="c1">//#include "ExternSort.h"using namespace std;    </span>
+<span class="c1">//使用多路归并进行外排序的类    </span>
+<span class="c1">//ExternSort.h    </span>
+<span class="cm">/** 大数据量的排序* 多路归并排序* 以千万级整数从小到大排序为例* 一个比较简单的例子，没有建立内存缓冲区*/</span>    
+<span class="cp">#ifndef EXTERN_SORT_H    </span>
+<span class="cp">#define EXTERN_SORT_H    </span>
+
+<span class="cp">#include &lt;cassert&gt;</span>
+
+<span class="k">class</span> <span class="nc">ExternSort</span>
+<span class="p">{</span>    
+<span class="nl">public:</span>    
+    <span class="kt">void</span> <span class="n">sort</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="kt">time_t</span> <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+        <span class="c1">//将文件内容分块在内存中排序，并分别写入临时文件</span>
+        <span class="kt">int</span> <span class="n">file_count</span> <span class="o">=</span> <span class="n">memory_sort</span><span class="p">();</span>
+        <span class="c1">//归并临时文件内容到输出文件</span>
+        <span class="n">merge_sort</span><span class="p">(</span><span class="n">file_count</span><span class="p">);</span>
+        <span class="kt">time_t</span> <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span><span class="n">printf</span><span class="p">(</span><span class="s">"total time:%f/n"</span><span class="p">,</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1000.0</span><span class="o">/</span> <span class="n">CLOCKS_PER_SEC</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">//input_file:输入文件名</span>
+    <span class="c1">//out_file:输出文件名</span>
+    <span class="c1">//count: 每次在内存中排序的整数个数</span>
+    <span class="n">ExternSort</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">input_file</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">out_file</span><span class="p">,</span> <span class="kt">int</span> <span class="n">count</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">m_count</span> <span class="o">=</span> <span class="n">count</span><span class="p">;</span>
+        <span class="n">m_in_file</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">strlen</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="n">strcpy</span><span class="p">(</span><span class="n">m_in_file</span><span class="p">,</span> <span class="n">input_file</span><span class="p">);</span>
+        <span class="n">m_out_file</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">strlen</span><span class="p">(</span><span class="n">out_file</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="n">strcpy</span><span class="p">(</span><span class="n">m_out_file</span><span class="p">,</span> <span class="n">out_file</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">virtual</span> <span class="o">~</span><span class="n">ExternSort</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">delete</span> <span class="p">[]</span> <span class="n">m_in_file</span><span class="p">;</span>
+        <span class="k">delete</span> <span class="p">[]</span> <span class="n">m_out_file</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">m_count</span><span class="p">;</span>
+    <span class="c1">//数组长度char *m_in_file;</span>
+    <span class="c1">//输入文件的路径</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">m_out_file</span><span class="p">;</span>
+    <span class="c1">//输出文件的路径</span>
+
+<span class="nl">protected:</span>
+    <span class="kt">int</span> <span class="nf">read_data</span><span class="p">(</span><span class="kt">FILE</span><span class="o">*</span> <span class="n">f</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">fscanf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">!=</span> <span class="n">EOF</span><span class="p">))</span>
+            <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"read:%d integer/n"</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="nf">write_data</span><span class="p">(</span><span class="kt">FILE</span><span class="o">*</span> <span class="n">f</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s">"%d "</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+
+    <span class="kt">char</span><span class="o">*</span> <span class="nf">temp_filename</span><span class="p">(</span><span class="kt">int</span> <span class="n">index</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">char</span> <span class="o">*</span><span class="n">tempfile</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
+        <span class="n">sprintf</span><span class="p">(</span><span class="n">tempfile</span><span class="p">,</span> <span class="s">"temp%d.txt"</span><span class="p">,</span> <span class="n">index</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">tempfile</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">static</span> <span class="kt">int</span> <span class="nf">cmp_int</span><span class="p">(</span><span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">b</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="o">*</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">a</span> <span class="o">-</span> <span class="o">*</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">b</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="nf">memory_sort</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="kt">FILE</span><span class="o">*</span> <span class="n">fin</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">m_in_file</span><span class="p">,</span> <span class="s">"rt"</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">file_count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="kt">int</span> <span class="o">*</span><span class="n">array</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">m_count</span><span class="p">];</span>
+
+        <span class="c1">//每读入m_count个整数就在内存中做一次排序，并写入临时文件</span>
+        <span class="k">while</span><span class="p">((</span> <span class="n">n</span> <span class="o">=</span> <span class="n">read_data</span><span class="p">(</span><span class="n">fin</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">m_count</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">qsort</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">),</span> <span class="n">cmp_int</span><span class="p">);</span>   <span class="c1">//这里，调用了库函数阿，在第四节的c实现里，不再调qsort。</span>
+            <span class="kt">char</span> <span class="o">*</span><span class="n">fileName</span> <span class="o">=</span> <span class="n">temp_filename</span><span class="p">(</span><span class="n">file_count</span><span class="o">++</span><span class="p">);</span>
+            <span class="kt">FILE</span> <span class="o">*</span><span class="n">tempFile</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="s">"w"</span><span class="p">);</span>
+            <span class="n">free</span><span class="p">(</span><span class="n">fileName</span><span class="p">);</span>
+            <span class="n">write_data</span><span class="p">(</span><span class="n">tempFile</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+            <span class="n">fclose</span><span class="p">(</span><span class="n">tempFile</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">delete</span> <span class="p">[]</span> <span class="n">array</span><span class="p">;</span>
+        <span class="n">fclose</span><span class="p">(</span><span class="n">fin</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">file_count</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="nf">merge_sort</span><span class="p">(</span><span class="kt">int</span> <span class="n">file_count</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">file_count</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="c1">//归并临时文件FILE *fout = fopen(m_out_file, "wt");</span>
+        <span class="kt">FILE</span><span class="o">*</span> <span class="o">*</span><span class="n">farray</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">FILE</span><span class="o">*</span><span class="p">[</span><span class="n">file_count</span><span class="p">];</span>
+        <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">file_count</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">char</span><span class="o">*</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">temp_filename</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+            <span class="n">farray</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="s">"rt"</span><span class="p">);</span>
+            <span class="n">free</span><span class="p">(</span><span class="n">fileName</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="kt">int</span> <span class="o">*</span><span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">file_count</span><span class="p">];</span>
+        <span class="c1">//存储每个文件当前的一个数字</span>
+        <span class="kt">bool</span> <span class="o">*</span><span class="n">hasNext</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">bool</span><span class="p">[</span><span class="n">file_count</span><span class="p">];</span>
+        <span class="c1">//标记文件是否读完</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="o">*</span> <span class="n">file_count</span><span class="p">);</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">hasNext</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">bool</span><span class="p">)</span> <span class="o">*</span> <span class="n">file_count</span><span class="p">);</span>
+        <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">file_count</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">fscanf</span><span class="p">(</span><span class="n">farray</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">==</span> <span class="n">EOF</span><span class="p">)</span>
+                <span class="c1">//读每个文件的第一个数到data数组</span>
+                <span class="n">hasNext</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">while</span><span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">//求data中可用的最小的数字，并记录对应文件的索引</span>
+            <span class="kt">int</span> <span class="n">min</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+            <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">file_count</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">hasNext</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                <span class="n">j</span><span class="o">++</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">&gt;=</span> <span class="n">file_count</span><span class="p">)</span>
+                <span class="c1">//没有可取的数字，终止归并</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">file_count</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">hasNext</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">min</span> <span class="o">&gt;</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="p">{</span>
+                    <span class="n">min</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                    <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">fscanf</span><span class="p">(</span><span class="n">farray</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">==</span> <span class="n">EOF</span><span class="p">)</span>
+                <span class="c1">//读取文件的下一个元素</span>
+                <span class="n">hasNext</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">fout</span><span class="p">,</span> <span class="s">"%d "</span><span class="p">,</span> <span class="n">min</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">delete</span> <span class="p">[]</span> <span class="n">hasNext</span><span class="p">;</span>
+        <span class="k">delete</span> <span class="p">[]</span> <span class="n">data</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">file_count</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">fclose</span><span class="p">(</span><span class="n">farray</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="p">}</span>
+        <span class="k">delete</span> <span class="p">[]</span> <span class="n">farray</span><span class="p">;</span>
+        <span class="n">fclose</span><span class="p">(</span><span class="n">fout</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+<span class="cp">#endif</span>
+
+<span class="c1">//测试主函数文件</span>
+<span class="cm">/** 大文件排序* 数据不能一次性全部装入内存* 排序文件里有多个整数，整数之间用空格隔开*/</span>
+
+<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">10000000</span><span class="p">;</span>
+<span class="c1">// 文件里数据的行数const unsigned int number_to_sort = 1000000;</span>
+<span class="c1">//在内存中一次排序的数量</span>
+<span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">unsort_file</span> <span class="o">=</span> <span class="s">"unsort_data.txt"</span><span class="p">;</span>
+<span class="c1">//原始未排序的文件名</span>
+<span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">sort_file</span> <span class="o">=</span> <span class="s">"sort_data.txt"</span><span class="p">;</span>
+<span class="c1">//已排序的文件名</span>
+<span class="kt">void</span> <span class="nf">init_data</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">num</span><span class="p">);</span>
+
+<span class="c1">//随机生成数据文件</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="o">*</span><span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">srand</span><span class="p">(</span><span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">));</span>
+    <span class="n">init_data</span><span class="p">(</span><span class="n">count</span><span class="p">);</span>
+    <span class="n">ExternSort</span> <span class="n">extSort</span><span class="p">(</span><span class="n">unsort_file</span><span class="p">,</span> <span class="n">sort_file</span><span class="p">,</span> <span class="n">number_to_sort</span><span class="p">);</span>
+    <span class="n">extSort</span><span class="p">.</span><span class="n">sort</span><span class="p">();</span>
+    <span class="n">system</span><span class="p">(</span><span class="s">"pause"</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">init_data</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">num</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">FILE</span><span class="o">*</span> <span class="n">f</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">unsort_file</span><span class="p">,</span> <span class="s">"wt"</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s">"%d "</span><span class="p">,</span> <span class="n">rand</span><span class="p">());</span>
+    <span class="n">fclose</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>程序测试：读者可以继续用小文件小数据量进一步测试。</p>
+
+<p><a href="../images/10/10.4.jpg" target="_blank"><img src="../images/10/10.4.jpg" alt="" style="max-width:100%;"></a></p>
+
+<h2>
+<a name="%E7%AC%AC%E4%B8%89%E8%8A%82%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F%E7%9A%84%E7%BC%96%E7%A8%8B%E5%AE%9E%E7%8E%B0" class="anchor" href="#%E7%AC%AC%E4%B8%89%E8%8A%82%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F%E7%9A%84%E7%BC%96%E7%A8%8B%E5%AE%9E%E7%8E%B0"><span class="octicon octicon-link"></span></a>第三节、磁盘文件排序的编程实现</h2>
+
+<p>ok，接下来，我们来编程实现上述磁盘文件排序的问题，本程序由两部分构成：</p>
+
+<p><strong>1、内存排序</strong></p>
+
+<p>由于要求的可用内存为1MB，那么每次可以在内存中对250K的数据进行排序，然后将有序的数写入硬盘。
+那么10M的数据需要循环40次，最终产生40个有序的文件。</p>
+
+<p><strong>2、归并排序</strong></p>
+
+<p>将每个文件最开始的数读入(由于有序，所以为该文件最小数)，存放在一个大小为40的first_data数组中；
+选择first_data数组中最小的数min_data，及其对应的文件索引index；
+将first_data数组中最小的数写入文件result，然后更新数组first_data(根据index读取该文件下一个数代替min_data)；</p>
+
+<p>判断是否所有数据都读取完毕，否则返回2。</p>
+
+<p>所以，本程序按顺序分两步，第一步、Memory Sort，第二步、Merge Sort。程序的流程图，如下图所示（感谢F的绘制）。</p>
+
+<p><a href="../images/10/10.5.jpg" target="_blank"><img src="../images/10/10.5.jpg" alt="" style="max-width:100%;"></a><a href="../images/10/10.6.jpg" target="_blank"><img src="../images/10/10.6.jpg" alt="" style="max-width:100%;"></a></p>
+
+<p>然后，编写的完整代码如下：</p>
+
+<div class="highlight highlight-cpp"><pre><span class="c1">//copyright@ yansha</span>
+<span class="c1">//July、updated，2011.05.28。</span>
+<span class="cp">#include &lt;iostream&gt;</span>
+<span class="cp">#include &lt;string&gt;</span>
+<span class="cp">#include &lt;algorithm&gt;</span>
+<span class="cp">#include &lt;time.h&gt;</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="n">sort_num</span> <span class="o">=</span> <span class="mi">10000000</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">memory_size</span> <span class="o">=</span> <span class="mi">250000</span><span class="p">;</span>
+
+<span class="c1">//每次只对250k个小数据量进行排序</span>
+<span class="kt">int</span> <span class="nf">read_data</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="n">space</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">index</span> <span class="o">&lt;</span> <span class="n">memory_size</span> <span class="o">&amp;&amp;</span> <span class="n">fscanf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%d "</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">space</span><span class="p">[</span><span class="n">index</span><span class="p">])</span> <span class="o">!=</span> <span class="n">EOF</span><span class="p">)</span>
+        <span class="n">index</span><span class="o">++</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">index</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">write_data</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="n">space</span><span class="p">,</span> <span class="kt">int</span> <span class="n">num</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">index</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%d "</span><span class="p">,</span> <span class="n">space</span><span class="p">[</span><span class="n">index</span><span class="p">]);</span>
+        <span class="n">index</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// check the file pointer whether valid or not.</span>
+<span class="kt">void</span> <span class="nf">check_fp</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">fp</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"The file pointer is invalid!"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">compare</span><span class="p">(</span><span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">first_num</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">second_num</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="o">*</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="n">first_num</span> <span class="o">-</span> <span class="o">*</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="n">second_num</span><span class="p">;</span>
+<span class="p">}</span>  
+
+<span class="n">string</span> <span class="nf">new_file_name</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">file_name</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+    <span class="n">sprintf</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="s">"data%d.txt"</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">file_name</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">memory_sort</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// open the target file.</span>
+    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp_in_file</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">"data.txt"</span><span class="p">,</span> <span class="s">"r"</span><span class="p">);</span>
+    <span class="n">check_fp</span><span class="p">(</span><span class="n">fp_in_file</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// allocate space to store data read from file.</span>
+        <span class="kt">int</span> <span class="o">*</span><span class="n">space</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">memory_size</span><span class="p">];</span>
+        <span class="kt">int</span> <span class="n">num</span> <span class="o">=</span> <span class="n">read_data</span><span class="p">(</span><span class="n">fp_in_file</span><span class="p">,</span> <span class="n">space</span><span class="p">);</span>
+        <span class="c1">// the memory sort have finished if not numbers any more.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">break</span><span class="p">;</span>
+
+        <span class="c1">// quick sort.</span>
+        <span class="n">qsort</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">),</span> <span class="n">compare</span><span class="p">);</span>
+        <span class="c1">// create a new auxiliary file name.</span>
+        <span class="n">string</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">new_file_name</span><span class="p">(</span><span class="o">++</span><span class="n">counter</span><span class="p">);</span>
+        <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp_aux_file</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">file_name</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="s">"w"</span><span class="p">);</span>
+        <span class="n">check_fp</span><span class="p">(</span><span class="n">fp_aux_file</span><span class="p">);</span>
+
+        <span class="c1">// write the orderly numbers into auxiliary file.</span>
+        <span class="n">write_data</span><span class="p">(</span><span class="n">fp_aux_file</span><span class="p">,</span> <span class="n">space</span><span class="p">,</span> <span class="n">num</span><span class="p">);</span>
+        <span class="n">fclose</span><span class="p">(</span><span class="n">fp_aux_file</span><span class="p">);</span>
+        <span class="k">delete</span> <span class="p">[]</span><span class="n">space</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">fclose</span><span class="p">(</span><span class="n">fp_in_file</span><span class="p">);</span>
+
+    <span class="c1">// return the number of auxiliary files.</span>
+    <span class="k">return</span> <span class="n">counter</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="nf">merge_sort</span><span class="p">(</span><span class="kt">int</span> <span class="n">file_num</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">file_num</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="c1">// create a new file to store result.</span>
+    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp_out_file</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">"result.txt"</span><span class="p">,</span> <span class="s">"w"</span><span class="p">);</span>
+    <span class="n">check_fp</span><span class="p">(</span><span class="n">fp_out_file</span><span class="p">);</span>
+
+    <span class="c1">// allocate a array to store the file pointer.</span>
+    <span class="kt">FILE</span> <span class="o">**</span><span class="n">fp_array</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">FILE</span> <span class="o">*</span><span class="p">[</span><span class="n">file_num</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">file_num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">string</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">new_file_name</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">fp_array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">file_name</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="s">"r"</span><span class="p">);</span>
+        <span class="n">check_fp</span><span class="p">(</span><span class="n">fp_array</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="o">*</span><span class="n">first_data</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">file_num</span><span class="p">];</span>
+    <span class="c1">//new出个大小为0.1亿/250k数组，由指针first_data指示数组首地址</span>
+    <span class="kt">bool</span> <span class="o">*</span><span class="n">finish</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">bool</span><span class="p">[</span><span class="n">file_num</span><span class="p">];</span>
+    <span class="n">memset</span><span class="p">(</span><span class="n">finish</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">bool</span><span class="p">)</span> <span class="o">*</span> <span class="n">file_num</span><span class="p">);</span>
+
+    <span class="c1">// read the first number of every auxiliary file.</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">file_num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">fscanf</span><span class="p">(</span><span class="n">fp_array</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s">"%d "</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">first_data</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">index</span> <span class="o">&lt;</span> <span class="n">file_num</span> <span class="o">&amp;&amp;</span> <span class="n">finish</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+            <span class="n">index</span><span class="o">++</span><span class="p">;</span>
+
+        <span class="c1">// the finish condition of the merge sort.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">index</span> <span class="o">&gt;=</span> <span class="n">file_num</span><span class="p">)</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="c1">//主要的修改在上面两行代码，就是merge sort结束条件。</span>
+        <span class="c1">//要保证所有文件都读完，必须使得finish[0]...finish[40]都为真</span>
+        <span class="c1">//July、yansha，555，2011.05.29。</span>
+
+        <span class="kt">int</span> <span class="n">min_data</span> <span class="o">=</span> <span class="n">first_data</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+        <span class="c1">// choose the relative minimum in the array of first_data.</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">file_num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">min_data</span> <span class="o">&gt;</span> <span class="n">first_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">finish</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="c1">//一旦发现比min_data更小的数据first_data[i]</span>
+            <span class="p">{</span>
+                <span class="n">min_data</span> <span class="o">=</span> <span class="n">first_data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                <span class="c1">//则置min_data&lt;-first_data[i]index = i;</span>
+                <span class="c1">//把下标i 赋给index。</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="c1">// write the orderly result to file.</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">fp_out_file</span><span class="p">,</span> <span class="s">"%d "</span><span class="p">,</span> <span class="n">min_data</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">fscanf</span><span class="p">(</span><span class="n">fp_array</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="s">"%d "</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">first_data</span><span class="p">[</span><span class="n">index</span><span class="p">])</span> <span class="o">==</span> <span class="n">EOF</span><span class="p">)</span>
+            <span class="n">finish</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">fclose</span><span class="p">(</span><span class="n">fp_out_file</span><span class="p">);</span>
+    <span class="k">delete</span> <span class="p">[]</span><span class="n">finish</span><span class="p">;</span>
+    <span class="k">delete</span> <span class="p">[]</span><span class="n">first_data</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">file_num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">fclose</span><span class="p">(</span><span class="n">fp_array</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="k">delete</span> <span class="p">[]</span> <span class="n">fp_array</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">clock_t</span> <span class="n">start_memory_sort</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+    <span class="kt">int</span> <span class="n">aux_file_num</span> <span class="o">=</span> <span class="n">memory_sort</span><span class="p">();</span>
+    <span class="kt">clock_t</span> <span class="n">end_memory_sort</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"The time needs in memory sort: "</span> <span class="o">&lt;&lt;</span> <span class="n">end_memory_sort</span> <span class="o">-</span> <span class="n">start_memory_sort</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="kt">clock_t</span> <span class="n">start_merge_sort</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+    <span class="n">merge_sort</span><span class="p">(</span><span class="n">aux_file_num</span><span class="p">);</span>
+    <span class="kt">clock_t</span> <span class="n">end_merge_sort</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"The time needs in merge sort: "</span> <span class="o">&lt;&lt;</span> <span class="n">end_merge_sort</span> <span class="o">-</span> <span class="n">start_merge_sort</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">system</span><span class="p">(</span><span class="s">"pause"</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>其中，生成数据文件data.txt的代码在第一节已经给出。</p>
+
+<p>程序测试：</p>
+
+<ol>
+<li>咱们对1000W数据进行测试，打开半天没看到数据，</li>
+</ol><p><a href="../images/10/10.7.jpg" target="_blank"><img src="../images/10/10.7.jpg" alt="" style="max-width:100%;"></a></p>
+
+<ol>
+<li>编译运行上述程序后，data文件先被分成40个小文件data[1....40]，然后程序再对这40个小文件进行归并排序，排序结果最终生成在result文件中，自此result文件中便是由data文件的数据经排序后得到的数据。</li>
+</ol><p><a href="../images/10/10.8.jpg" target="_blank"><img src="../images/10/10.8.jpg" alt="" style="max-width:100%;"></a></p>
+
+<ol>
+<li>且，我们能看到，data[i]，i=1...40的每个文件都是有序的，如下图：</li>
+</ol><p><a href="../images/10/10.9.jpg" target="_blank"><img src="../images/10/10.9.jpg" alt="" style="max-width:100%;"></a></p>
+
+<ol>
+<li>最终的运行结果，如下，单位统一为ms：</li>
+</ol><p><a href="../images/10/10.10.jpg" target="_blank"><img src="../images/10/10.10.jpg" alt="" style="max-width:100%;"></a></p>
+
+<p>由上观之，我们发现，第一节的位图方案的程序效率是最快的，约为14s，而采用上述的多路归并算法的程序运行时间约为25s。时间主要浪费在读写磁盘IO上，且程序中用的库函数qsort也耗费了不少时间。所以，总的来说，采取位图方案是最佳方案。</p>
+
+<p>小数据量测试：</p>
+
+<p>我们下面针对小数据量的文件再测试一次，针对20个小数据，每趟对4个数据进行排序，即5路归并，程序的排序结果如下图所示。</p>
+
+<p><a href="../images/10/10.11.jpg" target="_blank"><img src="../images/10/10.11.jpg" alt="" style="max-width:100%;"></a></p>
+
+<p>运行时间：</p>
+
+<p>0ms，可以忽略不计了，毕竟是对20个数的小数据量进行排序：</p>
+
+<p><a href="../images/10/10.12.jpg" target="_blank"><img src="../images/10/10.12.jpg" alt="" style="max-width:100%;"></a></p>
+
+<p>沙海拾贝：</p>
+
+<p>我们不在乎是否能把一个软件产品或一本书最终完成，我们更在乎的是，在完成这个产品或创作这本书的过程中，读者学到了什么，能学到什么?所以，不要一味的马上就想得到一道题目的正确答案，请跟着我们一起逐步走向山巅。</p>
+
+<h2>
+<a name="%E7%AC%AC%E5%9B%9B%E8%8A%82%E5%A4%9A%E8%B7%AF%E5%BD%92%E5%B9%B6%E7%AE%97%E6%B3%95%E7%9A%84c%E5%AE%9E%E7%8E%B0" class="anchor" href="#%E7%AC%AC%E5%9B%9B%E8%8A%82%E5%A4%9A%E8%B7%AF%E5%BD%92%E5%B9%B6%E7%AE%97%E6%B3%95%E7%9A%84c%E5%AE%9E%E7%8E%B0"><span class="octicon octicon-link"></span></a>第四节、多路归并算法的c实现</h2>
+
+<p>本多路归并算法的c实现原理与上述c++实现一致，不同的地方体现在一些细节处理上，且对临时文件的排序，不再用系统提供的快排，即上面的qsort库函数，是采用的三数中值的快速排序（个数小于3用插入排序）的。而我们知道，纯正的归并排序其实就是比较排序，在归并过程中总是不断的比较，为了从两个数中挑小的归并到最终的序列中。ok，此程序的详情请看：</p>
+
+<div class="highlight highlight-cpp"><pre><span class="c1">//copyright@ 555  </span>
+<span class="c1">//July、2011.05.29。  </span>
+<span class="cp">#include &lt;assert.h&gt;</span>
+<span class="cp">#include &lt;time.h&gt;</span>
+<span class="cp">#include &lt;stdio.h&gt;</span>
+<span class="cp">#include &lt;memory.h&gt;</span>
+<span class="cp">#include &lt;stdlib.h&gt;</span>
+
+<span class="kt">void</span> <span class="nf">swap_int</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span><span class="kt">int</span><span class="o">*</span> <span class="n">b</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">c</span><span class="p">;</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="o">*</span><span class="n">a</span><span class="p">;</span>
+    <span class="o">*</span><span class="n">a</span> <span class="o">=</span> <span class="o">*</span><span class="n">b</span><span class="p">;</span>
+    <span class="o">*</span><span class="n">b</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">//插入排序  </span>
+<span class="kt">void</span> <span class="nf">InsertionSort</span><span class="p">(</span><span class="kt">int</span> <span class="n">A</span><span class="p">[],</span><span class="kt">int</span> <span class="n">N</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">j</span><span class="p">,</span><span class="n">p</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">tmp</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">p</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">p</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">p</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">p</span><span class="p">];</span>
+        <span class="k">for</span><span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span><span class="n">j</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">A</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span><span class="n">tmp</span><span class="p">;</span><span class="n">j</span><span class="o">--</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">A</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="p">}</span>
+
+        <span class="n">A</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">//三数取中分割法  </span>
+<span class="kt">int</span> <span class="nf">Median3</span><span class="p">(</span><span class="kt">int</span> <span class="n">A</span><span class="p">[],</span><span class="kt">int</span> <span class="n">Left</span><span class="p">,</span><span class="kt">int</span> <span class="n">Right</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">Center</span> <span class="o">=</span> <span class="p">(</span><span class="n">Left</span> <span class="o">+</span> <span class="n">Right</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">Left</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">A</span><span class="p">[</span><span class="n">Center</span><span class="p">])</span>
+        <span class="n">swap_int</span><span class="p">(</span><span class="o">&amp;</span><span class="n">A</span><span class="p">[</span><span class="n">Left</span><span class="p">],</span><span class="o">&amp;</span><span class="n">A</span><span class="p">[</span><span class="n">Center</span><span class="p">]);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">Left</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">A</span><span class="p">[</span><span class="n">Right</span><span class="p">])</span>
+        <span class="n">swap_int</span><span class="p">(</span><span class="o">&amp;</span><span class="n">A</span><span class="p">[</span><span class="n">Left</span><span class="p">],</span><span class="o">&amp;</span><span class="n">A</span><span class="p">[</span><span class="n">Right</span><span class="p">]);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">Center</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">A</span><span class="p">[</span><span class="n">Right</span><span class="p">])</span>
+        <span class="n">swap_int</span><span class="p">(</span><span class="o">&amp;</span><span class="n">A</span><span class="p">[</span><span class="n">Center</span><span class="p">],</span><span class="o">&amp;</span><span class="n">A</span><span class="p">[</span><span class="n">Right</span><span class="p">]);</span>
+    <span class="n">swap_int</span><span class="p">(</span><span class="o">&amp;</span><span class="n">A</span><span class="p">[</span><span class="n">Center</span><span class="p">],</span><span class="o">&amp;</span><span class="n">A</span><span class="p">[</span><span class="n">Right</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
+    <span class="k">return</span> <span class="n">A</span><span class="p">[</span><span class="n">Right</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="c1">//快速排序  </span>
+<span class="kt">void</span> <span class="nf">QuickSort</span><span class="p">(</span><span class="kt">int</span> <span class="n">A</span><span class="p">[],</span><span class="kt">int</span> <span class="n">Left</span><span class="p">,</span><span class="kt">int</span> <span class="n">Right</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">Pivot</span><span class="p">;</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">Cutoff</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">Left</span> <span class="o">+</span> <span class="n">Cutoff</span> <span class="o">&lt;=</span> <span class="n">Right</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Pivot</span> <span class="o">=</span> <span class="n">Median3</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">Left</span><span class="p">,</span><span class="n">Right</span><span class="p">);</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">Left</span><span class="p">;</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="n">Right</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">while</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="o">++</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">Pivot</span><span class="p">){;}</span>
+            <span class="k">while</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="o">--</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">Pivot</span><span class="p">){;}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span><span class="p">)</span>
+                <span class="n">swap_int</span><span class="p">(</span><span class="o">&amp;</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="o">&amp;</span><span class="n">A</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+            <span class="k">else</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">swap_int</span><span class="p">(</span><span class="o">&amp;</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="o">&amp;</span><span class="n">A</span><span class="p">[</span><span class="n">Right</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
+
+        <span class="n">QuickSort</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">Left</span><span class="p">,</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">QuickSort</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span><span class="n">Right</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">InsertionSort</span><span class="p">(</span><span class="n">A</span><span class="o">+</span><span class="n">Left</span><span class="p">,</span><span class="n">Right</span> <span class="o">-</span> <span class="n">Left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">//const int  KNUM  = 40;</span>
+<span class="c1">//分块数</span>
+<span class="k">const</span> <span class="kt">int</span>  <span class="n">NUMBER</span> <span class="o">=</span> <span class="mi">10000000</span><span class="p">;</span>
+<span class="c1">//输入文件最大读取的整数的个数</span>
+<span class="c1">//为了便于测试，我决定改成小文件小数据量进行测试。</span>
+<span class="k">const</span> <span class="kt">int</span>  <span class="n">KNUM</span>  <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="c1">//分块数const int  NUMBER = 100;</span>
+<span class="c1">//输入文件最大读取的整数的个数</span>
+<span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">in_file</span> <span class="o">=</span> <span class="s">"infile.txt"</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">out_file</span> <span class="o">=</span> <span class="s">"outfile.txt"</span><span class="p">;</span>
+<span class="c1">//#define OUTPUT_OUT_FILE_DATA</span>
+<span class="c1">//数据量大的时候,没必要把所有的数全部打印出来，所以可以把上面这句注释掉。</span>
+<span class="kt">void</span>  <span class="nf">gen_infile</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="kt">FILE</span> <span class="o">*</span><span class="n">f</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">in_file</span><span class="p">,</span> <span class="s">"wt"</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="s">"%d "</span><span class="p">,</span><span class="n">rand</span><span class="p">());</span>
+    <span class="n">fclose</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span>  <span class="nf">read_data</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">f</span><span class="p">,</span><span class="kt">int</span> <span class="n">a</span><span class="p">[],</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">((</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">fscanf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="s">"%d"</span><span class="p">,</span><span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">!=</span> <span class="n">EOF</span><span class="p">))</span>
+        <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"read: %d integer/n"</span><span class="p">,</span><span class="n">i</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">i</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span>  <span class="nf">write_data</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">f</span><span class="p">,</span><span class="kt">int</span> <span class="n">a</span><span class="p">[],</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>  
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span><span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="s">"%d "</span><span class="p">,</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="p">}</span>
+
+<span class="kt">char</span><span class="o">*</span> <span class="nf">temp_filename</span><span class="p">(</span><span class="kt">int</span> <span class="n">index</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">tempfile</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="mi">64</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">));</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">tempfile</span><span class="p">);</span>
+    <span class="n">sprintf</span><span class="p">(</span><span class="n">tempfile</span><span class="p">,</span> <span class="s">"temp%d.txt"</span><span class="p">,</span> <span class="n">index</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">tempfile</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">//K路串行读取</span>
+<span class="kt">void</span> <span class="nf">k_num_read</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">filename</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">cnt</span><span class="p">,</span><span class="o">*</span><span class="n">array</span><span class="p">;</span>
+    <span class="kt">FILE</span><span class="o">*</span> <span class="n">fin</span><span class="p">;</span>
+    <span class="kt">FILE</span><span class="o">*</span> <span class="n">tmpfile</span><span class="p">;</span>
+    <span class="c1">//计算knum,每路应读取的整数个数int n = NUMBER/KNUM;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">KNUM</span> <span class="o">&lt;</span> <span class="n">NUMBER</span><span class="p">)</span><span class="n">n</span><span class="o">++</span><span class="p">;</span>
+
+    <span class="c1">//建立存储分块读取的数据的数组</span>
+    <span class="n">array</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span><span class="n">assert</span><span class="p">(</span><span class="n">array</span><span class="p">);</span>
+    <span class="c1">//打开输入文件</span>
+    <span class="n">fin</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">in_file</span><span class="p">,</span><span class="s">"rt"</span><span class="p">);</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="c1">//分块循环读取数据,并写入硬盘上的临时文件</span>
+    <span class="k">while</span> <span class="p">(</span> <span class="p">(</span><span class="n">cnt</span> <span class="o">=</span> <span class="n">read_data</span><span class="p">(</span><span class="n">fin</span><span class="p">,</span><span class="n">array</span><span class="p">,</span><span class="n">n</span><span class="p">))</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//对每次读取的数据,先进行快速排序,然后写入硬盘上的临时文件</span>
+        <span class="n">QuickSort</span><span class="p">(</span><span class="n">array</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">cnt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">temp_filename</span><span class="p">(</span><span class="n">i</span><span class="o">++</span><span class="p">);</span>
+        <span class="n">tmpfile</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s">"w"</span><span class="p">);</span>
+        <span class="n">free</span><span class="p">(</span><span class="n">filename</span><span class="p">);</span>
+        <span class="n">write_data</span><span class="p">(</span><span class="n">tmpfile</span><span class="p">,</span><span class="n">array</span><span class="p">,</span><span class="n">cnt</span><span class="p">);</span>
+        <span class="n">fclose</span><span class="p">(</span><span class="n">tmpfile</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">KNUM</span><span class="p">);</span>
+    <span class="c1">//没有生成K路文件时进行诊断</span>
+    <span class="c1">//关闭输入文件句柄和临时存储数组</span>
+    <span class="n">fclose</span><span class="p">(</span><span class="n">fin</span><span class="p">);</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">array</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">//k路合并(败者树)</span>
+<span class="kt">void</span> <span class="nf">k_num_merge</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fout</span><span class="p">;</span>
+    <span class="kt">FILE</span> <span class="o">**</span><span class="n">farray</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">filename</span><span class="p">;</span>
+    <span class="kt">int</span>  <span class="o">*</span><span class="n">data</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">hasNext</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">min</span><span class="p">;</span>
+<span class="cp">    #ifdef OUTPUT_OUT_FILE_DATAint id;</span>
+<span class="cp">    #endif</span>
+    <span class="c1">//打开输出文件</span>
+    <span class="n">fout</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">out_file</span><span class="p">,</span><span class="s">"wt"</span><span class="p">);</span>
+    <span class="c1">//打开各路临时分块文件</span>
+    <span class="n">farray</span> <span class="o">=</span> <span class="p">(</span><span class="kt">FILE</span><span class="o">**</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="n">KNUM</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">FILE</span><span class="o">*</span><span class="p">));</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">farray</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span> <span class="n">KNUM</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">temp_filename</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+        <span class="n">farray</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s">"rt"</span><span class="p">);</span>
+        <span class="n">free</span><span class="p">(</span><span class="n">filename</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">//建立KNUM个元素的data,hasNext数组,存储K路文件的临时数组和读取结束状态</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="n">KNUM</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+    <span class="n">hasNext</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="o">*</span><span class="n">KNUM</span><span class="p">);</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">hasNext</span><span class="p">);</span>
+    <span class="n">memset</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="o">*</span> <span class="n">KNUM</span><span class="p">);</span>
+    <span class="n">memset</span><span class="p">(</span><span class="n">hasNext</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)</span> <span class="o">*</span> <span class="n">KNUM</span><span class="p">);</span>
+
+    <span class="c1">//读K路文件先读取第一组数据,并对读取结束的各路文件设置不可再读状态</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">KNUM</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">fscanf</span><span class="p">(</span><span class="n">farray</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">==</span> <span class="n">EOF</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">hasNext</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">//读取各路文件,利用败者树从小到大输出到输出文件</span>
+<span class="cp">    #ifdef OUTPUT_OUT_FILE_DATAid = 0;</span>
+<span class="cp">    #endif</span>
+
+    <span class="n">j</span>  <span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="n">F_LOOP</span><span class="o">:</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">KNUM</span><span class="p">)</span>
+        <span class="c1">//以下这段代码嵌套过深，日后应尽量避免此类问题。</span>
+    <span class="p">{</span>
+        <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">min</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>
+            <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">KNUM</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">hasNext</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span>  <span class="o">&amp;&amp;</span> <span class="n">min</span> <span class="o">&gt;</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="p">{</span>
+                    <span class="n">min</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="n">m</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span><span class="p">(</span><span class="n">fscanf</span><span class="p">(</span><span class="n">farray</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">data</span><span class="p">[</span><span class="n">m</span><span class="p">])</span> <span class="o">==</span> <span class="n">EOF</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">hasNext</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">fout</span><span class="p">,</span> <span class="s">"%d "</span><span class="p">,</span> <span class="n">min</span><span class="p">);</span>
+<span class="cp">#ifdef OUTPUT_OUT_FILE_DATAprintf("fout :%d  %d/n",++id,min);  </span>
+<span class="cp">#endif  </span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="o">==</span> <span class="n">j</span> <span class="o">&amp;&amp;</span> <span class="n">hasNext</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="p">{</span>  
+                <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">KNUM</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="p">{</span>  
+                    <span class="k">if</span> <span class="p">(</span><span class="n">hasNext</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">!=</span> <span class="n">hasNext</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                    <span class="p">{</span>
+                        <span class="n">m</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+                        <span class="c1">//第i个文件未读完,从第i个继续往下读</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="o">!=</span> <span class="n">j</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">j</span> <span class="o">=</span> <span class="n">m</span><span class="p">;</span>
+                    <span class="k">goto</span> <span class="n">F_LOOP</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>  
+        <span class="p">}</span>  
+    <span class="p">}</span>  
+
+    <span class="c1">//关闭分配的数据和数组</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">hasNext</span><span class="p">);</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">KNUM</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">fclose</span><span class="p">(</span><span class="n">farray</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">farray</span><span class="p">);</span>
+    <span class="n">fclose</span><span class="p">(</span><span class="n">fout</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">time_t</span> <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">),</span><span class="n">end</span><span class="p">,</span><span class="n">start_read</span><span class="p">,</span><span class="n">end_read</span><span class="p">,</span><span class="n">start_merge</span><span class="p">,</span><span class="n">end_merge</span><span class="p">;</span>
+    <span class="n">gen_infile</span><span class="p">(</span><span class="n">NUMBER</span><span class="p">);</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"gen_infile data time:%f/n"</span><span class="p">,</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1000.0</span><span class="o">/</span> <span class="n">CLOCKS_PER_SEC</span><span class="p">);</span>
+    <span class="n">start_read</span> <span class="o">=</span> <span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span><span class="n">k_num_read</span><span class="p">();</span>
+    <span class="n">end_read</span> <span class="o">=</span> <span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"k_num_read time:%f/n"</span><span class="p">,</span> <span class="p">(</span><span class="n">end_read</span> <span class="o">-</span> <span class="n">start_read</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1000.0</span><span class="o">/</span> <span class="n">CLOCKS_PER_SEC</span><span class="p">);</span>
+    <span class="n">start_merge</span> <span class="o">=</span> <span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">k_num_merge</span><span class="p">();</span>
+    <span class="n">end_merge</span> <span class="o">=</span> <span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"k_num_merge time:%f/n"</span><span class="p">,</span> <span class="p">(</span><span class="n">end_merge</span> <span class="o">-</span> <span class="n">start_merge</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1000.0</span><span class="o">/</span> <span class="n">CLOCKS_PER_SEC</span><span class="p">);</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"total time:%f/n"</span><span class="p">,</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1000.0</span><span class="o">/</span> <span class="n">CLOCKS_PER_SEC</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>程序测试：</p>
+
+<p>在此，我们先测试下对10000000个数据的文件进行40趟排序，然后再对100个数据的文件进行4趟排序（读者可进一步测试）。如弄几组小点的数据,输出ID和数据到屏幕，再看程序运行效果。</p>
+
+<ol>
+<li>10个数, 4组</li>
+<li>40个数, 5组</li>
+<li>55个数, 6组</li>
+<li>100个数, 7组</li>
+</ol><p><a href="../images/10/10.13.jpg" target="_blank"><img src="../images/10/10.13.jpg" alt="" style="max-width:100%;"></a><a href="../images/10/10.14.jpg" target="_blank"><img src="../images/10/10.14.jpg" alt="" style="max-width:100%;"></a></p>
+
+<p>（备注：1、以上所有各节的程序运行环境为windows xp + vc6.0 + e5200 cpu 2.5g主频，2、感谢5为本文程序所作的大量测试工作）</p>
+
+<h4>
+<a name="%E5%85%A8%E6%96%87%E6%80%BB%E7%BB%93" class="anchor" href="#%E5%85%A8%E6%96%87%E6%80%BB%E7%BB%93"><span class="octicon octicon-link"></span></a>全文总结：</h4>
+
+<p>1、关于本章中位图和多路归并两种方案的时间复杂度及空间复杂度的比较，如下：</p>
+
+<pre><code>          时间复杂度       空间复杂度
+</code></pre>
+
+<p>位图         O(N)           0.625M
+  多位归并   O(Nlogn)         1M</p>
+
+<p>（多路归并，时间复杂度为O（k*n/k*logn/k ），严格来说，还要加上读写磁盘的时间，而此算法绝大部分时间也是浪费在这上面）</p>
+
+<p>2、bit-map</p>
+
+<p>适用范围：可进行数据的快速查找，判重，删除，一般来说数据范围是int的10倍以下
+基本原理及要点：使用bit数组来表示某些元素是否存在，比如8位电话号码
+扩展：bloom filter可以看做是对bit-map的扩展</p>
+
+<p>问题实例：</p>
+
+<p>1)已知某个文件内包含一些电话号码，每个号码为8位数字，统计不同号码的个数。
+8位最多99 999 999，大概需要99m个bit，大概10几m字节的内存即可。</p>
+
+<p>2)2.5亿个整数中找出不重复的整数的个数，内存空间不足以容纳这2.5亿个整数。</p>
+
+<p>将bit-map扩展一下，用2bit表示一个数即可，0表示未出现，1表示出现一次，2表示出现2次及以上。或者我们不用2bit来进行表示，我们用两个bit-map即可模拟实现这个2bit-map。</p>
+
+<p>3、[外排序适用范围]大数据的排序，去重基本原理及要点：外排序的归并方法，置换选择败者树原理，最优归并树扩展。问题实例：1).有一个1G大小的一个文件，里面每一行是一个词，词的大小不超过16个字节，内存限制大小是1M。返回频数最高的100个词。这个数据具有很明显的特点，词的大小为16个字节，但是内存只有1m做hash有些不够，所以可以用来排序。内存可以当输入缓冲区使用。 </p>
+
+<p>4、海量数据处理</p>
+
+<p>有关海量数据处理的方法或面试题可参考此文，十道海量数据处理面试题与十个方法大总结。日后，会逐步实现这十个处理海量数据的方法。同时，送给各位一句话，解决问题的关键在于熟悉一个算法，而不是某一个问题。熟悉了一个算法，便通了一片题目。</p>
+
+<p>有一读者朋友针对本文写了一篇文章为，海量数据多路归并排序的c++实现（归并时利用了败者树），地址为：<a href="http://www.cnblogs.com/harryshayne/archive/2011/07/02/2096196.html">http://www.cnblogs.com/harryshayne/archive/2011/07/02/2096196.html</a> 。谢谢，欢迎参考。</p>
+		  </article>
+		  
+			<div id="nav">
+				
+					<a href="09.0.html">prev</a>
+					|
+				
+				
+					<a href="11.0.html">next</a>
+				
+				<span style="float: right"><a href="index.html">Back to home</a>
+			</div>
+		  
+		</div>
+	</div>
+  </div>
+  
+  <div>&nbsp;</div>
+  </div>
+  <div style="text-align:center; margin-bottom: 30px">
+	  Generated by <a href="https://github.com/marchtea/md_to_github_html">mdtogh</a>
+  </div>
+</body>
+</html>
