@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title><link rel="stylesheet" href="style_cache/github-d9c478ed7e87eebc36430a1efc4e84b17e65df06.css" />
+  <link rel="stylesheet" href="style_cache/github2-902e67494b49343625b27d5860c1e86bf5c65627.css" />
+  <style>
+    .file-box {
+      margin: 64px auto;
+      width: 920px;
+    }
+	body {
+		font-size: 14px;
+		line-height: 22px;
+		<!--font-family: "adelle",Georgia,"Times New Roman",serif;-->
+		color: #4e443c;
+		background: #f0efe7;
+	}
+
+	.book-toc {
+
+	}
+	a {
+		color: #0388a6;
+		text-decoration: none;
+	}
+	a:hover {
+		color: #04b1d8;
+		text-decoration: none;
+	}
+	ol.book-toc li.chapter{
+		margin-bottom:0.6em
+	}
+	ol.book-toc, ol{
+		list-style-type: disc
+	}
+	ol.book-toc{
+		margin:30px 36px
+	}
+	ol.book-toc a{
+		padding-left:4px
+	}
+	li {
+		line-height: 22px;
+	}
+	h1, h2, h3, h4, h5, h6, li, p, a, ol, div{
+		margin: 0;
+		padding: 0;
+		border: 0;
+		vertical-align: baseline;
+	}
+	ul, ol {
+		padding: 0;
+		margin: 0 0 11px 25px;
+	}
+	h1 {
+		font-size: 36px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	h2 {
+		font-size: 18px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h1{
+		font-size: 22px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	ol.book-toc h2 {
+		font-size: 16px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	p {
+		margin: 0 0 11px;
+		font-size: 14px;
+		line-height: 22px;
+	}
+	div {
+		display: block;
+	}
+	div#nav{
+		padding: 30px
+	}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="file-box">
+	<div class="file">
+		<div id="readme" class="blob instapaper_body announce md">
+		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
+			<html>
+ <body>
+  <h1>
+   <a class="anchor" href="#%E7%AC%AC%E4%B8%80%E7%AB%A0%E5%B7%A6%E6%97%8B%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2" name="%E7%AC%AC%E4%B8%80%E7%AB%A0%E5%B7%A6%E6%97%8B%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   第一章：左旋转字符串
+  </h1>
+  <h2>
+   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   题目描述
+  </h2>
+  <p>
+   定义字符串左旋转操作:把字符串前面的若干个字符移动到字符串尾部,如把字符串 abcdef 左旋转 2 位得到字符串 cdefab。请实现字符串左旋转的函数,要求对长度为 n 的字符串操作的时间复杂度为 O(n),空间复杂度为 O(1)。
+  </p>
+  <h2>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80%E6%9A%B4%E5%8A%9B%E7%A7%BB%E4%BD%8D%E6%B3%95" name="%E8%A7%A3%E6%B3%95%E4%B8%80%E6%9A%B4%E5%8A%9B%E7%A7%BB%E4%BD%8D%E6%B3%95">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法一、暴力移位法
+  </h2>
+  <p>
+   初看此题,最先想到的方法可能就是一位一位移动,姑且将此函数叫做
+   <code>
+    left_shift_one(char *s, int n)
+   </code>
+   ，以完成左移动一位的功能
+  </p>
+  <div class="highlight highlight-c">
+   <pre><span class="kt">void</span> <span class="nf">left_shift_one</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">s</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="kt">char</span> <span class="n">t</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>  <span class="c1">//保存第一个字符</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">s</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+  </div>
+  <p>
+   若向左移 m 位,方法如下:
+  </p>
+  <div class="highlight highlight-c">
+   <pre><span class="kt">void</span> <span class="nf">left_shift_m</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">m</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">m</span><span class="o">--</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">left_shift_one</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
+  </div>
+  <h2>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C%E4%B8%89%E6%AD%A5%E5%8F%8D%E8%BD%AC%E6%B3%95" name="%E8%A7%A3%E6%B3%95%E4%BA%8C%E4%B8%89%E6%AD%A5%E5%8F%8D%E8%BD%AC%E6%B3%95">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法二、三步反转法
+  </h2>
+  <p>
+   对于这个问题，换一个角度：
+  </p>
+  <p>
+   将一个字符串分成X和Y两个部分，在每部分字符串上定义反转操作，如X^T，即把X的所有字符反转（如，X="abc"，那么X^T="cba"），那么就得到下面的结论：(X^TY^T)^T=YX。显然这解决了字符串的反转问题。
+  </p>
+  <p>
+   例如字符串 abcdef ，若要让def翻转到abc的前头，只要按下述3个步骤操作即可：
+  </p>
+  <ol>
+   <li>
+    首先分为俩部分，X:abc，Y:def；
+   </li>
+   <li>
+    将X反转，X-&gt;X^T，即得：abc-&gt;cba；将Y反转，Y-&gt;Y^T，即得：def-&gt;fed。
+   </li>
+   <li>
+    反转上述得到的结果字符串X^TY^T，即字符串cbafed的两部分（cba和fed）给予反转，得到：cbafed-&gt;defabc，形式化表示为(X^TY^T)^T=YX，这就实现了整个反转。
+   </li>
+  </ol>
+  <p>
+   是不是一目了然了？
+  </p>
+  <p>
+   在《编程珠玑》上也有这样一个类似的问题，它的解法同本思路一致，如下图所示：
+  </p>
+  <p>
+   <a href="../images/1/3.jpeg" target="_blank">
+    <img alt="" src="../images/1/3.jpeg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   代码可以这么写：
+  </p>
+  <div class="highlight highlight-c">
+   <pre><span class="c1">//updated@caopengcs &amp;&amp; July</span>
+<span class="c1">//2014-1-6</span>
+<span class="kt">void</span> <span class="nf">reverse</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span><span class="kt">int</span> <span class="n">from</span><span class="p">,</span><span class="kt">int</span> <span class="n">to</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">from</span> <span class="o">&lt;</span> <span class="n">to</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">char</span> <span class="n">t</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">from</span><span class="p">];</span>
+        <span class="n">s</span><span class="p">[</span><span class="n">from</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">to</span><span class="p">];</span>
+        <span class="n">s</span><span class="p">[</span><span class="n">to</span><span class="o">--</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">leftshift</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span><span class="kt">int</span> <span class="n">m</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">m</span> <span class="o">%=</span> <span class="n">n</span><span class="p">;</span>               <span class="c1">//若要左移动大于n位，那么和%n 是等价的</span>
+    <span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">//反转[0..m - 1]，套用到上面举的例子中，就是X-&gt;X^T，即 abc-&gt;cba</span>
+    <span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">//反转[m..n - 1]，例如Y-&gt;Y^T，即 def-&gt;fed</span>
+    <span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">//反转[0..n - 1]，即如整个反转，(X^TY^T)^T=YX，即 cbafed-&gt;defabc。</span>
+<span class="p">}</span>
+</pre>
+  </div>
+ </body>
+</html>
+		  </article>
+		  
+			<div id="nav">
+				
+					<a href="00.01.html">prev</a>
+					|
+				
+				
+					<a href="01.02.html">next</a>
+				
+				<span style="float: right"><a href="index.html">Back to home</a>
+			</div>
+		  
+		</div>
+	</div>
+  </div>
+  
+  <div>&nbsp;</div>
+  </div>
+  <div style="text-align:center; margin-bottom: 30px">
+	  Generated by <a href="https://github.com/marchtea/md_to_github_html">mdtogh</a>
+  </div>
+</body>
+</html>

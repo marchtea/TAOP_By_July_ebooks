@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title><link rel="stylesheet" href="style_cache/github-d9c478ed7e87eebc36430a1efc4e84b17e65df06.css" />
+  <link rel="stylesheet" href="style_cache/github2-902e67494b49343625b27d5860c1e86bf5c65627.css" />
+  <style>
+    .file-box {
+      margin: 64px auto;
+      width: 920px;
+    }
+	body {
+		font-size: 14px;
+		line-height: 22px;
+		<!--font-family: "adelle",Georgia,"Times New Roman",serif;-->
+		color: #4e443c;
+		background: #f0efe7;
+	}
+
+	.book-toc {
+
+	}
+	a {
+		color: #0388a6;
+		text-decoration: none;
+	}
+	a:hover {
+		color: #04b1d8;
+		text-decoration: none;
+	}
+	ol.book-toc li.chapter{
+		margin-bottom:0.6em
+	}
+	ol.book-toc, ol{
+		list-style-type: disc
+	}
+	ol.book-toc{
+		margin:30px 36px
+	}
+	ol.book-toc a{
+		padding-left:4px
+	}
+	li {
+		line-height: 22px;
+	}
+	h1, h2, h3, h4, h5, h6, li, p, a, ol, div{
+		margin: 0;
+		padding: 0;
+		border: 0;
+		vertical-align: baseline;
+	}
+	ul, ol {
+		padding: 0;
+		margin: 0 0 11px 25px;
+	}
+	h1 {
+		font-size: 36px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	h2 {
+		font-size: 18px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h1{
+		font-size: 22px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	ol.book-toc h2 {
+		font-size: 16px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	p {
+		margin: 0 0 11px;
+		font-size: 14px;
+		line-height: 22px;
+	}
+	div {
+		display: block;
+	}
+	div#nav{
+		padding: 30px
+	}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="file-box">
+	<div class="file">
+		<div id="readme" class="blob instapaper_body announce md">
+		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
+			<html>
+ <body>
+  <h2>
+   <a class="anchor" href="#%E5%AF%86%E5%8C%99%E4%BA%8C%E5%8F%8C%E5%B1%82%E6%A1%B6%E5%88%92%E5%88%86" name="%E5%AF%86%E5%8C%99%E4%BA%8C%E5%8F%8C%E5%B1%82%E6%A1%B6%E5%88%92%E5%88%86">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   密匙二、双层桶划分
+  </h2>
+  <p>
+   双层桶划分----其实本质上还是分而治之的思想，重在“分”的技巧上！
+  </p>
+  <p>
+   适用范围：第k大，中位数，不重复或重复的数字
+  </p>
+  <p>
+   基本原理及要点：因为元素范围很大，不能利用直接寻址表，所以通过多次划分，逐步确定范围，然后最后在一个可以接受的范围内进行。可以通过多次缩小，双层只是一个例子。
+  </p>
+  <p>
+   扩展：
+  </p>
+  <p>
+   问题实例：
+  </p>
+  <h3>
+   <a class="anchor" href="#1325%E4%BA%BF%E4%B8%AA%E6%95%B4%E6%95%B0%E4%B8%AD%E6%89%BE%E5%87%BA%E4%B8%8D%E9%87%8D%E5%A4%8D%E7%9A%84%E6%95%B4%E6%95%B0%E7%9A%84%E4%B8%AA%E6%95%B0%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4%E4%B8%8D%E8%B6%B3%E4%BB%A5%E5%AE%B9%E7%BA%B3%E8%BF%9925%E4%BA%BF%E4%B8%AA%E6%95%B4%E6%95%B0" name="1325%E4%BA%BF%E4%B8%AA%E6%95%B4%E6%95%B0%E4%B8%AD%E6%89%BE%E5%87%BA%E4%B8%8D%E9%87%8D%E5%A4%8D%E7%9A%84%E6%95%B4%E6%95%B0%E7%9A%84%E4%B8%AA%E6%95%B0%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4%E4%B8%8D%E8%B6%B3%E4%BB%A5%E5%AE%B9%E7%BA%B3%E8%BF%9925%E4%BA%BF%E4%B8%AA%E6%95%B4%E6%95%B0">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   13、2.5亿个整数中找出不重复的整数的个数，内存空间不足以容纳这2.5亿个整数。
+  </h3>
+  <p>
+   有点像鸽巢原理，整数个数为2^32,也就是，我们可以将这2^32个数，划分为2^8个区域(比如用单个文件代表一个区域)，然后将数据分离到不同的区域，然后不同的区域在利用bitmap就可以直接解决了。也就是说只要有足够的磁盘空间，就可以很方便的解决。
+  </p>
+  <h3>
+   <a class="anchor" href="#145%E4%BA%BF%E4%B8%AAint%E6%89%BE%E5%AE%83%E4%BB%AC%E7%9A%84%E4%B8%AD%E4%BD%8D%E6%95%B0" name="145%E4%BA%BF%E4%B8%AAint%E6%89%BE%E5%AE%83%E4%BB%AC%E7%9A%84%E4%B8%AD%E4%BD%8D%E6%95%B0">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   14、5亿个int找它们的中位数。
+  </h3>
+  <ol>
+   <li>
+    <p>
+     思路一：这个例子比上面那个更明显。首先我们将int划分为2^16个区域，然后读取数据统计落到各个区域里的数的个数，之后我们根据统计结果就可以判断中位数落到那个区域，同时知道这个区域中的第几大数刚好是中位数。然后第二次扫描我们只统计落在这个区域中的那些数就可以了。
+    </p>
+    <p>
+     实际上，如果不是int是int64，我们可以经过3次这样的划分即可降低到可以接受的程度。即可以先将int64分成2^24个区域，然后确定区域的第几大数，在将该区域分成2^20个子区域，然后确定是子区域的第几大数，然后子区域里的数的个数只有2^20，就可以直接利用direct addr table进行统计了。
+    </p>
+   </li>
+   <li>
+    <p>
+     思路二@绿色夹克衫：同样需要做两遍统计，如果数据存在硬盘上，就需要读取2次。
+    </p>
+    <p>
+     方法同基数排序有些像，开一个大小为65536的Int数组，第一遍读取，统计Int32的高16位的情况，也就是0-65535，都算作0,65536 - 131071都算作1。就相当于用该数除以65536。Int32 除以 65536的结果不会超过65536种情况，因此开一个长度为65536的数组计数就可以。每读取一个数，数组中对应的计数+1，考虑有负数的情况，需要将结果加32768后，记录在相应的数组内。
+    </p>
+    <p>
+     第一遍统计之后，遍历数组，逐个累加统计，看中位数处于哪个区间，比如处于区间k，那么0- k-1的区间里数字的数量sum应该&lt;n/2（2.5亿）。而k+1 - 65535的计数和也&lt;n/2，第二遍统计同上面的方法类似，但这次只统计处于区间k的情况，也就是说(x / 65536) + 32768 = k。统计只统计低16位的情况。并且利用刚才统计的sum，比如sum = 2.49亿，那么现在就是要在低16位里面找100万个数(2.5亿-2.49亿)。这次计数之后，再统计一下，看中位数所处的区间，最后将高位和低位组合一下就是结果了。
+    </p>
+   </li>
+  </ol>
+ </body>
+</html>
+		  </article>
+		  
+			<div id="nav">
+				
+					<a href="08.01.03.html">prev</a>
+					|
+				
+				
+					<a href="08.01.05.html">next</a>
+				
+				<span style="float: right"><a href="index.html">Back to home</a>
+			</div>
+		  
+		</div>
+	</div>
+  </div>
+  
+  <div>&nbsp;</div>
+  </div>
+  <div style="text-align:center; margin-bottom: 30px">
+	  Generated by <a href="https://github.com/marchtea/md_to_github_html">mdtogh</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title><link rel="stylesheet" href="style_cache/github-d9c478ed7e87eebc36430a1efc4e84b17e65df06.css" />
+  <link rel="stylesheet" href="style_cache/github2-902e67494b49343625b27d5860c1e86bf5c65627.css" />
+  <style>
+    .file-box {
+      margin: 64px auto;
+      width: 920px;
+    }
+	body {
+		font-size: 14px;
+		line-height: 22px;
+		<!--font-family: "adelle",Georgia,"Times New Roman",serif;-->
+		color: #4e443c;
+		background: #f0efe7;
+	}
+
+	.book-toc {
+
+	}
+	a {
+		color: #0388a6;
+		text-decoration: none;
+	}
+	a:hover {
+		color: #04b1d8;
+		text-decoration: none;
+	}
+	ol.book-toc li.chapter{
+		margin-bottom:0.6em
+	}
+	ol.book-toc, ol{
+		list-style-type: disc
+	}
+	ol.book-toc{
+		margin:30px 36px
+	}
+	ol.book-toc a{
+		padding-left:4px
+	}
+	li {
+		line-height: 22px;
+	}
+	h1, h2, h3, h4, h5, h6, li, p, a, ol, div{
+		margin: 0;
+		padding: 0;
+		border: 0;
+		vertical-align: baseline;
+	}
+	ul, ol {
+		padding: 0;
+		margin: 0 0 11px 25px;
+	}
+	h1 {
+		font-size: 36px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	h2 {
+		font-size: 18px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h1{
+		font-size: 22px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	ol.book-toc h2 {
+		font-size: 16px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	p {
+		margin: 0 0 11px;
+		font-size: 14px;
+		line-height: 22px;
+	}
+	div {
+		display: block;
+	}
+	div#nav{
+		padding: 30px
+	}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="file-box">
+	<div class="file">
+		<div id="readme" class="blob instapaper_body announce md">
+		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
+			<html>
+ <body>
+  <h2>
+   <a class="anchor" href="#%E5%AF%86%E5%8C%99%E4%B8%89bloom-filterbitmap" name="%E5%AF%86%E5%8C%99%E4%B8%89bloom-filterbitmap">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   密匙三：Bloom filter/Bitmap
+  </h2>
+  <p>
+   <strong>
+    Bloom filter
+   </strong>
+  </p>
+  <p>
+   关于什么是Bloom filter，请参看blog内此文：
+  </p>
+  <p>
+   <a href="http://blog.csdn.net/v_july_v/article/details/6685894">
+    海量数据处理之Bloom Filter详解
+   </a>
+  </p>
+  <p>
+   适用范围：可以用来实现数据字典，进行数据的判重，或者集合求交集
+  </p>
+  <p>
+   基本原理及要点：
+  </p>
+  <p>
+   对于原理来说很简单，位数组+k个独立hash函数。将hash函数对应的值的位数组置1，查找时如果发现所有hash函数对应位都是1说明存在，很明显这个过程并不保证查找的结果是100%正确的。同时也不支持删除一个已经插入的关键字，因为该关键字对应的位会牵动到其他的关键字。所以一个简单的改进就是 counting Bloom filter，用一个counter数组代替位数组，就可以支持删除了。
+  </p>
+  <p>
+   还有一个比较重要的问题，如何根据输入元素个数n，确定位数组m的大小及hash函数个数。当hash函数个数k=(ln2)*(m/n)时错误率最小。在错误率不大于E的情况下，m至少要等于n*lg(1/E)才能表示任意n个元素的集合。但m还应该更大些，因为还要保证bit数组里至少一半为0，则m应该&gt;=nlg(1/E)*lge 大概就是nlg(1/E)1.44倍(lg表示以2为底的对数)。
+  </p>
+  <p>
+   举个例子我们假设错误率为0.01，则此时m应大概是n的13倍。这样k大概是8个。
+  </p>
+  <p>
+   注意这里m与n的单位不同，m是bit为单位，而n则是以元素个数为单位(准确的说是不同元素的个数)。通常单个元素的长度都是有很多bit的。所以使用bloom filter内存上通常都是节省的。
+  </p>
+  <p>
+   扩展：
+  </p>
+  <p>
+   Bloom filter将集合中的元素映射到位数组中，用k（k为哈希函数个数）个映射位是否全1表示元素在不在这个集合中。Counting bloom filter（CBF）将位数组中的每一位扩展为一个counter，从而支持了元素的删除操作。Spectral Bloom Filter（SBF）将其与集合元素的出现次数关联。SBF采用counter中的最小值来近似表示元素的出现频率。
+  </p>
+  <p>
+   可以看下上文中的第6题：
+  </p>
+  <p>
+   “6、给你A,B两个文件，各存放50亿条URL，每条URL占用64字节，内存限制是4G，让你找出A,B文件共同的URL。如果是三个乃至n个文件呢？
+  </p>
+  <p>
+   根据这个问题我们来计算下内存的占用，4G=2^32大概是40亿*8大概是340亿，n=50亿，如果按出错率0.01算需要的大概是650亿个bit。现在可用的是340亿，相差并不多，这样可能会使出错率上升些。另外如果这些urlip是一一对应的，就可以转换成ip，则大大简单了。
+  </p>
+  <p>
+   同时，上文的第5题：给定a、b两个文件，各存放50亿个url，每个url各占64字节，内存限制是4G，让你找出a、b文件共同的url？如果允许有一定的错误率，可以使用Bloom filter，4G内存大概可以表示340亿bit。将其中一个文件中的url使用Bloom filter映射为这340亿bit，然后挨个读取另外一个文件的url，检查是否与Bloom filter，如果是，那么该url应该是共同的url（注意会有一定的错误率）。”
+  </p>
+  <p>
+   <strong>
+    Bitmap
+   </strong>
+  </p>
+  <ul>
+   <li>
+    关于什么是Bitmap，请看blog内此文第二部分：
+    <a href="http://blog.csdn.net/v_july_v/article/details/6685962">
+     http://blog.csdn.net/v_july_v/article/details/6685962
+    </a>
+    。
+   </li>
+  </ul>
+  <p>
+   下面关于Bitmap的应用，可以看下上文中的第13题，以及另外一道新题：
+  </p>
+  <p>
+   “13、在2.5亿个整数中找出不重复的整数，注，内存不足以容纳这2.5亿个整数。
+  </p>
+  <p>
+   方案1：采用2-Bitmap（每个数分配2bit，00表示不存在，01表示出现一次，10表示多次，11无意义）进行，共需内存2^32 * 2 bit=1 GB内存，还可以接受。然后扫描这2.5亿个整数，查看Bitmap中相对应位，如果是00变01，01变10，10保持不变。所描完事后，查看bitmap，把对应位是01的整数输出即可。
+  </p>
+  <p>
+   方案2：也可采用与第1题类似的方法，进行划分小文件的方法。然后在小文件中找出不重复的整数，并排序。然后再进行归并，注意去除重复的元素。”
+  </p>
+  <h3>
+   <a class="anchor" href="#15%E7%BB%9940%E4%BA%BF%E4%B8%AA%E4%B8%8D%E9%87%8D%E5%A4%8D%E7%9A%84unsigned-int%E7%9A%84%E6%95%B4%E6%95%B0%E6%B2%A1%E6%8E%92%E8%BF%87%E5%BA%8F%E7%9A%84%E7%84%B6%E5%90%8E%E5%86%8D%E7%BB%99%E4%B8%80%E4%B8%AA%E6%95%B0%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E5%88%A4%E6%96%AD%E8%BF%99%E4%B8%AA%E6%95%B0%E6%98%AF%E5%90%A6%E5%9C%A8%E9%82%A340%E4%BA%BF%E4%B8%AA%E6%95%B0%E5%BD%93%E4%B8%AD" name="15%E7%BB%9940%E4%BA%BF%E4%B8%AA%E4%B8%8D%E9%87%8D%E5%A4%8D%E7%9A%84unsigned-int%E7%9A%84%E6%95%B4%E6%95%B0%E6%B2%A1%E6%8E%92%E8%BF%87%E5%BA%8F%E7%9A%84%E7%84%B6%E5%90%8E%E5%86%8D%E7%BB%99%E4%B8%80%E4%B8%AA%E6%95%B0%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E5%88%A4%E6%96%AD%E8%BF%99%E4%B8%AA%E6%95%B0%E6%98%AF%E5%90%A6%E5%9C%A8%E9%82%A340%E4%BA%BF%E4%B8%AA%E6%95%B0%E5%BD%93%E4%B8%AD">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   15、给40亿个不重复的unsigned int的整数，没排过序的，然后再给一个数，如何快速判断这个数是否在那40亿个数当中？
+  </h3>
+  <p>
+   方案1：frome oo，用位图/Bitmap的方法，申请512M的内存，一个bit位代表一个unsigned int值。读入40亿个数，设置相应的bit位，读入要查询的数，查看相应bit位是否为1，为1表示存在，为0表示不存在。
+  </p>
+ </body>
+</html>
+		  </article>
+		  
+			<div id="nav">
+				
+					<a href="08.01.04.html">prev</a>
+					|
+				
+				
+					<a href="08.01.06.html">next</a>
+				
+				<span style="float: right"><a href="index.html">Back to home</a>
+			</div>
+		  
+		</div>
+	</div>
+  </div>
+  
+  <div>&nbsp;</div>
+  </div>
+  <div style="text-align:center; margin-bottom: 30px">
+	  Generated by <a href="https://github.com/marchtea/md_to_github_html">mdtogh</a>
+  </div>
+</body>
+</html>

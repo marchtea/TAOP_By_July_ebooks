@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title><link rel="stylesheet" href="style_cache/github-d9c478ed7e87eebc36430a1efc4e84b17e65df06.css" />
+  <link rel="stylesheet" href="style_cache/github2-902e67494b49343625b27d5860c1e86bf5c65627.css" />
+  <style>
+    .file-box {
+      margin: 64px auto;
+      width: 920px;
+    }
+	body {
+		font-size: 14px;
+		line-height: 22px;
+		<!--font-family: "adelle",Georgia,"Times New Roman",serif;-->
+		color: #4e443c;
+		background: #f0efe7;
+	}
+
+	.book-toc {
+
+	}
+	a {
+		color: #0388a6;
+		text-decoration: none;
+	}
+	a:hover {
+		color: #04b1d8;
+		text-decoration: none;
+	}
+	ol.book-toc li.chapter{
+		margin-bottom:0.6em
+	}
+	ol.book-toc, ol{
+		list-style-type: disc
+	}
+	ol.book-toc{
+		margin:30px 36px
+	}
+	ol.book-toc a{
+		padding-left:4px
+	}
+	li {
+		line-height: 22px;
+	}
+	h1, h2, h3, h4, h5, h6, li, p, a, ol, div{
+		margin: 0;
+		padding: 0;
+		border: 0;
+		vertical-align: baseline;
+	}
+	ul, ol {
+		padding: 0;
+		margin: 0 0 11px 25px;
+	}
+	h1 {
+		font-size: 36px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	h2 {
+		font-size: 18px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h1{
+		font-size: 22px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	ol.book-toc h2 {
+		font-size: 16px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	p {
+		margin: 0 0 11px;
+		font-size: 14px;
+		line-height: 22px;
+	}
+	div {
+		display: block;
+	}
+	div#nav{
+		padding: 30px
+	}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="file-box">
+	<div class="file">
+		<div id="readme" class="blob instapaper_body announce md">
+		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
+			<html>
+ <body>
+  <h1>
+   <a class="anchor" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0%E7%BB%AD%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E7%83%AD%E9%97%A8%E6%9F%A5%E8%AF%A2%E7%BB%9F%E8%AE%A1" name="%E7%AC%AC%E4%B8%89%E7%AB%A0%E7%BB%AD%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E7%83%AD%E9%97%A8%E6%9F%A5%E8%AF%A2%E7%BB%9F%E8%AE%A1">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   第三章续：搜索引擎热门查询统计
+  </h1>
+  <p>
+   <strong>
+    题目描述
+   </strong>
+   ：
+搜索引擎会通过日志文件把用户每次检索使用的所有检索串都记录下来，每个查询串的长度为1-255字节。
+   <br/>
+   假设目前有一千万个记录（这些查询串的重复度比较高，虽然总数是1千万，但如果除去重复后，不超过3百万个。一个查询串的重复度越高，说明查询它的用户越多，也就是越热门。），请你统计最热门的10个查询串，要求使用的内存不能超过1G。
+  </p>
+  <p>
+   分析：这个问题在之前的这篇文章
+   <a href="http://blog.csdn.net/v_JULY_v/article/details/6256463">
+    十一、从头到尾彻底解析Hash表算法
+   </a>
+   里，已经有所解答。方法是:
+  </p>
+  <p>
+   <strong>
+    第一步
+   </strong>
+   、先对这批海量数据预处理，在O(N)的时间内用Hash表完成统计；
+   <br/>
+   <strong>
+    第二步
+   </strong>
+   、借助堆这个数据结构，找出Top K，时间复杂度为N‘logK。
+   <br/>
+   即，借助堆结构，我们可以在log量级的时间内查找和调整/移动。因此，维护一个K(该题目中是10)大小的小根堆（K1&gt;K2&gt;....Kmin，Kmin设为堆顶元素），然后遍历300万的Query，分别和根元素Kmin进行对比比较（如上第2节思路3所述，若X&gt;Kmin，则更新并调整堆，否则，不更新），我们最终的时间复杂度是：O(N) + N'*O(logK)，（N为1000万，N’为300万）。
+  </p>
+  <p>
+   或者：采用trie树，关键字域存该查询串出现的次数，没有出现为0。最后用10个元素的最小推来对出现频率进行排序。
+  </p>
+  <p>
+   ok，本章里，咱们来实现这个问题，为了降低实现上的难度，假设这些记录全部是一些英文单词，即用户在搜索框里敲入一个英文单词，然后查询搜索结果，最后，要你统计输入单词中频率最大的前K个单词。ok，复杂问题简单化了之后，编写代码实现也相对轻松多了，画的简单示意图（绘制者，yansha），如下：
+  </p>
+  <p>
+   <a href="../images/3/3.1/3.1.1.jpg" target="_blank">
+    <img alt="" src="../images/3/3.1/3.1.1.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   <strong>
+    完整源码
+   </strong>
+   ：
+  </p>
+  <div class="highlight highlight-c">
+   <pre><span class="c1">//copyright@yansha &amp;&amp;July</span>
+<span class="c1">//July、updated，2011.05.08</span>
+
+<span class="c1">//题目描述：</span>
+<span class="c1">//搜索引擎会通过日志文件把用户每次检索使用的所有检索串都记录下来，每个查询串的</span>
+<span class="c1">//长度为1-255字节。假设目前有一千万个记录（这些查询串的重复度比较高，虽然总数是1千万，但如果</span>
+<span class="c1">//除去重复后，不超过3百万个。一个查询串的重复度越高，说明查询它的用户越多，也就是越热门），</span>
+<span class="c1">//请你统计最热门的10个查询串，要求使用的内存不能超过1G。</span>
+
+<span class="cp">#include &lt;iostream&gt;</span>
+<span class="cp">#include &lt;stdio.h&gt;</span>
+<span class="cp">#include &lt;string.h&gt;</span>
+<span class="cp">#include &lt;assert.h&gt;</span>
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="cp">#define HASHLEN 2807303</span>
+<span class="cp">#define WORDLEN 30</span>
+
+<span class="c1">// 结点指针</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">node_no_space</span> <span class="o">*</span><span class="n">ptr_no_space</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">node_has_space</span> <span class="o">*</span><span class="n">ptr_has_space</span><span class="p">;</span>
+<span class="n">ptr_no_space</span> <span class="n">head</span><span class="p">[</span><span class="n">HASHLEN</span><span class="p">];</span>
+
+<span class="k">struct</span> <span class="n">node_no_space</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">word</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">count</span><span class="p">;</span>
+    <span class="n">ptr_no_space</span> <span class="n">next</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">struct</span> <span class="n">node_has_space</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">word</span><span class="p">[</span><span class="n">WORDLEN</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">count</span><span class="p">;</span>
+    <span class="n">ptr_has_space</span> <span class="n">next</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">// 最简单hash函数</span>
+<span class="kt">int</span> <span class="nf">hash_function</span><span class="p">(</span><span class="kt">char</span> <span class="k">const</span> <span class="o">*</span><span class="n">p</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">value</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">*</span><span class="n">p</span> <span class="o">!=</span> <span class="sc">'\0'</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span> <span class="o">*</span> <span class="mi">31</span> <span class="o">+</span> <span class="o">*</span><span class="n">p</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">value</span> <span class="o">&gt;</span> <span class="n">HASHLEN</span><span class="p">)</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span> <span class="o">%</span> <span class="n">HASHLEN</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">value</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// 添加单词到hash表</span>
+<span class="kt">void</span> <span class="nf">append_word</span><span class="p">(</span><span class="kt">char</span> <span class="k">const</span> <span class="o">*</span><span class="n">str</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="n">hash_function</span><span class="p">(</span><span class="n">str</span><span class="p">);</span>
+    <span class="n">ptr_no_space</span> <span class="n">p</span> <span class="o">=</span> <span class="n">head</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">p</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">word</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">count</span><span class="p">)</span><span class="o">++</span><span class="p">;</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 新建一个结点</span>
+    <span class="n">ptr_no_space</span> <span class="n">q</span> <span class="o">=</span> <span class="n">new</span> <span class="n">node_no_space</span><span class="p">;</span>
+    <span class="n">q</span><span class="o">-&gt;</span><span class="n">count</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">q</span><span class="o">-&gt;</span><span class="n">word</span> <span class="o">=</span> <span class="n">new</span> <span class="kt">char</span> <span class="p">[</span><span class="n">strlen</span><span class="p">(</span><span class="n">str</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+    <span class="n">strcpy</span><span class="p">(</span><span class="n">q</span><span class="o">-&gt;</span><span class="n">word</span><span class="p">,</span> <span class="n">str</span><span class="p">);</span>
+    <span class="n">q</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">head</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+    <span class="n">head</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">q</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="c1">// 将单词处理结果写入文件</span>
+<span class="kt">void</span> <span class="nf">write_to_file</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">"result.txt"</span><span class="p">,</span> <span class="s">"w"</span><span class="p">);</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+
+    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">HASHLEN</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">ptr_no_space</span> <span class="n">p</span> <span class="o">=</span> <span class="n">head</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="n">p</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">;</span> <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%s  %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">word</span><span class="p">,</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">count</span><span class="p">);</span>
+        <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// 从上往下筛选，保持小根堆</span>
+<span class="kt">void</span> <span class="nf">sift_down</span><span class="p">(</span><span class="n">node_has_space</span> <span class="n">heap</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">len</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">min_index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">i</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="n">len</span> <span class="o">&amp;&amp;</span> <span class="n">heap</span><span class="p">[</span><span class="n">left</span><span class="p">].</span><span class="n">count</span> <span class="o">&lt;</span> <span class="n">heap</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">count</span><span class="p">)</span>
+        <span class="n">min_index</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="n">min_index</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">right</span> <span class="o">&lt;=</span> <span class="n">len</span> <span class="o">&amp;&amp;</span> <span class="n">heap</span><span class="p">[</span><span class="n">right</span><span class="p">].</span><span class="n">count</span> <span class="o">&lt;</span> <span class="n">heap</span><span class="p">[</span><span class="n">min_index</span><span class="p">].</span><span class="n">count</span><span class="p">)</span>
+        <span class="n">min_index</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">min_index</span> <span class="o">!=</span> <span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// 交换结点元素</span>
+        <span class="n">swap</span><span class="p">(</span><span class="n">heap</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">count</span><span class="p">,</span> <span class="n">heap</span><span class="p">[</span><span class="n">min_index</span><span class="p">].</span><span class="n">count</span><span class="p">);</span>
+
+        <span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="n">WORDLEN</span><span class="p">];</span>
+        <span class="n">strcpy</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">heap</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">word</span><span class="p">);</span>
+        <span class="n">strcpy</span><span class="p">(</span><span class="n">heap</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">word</span><span class="p">,</span> <span class="n">heap</span><span class="p">[</span><span class="n">min_index</span><span class="p">].</span><span class="n">word</span><span class="p">);</span>
+        <span class="n">strcpy</span><span class="p">(</span><span class="n">heap</span><span class="p">[</span><span class="n">min_index</span><span class="p">].</span><span class="n">word</span><span class="p">,</span> <span class="n">buffer</span><span class="p">);</span>
+
+        <span class="n">sift_down</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">min_index</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 建立小根堆</span>
+<span class="kt">void</span> <span class="nf">build_min_heap</span><span class="p">(</span><span class="n">node_has_space</span> <span class="n">heap</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">len</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="n">len</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">index</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
+        <span class="n">sift_down</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// 去除字符串前后符号</span>
+<span class="kt">void</span> <span class="nf">handle_symbol</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">&lt;</span> <span class="sc">'0'</span> <span class="o">||</span> <span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">&gt;</span> <span class="sc">'9'</span> <span class="o">&amp;&amp;</span> <span class="n">str</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">&lt;</span> <span class="sc">'A'</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">&gt;</span> <span class="sc">'Z'</span> <span class="o">&amp;&amp;</span> <span class="n">str</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">&lt;</span> <span class="sc">'a'</span><span class="p">)</span> <span class="o">||</span> <span class="n">str</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">&gt;</span> <span class="sc">'z'</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">str</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span>
+        <span class="n">n</span><span class="o">--</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="sc">'0'</span> <span class="o">||</span> <span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="sc">'9'</span> <span class="o">&amp;&amp;</span> <span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="sc">'A'</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="sc">'Z'</span> <span class="o">&amp;&amp;</span> <span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="sc">'a'</span><span class="p">)</span> <span class="o">||</span> <span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="sc">'z'</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+            <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span>
+        <span class="n">n</span><span class="o">--</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">str</span><span class="p">[</span><span class="n">WORDLEN</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">HASHLEN</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">head</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+    <span class="c1">// 将字符串用hash函数转换成一个整数并统计出现频率</span>
+    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp_passage</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">"string.txt"</span><span class="p">,</span> <span class="s">"r"</span><span class="p">);</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">fp_passage</span><span class="p">);</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">fscanf</span><span class="p">(</span><span class="n">fp_passage</span><span class="p">,</span> <span class="s">"%s"</span><span class="p">,</span> <span class="n">str</span><span class="p">)</span> <span class="o">!=</span> <span class="n">EOF</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">str</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">handle_symbol</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+        <span class="n">append_word</span><span class="p">(</span><span class="n">str</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">fclose</span><span class="p">(</span><span class="n">fp_passage</span><span class="p">);</span>
+
+    <span class="c1">// 将统计结果输入文件</span>
+    <span class="n">write_to_file</span><span class="p">();</span>
+
+    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+    <span class="n">ptr_has_space</span> <span class="n">heap</span> <span class="o">=</span> <span class="n">new</span> <span class="n">node_has_space</span> <span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+
+    <span class="kt">int</span> <span class="n">c</span><span class="p">;</span>
+
+    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp_word</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">"result.txt"</span><span class="p">,</span> <span class="s">"r"</span><span class="p">);</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">fp_word</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">fscanf</span><span class="p">(</span><span class="n">fp_word</span><span class="p">,</span> <span class="s">"%s %d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">str</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">c</span><span class="p">);</span>
+        <span class="n">heap</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">count</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+        <span class="n">strcpy</span><span class="p">(</span><span class="n">heap</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">word</span><span class="p">,</span> <span class="n">str</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 建立小根堆</span>
+    <span class="n">build_min_heap</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+
+    <span class="c1">// 查找出现频率最大的10个单词</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">fscanf</span><span class="p">(</span><span class="n">fp_word</span><span class="p">,</span> <span class="s">"%s %d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">str</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">c</span><span class="p">)</span> <span class="o">!=</span> <span class="n">EOF</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">c</span> <span class="o">&gt;</span> <span class="n">heap</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">count</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">heap</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">count</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+            <span class="n">strcpy</span><span class="p">(</span><span class="n">heap</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">word</span><span class="p">,</span> <span class="n">str</span><span class="p">);</span>
+            <span class="n">sift_down</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">fclose</span><span class="p">(</span><span class="n">fp_word</span><span class="p">);</span>
+
+    <span class="c1">// 输出出现频率最大的单词</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">heap</span><span class="p">[</span><span class="n">k</span><span class="p">].</span><span class="n">count</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="n">heap</span><span class="p">[</span><span class="n">k</span><span class="p">].</span><span class="n">word</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+  </div>
+  <p>
+   <strong>
+    程序测试
+   </strong>
+   ：咱们接下来，来对下面的通过用户输入单词后，搜索引擎记录下来，“大量”单词记录进行统计（同时，令K=10，即要你找出10个最热门查询的单词）：
+  </p>
+  <p>
+   <a href="../images/3/3.1/3.1.2.jpg" target="_blank">
+    <img alt="" src="../images/3/3.1/3.1.2.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   <strong>
+    运行结果
+   </strong>
+   ：根据程序的运行结果，可以看到，搜索引擎记录下来的查询次数最多的10个单词为（注，并未要求这10个数要有序输出）：in（312次），it（384次），a（432），that（456），MPQ（408），of（504），and（624），is（456），the（1008），to（936）。
+  </p>
+  <p>
+   <a href="../images/3/3.1/3.1.3.jpg" target="_blank">
+    <img alt="" src="../images/3/3.1/3.1.3.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   <strong>
+    读者反馈from 杨忠胜
+   </strong>
+   ：3.1节的代码第38行 hash_function(char const *p)有误吧，这样的话，不能修改p的值（但是函数需要修改指针的值），要想不修改*p指向的内容，应该是const char *p; 此外，您程序中的/t,  /n有误，C语言是\t,\n。
+   <br/>
+   感谢这位读者的来信，日后统一订正。谢谢。
+  </p>
+  <h3>
+   <a class="anchor" href="#%E6%89%A9%E5%B1%95%E7%BB%9F%E8%AE%A1%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E6%95%B0%E6%8D%AE" name="%E6%89%A9%E5%B1%95%E7%BB%9F%E8%AE%A1%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E6%95%B0%E6%8D%AE">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   扩展、统计出现次数最多的数据
+  </h3>
+  <p>
+   <strong>
+    题目描述
+   </strong>
+   ：
+给你上千万或上亿数据（有重复），统计其中出现次数最多的前N个数据。
+  </p>
+  <p>
+   分析：上千万或上亿的数据，现在的机器的内存应该能存下（也许可以，也许不可以）。所以考虑采用hash_map/搜索二叉树/红黑树等来进行统计次数。然后就是取出前N个出现次数最多的数据了。当然，也可以堆实现。
+  </p>
+  <p>
+   ok，此题与上题类似，最好的方法是用hash_map统计出现的次数，然后再借用堆找出出现次数最多的N个数据。不过，上一题统计搜索引擎最热门的查询已经采用过hash表统计单词出现的次数，特此，本题咱们改用红黑树取代之前的用hash表，来完成最初的统计，然后用堆更新，找出出现次数最多的前N个数据。
+  </p>
+ </body>
+</html>
+		  </article>
+		  
+			<div id="nav">
+				
+					<a href="09.0.html">prev</a>
+					|
+				
+				
+					<a href="09.02.html">next</a>
+				
+				<span style="float: right"><a href="index.html">Back to home</a>
+			</div>
+		  
+		</div>
+	</div>
+  </div>
+  
+  <div>&nbsp;</div>
+  </div>
+  <div style="text-align:center; margin-bottom: 30px">
+	  Generated by <a href="https://github.com/marchtea/md_to_github_html">mdtogh</a>
+  </div>
+</body>
+</html>

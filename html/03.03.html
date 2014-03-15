@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title><link rel="stylesheet" href="style_cache/github-d9c478ed7e87eebc36430a1efc4e84b17e65df06.css" />
+  <link rel="stylesheet" href="style_cache/github2-902e67494b49343625b27d5860c1e86bf5c65627.css" />
+  <style>
+    .file-box {
+      margin: 64px auto;
+      width: 920px;
+    }
+	body {
+		font-size: 14px;
+		line-height: 22px;
+		<!--font-family: "adelle",Georgia,"Times New Roman",serif;-->
+		color: #4e443c;
+		background: #f0efe7;
+	}
+
+	.book-toc {
+
+	}
+	a {
+		color: #0388a6;
+		text-decoration: none;
+	}
+	a:hover {
+		color: #04b1d8;
+		text-decoration: none;
+	}
+	ol.book-toc li.chapter{
+		margin-bottom:0.6em
+	}
+	ol.book-toc, ol{
+		list-style-type: disc
+	}
+	ol.book-toc{
+		margin:30px 36px
+	}
+	ol.book-toc a{
+		padding-left:4px
+	}
+	li {
+		line-height: 22px;
+	}
+	h1, h2, h3, h4, h5, h6, li, p, a, ol, div{
+		margin: 0;
+		padding: 0;
+		border: 0;
+		vertical-align: baseline;
+	}
+	ul, ol {
+		padding: 0;
+		margin: 0 0 11px 25px;
+	}
+	h1 {
+		font-size: 36px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	h2 {
+		font-size: 18px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h1{
+		font-size: 22px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	ol.book-toc h2 {
+		font-size: 16px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	p {
+		margin: 0 0 11px;
+		font-size: 14px;
+		line-height: 22px;
+	}
+	div {
+		display: block;
+	}
+	div#nav{
+		padding: 30px
+	}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="file-box">
+	<div class="file">
+		<div id="readme" class="blob instapaper_body announce md">
+		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
+			<html>
+ <body>
+  <h1>
+   <a class="anchor" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%BA%94%E7%AB%A0%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E5%AE%9E%E7%8E%B0" name="%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%BA%94%E7%AB%A0%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E5%AE%9E%E7%8E%B0">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   第二十五章：二分查找实现
+  </h1>
+  <p>
+   作者：July
+  </p>
+  <p>
+   出处：结构之法算法之道
+  </p>
+  <h2>
+   <a class="anchor" href="#%E5%BC%95%E8%A8%80" name="%E5%BC%95%E8%A8%80">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   引言
+  </h2>
+  <p>
+   Jon Bentley：90%以上的程序员无法正确无误的写出二分查找代码。也许很多人都早已听说过这句话，但我还是想引用《编程珠玑》上的如下几段文字：
+  </p>
+  <p>
+   二分查找可以解决（预排序数组的查找）问题：只要数组中包含T（即要查找的值），那么通过不断缩小包含T的范围，最终就可以找到它。一开始，范围覆盖整个数组。将数组的中间项与T进行比较，可以排除一半元素，范围缩小一半。就这样反复比较，反复缩小范围，最终就会在数组中找到T，或者确定原以为T所在的范围实际为空。对于包含N个元素的表，整个查找过程大约要经过log(2)N次比较。
+  </p>
+  <p>
+   多数程序员都觉得只要理解了上面的描述，写出代码就不难了；但事实并非如此。如果你不认同这一点，最好的办法就是放下书本，自己动手写一写。试试吧。
+  </p>
+  <p>
+   我在贝尔实验室和IBM的时候都出过这道考题。那些专业的程序员有几个小时的时间，可以用他们选择的语言把上面的描述写出来；写出高级伪代码也可以。考试结束后，差不多所有程序员都认为自己写出了正确的程序。于是，我们花了半个钟头来看他们编写的代码经过测试用例验证的结果。几次课，一百多人的结果相差无几：90%的程序员写的程序中有bug（我并不认为没有bug的代码就正确）。
+  </p>
+  <p>
+   我很惊讶：在足够的时间内，只有大约10%的专业程序员可以把这个小程序写对。但写不对这个小程序的还不止这些人：高德纳在《计算机程序设计的艺术 第3卷 排序和查找》第6.2.1节的“历史与参考文献”部分指出，虽然早在1946年就有人将二分查找的方法公诸于世，但直到1962年才有人写出没有bug的二分查找程序。 ”——乔恩·本特利，《编程珠玑（第1版）》第35-36页。
+  </p>
+  <p>
+   <strong>
+    你能正确无误的写出二分查找代码么？不妨一试。
+   </strong>
+  </p>
+  <h2>
+   <a class="anchor" href="#%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E4%BB%A3%E7%A0%81" name="%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E4%BB%A3%E7%A0%81">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   二分查找代码
+  </h2>
+  <p>
+   二分查找的原理想必不用多解释了，不过有一点必须提醒读者的是，二分查找是针对的排好序的数组。OK，纸上读来终觉浅，觉知此事要躬行。我先来写一份，下面是我写的一份二分查找的实现（之前去某一家公司面试也曾被叫当场实现二分查找，不过结果可能跟你一样，当时就未能完整无误写出），有任何问题或错误，恳请不吝指正：
+  </p>
+  <div class="highlight highlight-cpp">
+   <pre><span class="c1">//二分查找V0.1实现版</span>
+<span class="c1">//copyright@2011 July</span>
+
+<span class="c1">//首先要把握下面几个要点：</span>
+<span class="c1">//right = n-1 =&gt; while(left &lt;= right) =&gt; right = middle-1;</span>
+<span class="c1">//right = n   =&gt; while(left &lt;  right) =&gt; right = middle;</span>
+<span class="c1">//middle的计算不能写在while循环外，否则无法得到更新。</span>
+
+<span class="kt">int</span> <span class="nf">binary_search</span><span class="p">(</span><span class="kt">int</span> <span class="n">array</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="c1">//如果这里是int right = n 的话，那么下面有两处地方需要修改，以保证一一对应：</span>
+    <span class="c1">//1、下面循环的条件则是while(left &lt; right)</span>
+    <span class="c1">//2、循环内当 array[middle] &gt; value 的时候，right = mid</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="n">right</span><span class="p">)</span>  <span class="c1">//循环条件，适时而变</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">middle</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="p">((</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">);</span>  <span class="c1">//防止溢出，移位也更高效。同时，每次循环都需要更新。</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">middle</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">value</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">right</span> <span class="o">=</span> <span class="n">middle</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>  <span class="c1">//right赋值，适时而变</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">middle</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">value</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="n">middle</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+            <span class="k">return</span> <span class="n">middle</span><span class="p">;</span>
+        <span class="c1">//可能会有读者认为刚开始时就要判断相等，但毕竟数组中不相等的情况更多</span>
+        <span class="c1">//如果每次循环都判断一下是否相等，将耗费时间</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+  </div>
+  <p>
+   简单测试下，运行结果如下所示（当然，一次测试正确不代表程序便0 bug了，且测试深度远远不够）：
+  </p>
+  <p>
+   <a href="../images/25.1.gif" target="_blank">
+    <img alt="img" src="../images/25.1.gif" style="max-width:100%;"/>
+   </a>
+  </p>
+  <h2>
+   <a class="anchor" href="#%E6%B5%8B%E8%AF%95" name="%E6%B5%8B%E8%AF%95">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   测试
+  </h2>
+  <p>
+   也许你之前已经把二分查找实现过很多次了，但现在不妨再次测试一下。关闭所有网页，窗口，打开记事本，或者编辑器，或者直接在本文评论下，不参考上面我写的或其他任何人的程序，给自己十分钟到N个小时不等的时间，立即编写一个二分查找程序。
+  </p>
+  <p>
+   当然，能正确写出来不代表任何什么，不能正确写出来亦不代表什么，仅仅针对Jon Bentley的言论做一个简单的测试而已。
+  </p>
+  <h2>
+   <a class="anchor" href="#%E6%80%BB%E7%BB%93" name="%E6%80%BB%E7%BB%93">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   总结
+  </h2>
+  <p>
+   本文发表后，马上就有很多朋友自己尝试了。根据从朋友们在本文评论下留下的代码，发现出错率最高的在以下这么几个地方：
+  </p>
+  <p>
+   注释里已经说得很明白了，可还是会有不少朋友犯此类的错误：
+  </p>
+  <pre><code>首先要把握下面几个要点：
+right = n-1 =&gt; while(left &lt;= right) =&gt; right = middle-1;
+middle的计算不能写在while循环外，否则无法得到更新。
+</code></pre>
+  <p>
+   还有一个最最常犯的错误，具体可以参考
+   <a href="http://googleresearch.blogspot.com/2006/06/extra-extra-read-all-about-it-nearly.html">
+    Extra, Extra - Read All About It: Nearly All Binary Searches and Mergesorts are Broken
+   </a>
+   ，其中提到了JDK5中该BUG：
+  </p>
+  <pre><code>middle = (left+right)&gt;&gt;1; 这样的话left与right的值比较大的时候，其和可能溢出。
+</code></pre>
+  <p>
+   这个也是错误的:
+  </p>
+  <pre><code>right = n   =&gt; while(left &lt;  right) =&gt; right = middle;
+</code></pre>
+  <p>
+   如果搜索数组中不存在的数字的时候,可能会导致死循环.
+  因为最后left = middle, right = middle + 1,这样每次更新left和middle总是不变的.
+  </p>
+ </body>
+</html>
+		  </article>
+		  
+			<div id="nav">
+				
+					<a href="03.02.html">prev</a>
+					|
+				
+				
+					<a href="04.01.html">next</a>
+				
+				<span style="float: right"><a href="index.html">Back to home</a>
+			</div>
+		  
+		</div>
+	</div>
+  </div>
+  
+  <div>&nbsp;</div>
+  </div>
+  <div style="text-align:center; margin-bottom: 30px">
+	  Generated by <a href="https://github.com/marchtea/md_to_github_html">mdtogh</a>
+  </div>
+</body>
+</html>

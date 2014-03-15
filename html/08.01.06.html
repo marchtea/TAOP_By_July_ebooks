@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title><link rel="stylesheet" href="style_cache/github-d9c478ed7e87eebc36430a1efc4e84b17e65df06.css" />
+  <link rel="stylesheet" href="style_cache/github2-902e67494b49343625b27d5860c1e86bf5c65627.css" />
+  <style>
+    .file-box {
+      margin: 64px auto;
+      width: 920px;
+    }
+	body {
+		font-size: 14px;
+		line-height: 22px;
+		<!--font-family: "adelle",Georgia,"Times New Roman",serif;-->
+		color: #4e443c;
+		background: #f0efe7;
+	}
+
+	.book-toc {
+
+	}
+	a {
+		color: #0388a6;
+		text-decoration: none;
+	}
+	a:hover {
+		color: #04b1d8;
+		text-decoration: none;
+	}
+	ol.book-toc li.chapter{
+		margin-bottom:0.6em
+	}
+	ol.book-toc, ol{
+		list-style-type: disc
+	}
+	ol.book-toc{
+		margin:30px 36px
+	}
+	ol.book-toc a{
+		padding-left:4px
+	}
+	li {
+		line-height: 22px;
+	}
+	h1, h2, h3, h4, h5, h6, li, p, a, ol, div{
+		margin: 0;
+		padding: 0;
+		border: 0;
+		vertical-align: baseline;
+	}
+	ul, ol {
+		padding: 0;
+		margin: 0 0 11px 25px;
+	}
+	h1 {
+		font-size: 36px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	h2 {
+		font-size: 18px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h1{
+		font-size: 22px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	ol.book-toc h2 {
+		font-size: 16px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	p {
+		margin: 0 0 11px;
+		font-size: 14px;
+		line-height: 22px;
+	}
+	div {
+		display: block;
+	}
+	div#nav{
+		padding: 30px
+	}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="file-box">
+	<div class="file">
+		<div id="readme" class="blob instapaper_body announce md">
+		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
+			<html>
+ <body>
+  <h2>
+   <a class="anchor" href="#%E5%AF%86%E5%8C%99%E5%9B%9Btrie%E6%A0%91%E6%95%B0%E6%8D%AE%E5%BA%93%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95" name="%E5%AF%86%E5%8C%99%E5%9B%9Btrie%E6%A0%91%E6%95%B0%E6%8D%AE%E5%BA%93%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   密匙四、Trie树/数据库/倒排索引
+  </h2>
+  <p>
+   <strong>
+    Trie树
+   </strong>
+  </p>
+  <p>
+   适用范围：数据量大，重复多，但是数据种类小可以放入内存
+  </p>
+  <p>
+   基本原理及要点：实现方式，节点孩子的表示方式
+  </p>
+  <p>
+   扩展：压缩实现。
+  </p>
+  <p>
+   问题实例：
+  </p>
+  <ol>
+   <li>
+    上面的
+    <strong>
+     第2题
+    </strong>
+    ：寻找热门查询：查询串的重复度比较高，虽然总数是1千万，但如果除去重复后，不超过3百万个，每个不超过255字节。
+   </li>
+   <li>
+    上面的
+    <strong>
+     第5题
+    </strong>
+    ：有10个文件，每个文件1G，每个文件的每一行都存放的是用户的query，每个文件的query都可能重复。要你按照query的频度排序。
+   </li>
+   <li>
+    1000万字符串，其中有些是相同的(重复),需要把重复的全部去掉，保留没有重复的字符串。请问怎么设计和实现？
+   </li>
+   <li>
+    上面的
+    <strong>
+     第8题
+    </strong>
+    ：一个文本文件，大约有一万行，每行一个词，要求统计出其中最频繁出现的前10个词。其解决方法是：用trie树统计每个词出现的次数，时间复杂度是O(n*le)（le表示单词的平准长度），然后是找出出现最频繁的前10个词。
+   </li>
+  </ol>
+  <p>
+   更多有关Trie树的介绍，请参见此文：
+   <a href="http://blog.csdn.net/v_july_v/article/details/6897097">
+    从Trie树（字典树）谈到后缀树
+   </a>
+   。
+  </p>
+  <p>
+   <strong>
+    数据库索引
+   </strong>
+  </p>
+  <p>
+   适用范围：大数据量的增删改查
+  </p>
+  <p>
+   基本原理及要点：利用数据的设计实现方法，对海量数据的增删改查进行处理。
+  </p>
+  <ul>
+   <li>
+    关于数据库索引及其优化，更多可参见此文：
+    <a href="http://www.cnblogs.com/pkuoliver/archive/2011/08/17/mass-data-topic-7-index-and-optimize.html">
+     http://www.cnblogs.com/pkuoliver/archive/2011/08/17/mass-data-topic-7-index-and-optimize.html
+    </a>
+    ；
+   </li>
+   <li>
+    关于MySQL索引背后的数据结构及算法原理，这里还有一篇很好的文章：
+    <a href="http://blog.codinglabs.org/articles/theory-of-mysql-index.html">
+     http://blog.codinglabs.org/articles/theory-of-mysql-index.html
+    </a>
+    ；
+   </li>
+   <li>
+    关于B 树、B+ 树、B* 树及R 树，本blog内有篇绝佳文章：
+    <a href="07.02.html">
+     从B树、B+树、B*树谈到R 树
+    </a>
+    。
+   </li>
+  </ul>
+  <p>
+   <strong>
+    倒排索引(Inverted index)
+   </strong>
+  </p>
+  <p>
+   适用范围：搜索引擎，关键字查询
+  </p>
+  <p>
+   基本原理及要点：为何叫倒排索引？一种索引方法，被用来存储在全文搜索下某个单词在一个文档或者一组文档中的存储位置的映射。
+  </p>
+  <p>
+   以英文为例，下面是要被索引的文本：
+  </p>
+  <pre><code>T0 = "it is what it is"  
+T1 = "what is it"  
+T2 = "it is a banana"  
+</code></pre>
+  <p>
+   我们就能得到下面的反向文件索引：
+  </p>
+  <pre><code>"a":      {2}
+"banana": {2}
+"is":     {0, 1, 2}
+"it":     {0, 1, 2}
+"what":   {0, 1}
+</code></pre>
+  <p>
+   检索的条件"what","is"和"it"将对应集合的交集。
+  </p>
+  <p>
+   正向索引开发出来用来存储每个文档的单词的列表。正向索引的查询往往满足每个文档有序频繁的全文查询和每个单词在校验文档中的验证这样的查询。在正向索引中，文档占据了中心的位置，每个文档指向了一个它所包含的索引项的序列。也就是说文档指向了它包含的那些单词，而反向索引则是单词指向了包含它的文档，很容易看到这个反向的关系。
+  </p>
+  <p>
+   扩展：
+  </p>
+  <p>
+   问题实例：文档检索系统，查询那些文件包含了某单词，比如常见的学术论文的关键字搜索。
+  </p>
+  <p>
+   关于倒排索引的应用，更多请参见：
+  </p>
+  <ul>
+   <li>
+    <a href="03.02.html">
+     第二十三章：杨氏矩阵查找
+    </a>
+    ，
+   </li>
+   <li>
+    <a href="09.04.html">
+     第二十四章：倒排索引关键词Hash不重复编码实践
+    </a>
+   </li>
+   <li>
+    <a href="09.05.html">
+     第二十六章：基于给定的文档生成倒排索引的编码与实践
+    </a>
+    。
+   </li>
+  </ul>
+ </body>
+</html>
+		  </article>
+		  
+			<div id="nav">
+				
+					<a href="08.01.05.html">prev</a>
+					|
+				
+				
+					<a href="08.01.07.html">next</a>
+				
+				<span style="float: right"><a href="index.html">Back to home</a>
+			</div>
+		  
+		</div>
+	</div>
+  </div>
+  
+  <div>&nbsp;</div>
+  </div>
+  <div style="text-align:center; margin-bottom: 30px">
+	  Generated by <a href="https://github.com/marchtea/md_to_github_html">mdtogh</a>
+  </div>
+</body>
+</html>

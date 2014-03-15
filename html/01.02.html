@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title><link rel="stylesheet" href="style_cache/github-d9c478ed7e87eebc36430a1efc4e84b17e65df06.css" />
+  <link rel="stylesheet" href="style_cache/github2-902e67494b49343625b27d5860c1e86bf5c65627.css" />
+  <style>
+    .file-box {
+      margin: 64px auto;
+      width: 920px;
+    }
+	body {
+		font-size: 14px;
+		line-height: 22px;
+		<!--font-family: "adelle",Georgia,"Times New Roman",serif;-->
+		color: #4e443c;
+		background: #f0efe7;
+	}
+
+	.book-toc {
+
+	}
+	a {
+		color: #0388a6;
+		text-decoration: none;
+	}
+	a:hover {
+		color: #04b1d8;
+		text-decoration: none;
+	}
+	ol.book-toc li.chapter{
+		margin-bottom:0.6em
+	}
+	ol.book-toc, ol{
+		list-style-type: disc
+	}
+	ol.book-toc{
+		margin:30px 36px
+	}
+	ol.book-toc a{
+		padding-left:4px
+	}
+	li {
+		line-height: 22px;
+	}
+	h1, h2, h3, h4, h5, h6, li, p, a, ol, div{
+		margin: 0;
+		padding: 0;
+		border: 0;
+		vertical-align: baseline;
+	}
+	ul, ol {
+		padding: 0;
+		margin: 0 0 11px 25px;
+	}
+	h1 {
+		font-size: 36px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	h2 {
+		font-size: 18px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h1{
+		font-size: 22px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	ol.book-toc h2 {
+		font-size: 16px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	p {
+		margin: 0 0 11px;
+		font-size: 14px;
+		line-height: 22px;
+	}
+	div {
+		display: block;
+	}
+	div#nav{
+		padding: 30px
+	}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="file-box">
+	<div class="file">
+		<div id="readme" class="blob instapaper_body announce md">
+		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
+			<html>
+ <body>
+  <h1>
+   <a class="anchor" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%98%AF%E5%90%A6%E5%8C%85%E5%90%AB%E9%97%AE%E9%A2%98" name="%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%98%AF%E5%90%A6%E5%8C%85%E5%90%AB%E9%97%AE%E9%A2%98">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   第二章：字符串是否包含问题
+  </h1>
+  <h2>
+   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   题目描述
+  </h2>
+  <p>
+   假设这有两个分别由字母组成的字符串A另外字符串B，字符串B的字母数较字符串A少一些。什么方法能最快地查出字符串B所有字母是不是都在字符串A里？也就是说判断字符串B是不是字符串A的真子集（为了简化，姑且认为两个集合都不是空集，即字符串都不为空。）。为了简单起见，我们规定输入的字符串只包含大写英文字母。
+  </p>
+  <p>
+   实现函数bool compare(string &amp;A,string &amp;B)
+  </p>
+  <p>
+   比如，如果是下面两个字符串：
+  </p>
+  <p>
+   String 1: ABCDEFGHLMNOPQRS
+  </p>
+  <p>
+   String 2: DCGSRQPO
+  </p>
+  <p>
+   答案是true，即String2里的字母在String1里也都有，或者说String2是String1的真子集。
+  </p>
+  <p>
+   如果是下面两个字符串：
+  </p>
+  <p>
+   String 1: ABCDEFGHLMNOPQRS
+  </p>
+  <p>
+   String 2: DCGSRQPZ
+  </p>
+  <p>
+   答案是false，因为字符串String2里的Z字母不在字符串String1里。
+  </p>
+  <p>
+   点评：
+  </p>
+  <ol>
+   <li>
+    <p>
+     题目描述虽长，但题意很明了，就是给定一长一短的两个字符串A，B，假设A长B短，要求判断B是否包含在字符串A中，即B?(-A。
+    </p>
+   </li>
+   <li>
+    <p>
+     似乎简单，但实现起来并不轻松，且如果面试官步步紧逼，一个一个否决你能想到的方法，要你给出更好、最好的方案时，恐怕就要伤不少脑筋了。
+    </p>
+   </li>
+  </ol>
+  <p>
+   在揭晓答案之前，读者最好先想一想，看看自己能想到的最好方案是什么，是否与本文作者所见略同。
+  </p>
+  <h2>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80%E6%9A%B4%E5%8A%9B%E8%BD%AE%E8%AF%A2" name="%E8%A7%A3%E6%B3%95%E4%B8%80%E6%9A%B4%E5%8A%9B%E8%BD%AE%E8%AF%A2">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法一、暴力轮询
+  </h2>
+  <p>
+   判断string2中的字符是否在string1中?：
+  </p>
+  <p>
+   String 1: ABCDEFGHLMNOPQRS
+  </p>
+  <p>
+   String 2: DCGSRQPO
+  </p>
+  <p>
+   最直观也是最简单的思路是，针对string2中每一个字符，一一与string1中每个字符依次轮询比较，看它是否在String1中。
+  </p>
+  <p>
+   代码可如下编写：
+  </p>
+  <div class="highlight highlight-cpp">
+   <pre><span class="c1">//copyright@caopengcs 2013-01-14</span>
+<span class="kt">bool</span> <span class="nf">compare</span><span class="p">(</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">length</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">j</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">.</span><span class="n">length</span><span class="p">())</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+            <span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">&gt;=</span> <span class="n">a</span><span class="p">.</span><span class="n">length</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+  </div>
+  <p>
+   假设n是字符串String1的长度，m是字符串String2的长度，那么此算法，需要O（n*m）次操作，以上面的例子来说，将会有16*8 = 128次操作。显然，时间开销太大，应该找到一种更好的办法。
+  </p>
+  <h2>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C%E6%99%AE%E9%80%9A%E6%8E%92%E5%BA%8F" name="%E8%A7%A3%E6%B3%95%E4%BA%8C%E6%99%AE%E9%80%9A%E6%8E%92%E5%BA%8F">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法二、普通排序
+  </h2>
+  <p>
+   一个稍微好一点的方案是先对这两个字符串的字母进行排序，然后同时对两个字串依次轮询。两个字串的排序需要(常规情况)O(m log m) + O(n log n)次操作，之后的线性扫描需要O(m+n)次操作。
+  </p>
+  <p>
+   同样拿上面的字串做例子，将会需要16*4 + 8*3 = 88，再加上对两个字串线性扫描的16 + 8 = 24的操作。(随着字串长度的增长，你会发现这个算法的效果会越来越好)
+  </p>
+  <p>
+   关于排序方法，可采用最常用的快速排序，C有库函数qsort,C++有库函数sort，排序不是重点，因此使用库函数好一些。
+  </p>
+  <div class="highlight highlight-cpp">
+   <pre><span class="c1">//copyright@caopengcs 2014-01-14 </span>
+<span class="c1">//注意A B中可能包含重复字符，所以注意A下标不要轻易移动。这种方法改变了字符串。如不想改变请自己复制</span>
+<span class="kt">bool</span> <span class="nf">compare</span><span class="p">(</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">sort</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="n">a</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+    <span class="n">sort</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="n">b</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">pa</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">pb</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">pb</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">length</span><span class="p">();)</span>
+    <span class="p">{</span>
+        <span class="k">while</span> <span class="p">((</span><span class="n">pa</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">.</span><span class="n">length</span><span class="p">())</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">[</span><span class="n">pb</span><span class="p">]))</span>
+        <span class="p">{</span>
+            <span class="o">++</span><span class="n">pa</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">pa</span> <span class="o">&gt;=</span> <span class="n">a</span><span class="p">.</span><span class="n">length</span><span class="p">())</span> <span class="o">||</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">[</span><span class="n">pb</span><span class="p">]))</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">//a[pa] == b[pb]</span>
+        <span class="o">++</span><span class="n">pb</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+  </div>
+  <h2>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%89%E8%AE%A1%E6%95%B0%E6%AF%94%E8%BE%83" name="%E8%A7%A3%E6%B3%95%E4%B8%89%E8%AE%A1%E6%95%B0%E6%AF%94%E8%BE%83">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法三、计数比较
+  </h2>
+  <p>
+   此方案与上述相比，区别在于不用排序。采用线性时间的计数方法，假设需要比较字符串A（n）中是否包含字符串B（m），统计A中出现的字符O(n)，比较B中是否有出现的字符O(m)，总计时间复杂度为：O(n+m)。
+  </p>
+  <p>
+   代码如下：
+  </p>
+  <div class="highlight highlight-cpp">
+   <pre><span class="c1">// copyright@caopengcs 2014-01-14</span>
+<span class="c1">// modified by @古道西风 2014-01-14</span>
+<span class="kt">bool</span> <span class="nf">compare</span><span class="p">(</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">have</span><span class="p">;</span>
+    <span class="n">have</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">26</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">.</span><span class="n">length</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="o">++</span><span class="n">have</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'A'</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">length</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//若A中只需要包含同一个相同的字符即可代表B中重复出现的字符</span>
+        <span class="c1">//即A：CDEFAB B：AABBCC 合法</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">have</span><span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'A'</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">//若A中需要包含B中所有重复出现字符</span>
+        <span class="c1">//即A：AAACCDBBCCE    B：AABBCC 合法</span>
+        <span class="c1">//即A：BCDEFA B：AABBCC 非法</span>
+        <span class="c1">//if (have[b[i] - 'A']-- == 0) {</span>
+        <span class="c1">//  return false;</span>
+        <span class="c1">//}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+  </div>
+  <h2>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%9B%9B%E5%B7%A7%E7%94%A8hashtable" name="%E8%A7%A3%E6%B3%95%E5%9B%9B%E5%B7%A7%E7%94%A8hashtable">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法四、巧用hashtable
+  </h2>
+  <p>
+   上述方案中，较好的方法是先对字符串进行排序，然后再线性扫描，总的时间已经优化到了：O(m+n)，貌似到了极限，还有没有更好的办法?
+  </p>
+  <p>
+   可以对短字符串进行轮询（此思路的叙述可能与网上的一些叙述有出入。最好是把短的先存储，那样，会降低时间复杂度），把其中的每个字母都放入一个Hashtable里（始终设m为短字符串的长度，那么此项操作成本是O(m)或8次操作）。然后轮询长字符串，在Hashtable里查询短字符串的每个字符，看能否找到。如果找不到，说明没有匹配成功，轮询长字符串将消耗掉16次操作，这样两项操作加起来一共只有8+16=24次。
+  </p>
+  <p>
+   当然，理想情况是如果长字串的前缀就为短字串，只需消耗8次操作，这样总共只需8+8=16次。
+  </p>
+  <p>
+   或如梦想天窗所说： 我之前用散列表做过一次，算法如下：
+1. hash[26]，先全部清零，然后扫描短的字符串，若有相应的置1，
+2. 计算hash[26]中1的个数，记为m
+3. 扫描长字符串的每个字符a；若原来hash[a] == 1 ，则修改hash[a] = 0，并将m减1；若hash[a] == 0，则不做处理
+4. 若m == 0 or 扫描结束，退出循环。
+  </p>
+  <p>
+   这种方法其实和1.3节方法类似。
+  </p>
+  <p>
+   代码实现，也不难，如下：
+  </p>
+  <div class="highlight highlight-cpp">
+   <pre><span class="c1">// copyright@caopengcs 2014-01-14</span>
+<span class="kt">bool</span> <span class="nf">compare</span><span class="p">(</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">hash</span><span class="p">;</span>
+    <span class="n">hash</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">26</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">length</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'A'</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">hash</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">hash</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="o">++</span><span class="n">m</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">.</span><span class="n">length</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'A'</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">hash</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="o">--</span><span class="n">m</span><span class="p">;</span>
+            <span class="n">hash</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">m</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+  </div>
+  <h2>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%94%E7%B4%A0%E6%95%B0%E7%9B%B8%E4%B9%98" name="%E8%A7%A3%E6%B3%95%E4%BA%94%E7%B4%A0%E6%95%B0%E7%9B%B8%E4%B9%98">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法五、素数相乘
+  </h2>
+  <p>
+   继续追问，还有更好的方案么?
+  </p>
+  <p>
+   或许想到：O(n+m)已经是能得到的最好结果了，对每个字母至少访问一次才能完成这项操作，而前述的后两个方案是刚好是对每个字母只访问一次。
+  </p>
+  <p>
+   ok，下面给出的方案更让人思路大开：
+  </p>
+  <p>
+   假设有一个仅由字母组成字串，让每个字母与一个素数对应，从2开始，往后类推，A对应2，B对应3，C对应5，......。遍历第一个字串，把每个字母对应素数相乘。最终会得到一个整数。
+  </p>
+  <p>
+   利用上面字母和素数的对应关系，对应第二个字符串中的字母，然后轮询，用每个字母对应的素数除前面得到的整数。如果结果有余数，说明结果为false。如果整个过程中没有余数，则说明第二个字符串是第一个的子集了（判断是不是真子集，可以比较两个字符串对应的素数乘积，若相等则不是真子集）。
+  </p>
+  <p>
+   思路总结如下：
+1. 按照从小到大的顺序，用26个素数分别与字符'A'到'Z'一一对应。
+2. 遍历长字符串，求得每个字符对应素数的乘积。
+3. 遍历短字符串，判断乘积能否被短字符串中的字符对应的素数整除。
+4. 输出结果。
+  </p>
+  <p>
+   如前所述，算法的时间复杂度为O(m+n)的最好的情况为O(n)（遍历短的字符串的第一个数，与长字符串素数的乘积相除，即出现余数，便可退出程序，返回false），n为长字串的长度，空间复杂度为O(1)。
+  </p>
+  <p>
+   不过，正如原文中所述：“现在我想告诉你 —— Guy的方案在算法上并不能说就比我的好。而且在实际操作中，你很可能仍会使用我的方案，因为它更通用，无需跟麻烦的大型数字打交道。但从”巧妙水平“上讲，Guy提供的是一种更、更、更有趣的方案。”
+  </p>
+  <p>
+   ok，如果你有更好的思路，欢迎在本文的评论中给出，非常感谢。
+  </p>
+  <p>
+   这种方法的缺点是可能整数溢出……
+  </p>
+  <div class="highlight highlight-cpp">
+   <pre><span class="c1">// copyright@caopengcs </span>
+<span class="c1">//此方法只有理论意义，因为整数乘积很大，有溢出风险</span>
+<span class="kt">bool</span> <span class="nf">compare</span><span class="p">(</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">p</span><span class="p">[</span><span class="mi">26</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">53</span><span class="p">,</span> <span class="mi">59</span><span class="p">,</span><span class="mi">61</span><span class="p">,</span> <span class="mi">67</span><span class="p">,</span> <span class="mi">71</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">79</span><span class="p">,</span> <span class="mi">83</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">97</span><span class="p">,</span> <span class="mi">101</span><span class="p">};</span>
+    <span class="kt">int</span> <span class="n">f</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">.</span><span class="n">length</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'A'</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">f</span> <span class="o">%</span> <span class="n">x</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">f</span> <span class="o">*=</span> <span class="n">x</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">length</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'A'</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">f</span> <span class="o">%</span> <span class="n">x</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+  </div>
+  <h2>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%85%AD%E4%BD%8D%E8%BF%90%E7%AE%97" name="%E8%A7%A3%E6%B3%95%E5%85%AD%E4%BD%8D%E8%BF%90%E7%AE%97">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法六、位运算
+  </h2>
+  <p>
+   最好的思路是对字符串A,用位运算（26bit整数表示)计算出一个“签名”，再用B中的字符到A里面进行查找。这个方法的实质是用一个整数代替了hashtable，空间复杂度可以降低为O(1)。时间复杂度还是O(n + m)。
+  </p>
+  <div class="highlight highlight-cpp">
+   <pre><span class="c1">// copyright@caopengcs </span>
+<span class="c1">// “最好的方法”，时间复杂度O(n + m)，空间复杂度O(1)</span>
+<span class="kt">bool</span> <span class="nf">compare</span><span class="p">(</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">hash</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">.</span><span class="n">length</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">hash</span> <span class="o">|=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'A'</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">length</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">hash</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'A'</span><span class="p">)))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+  </div>
+ </body>
+</html>
+		  </article>
+		  
+			<div id="nav">
+				
+					<a href="01.01.html">prev</a>
+					|
+				
+				
+					<a href="01.03.html">next</a>
+				
+				<span style="float: right"><a href="index.html">Back to home</a>
+			</div>
+		  
+		</div>
+	</div>
+  </div>
+  
+  <div>&nbsp;</div>
+  </div>
+  <div style="text-align:center; margin-bottom: 30px">
+	  Generated by <a href="https://github.com/marchtea/md_to_github_html">mdtogh</a>
+  </div>
+</body>
+</html>
