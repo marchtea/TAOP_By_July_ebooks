@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-d9c478ed7e87eebc36430a1efc4e84b17e65df06.css" />
-  <link rel="stylesheet" href="style_cache/github2-902e67494b49343625b27d5860c1e86bf5c65627.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-87cbc66c0a828647c8911f5e67d5b26b0cf62bbe.css" />
+  <link rel="stylesheet" href="style_cache/github2-f14002c8b8c821aeaeaf37b52de1d6c4d29dc214.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,11 +105,11 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0%E5%AF%BB%E6%89%BE%E5%92%8C%E4%B8%BA%E5%AE%9A%E5%80%BC%E7%9A%84%E5%A4%9A%E4%B8%AA%E6%95%B0" name="%E7%AC%AC%E4%BA%94%E7%AB%A0%E5%AF%BB%E6%89%BE%E5%92%8C%E4%B8%BA%E5%AE%9A%E5%80%BC%E7%9A%84%E5%A4%9A%E4%B8%AA%E6%95%B0">
+   <a class="anchor" href="#%E7%AC%AC%E4%B8%83%E7%AB%A0%E6%B1%82%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C" name="%E7%AC%AC%E4%B8%83%E7%AB%A0%E6%B1%82%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C">
     <span class="octicon octicon-link">
     </span>
    </a>
-   第五章、寻找和为定值的多个数
+   第七章：求连续子数组的最大和
   </h1>
   <h2>
    <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
@@ -119,167 +119,168 @@
    题目描述
   </h2>
   <p>
-   输入两个整数 n 和 m，从数列1，2，3.......n 中 随意取几个数,
+   输入一个整形数组，数组里有正数也有负数。
+数组中连续的一个或多个整数组成一个子数组，每个子数组都有一个和。
+求所有子数组的和的最大值。要求时间复杂度为O(n)。
   </p>
   <p>
-   使其和等于 m ,要求将其中所有的可能组合列出来。
+   例如输入的数组为
+   <code>
+    1, -2, 3, 10, -4, 7, 2, -5
+   </code>
+   ，和最大的子数组为
+   <code>
+    3, 10, -4, 7, 2
+   </code>
+   ，
+因此输出为该子数组的和18。
   </p>
   <h2>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="%E8%A7%A3%E6%B3%95%E4%B8%80">
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80%E6%9A%B4%E5%8A%9B%E5%BE%AA%E7%8E%AF" name="%E8%A7%A3%E6%B3%95%E4%B8%80%E6%9A%B4%E5%8A%9B%E5%BE%AA%E7%8E%AF">
     <span class="octicon octicon-link">
     </span>
    </a>
-   解法一
+   解法一、暴力循环
   </h2>
   <p>
-   我想，稍后给出的程序已经足够清楚了，就是要注意到放n，和不放n个区别，即可，代码如下：
+   求一个数组的最大子数组和，如此序列
+   <code>
+    1, -2, 3, 10, -4, 7, 2, -5
+   </code>
+   ，我想最最直观也是最野蛮的办法便是，三个for循环三层遍历，求出数组中每一个子数组的和，最终求出这些子数组的最大的一个值。
+记Sum[i, …, j]为数组A中第i个元素到第j个元素的和（其中0 &lt;= i &lt;= j &lt; n），遍历所有可能的Sum[i, …, j]，那么时间复杂度为O(N^3)：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="c1">// 21题递归方法</span>
-<span class="c1">//copyright@ July &amp;&amp; yansha</span>
-<span class="c1">//July、yansha，updated。</span>
-<span class="cp">#include&lt;list&gt;</span>
-<span class="cp">#include&lt;iostream&gt;</span>
-<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
-
-<span class="n">list</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="n">list1</span><span class="p">;</span>
-<span class="kt">void</span> <span class="nf">find_factor</span><span class="p">(</span><span class="kt">int</span> <span class="n">sum</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+   <pre><span class="c1">//本段代码引自编程之美</span>
+<span class="kt">int</span> <span class="nf">MaxSum</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">A</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="c1">// 递归出口</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">sum</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">;</span>
-
-    <span class="c1">// 输出找到的结果</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">sum</span> <span class="o">==</span> <span class="n">n</span><span class="p">)</span>
+    <span class="kt">int</span> <span class="n">maximum</span> <span class="o">=</span> <span class="o">-</span><span class="n">INF</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="c1">// 反转list</span>
-        <span class="n">list1</span><span class="p">.</span><span class="n">reverse</span><span class="p">();</span>
-        <span class="k">for</span><span class="p">(</span><span class="n">list</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">iter</span> <span class="o">=</span> <span class="n">list1</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">iter</span> <span class="o">!=</span> <span class="n">list1</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">iter</span><span class="o">++</span><span class="p">)</span>
-            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">iter</span> <span class="o">&lt;&lt;</span> <span class="s">" + "</span><span class="p">;</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">n</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-        <span class="n">list1</span><span class="p">.</span><span class="n">reverse</span><span class="p">();</span>
-    <span class="p">}</span>
-
-    <span class="n">list1</span><span class="p">.</span><span class="n">push_front</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>      <span class="c1">//典型的01背包问题</span>
-    <span class="n">find_factor</span><span class="p">(</span><span class="n">sum</span><span class="o">-</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>   <span class="c1">//放n，n-1个数填满sum-n</span>
-    <span class="n">list1</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
-    <span class="n">find_factor</span><span class="p">(</span><span class="n">sum</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>     <span class="c1">//不放n，n-1个数填满sum</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">sum</span><span class="p">,</span> <span class="n">n</span><span class="p">;</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"请输入你要等于多少的数值sum:"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">sum</span><span class="p">;</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"请输入你要从1.....n数列中取值的n："</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"所有可能的序列，如下："</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-    <span class="n">find_factor</span><span class="p">(</span><span class="n">sum</span><span class="p">,</span><span class="n">n</span><span class="p">);</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
-  </div>
-  <h2>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" name="%E8%A7%A3%E6%B3%95%E4%BA%8C">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   解法二
-  </h2>
-  <p>
-   @zhouzhenren：
-  </p>
-  <p>
-   这个问题属于子集和问题（也是背包问题）。本程序采用 回溯法+剪枝
-  </p>
-  <p>
-   X数组是解向量，t=∑(1,..,k-1)Wi*Xi, r=∑(k,..,n)Wi
-  </p>
-  <p>
-   若t+Wk+W(k+1)&lt;=M,则Xk=true，递归左儿子(X1,X2,..,X(k-1),1)；否则剪枝；
-  </p>
-  <p>
-   若t+r-Wk&gt;=M &amp;&amp; t+W(k+1)&lt;=M,则置Xk=0，递归右儿子(X1,X2,..,X(k-1),0)；否则剪枝；
-  </p>
-  <p>
-   本题中W数组就是(1,2,..,n),所以直接用k代替WK值。
-  </p>
-  <p>
-   代码编写如下：
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="c1">//copyright@ 2011 zhouzhenren</span>
-
-<span class="c1">//输入两个整数 n 和 m，从数列1，2，3.......n 中 随意取几个数,</span>
-<span class="c1">//使其和等于 m ,要求将其中所有的可能组合列出来。</span>
-
-<span class="cp">#include &lt;stdio.h&gt;</span>
-<span class="cp">#include &lt;stdlib.h&gt;</span>
-<span class="cp">#include &lt;memory.h&gt;</span>
-
-<span class="cm">/**</span>
-<span class="cm"> * 输入t， r， 尝试Wk</span>
-<span class="cm"> */</span>
-<span class="kt">void</span> <span class="nf">sumofsub</span><span class="p">(</span><span class="kt">int</span> <span class="n">t</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span> <span class="p">,</span><span class="kt">int</span> <span class="n">r</span><span class="p">,</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">M</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&amp;</span> <span class="n">flag</span><span class="p">,</span> <span class="kt">bool</span><span class="o">*</span> <span class="n">X</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">X</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>   <span class="c1">// 选第k个数</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">k</span> <span class="o">==</span> <span class="n">M</span><span class="p">)</span> <span class="c1">// 若找到一个和为M，则设置解向量的标志位，输出解</span>
-    <span class="p">{</span>
-        <span class="n">flag</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="n">j</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">)</span>
             <span class="p">{</span>
-                <span class="n">printf</span><span class="p">(</span><span class="s">"%d "</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+                <span class="n">sum</span> <span class="o">+=</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">];</span>
             <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">"/n"</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>   <span class="c1">// 若第k+1个数满足条件，则递归左子树</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">k</span> <span class="o">+</span> <span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">M</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">sumofsub</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">k</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span> <span class="o">-</span> <span class="n">k</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">flag</span><span class="p">,</span> <span class="n">X</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="c1">// 若不选第k个数，选第k+1个数满足条件，则递归右子树</span>
-        <span class="k">if</span> <span class="p">((</span><span class="n">t</span> <span class="o">+</span> <span class="n">r</span> <span class="o">-</span> <span class="n">k</span> <span class="o">&gt;=</span> <span class="n">M</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">M</span><span class="p">))</span>
-        <span class="p">{</span>
-            <span class="n">X</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-            <span class="n">sumofsub</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span> <span class="o">-</span> <span class="n">k</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">flag</span><span class="p">,</span> <span class="n">X</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">sum</span> <span class="o">&gt;</span> <span class="n">maximum</span><span class="p">)</span>
+                <span class="n">maximum</span> <span class="o">=</span> <span class="n">sum</span><span class="p">;</span>
 
-<span class="kt">void</span> <span class="nf">search</span><span class="p">(</span><span class="kt">int</span><span class="o">&amp;</span> <span class="n">N</span><span class="p">,</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">M</span><span class="p">)</span>
+            <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">//这里要记得清零，否则的话sum最终存放的是所有子数组的和。也就是编程之美上所说的bug。多谢苍狼。</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">maximum</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+  </div>
+  <h2>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8Con%E9%81%8D%E5%8E%86" name="%E8%A7%A3%E6%B3%95%E4%BA%8Con%E9%81%8D%E5%8E%86">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法二、O(N)遍历
+  </h2>
+  <p>
+   其实这个问题，在我之前上传的微软100题，答案V0.2版[第1-20题答案]，便直接给出了以下O(N)的算法：
+  </p>
+  <div class="highlight highlight-c">
+   <pre><span class="c1">//copyright@ July 2010/10/18</span>
+<span class="c1">//updated，2011.05.25.</span>
+<span class="cp">#include &lt;iostream.h&gt;</span>
+
+<span class="kt">int</span> <span class="nf">maxSum</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="c1">// 初始化解空间</span>
-    <span class="kt">bool</span><span class="o">*</span> <span class="n">X</span> <span class="o">=</span> <span class="p">(</span><span class="kt">bool</span><span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">bool</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">));</span>
-    <span class="n">memset</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">bool</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">));</span>
-    <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="p">(</span><span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">N</span> <span class="o">*</span> <span class="mf">0.5f</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&gt;</span> <span class="n">M</span> <span class="o">||</span> <span class="n">sum</span> <span class="o">&lt;</span> <span class="n">M</span><span class="p">)</span> <span class="c1">// 预先排除无解情况</span>
+    <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="c1">//其实要处理全是负数的情况，很简单，如稍后下面第3点所见，直接把这句改成："int sum=a[0]"即可</span>
+    <span class="c1">//也可以不改，当全是负数的情况，直接返回0，也不见得不行。</span>
+    <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">"not found/n"</span><span class="p">);</span>
-        <span class="k">return</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="k">else</span>
+            <span class="n">b</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">sum</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">)</span>
+            <span class="n">sum</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
     <span class="p">}</span>
-    <span class="kt">bool</span> <span class="n">f</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-    <span class="n">sumofsub</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sum</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">X</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">f</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">"not found/n"</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="n">free</span><span class="p">(</span><span class="n">X</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">sum</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
 <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">;</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">"请输入整数N和M/n"</span><span class="p">);</span>
-    <span class="n">scanf</span><span class="p">(</span><span class="s">"%d%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">N</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">M</span><span class="p">);</span>
-    <span class="n">search</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">};</span>
+    <span class="c1">//int a[] = {-1,-2,-3,-4};  //测试全是负数的用例</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">maxSum</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*-------------------------------------</span>
+<span class="cm">  解释下：</span>
+<span class="cm">  例如输入的数组为1, -2, 3, 10, -4, 7, 2, -5，</span>
+<span class="cm">  那么最大的子数组为3, 10, -4, 7, 2，</span>
+<span class="cm">  因此输出为该子数组的和18。</span>
+
+<span class="cm">  所有的东西都在以下俩行，</span>
+<span class="cm">  即：</span>
+<span class="cm">  b  ：  0  1  -1  3  13   9  16  18  13</span>
+<span class="cm">  sum：  0  1   1  3  13  13  16  18  18</span>
+
+<span class="cm">  其实算法很简单，当前面的几个数，加起来后，b&lt;0后，</span>
+<span class="cm">  把b重新赋值，置为下一个元素，b=a[i]。</span>
+<span class="cm">  当b&gt;sum，则更新sum=b;</span>
+<span class="cm">  若b&lt;sum，则sum保持原值，不更新。。July、10/31。</span>
+<span class="cm">  ----------------------------------*/</span>
+</pre>
+  </div>
+  <p>
+   不少朋友看到上面的答案之后，认为上述思路2的代码，没有处理全是负数的情况，当全是负数的情况时，我们可以让程序返回0，也可以让其返回最大的那个负数，下面便是前几日重写的，修改后的处理全是负数情况（返回最大的负数）的代码：
+  </p>
+  <div class="highlight highlight-c">
+   <pre><span class="c1">//copyright@ July</span>
+<span class="c1">//July、updated，2011.05.25。</span>
+<span class="cp">#include &lt;iostream.h&gt;</span>
+<span class="cp">#define n 4           </span><span class="c1">//多定义了一个变量</span>
+
+<span class="kt">int</span> <span class="nf">maxsum</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+<span class="c1">//于此处，你能看到上述思路2代码（指针）的优势</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">max</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>       <span class="c1">//全负情况，返回最大数</span>
+    <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">sum</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>    <span class="c1">//如果加上某个元素，sum&gt;=0的话，就加</span>
+            <span class="n">sum</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+        <span class="k">else</span>
+            <span class="n">sum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>  <span class="c1">//如果加上某个元素，sum&lt;0了，就不加</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">sum</span> <span class="o">&gt;</span> <span class="n">max</span><span class="p">)</span>
+            <span class="n">max</span> <span class="o">=</span> <span class="n">sum</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">max</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">};</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">maxsum</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
 </pre>
   </div>
+  <h2>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%89%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92" name="%E8%A7%A3%E6%B3%95%E4%B8%89%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法三、动态规划
+  </h2>
+  <p>
+   DP解法的具体方程：@ flyinghearts：设sum[i] 为前i个元素中，包含第i个元素且和最大的连续子数组，result 为已找到的子数组中和最大的。对第i+1个元素有两种选择：做为新子数组的第一个元素、放入前面找到的子数组。
+  </p>
+  <pre><code>sum[i+1] = max(a[i+1], sum[i] + a[i+1])
+result = max(result, sum[i])
+</code></pre>
   <h2>
    <a class="anchor" href="#%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95" name="%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95">
     <span class="octicon octicon-link">
@@ -287,173 +288,125 @@
    </a>
    问题扩展
   </h2>
+  <ol>
+   <li>
+    如果数组是二维数组，同样要你求最大子数组的和列?
+   </li>
+   <li>
+    如果是要你求子数组的最大乘积列?
+   </li>
+   <li>
+    如果同时要求输出子段的开始和结束列?
+   </li>
+  </ol>
+  <h2>
+   <a class="anchor" href="#data-structures-and-algorithm-analysis-in-c" name="data-structures-and-algorithm-analysis-in-c">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   Data structures and Algorithm analysis in C
+  </h2>
   <p>
-   1、从一列数中筛除尽可能少的数使得从左往右看，这些数是从小到大再从大到小的（网易）。
-  </p>
-  <p>
-   2、有两个序列a,b，大小都为n,序列元素的值任意整数，无序；
-  </p>
-  <p>
-   要求：通过交换a,b中的元素，使[序列a元素的和]与[序列b元素的和]之间的差最小。
-  </p>
-  <p>
-   例如:
-  </p>
-  <p>
-   var a=[100,99,98,1,2, 3];
-  </p>
-  <p>
-   var b=[1, 2, 3, 4,5,40];（微软100题第32题）。
-  </p>
-  <p>
-   @well：[fairywell]:
-  </p>
-  <p>
-   给出扩展问题 1 的一个解法：
-  </p>
-  <p>
-   1、从一列数中筛除尽可能少的数使得从左往右看，这些数是从小到大再从大到小的（网易）。
-  </p>
-  <p>
-   双端 LIS 问题，用 DP 的思想可解，目标规划函数 max{ b[i] + c[i] - 1 }, 其中 b[i] 为从左到右， 0 ~ i 个数之间满足递增的数字个数； c[i] 为从右到左， n-1 ~ i 个数之间满足递增的数字个数。最后结果为 n - max + 1。其中 DP 的时候，可以维护一个 inc[] 数组表示递增数字序列，inc[i] 为从小到大第 i 大的数字，然后在计算 b[i] c[i] 的时候使用二分查找在 inc[] 中找出区间 inc[0] ~ inc[i-1] 中小于 a[i] 的元素个数（low）。
-源代码如下：
+   下面给出《Data structures and Algorithm analysis in C》中4种实现。
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="cm">/**</span>
-<span class="cm">* The problem:</span>
-<span class="cm">* 从一列数中筛除尽可能少的数使得从左往右看，这些数是从小到大再从大到小的（网易）。</span>
-<span class="cm">* use binary search, perhaps you should compile it with -std=c99</span>
-<span class="cm">* fairywell 2011</span>
-<span class="cm">*/</span>
-<span class="cp">#include &lt;stdio.h&gt;</span>
+   <pre><span class="c1">//感谢网友firo</span>
+<span class="c1">//July、2010.06.05。</span>
 
-<span class="cp">#define MAX_NUM    (1U&lt;&lt;31)</span>
-
-<span class="kt">int</span>
-<span class="nf">main</span><span class="p">()</span>
+<span class="c1">//Algorithm 1:时间效率为O(n*n*n)</span>
+<span class="kt">int</span> <span class="nf">MaxSubsequenceSum1</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">A</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">N</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">,</span> <span class="n">mid</span><span class="p">,</span> <span class="n">max</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">ThisSum</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">,</span> <span class="n">MaxSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">ThisSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">k</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">j</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">)</span>
+                <span class="n">ThisSum</span> <span class="o">+=</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">];</span>
 
-    <span class="n">printf</span><span class="p">(</span><span class="s">"Input how many numbers there are: "</span><span class="p">);</span>
-    <span class="n">scanf</span><span class="p">(</span><span class="s">"%d/n"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">);</span>
-    <span class="cm">/* a[] holds the numbers, b[i] holds the number of increasing numbers</span>
-<span class="cm">    * from a[0] to a[i], c[i] holds the number of increasing numbers</span>
-<span class="cm">    * from a[n-1] to a[i]</span>
-<span class="cm">    * inc[] holds the increasing numbers</span>
-<span class="cm">    * VLA needs c99 features, compile with -stc=c99</span>
-<span class="cm">    */</span>
-    <span class="kt">double</span> <span class="n">a</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">c</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">inc</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
-
-    <span class="n">printf</span><span class="p">(</span><span class="s">"Please input the numbers:/n"</span><span class="p">);</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="n">scanf</span><span class="p">(</span><span class="s">"%lf"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-
-    <span class="c1">// update array b from left to right</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="n">inc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span><span class="p">)</span> <span class="n">MAX_NUM</span><span class="p">;</span>
-    <span class="c1">//b[0] = 0;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">low</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">high</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">low</span> <span class="o">&lt;</span> <span class="n">high</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">mid</span> <span class="o">=</span> <span class="n">low</span> <span class="o">+</span> <span class="p">(</span><span class="n">high</span><span class="o">-</span><span class="n">low</span><span class="p">)</span><span class="o">*</span><span class="mf">0.5</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">inc</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="n">low</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-            <span class="k">else</span> <span class="n">high</span> <span class="o">=</span> <span class="n">mid</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ThisSum</span> <span class="o">&gt;</span> <span class="n">MaxSum</span><span class="p">)</span>
+                <span class="n">MaxSum</span> <span class="o">=</span> <span class="n">ThisSum</span><span class="p">;</span>
         <span class="p">}</span>
-        <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">low</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="n">inc</span><span class="p">[</span><span class="n">low</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">MaxSum</span><span class="p">;</span>
+<span class="p">}</span>
 
-    <span class="c1">// update array c from right to left</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="n">inc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span><span class="p">)</span> <span class="n">MAX_NUM</span><span class="p">;</span>
-    <span class="c1">//c[0] = 0;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">low</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">high</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">low</span> <span class="o">&lt;</span> <span class="n">high</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">mid</span> <span class="o">=</span> <span class="n">low</span> <span class="o">+</span> <span class="p">(</span><span class="n">high</span><span class="o">-</span><span class="n">low</span><span class="p">)</span><span class="o">*</span><span class="mf">0.5</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">inc</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="n">low</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-            <span class="k">else</span> <span class="n">high</span> <span class="o">=</span> <span class="n">mid</span><span class="p">;</span>
+<span class="c1">//Algorithm 2:时间效率为O(n*n)</span>
+<span class="kt">int</span> <span class="nf">MaxSubsequenceSum2</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">A</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">N</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">ThisSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">MaxSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">ThisSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">ThisSum</span> <span class="o">+=</span> <span class="n">A</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ThisSum</span> <span class="o">&gt;</span> <span class="n">MaxSum</span><span class="p">)</span>
+                <span class="n">MaxSum</span> <span class="o">=</span> <span class="n">ThisSum</span><span class="p">;</span>
         <span class="p">}</span>
-        <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">low</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="n">inc</span><span class="p">[</span><span class="n">low</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
     <span class="p">}</span>
+    <span class="k">return</span> <span class="n">MaxSum</span><span class="p">;</span>
+<span class="p">}</span>
 
-    <span class="n">max</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span> <span class="p">)</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">max</span><span class="p">)</span> <span class="n">max</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">"%d number(s) should be erased at least./n"</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="o">-</span><span class="n">max</span><span class="p">);</span>
-        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="c1">//Algorithm 3:时间效率为O(n*log n)</span>
+<span class="c1">//算法3的主要思想：采用二分策略，将序列分成左右两份。</span>
+<span class="c1">//那么最长子序列有三种可能出现的情况，即</span>
+<span class="c1">//【1】只出现在左部分.</span>
+<span class="c1">//【2】只出现在右部分。</span>
+<span class="c1">//【3】出现在中间，同时涉及到左右两部分。</span>
+<span class="c1">//分情况讨论之。</span>
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">MaxSubSum</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">A</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">Left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">Right</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">MaxLeftSum</span><span class="p">,</span> <span class="n">MaxRightSum</span><span class="p">;</span>             <span class="c1">//左、右部分最大连续子序列值。对应情况【1】、【2】</span>
+    <span class="kt">int</span> <span class="n">MaxLeftBorderSum</span><span class="p">,</span> <span class="n">MaxRightBorderSum</span><span class="p">;</span> <span class="c1">//从中间分别到左右两侧的最大连续子序列值，对应case【3】。</span>
+    <span class="kt">int</span> <span class="n">LeftBorderSum</span><span class="p">,</span> <span class="n">RightBorderSum</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">Center</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">Left</span> <span class="o">==</span> <span class="n">Right</span><span class="p">)</span><span class="n">Base</span> <span class="n">Case</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">Left</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">A</span><span class="p">[</span><span class="n">Left</span><span class="p">];</span>
+        <span class="k">else</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">Center</span> <span class="o">=</span> <span class="p">(</span><span class="n">Left</span> <span class="o">+</span> <span class="n">Right</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="n">MaxLeftSum</span> <span class="o">=</span> <span class="n">MaxSubSum</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">Left</span><span class="p">,</span> <span class="n">Center</span><span class="p">);</span>
+    <span class="n">MaxRightSum</span> <span class="o">=</span> <span class="n">MaxSubSum</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">Center</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Right</span><span class="p">);</span>
+    <span class="n">MaxLeftBorderSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">LeftBorderSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">Center</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">Left</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">LeftBorderSum</span> <span class="o">+=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">LeftBorderSum</span> <span class="o">&gt;</span> <span class="n">MaxLeftBorderSum</span><span class="p">)</span>
+            <span class="n">MaxLeftBorderSum</span> <span class="o">=</span> <span class="n">LeftBorderSum</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">MaxRightBorderSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">RightBorderSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">Center</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">Right</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">RightBorderSum</span> <span class="o">+=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">RightBorderSum</span> <span class="o">&gt;</span> <span class="n">MaxRightBorderSum</span><span class="p">)</span>
+            <span class="n">MaxRightBorderSum</span> <span class="o">=</span> <span class="n">RightBorderSum</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">max1</span> <span class="o">=</span> <span class="n">MaxLeftSum</span> <span class="o">&gt;</span> <span class="n">MaxRightSum</span> <span class="o">?</span> <span class="n">MaxLeftSum</span> <span class="o">:</span> <span class="n">MaxRightSum</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">max2</span> <span class="o">=</span> <span class="n">MaxLeftBorderSum</span> <span class="o">+</span> <span class="n">MaxRightBorderSum</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">max1</span> <span class="o">&gt;</span> <span class="n">max2</span> <span class="o">?</span> <span class="n">max1</span> <span class="o">:</span> <span class="n">max2</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">//Algorithm 4:时间效率为O(n)</span>
+<span class="c1">//同上述第一节中的思路3、和4。</span>
+<span class="kt">int</span> <span class="nf">MaxSubsequenceSum</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">A</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">N</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">ThisSum</span><span class="p">,</span> <span class="n">MaxSum</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
+    <span class="n">ThisSum</span> <span class="o">=</span> <span class="n">MaxSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">ThisSum</span> <span class="o">+=</span> <span class="n">A</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ThisSum</span> <span class="o">&gt;</span> <span class="n">MaxSum</span><span class="p">)</span>
+            <span class="n">MaxSum</span> <span class="o">=</span> <span class="n">ThisSum</span><span class="p">;</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ThisSum</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">ThisSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">MaxSum</span><span class="p">;</span>
 <span class="p">}</span>
 </pre>
   </div>
-  <p>
-   @yansha：fairywell的程序很赞，时间复杂度O(N log N)，这也是我能想到的时间复杂度最优值了。不知能不能达到O(N)。
-  </p>
-  <p>
-   扩展题第2题
-  </p>
-  <p>
-   当前数组a和数组b的和之差为
-  </p>
-  <p>
-   <code>
-    A = sum(a) - sum(b)
-   </code>
-  </p>
-  <p>
-   a的第i个元素和b的第j个元素交换后，a和b的和之差为
-  </p>
-  <pre><code>A' = sum(a) - a[i] + b[j] - （sum(b) - b[j] + a[i])
-
-       = sum(a) - sum(b) - 2 (a[i] - b[j])
-
-       = A - 2 (a[i] - b[j])
-</code></pre>
-  <p>
-   设x = a[i] - b[j]，得
-  </p>
-  <p>
-   <code>
-    |A| - |A'| = |A| - |A-2x|
-   </code>
-  </p>
-  <p>
-   假设A &gt; 0,
-  </p>
-  <p>
-   当x 在 (0,A)之间时，做这样的交换才能使得交换后的a和b的和之差变小，x越接近A/2效果越好,
-  </p>
-  <p>
-   如果找不到在(0,A)之间的x，则当前的a和b就是答案。
-  </p>
-  <p>
-   所以算法大概如下：
-  </p>
-  <p>
-   在a和b中寻找使得x在(0,A)之间并且最接近A/2的i和j，交换相应的i和j元素，重新计算A后，重复前面的步骤直至找不到(0,A)之间的x为止。
-  </p>
-  <p>
-   接上，@yuan：
-  </p>
-  <p>
-   a[i]-b[j]要接近A/2，则可以这样想，
-  </p>
-  <p>
-   我们可以对于a数组的任意一个a[k],在数组b中找出与a[k]-C最接近的数（C就是常数，也就是0.5*A）
-  </p>
-  <p>
-   这个数要么就是a[k]-C，要么就是比他稍大，要么比他稍小，所以可以要二分查找。
-  </p>
-  <p>
-   查找最后一个小于等于a[k]-C的数和第一个大于等于a[k]-C的数，
-  </p>
-  <p>
-   然后看哪一个与a[k]-C更加接近，所以T(N) = N log N。
-  </p>
-  <p>
-   除此之外，受本文读者xiafei1987128启示，有朋友在stacoverflow上也问过一个类似的题，:-)，见此：
-   <a href="http://stackoverflow.com/questions/9047908/swap-the-elements-of-two-sequences-such-that-the-difference-of-the-element-sums">
-    http://stackoverflow.com/questions/9047908/swap-the-elements-of-two-sequences-such-that-the-difference-of-the-element-sums
-   </a>
-   。感兴趣的可以看看。
-  </p>
  </body>
 </html>
 		  </article>
@@ -464,7 +417,7 @@
 					|
 				
 				
-					<a href="02.07.html">next</a>
+					<a href="02.07~02.08.html">next</a>
 				
 				<span style="float: right"><a href="index.html">Back to home</a>
 			</div>

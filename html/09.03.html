@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-d9c478ed7e87eebc36430a1efc4e84b17e65df06.css" />
-  <link rel="stylesheet" href="style_cache/github2-902e67494b49343625b27d5860c1e86bf5c65627.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-87cbc66c0a828647c8911f5e67d5b26b0cf62bbe.css" />
+  <link rel="stylesheet" href="style_cache/github2-f14002c8b8c821aeaeaf37b52de1d6c4d29dc214.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,373 +105,425 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%BA%8C%E7%AB%A0%E6%9C%80%E7%9F%AD%E6%91%98%E8%A6%81%E7%9A%84%E7%94%9F%E6%88%90" name="%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%BA%8C%E7%AB%A0%E6%9C%80%E7%9F%AD%E6%91%98%E8%A6%81%E7%9A%84%E7%94%9F%E6%88%90">
+   <a class="anchor" href="#%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E4%B9%8Bbloom-filter%E8%AF%A6%E8%A7%A3" name="%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E4%B9%8Bbloom-filter%E8%AF%A6%E8%A7%A3">
     <span class="octicon octicon-link">
     </span>
    </a>
-   第二十二章：最短摘要的生成
+   海量数据处理之Bloom Filter详解
   </h1>
-  <p>
-   第二个问题来自各位读者的手中，你我在百度或谷歌搜索框中敲入本博客名称的前4个字“结构之法”，便能在第一个选项看到本博客的链接，如下图2所示：
-  </p>
-  <p>
-   <a href="../images/21%7E22/22.1.gif" target="_blank">
-    <img alt="" src="../images/21%7E22/22.1.gif" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   图2  谷歌中搜索关键字“结构之法”
-  </p>
-  <p>
-   在上面所示的图2中，搜索结果“结构之法算法之道-博客频道-CSDN.NET”下有一段说明性的文字：“程序员面试、算法研究、编程艺术、红黑树4大经典原创系列集锦与总结 作者：July--结构之法算法...”，我们把这段文字称为那个搜索结果的摘要，亦即最短摘要。我们的问题是，请问，这个最短摘要是怎么生成的呢?
-  </p>
-  <p>
-   <strong>
-    Alibaba
-   </strong>
-   笔试题：给定一段产品的英文描述，包含M个英文字母，每个英文单词以空格分隔，无其他标点符号；再给定N个英文单词关键字，请说明思路并编程实现方法
-  </p>
-  <pre><code>String extractSummary(String description,String[] key words)
-</code></pre>
-  <p>
-   目标是找出此产品描述中包含N个关键字（每个关键词至少出现一次）的长度最短的子串，作为产品简介输出。（不限编程语言）20分。
-  </p>
-  <p>
-   这题是来自此篇文章十月百度，阿里巴巴，迅雷搜狗最新面试十一题中整理的阿里巴巴的笔试题，之前已经给出了这样一种思路，如下：
-  </p>
-  <pre><code>@owen：扫描过程始终保持一个[left,right]的range,初始化确保[left,right]的range里包含所有关键字则停止。然后每次迭代：
-1.试图右移动left，停止条件为再移动将导致无法包含所有关键字。
-2.比较当前range's length和best length，更新最优值。
-3.右移right，停止条件为使任意一个关键字的计数+1。
-4.重复迭代。
-</code></pre>
-  <p>
-   在那篇文章中也提到了编程之美有最短摘要生成的问题，与此问题类似。下面，我将介绍这种方法。首先，咱们来看一个问题。读者可以在百度或谷歌中搜索本博客名称的前4个字，”结构之法“，便会在第一个搜索结果中看到如下图所示的搜索项：
-  </p>
-  <p>
-   <a href="../images/21%7E22/22.2.gif" target="_blank">
-    <img alt="" src="../images/21%7E22/22.2.gif" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   上图中，那段大致介绍本博客结构之法算法之道的文字：”程序员面试、算法研究、编程艺术、红黑树4大经典原创系列集锦与总结 作者：July--结构之法算法之道blog之博主。时间：2010年10月-2011年6月。出处：http://...“这段介于搜索关键词与最底下的URL便是我们所称之为的摘要。那么，这段摘要是怎么产生的呢?可以对问题进行如下的简化。
-  </p>
-  <p>
-   <strong>
-    1.
-   </strong>
-   假设给定的已经是经过网页分词之后的结果，词语序列数组为W。其中W[0], W[1],…, W[N]为一些已经分好的词语。
-  </p>
-  <p>
-   <strong>
-    2.
-   </strong>
-   假设用户输入的搜索关键词为数组Q。其中Q[0], Q[1],…, Q[m]为所有输入的搜索关键词。
-  </p>
-  <p>
-   这样，生成的最短摘要实际上就是一串相互联系的分词序列。比如从W[i]到W[j]，其中，0 &lt; i &lt; j&lt;= N。例如上图所示的摘要“程序员面试、算法研究、编程艺术、红黑树4大经典原创吸了集锦与总结 作者：July--结构之法算法之道blog之博主.....”中包含了关键字——“结构之法”。
-  </p>
-  <p>
-   那么，我们该怎么做呢？
-  </p>
-  <h4>
-   <a class="anchor" href="#%E6%80%9D%E8%B7%AF%E4%B8%80" name="%E6%80%9D%E8%B7%AF%E4%B8%80">
+  <h2>
+   <a class="anchor" href="#%E4%B8%80%E4%BB%80%E4%B9%88%E6%98%AFbloom-filter" name="%E4%B8%80%E4%BB%80%E4%B9%88%E6%98%AFbloom-filter">
     <span class="octicon octicon-link">
     </span>
    </a>
-   思路一：
-  </h4>
+   一、什么是Bloom Filter
+  </h2>
   <p>
-   在分析问题之前，先通过一个实际的例子来探讨。比如在本博客第一篇置顶文章的开头，有这么一段话：
-  </p>
-  <pre><code>“程序员面试、算法研究、编程艺术、红黑树4大经典原创系列集锦与总结
-作者：July--结构之法算法之道blog之博主。
-时间：2010年10月-2011年6月。
-出处：http://blog.csdn.net/v_JULY_v。
-声明：版权所有，侵犯必究。”
-</code></pre>
-  <p>
-   那么，我们可以猜想一下可能的分词结果：
-  </p>
-  <pre><code>”程序员/面试/、/算法/研究/、/编程/艺术/、/红黑树/4/大/经典/原创/系列/集锦/与/总结/ /作者/：/July/
---/结构/之/法/算法/之/道/blog/之/博主/....“（网页的分词效果W数组）
-</code></pre>
-  <p>
-   这也就是我们期望的W数组序列。
-  </p>
-  <p>
-   之前的Q数组序列为：
-  </p>
-  <pre><code>“结构之法”（用户输入的关键字Q数组）
-</code></pre>
-  <p>
-   再看下下面这个W-Q序列：
-  </p>
-  <pre><code>w0,w1,w2,w3,q0,w4,w5,q1,w6,w7,w8,q0,w9,q1
-</code></pre>
-  <p>
-   上述序列上面的是W数组（经过网页分词之后的结果），W[0], W[1],…, W[N]为一些已经分好的词语，上述序列下面的是Q数组（用户输入的搜索关键词）。其中Q[0], Q[1],…, Q[m]为所有输入的搜索关键词。
-  </p>
-  <p>
-   ok，如果你不甚明白，我说的通俗点：如上W-Q序列中，我们可以把,q0,w4,w5,q1作为摘要，q0,w9,q1的也可以作为摘要，同样都包括了所有的关键词q0，q1，那么选取哪个是最短摘要呢？答案很明显，后一个更短，选取q0,w9,q1的作为最短摘要，这便是最短摘要的生成。
-  </p>
-  <p>
-   我们可以进一步可以想象，如下：
-  </p>
-  <p>
-   从用户的角度看：当我们在百度的搜索框中输入“结构之法”4个字时，搜索引擎将在索引数据库中（关于搜索引擎原理的大致介绍，可参考本博客中这篇文章：搜索引擎技术之概要预览）查找和匹配这4个字的网页，最终第一个找到了本博客的置顶的第一篇文章：[置顶]程序员面试、算法研究、编程艺术、红黑树4大系列集锦与总结；
-  </p>
-  <p>
-   从搜索引擎的角度看：搜索引擎经过把上述网页分词后，便得到了上述的分词效果，然后在这些分词中查找“结构之法”4个关键字，但这4个关键字不一定只会出现一遍，它可能会在这篇文章中出现多次，就如上面的W-Q序列一般。咱们可以假想出下面的结果（结构之法便出现了两次）：
-  </p>
-  <pre><code>“程序员/面试/、/算法/研究/、/编程/艺术/、/红黑树/4/大/经典/原创/系列/集锦/与/总结/ /作者/：/July/
---/结构/之/法/算法/之/道/blog/之/博主/././././转载/请/注明/出处/：/结构/之/法/算法/之/道/CSDN/博客/./././.”
-</code></pre>
-  <p>
-   由此，我们可以得出解决此问题的思路，如下：
-  </p>
-  <p>
+   Bloom Filter是一种空间效率很高的随机数据结构，它的原理是，
    <strong>
-    1.
+    当一个元素被加入集合时，通过K个Hash函数将这个元素映射成一个位阵列（Bit array）中的K个点，把它们置为1
    </strong>
-   从W数组的第一个位置开始查找出一段包含所有关键词数组Q的序列（第一个位置”程“开始：程序员/面试/、/算法/研究/、/编程/艺术/、/红黑树/4/大/经典/原创/系列/集锦/与/总结/ /作者/：/July/--/结构/之/法/查找包含关键字“结构之法”所有关键词的序列）。计算当前的最短长度，并更新Seq数组。
+   。检索时，我们只要看看这些点是不是都是1就（大约）知道集合中有没有它了：如果这些点有任何一个0，则被检索元素一定不在；如果都是1，则被检索元素很可能在。这就是布隆过滤器的基本思想。
   </p>
   <p>
-   <strong>
-    2.
-   </strong>
-   对目标数组W进行遍历，从第二个位置开始，重新查找包含所有关键词数组Q的序列（第二个位置”序“处开始：程序员/面试/、/算法/研究/、/编程/艺术/、/红黑树/4/大/经典/原创/系列/集锦/与/总结/ /作者/：/July/--/结构/之/法/查找包含关键字”结构之法“所有关键词的序列），同样计算出其最短长度，以及更新包含所有关键词的序列Seq，然后求出最短距离。
+   但Bloom Filter的这种高效是有一定代价的：在判断一个元素是否属于某个集合时，有可能会把不属于这个集合的元素误认为属于这个集合（false positive）。因此，Bloom Filter不适合那些“零错误”的应用场合。而在能容忍低错误率的应用场合下，Bloom Filter通过极少的错误换取了存储空间的极大节省。
   </p>
   <p>
-   <strong>
-    3.
-   </strong>
-   依次操作下去，一直到遍历至目标数组W的最后一个位置为止。
+   有人可能想知道它的中文叫法，倒是有被译作称布隆过滤器。该不该译，译的是否恰当，由诸君品之。下文之中，如果有诸多公式不慎理解，也无碍，只作稍稍了解即可。
   </p>
-  <p>
-   最终，通过比较，咱们确定如下分词序列作为最短摘要，即搜索引擎给出的分词效果：
-  </p>
-  <pre><code>“程序员面试、算法研究、编程艺术、红黑树4大经典原创系列集锦与总结 作者：July--结构之法算法之道blog之博主。
-时间：2010年10月-2011年6月。出处：http://...”
-</code></pre>
-  <p>
-   那么，这个算法的时间复杂度如何呢？
-  </p>
-  <p>
-   要遍历所有其他的关键词（M），对于每个关键词，要遍历整个网页的词（N），而每个关键词在整个网页中的每一次出现，要遍历所有的Seq，以更新这个关键词与所有其他关键词的最小距离。所以算法复杂度为：O（N^2 * M）。
-  </p>
-  <h4>
-   <a class="anchor" href="#%E6%80%9D%E8%B7%AF%E4%BA%8C" name="%E6%80%9D%E8%B7%AF%E4%BA%8C">
+  <h3>
+   <a class="anchor" href="#11%E9%9B%86%E5%90%88%E8%A1%A8%E7%A4%BA%E5%92%8C%E5%85%83%E7%B4%A0%E6%9F%A5%E8%AF%A2" name="11%E9%9B%86%E5%90%88%E8%A1%A8%E7%A4%BA%E5%92%8C%E5%85%83%E7%B4%A0%E6%9F%A5%E8%AF%A2">
     <span class="octicon octicon-link">
     </span>
    </a>
-   思路二：
-  </h4>
+   1.1、集合表示和元素查询
+  </h3>
   <p>
-   我们试着降低此问题的复杂度。因为上述思路一再进行查找的时候，总是重复地循环，效率不高。那么怎么简化呢？先来看看这些序列：
-  </p>
-  <pre><code>w0,w1,w2,w3,q0,w4,w5,q1,w6,w7,w8,q0,w9,q1
-</code></pre>
-  <p>
-   问题在于，如何一次把所有的关键词都扫描到，并且不遗漏。扫描肯定是无法避免的，但是如何把两次扫描的结果联系起来呢？这是一个值得考虑的问题。
+   下面我们具体来看Bloom Filter是如何用位数组表示集合的。初始状态时，Bloom Filter是一个包含m位的位数组，每一位都置为0。
   </p>
   <p>
-   沿用前面的扫描方法，再来看看。第一次扫描的时候，假设需要包含所有的关键词，从第一个位置w0处将扫描到w6处：
+   <a href="../images/9/9.3/9.3.1.jpg" target="_blank">
+    <img alt="" src="../images/9/9.3/9.3.1.jpg" style="max-width:100%;"/>
+   </a>
   </p>
-  <pre><code>w0,w1,w2,w3,q0,w4,w5,q1,w6,w7,w8,q0,w9,q1
-</code></pre>
   <p>
-   那么，下次扫描应该怎么办呢？先把第一个被扫描的位置挪到q0处。
+   为了表达S={x
+   <sub>
+    1
+   </sub>
+   , x
+   <sub>
+    2
+   </sub>
+   ,…,x
+   <sub>
+    n
+   </sub>
+   }这样一个n个元素的集合，Bloom Filter使用k个相互独立的哈希函数（Hash Function），它们分别将集合中的每个元素映射到{1,…,m}的范围中。对任意一个元素x，第i个哈希函数映射的位置h
+   <sub>
+    i
+   </sub>
+   (x)就会被置为1（1≤i≤k）。注意，如果一个位置多次被置为1，那么只有第一次会起作用，后面几次将没有任何效果。在下图中，k=3，且有两个哈希函数选中同一个位置（从左边数第五位，即第二个“1“处）。
   </p>
-  <pre><code>w0,w1,w2,w3,q0,w4,w5,q1,w6,w7,w8,q0,w9,q1
-</code></pre>
   <p>
-   然后把第一个被扫描的位置继续往后面移动一格，这样包含的序列中将减少了关键词q0。那么，我们便可以把第二个扫描位置往后移，这样就可以找到下一个包含所有关键词的序列。即从w4扫描到w9处，便包含了q1，q0：
+   <a href="../images/9/9.3/9.3.2.jpg" target="_blank">
+    <img alt="" src="../images/9/9.3/9.3.2.jpg" style="max-width:100%;"/>
+   </a>
   </p>
-  <pre><code>w0,w1,w2,w3,q0,w4,w5,q1,w6,w7,w8,q0,w9,q1
-</code></pre>
   <p>
-   这样，问题就和第一次扫描时碰到的情况一样了。依次扫描下去，在w中找出所有包含q的序列，并且找出其中的最小值，就可得到最终的结果。编程之美上给出了如下参考代码：
+   在判断y是否属于这个集合时，我们对y应用k次哈希函数，如果所有h
+   <sub>
+    i
+   </sub>
+   (y)的位置都是1（1≤i≤k），那么我们就认为y是集合中的元素，否则就认为y不是集合中的元素。下图中y
+   <sub>
+    1
+   </sub>
+   就不是集合中的元素（因为y1有一处指向了“0”位）。y
+   <sub>
+    2
+   </sub>
+   或者属于这个集合，或者刚好是一个false positive。
   </p>
-  <div class="highlight highlight-c">
-   <pre><span class="c1">//July、updated，2011.10.21</span>
-<span class="kt">int</span> <span class="n">nTargetLen</span> <span class="o">=</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>           <span class="c1">// 设置目标长度为总长度+1  </span>
-<span class="kt">int</span> <span class="n">pBegin</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>                     <span class="c1">// 初始指针  </span>
-<span class="kt">int</span> <span class="n">pEnd</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>                       <span class="c1">// 结束指针  </span>
-<span class="kt">int</span> <span class="n">nLen</span> <span class="o">=</span> <span class="n">N</span><span class="p">;</span>                       <span class="c1">// 目标数组的长度为N  </span>
-<span class="kt">int</span> <span class="n">nAbstractBegin</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>           <span class="c1">// 目标摘要的起始地址  </span>
-<span class="kt">int</span> <span class="n">nAbstractEnd</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>           <span class="c1">// 目标摘要的结束地址  </span>
-
-<span class="k">while</span><span class="p">(</span><span class="nb">true</span><span class="p">)</span>  
-<span class="p">{</span>  
-    <span class="c1">// 假设未包含所有的关键词，并且后面的指针没有越界，往后移动指针  </span>
-    <span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="n">isAllExisted</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">pEnd</span> <span class="o">&lt;</span> <span class="n">nLen</span><span class="p">)</span>  
-    <span class="p">{</span>  
-        <span class="n">pEnd</span><span class="o">++</span><span class="p">;</span>  
-    <span class="p">}</span>  
-
-    <span class="c1">// 假设找到一段包含所有关键词信息的字符串  </span>
-    <span class="k">while</span><span class="p">(</span><span class="n">isAllExisted</span><span class="p">())</span>  
-    <span class="p">{</span>  
-        <span class="k">if</span><span class="p">(</span><span class="n">pEnd</span> <span class="err">–</span> <span class="n">pBegin</span> <span class="o">&lt;</span> <span class="n">nTargetLen</span><span class="p">)</span>  
-        <span class="p">{</span>  
-            <span class="n">nTargetLen</span> <span class="o">=</span> <span class="n">pEnd</span> <span class="err">–</span> <span class="n">pBegin</span><span class="p">;</span>  
-            <span class="n">nAbstractBegin</span> <span class="o">=</span> <span class="n">pBegin</span><span class="p">;</span>  
-            <span class="n">nAbstractEnd</span> <span class="o">=</span> <span class="n">pEnd</span> <span class="err">–</span> <span class="mi">1</span><span class="p">;</span>   
-        <span class="p">}</span>  
-        <span class="n">pBegin</span><span class="o">++</span><span class="p">;</span>  
-    <span class="p">}</span>  
-    <span class="k">if</span><span class="p">(</span><span class="n">pEnd</span> <span class="o">&gt;=</span> <span class="n">N</span><span class="p">)</span>  
-        <span class="n">Break</span><span class="p">;</span>  
-<span class="p">}</span>
-</pre>
-  </div>
   <p>
-   小结：上述思路二相比于思路一，很明显提高了不小效率。我们在匹配的过程中利用了可以省去其中某些死板的步骤，这让我想到了KMP算法的匹配过程。同样是经过观察，比较，最后总结归纳出的高效算法。我想，一定还有更好的办法，只是我们目前还没有看到，想到，待我们去发现，创造。
+   <a href="../images/9/9.3/9.3.3.jpg" target="_blank">
+    <img alt="" src="../images/9/9.3/9.3.3.jpg" style="max-width:100%;"/>
+   </a>
   </p>
-  <h4>
-   <a class="anchor" href="#%E6%80%9D%E8%B7%AF%E4%B8%89" name="%E6%80%9D%E8%B7%AF%E4%B8%89">
+  <h3>
+   <a class="anchor" href="#12%E9%94%99%E8%AF%AF%E7%8E%87%E4%BC%B0%E8%AE%A1" name="12%E9%94%99%E8%AF%AF%E7%8E%87%E4%BC%B0%E8%AE%A1">
     <span class="octicon octicon-link">
     </span>
    </a>
-   思路三：
-  </h4>
+   1.2、错误率估计
+  </h3>
   <p>
-   以下是读者jiaotao1983回复于本文评论下的反馈，非常感谢。
+   前面我们已经提到了，Bloom Filter在判断一个元素是否属于它表示的集合时会有一定的错误率（false positive rate），下面我们就来估计错误率的大小。在估计之前为了简化模型，我们假设kn1, x
+   <sub>
+    2
+   </sub>
+   ,…,x
+   <sub>
+    n
+   </sub>
+   }的所有元素都被k个哈希函数映射到m位的位数组中时，这个位数组中某一位还是0的概率是：
   </p>
   <p>
-   关于最短摘要的生成，我觉得July的处理有些简单，我以July的想法为基础，提出了自己的一些想法，这个问题分以下几步解决：
+   <a href="../images/9/9.3/9.3.4.jpg" target="_blank">
+    <img alt="" src="../images/9/9.3/9.3.4.jpg" style="max-width:100%;"/>
+   </a>
   </p>
   <p>
-   <strong>
-    1.
-   </strong>
-   将传入的key words[]生成哈希表，便于以后的字符串比较。结构为KeyHash，如下：
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="k">struct</span> <span class="n">KeyHash</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">cnt</span><span class="p">;</span>
-  <span class="kt">char</span> <span class="n">key</span><span class="p">[];</span>
-  <span class="kt">int</span> <span class="n">hash</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
-  </div>
-  <p>
-   结构体中的hash代表了关键字的哈希值，key代表了关键字，cnt代表了在当前的扫描过程中，扫描到的该关键字的个数。
+   其中1/m表示任意一个哈希函数选中这一位的概率（前提是哈希函数是完全随机的），(1-1/m)表示哈希一次没有选中这一位的概率。要把S完全映射到位数组中，需要做kn次哈希。某一位还是0意味着kn次哈希都没有选中它，因此这个概率就是（1-1/m）的kn次方。令p = e
+   <sup>
+    -kn/m
+   </sup>
+   是为了简化运算，这里用到了计算e时常用的近似：
   </p>
   <p>
-   当然，作为哈希表结构，该结构体中还会有其它值，这里不赘述。
+   <a href="../images/9/9.3/9.3.5.jpg" target="_blank">
+    <img alt="" src="../images/9/9.3/9.3.5.jpg" style="max-width:100%;"/>
+   </a>
   </p>
   <p>
-   初始状态下，所有哈希结构的cnt字段为0。
+   令ρ为位数组中0的比例，则ρ的数学期望E(ρ)= p’。在ρ已知的情况下，要求的错误率（false positive rate）为：
   </p>
   <p>
-   <strong>
-    2.
-   </strong>
-   建立一个KeyWord结构，结构体如下：
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="k">struct</span> <span class="n">KeyWord</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">start</span><span class="p">;</span>
-  <span class="n">KeyHash</span><span class="o">*</span> <span class="n">key</span><span class="p">;</span>
-  <span class="n">KeyWord</span><span class="o">*</span> <span class="n">next</span><span class="p">;</span>
-  <span class="n">KeyWord</span><span class="o">*</span> <span class="n">prev</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
-  </div>
-  <p>
-   key字段指向了建立的一个KeyWord代表了当前扫描到的一个关键字，扫描到的多个关键字组成一个双向链表。
+   <a href="../images/9/9.3/9.3.6.jpg" target="_blank">
+    <img alt="" src="../images/9/9.3/9.3.6.jpg" style="max-width:100%;"/>
+   </a>
   </p>
   <p>
-   start字段指向了关键字在文章中的起始位置。
+   (1-ρ)为位数组中1的比例，(1-ρ)
+   <sup>
+    k
+   </sup>
+   就表示k次哈希都刚好选中1的区域，即false positive rate。上式中第二步近似在前面已经提到了，现在来看第一步近似。p’只是ρ的数学期望，在实际中ρ的值有可能偏离它的数学期望值。M. Mitzenmacher已经证明
+   <sup>
+    [2]
+   </sup>
+   ，位数组中0的比例非常集中地分布在它的数学期望值的附近。因此，第一步的近似得以成立。分别将p和p’代入上式中，得：
   </p>
   <p>
-   <strong>
-    3.
-   </strong>
-   建立几个全局变量:
+   <a href="../images/9/9.3/9.3.7.jpg" target="_blank">
+    <img alt="" src="../images/9/9.3/9.3.7.jpg" style="max-width:100%;"/>
+   </a>
   </p>
   <p>
-   KeyWord* head，指向了双向链表的头，初始为NULL。
+   <a href="../images/9/9.3/9.3.8.jpg" target="_blank">
+    <img alt="" src="../images/9/9.3/9.3.8.jpg" style="max-width:100%;"/>
+   </a>
   </p>
   <p>
-   KeyWord* tail，指向了双向链表的尾，初始为NULL。
+   相比p’和f’，使用p和f通常在分析中更为方便。
+  </p>
+  <h3>
+   <a class="anchor" href="#13%E6%9C%80%E4%BC%98%E7%9A%84%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0%E4%B8%AA%E6%95%B0" name="13%E6%9C%80%E4%BC%98%E7%9A%84%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0%E4%B8%AA%E6%95%B0">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   1.3、最优的哈希函数个数
+  </h3>
+  <p>
+   既然Bloom Filter要靠多个哈希函数将集合映射到位数组中，那么应该选择几个哈希函数才能使元素查询时的错误率降到最低呢？这里有两个互斥的理由：如果哈希函数的个数多，那么在对一个不属于集合的元素进行查询时得到0的概率就大；但另一方面，如果哈希函数的个数少，那么位数组中的0就多。为了得到最优的哈希函数个数，我们需要根据上一小节中的错误率公式进行计算。
   </p>
   <p>
-   int minLen，当前扫描到的最短的摘要的长度，初始为0。
+   先用p和f进行计算。注意到f = exp(k ln(1 − e
+   <sup>
+    −kn/m
+   </sup>
+   ))，我们令g = k ln(1 − e
+   <sup>
+    −kn/m
+   </sup>
+   )，只要让g取到最小，f自然也取到最小。由于p = e
+   <sup>
+    -kn/m
+   </sup>
+   ，我们可以将g写成
   </p>
   <p>
-   int minStartPos，当前扫描到的最短摘要的起始位置。
+   <a href="../images/9/9.3/9.3.9.jpg" target="_blank">
+    <img alt="" src="../images/9/9.3/9.3.9.jpg" style="max-width:100%;"/>
+   </a>
   </p>
   <p>
-   int needKeyCnt，还需要几个关键字才能够包括全部的关键字，初始为关键字的个数。
+   根据对称性法则可以很容易看出当p = 1/2，也就是k = ln2· (m/n)时，g取得最小值。在这种情况下，最小错误率f等于(1/2)
+   <sup>
+    k
+   </sup>
+   ≈ (0.6185)
+   <sup>
+    m/n
+   </sup>
+   。另外，注意到p是位数组中某一位仍是0的概率，所以p = 1/2对应着位数组中0和1各一半。换句话说，要想保持错误率低，最好让位数组有一半还空着。
   </p>
   <p>
-   <strong>
-    4.
-   </strong>
-   开始对文章进行扫描。每扫描到一个关键字时，就建立一个KeyWord的结构并且将其连入到扫描到的双向链表中，更新head和tail结构，同时将对应的KeyHash结构中的cnt加1，表示扫描到了关键字。如果cnt由0变成了1，表示扫描到一个新的关键字，因此needKeyCnt减1。
+   需要强调的一点是，p = 1/2时错误率最小这个结果并不依赖于近似值p和f。同样对于f’ = exp(k ln(1 − (1 − 1/m)
+   <sup>
+    kn
+   </sup>
+   ))，g’ = k ln(1 − (1 − 1/m)
+   <sup>
+    kn
+   </sup>
+   )，p’ = (1 − 1/m)
+   <sup>
+    kn
+   </sup>
+   ，我们可以将g’写成
   </p>
   <p>
-   <strong>
-    5.
-   </strong>
-   当needKeyCnt变成0时，表示扫描到了全部的关键字了。此时要进行一个操作：链表头优化。链表头指向的word是摘要的起始点，可是如果对应的KeyHash结构中的cnt大于1，表示扫描到的摘要中还有该关键字，因此可以跳过该关键字。因此，此时将链表头更新为下一个关键字，同时，将对应的KeyHash中的结构中的cnt减1，重复这样的检查，直至某个链表头对应的KeyHash结构中的cnt为1，此时该结构不能够少了。
+   <a href="../images/9/9.3/9.3.10.jpg" target="_blank">
+    <img alt="" src="../images/9/9.3/9.3.10.jpg" style="max-width:100%;"/>
+   </a>
   </p>
   <p>
-   <strong>
-    6.
-   </strong>
-   如果找到更短的minLength，则更新minLength和minStartPos。
+   同样根据对称性法则可以得到当p’ = 1/2时，g’取得最小值。
+  </p>
+  <h3>
+   <a class="anchor" href="#14%E4%BD%8D%E6%95%B0%E7%BB%84%E7%9A%84%E5%A4%A7%E5%B0%8F" name="14%E4%BD%8D%E6%95%B0%E7%BB%84%E7%9A%84%E5%A4%A7%E5%B0%8F">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   1.4、位数组的大小
+  </h3>
+  <p>
+   下面我们来看看，在不超过一定错误率的情况下，Bloom Filter至少需要多少位才能表示全集中任意n个元素的集合。假设全集中共有u个元素，允许的最大错误率为є，下面我们来求位数组的位数m。
   </p>
   <p>
-   <strong>
-    7.
-   </strong>
-   开始新一轮的搜索。此时摘除链表的第一个节点，将needKeyCnt加1，将下一个节点作为链表头，同样的开始链表头优化措施。搜索从上一次的搜索结束处开始，不用回溯。就是所，搜索在整个算法的过程中是一直沿着文章向下的，不会回溯，直至文章搜索完毕。
+   假设X为全集中任取n个元素的集合，F(X)是表示X的位数组。那么对于集合X中任意一个元素x，在s = F(X)中查询x都能得到肯定的结果，即s能够接受x。显然，由于Bloom Filter引入了错误，s能够接受的不仅仅是X中的元素，它还能够є (u - n)个false positive。因此，对于一个确定的位数组来说，它能够接受总共n + є (u - n)个元素。在n + є (u - n)个元素中，s真正表示的只有其中n个，所以一个确定的位数组可以表示
   </p>
   <p>
-   这样的算法的复杂度初步估计是O(M+N)。
+   <a href="../images/9/9.3/9.3.11.jpg" target="_blank">
+    <img alt="" src="../images/9/9.3/9.3.11.jpg" style="max-width:100%;"/>
+   </a>
   </p>
   <p>
-   <strong>
-    8.
-   </strong>
-   另外，我觉得该问题不具备实际意义，要具备实际意义，摘要应该包含完整的句子，所以摘要的起始和结束点应该以句号作为分隔。
+   个集合。m位的位数组共有2
+   <sup>
+    m
+   </sup>
+   个不同的组合，进而可以推出，m位的位数组可以表示
   </p>
   <p>
-   这里，新建立一个结构：Sentence，结构体如下：
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="k">struct</span> <span class="n">Sentence</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">start</span><span class="p">;</span> <span class="c1">//句子的起始位置</span>
-  <span class="kt">int</span> <span class="n">end</span><span class="p">;</span> <span class="c1">//句子的结束位置</span>
-  <span class="n">KeyWord</span><span class="o">*</span> <span class="n">startKey</span><span class="p">;</span> <span class="c1">//句子包含的起始关键字</span>
-  <span class="n">KeyWord</span><span class="o">*</span> <span class="n">endKey</span><span class="p">;</span> <span class="c1">//句子包含的结束关键字</span>
-  <span class="n">Sentence</span><span class="o">*</span> <span class="n">prev</span><span class="p">;</span> <span class="c1">//下一个句子结构</span>
-  <span class="n">Sentence</span><span class="o">*</span> <span class="n">next</span><span class="p">;</span> <span class="c1">//前一个句子结构</span>
-<span class="p">}</span>
-</pre>
-  </div>
-  <p>
-   扫描到的多个句子结构组成一个链表。增加两个全局变量，分别指向了Sentence链表的头和尾。
+   <a href="../images/9/9.3/9.3.12.jpg" target="_blank">
+    <img alt="" src="../images/9/9.3/9.3.12.jpg" style="max-width:100%;"/>
+   </a>
   </p>
   <p>
-   扫描时，建立关键字链表时，也要建立Sentence链表。当扫描到包含了所有的关键字时，必须要扫描到一个完整句子的结束。开始做Sentence头节点优化。做法是：查看Sentence结构中的全部key结构，如果全部的key对应的KeyHash结构的cnt属性全部大于1，表明该句子是多余的，去掉它，去掉它的时候更新对应的HashKey结构的关键字，因为减去了很多的关键字。然后对下一个Sentence结构做同样的操作，直至某个Sentence结构是必不可少的，就是说它包含了当前的摘要中只出现过一次的关键字！
+   个集合。全集中n个元素的集合总共有
   </p>
   <p>
-   扫描到了一个摘要后，在开始新的扫描。更新Sentence链表的头结点为下一个节点，同时更新对应的KeyHash结构中的cnt关键字，当某个cnt变成0时，就递增needKeycnt变量。再次扫描时仍然是从当前的结束位置开始扫描。
+   <a href="../images/9/9.3/9.3.13.jpg" target="_blank">
+    <img alt="" src="../images/9/9.3/9.3.13.jpg" style="max-width:100%;"/>
+   </a>
   </p>
   <p>
-   初步估计时间也是O(M+N)。
+   个，因此要让m位的位数组能够表示所有n个元素的集合，必须有
   </p>
   <p>
-   ok，留下一个编程之美一书上的扩展问题：当搜索一个词语后，有许多的相似页面出现，如何判断两个页面相似，从而在搜索结果中隐去这类结果？
+   <a href="../images/9/9.3/9.3.14.jpg" target="_blank">
+    <img alt="" src="../images/9/9.3/9.3.14.jpg" style="max-width:100%;"/>
+   </a>
   </p>
+  <p>
+   即：
+  </p>
+  <p>
+   <a href="../images/9/9.3/9.3.15.jpg" target="_blank">
+    <img alt="" src="../images/9/9.3/9.3.15.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   上式中的近似前提是n和єu相比很小，这也是实际情况中常常发生的。根据上式，我们得出结论：在错误率不大于є的情况下，m至少要等于n log
+   <sub>
+    2
+   </sub>
+   (1/є)才能表示任意n个元素的集合。
+  </p>
+  <p>
+   上一小节中我们曾算出当k = ln2· (m/n)时错误率f最小，这时f = (1/2)
+   <sup>
+    k
+   </sup>
+   = (1/2)
+   <sup>
+    mln2 / n
+   </sup>
+   。现在令f≤є，可以推出
+  </p>
+  <p>
+   <a href="../images/9/9.3/9.3.16.jpg" target="_blank">
+    <img alt="" src="../images/9/9.3/9.3.16.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   这个结果比前面我们算得的下界n log
+   <sub>
+    2
+   </sub>
+   (1/є)大了log
+   <sub>
+    2
+   </sub>
+   e≈ 1.44倍。这说明在哈希函数的个数取到最优时，要让错误率不超过є，m至少需要取到最小值的1.44倍。
+  </p>
+  <h3>
+   <a class="anchor" href="#15%E6%A6%82%E6%8B%AC" name="15%E6%A6%82%E6%8B%AC">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   1.5、概括
+  </h3>
+  <p>
+   在计算机科学中，我们常常会碰到时间换空间或者空间换时间的情况，即为了达到某一个方面的最优而牺牲另一个方面。Bloom Filter在时间空间这两个因素之外又引入了另一个因素：错误率。在使用Bloom Filter判断一个元素是否属于某个集合时，会有一定的错误率。也就是说，有可能把不属于这个集合的元素误认为属于这个集合（False Positive），但不会把属于这个集合的元素误认为不属于这个集合（False Negative）。在增加了错误率这个因素之后，Bloom Filter通过允许少量的错误来节省大量的存储空间。
+  </p>
+  <p>
+   自从Burton Bloom在70年代提出Bloom Filter之后，Bloom Filter就被广泛用于拼写检查和数据库系统中。近一二十年，伴随着网络的普及和发展，Bloom Filter在网络领域获得了新生，各种Bloom Filter变种和新的应用不断出现。可以预见，随着网络应用的不断深入，新的变种和应用将会继续出现，Bloom Filter必将获得更大的发展。
+  </p>
+  <h2>
+   <a class="anchor" href="#%E4%BA%8C%E9%80%82%E7%94%A8%E8%8C%83%E5%9B%B4" name="%E4%BA%8C%E9%80%82%E7%94%A8%E8%8C%83%E5%9B%B4">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   二、适用范围
+  </h2>
+  <p>
+   可以用来实现数据字典，进行数据的判重，或者集合求交集
+  </p>
+  <h2>
+   <a class="anchor" href="#%E4%B8%89%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%8F%8A%E8%A6%81%E7%82%B9" name="%E4%B8%89%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%8F%8A%E8%A6%81%E7%82%B9">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   三、基本原理及要点
+  </h2>
+  <p>
+   对于原理来说很简单，位数组+k个独立hash函数。将hash函数对应的值的位数组置1，查找时如果发现所有hash函数对应位都是1说明存在，很明显这 个过程并不保证查找的结果是100%正确的。同时也不支持删除一个已经插入的关键字，因为该关键字对应的位会牵动到其他的关键字。所以一个简单的改进就是 counting Bloom filter，用一个counter数组代替位数组，就可以支持删除了。
+  </p>
+  <p>
+   还有一个比较重要的问题，如 何根据输入元素个数n，确定位数组m的大小及hash函数个数。当hash函数个数
+   <code>
+    k=(ln2)*(m/n)
+   </code>
+   时错误率最小。在错误率不大于E的情况 下，m至少要等于
+   <code>
+    n*lg(1/E)
+   </code>
+   才能表示任意n个元素的集合。但m还应该更大些，因为还要保证bit数组里至少一半为0，则m应 该
+   <code>
+    &gt;=nlg(1/E)*lge
+   </code>
+   大概就是
+   <code>
+    nlg(1/E)1.44
+   </code>
+   倍(lg表示以2为底的对数)。
+  </p>
+  <p>
+   举个例子我们假设错误率为0.01，则此时m应大概是n的13倍。这样k大概是8个。
+  </p>
+  <p>
+   注意这里m与n的单位不同，m是bit为单位，而n则是以元素个数为单位(准确的说是不同元素的个数)。通常单个元素的长度都是有很多bit的。所以使用bloom filter内存上通常都是节省的。
+  </p>
+  <h2>
+   <a class="anchor" href="#%E5%9B%9B%E6%89%A9%E5%B1%95" name="%E5%9B%9B%E6%89%A9%E5%B1%95">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   四、扩展
+  </h2>
+  <p>
+   Bloom filter将集合中的元素映射到位数组中，用k（k为哈希函数个数）个映射位是否全1表示元素在不在这个集合中。Counting bloom filter（CBF）将位数组中的每一位扩展为一个counter，从而支持了元素的删除操作。Spectral Bloom Filter（SBF）将其与集合元素的出现次数关联。SBF采用counter中的最小值来近似表示元素的出现频率。
+  </p>
+  <h2>
+   <a class="anchor" href="#%E4%BA%94%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B" name="%E4%BA%94%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   五、问题实例
+  </h2>
+  <p>
+   给你A,B两个文件，各存放50亿条URL，每条URL占用64字节，内存限制是4G，让你找出A,B文件共同的URL。如果是三个乃至n个文件呢？
+  </p>
+  <p>
+   根据这个问题我们来计算下内存的占用，4G=2^32大概是40亿*8大概是340亿，n=50亿，如果按出错率0.01算需要的大概是650亿个bit。 现在可用的是340亿，相差并不多，这样可能会使出错率上升些。另外如果这些urlip是一一对应的，就可以转换成ip，则大大简单了。
+  </p>
+  <h2>
+   <a class="anchor" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E5%8F%8A%E6%8E%A8%E8%8D%90%E9%98%85%E8%AF%BB" name="%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E5%8F%8A%E6%8E%A8%E8%8D%90%E9%98%85%E8%AF%BB">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   参考文献及推荐阅读
+  </h2>
+  <ol>
+   <li>
+    <a href="http://blog.csdn.net/jiaomeng/article/details/1495500">
+     http://blog.csdn.net/jiaomeng/article/details/1495500
+    </a>
+   </li>
+   <li>
+    <a href="http://blog.redfox66.com/post/2010/09/24/mass-data-topic-1-start.aspx">
+     http://blog.redfox66.com/post/2010/09/24/mass-data-topic-1-start.aspx
+    </a>
+    ；
+   </li>
+   <li>
+    维基百科上关于布隆过滤器的介绍：
+    <a href="http://zh.wikipedia.org/zh-cn/%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8">
+     http://zh.wikipedia.org/zh-cn/%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8
+    </a>
+    ；
+   </li>
+   <li>
+    海量数据处理利器之Bloom Filter：
+    <a href="http://www.dbafree.net/?p=36">
+     http://www.dbafree.net/?p=36
+    </a>
+    。
+   </li>
+  </ol>
  </body>
 </html>
 		  </article>
@@ -482,7 +534,7 @@
 					|
 				
 				
-					<a href="09.04.html">next</a>
+					<a href="11.01.svm.html">next</a>
 				
 				<span style="float: right"><a href="index.html">Back to home</a>
 			</div>
