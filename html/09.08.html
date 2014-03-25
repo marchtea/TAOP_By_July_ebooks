@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-d9c478ed7e87eebc36430a1efc4e84b17e65df06.css" />
-  <link rel="stylesheet" href="style_cache/github2-902e67494b49343625b27d5860c1e86bf5c65627.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-87cbc66c0a828647c8911f5e67d5b26b0cf62bbe.css" />
+  <link rel="stylesheet" href="style_cache/github2-f14002c8b8c821aeaeaf37b52de1d6c4d29dc214.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -104,410 +104,307 @@
 		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
 			<html>
  <body>
-  <h1>
-   <a class="anchor" href="#%E7%AC%AC%E4%B8%89%E5%8D%81%E5%85%AB%E7%AB%A0hero%E5%9C%A8%E7%BA%BF%E7%BC%96%E7%A8%8B%E5%88%A4%E9%A2%98%E5%87%BA%E9%A2%98%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%BC%94%E8%BF%9B%E4%B8%8E%E4%BC%98%E5%8C%96" name="%E7%AC%AC%E4%B8%89%E5%8D%81%E5%85%AB%E7%AB%A0hero%E5%9C%A8%E7%BA%BF%E7%BC%96%E7%A8%8B%E5%88%A4%E9%A2%98%E5%87%BA%E9%A2%98%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%BC%94%E8%BF%9B%E4%B8%8E%E4%BC%98%E5%8C%96">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   第三十八章：Hero在线编程判题、出题系统的演进与优化
-  </h1>
   <h2>
-   <a class="anchor" href="#%E5%89%8D%E8%A8%80" name="%E5%89%8D%E8%A8%80">
+   <a class="anchor" href="#%E5%AF%86%E5%8C%99%E5%85%AD%E5%88%86%E5%B8%83%E5%BC%8F%E5%A4%84%E7%90%86%E4%B9%8Bmapreduce" name="%E5%AF%86%E5%8C%99%E5%85%AD%E5%88%86%E5%B8%83%E5%BC%8F%E5%A4%84%E7%90%86%E4%B9%8Bmapreduce">
     <span class="octicon octicon-link">
     </span>
    </a>
-   前言
+   密匙六、分布式处理之Mapreduce
   </h2>
   <p>
-   以前出门在外玩的时候，经常跑去网吧，去网吧也不干啥事，看看博客，改改博客，但若想修改博客上的一段代码，却发觉网吧没有装编译器这个东西，可一想到安装它需要不少时间，所以每次想在网吧写代码都作罢。
+   MapReduce是一种计算模型，简单的说就是将大批量的工作（数据）分解（MAP）执行，然后再将结果合并成最终结果（REDUCE）。这样做的好处是可以在任务被分解后，可以通过大量机器进行并行计算，减少整个操作的时间。但如果你要我再通俗点介绍，那么，说白了，Mapreduce的原理就是一个归并排序。
   </p>
   <p>
-   当时，便想，如果某一天打开浏览器，便能在网页上直接敲代码，那该有多好，随时随地，不受编译器限制。好事多磨，今年3月终于来CSDN来做这样一个在线编程网站Hero了：
-   <a href="http://hero.csdn.net">
-    http://hero.csdn.net
-   </a>
-   ，以项目负责人的身份总体负责它的产品和运营、包括出题。
+   适用范围：数据量大，但是数据种类小可以放入内存
   </p>
   <p>
-   为何要写此文？本文不谈Hero如何实现，也不谈今年3月至今，它的PV涨了多少倍，不谈每一道题的具体解法、思路、代码是怎样的（日后可能会写），更不谈它的界面是如何一步步优化的，只谈谈它的判题系统、出题系统是如何一步步演进和优化的，即它背后是怎样的一种判题机制（用来判断每天几千个用户提交的程序正确与否），以及如何做到让每一个用户都可以来Hero上出题的。
+   基本原理及要点：将数据交给不同的机器去处理，数据划分，结果归约。
   </p>
   <p>
-   顺便对很多朋友询问“Hero后台到底是怎样判题的，为何我的程序提交出错？”的一个集中回答，把判题机制开放出来，对每一个Hero的用户做到公平公正。最后年终将至，也算是对自己近一年工作的部分回顾与总结。
+   扩展：
   </p>
   <p>
-   OK，本文有何问题，欢迎随时指正，对Hero有任何改进或建议，欢迎随时向我反馈，thanks。
-  </p>
-  <h2>
-   <a class="anchor" href="#%E4%B8%80%E6%9C%80%E5%88%9D%E7%9A%84%E4%BA%BA%E5%B7%A5%E8%82%89%E7%9C%BC%E5%88%A4%E9%A2%98" name="%E4%B8%80%E6%9C%80%E5%88%9D%E7%9A%84%E4%BA%BA%E5%B7%A5%E8%82%89%E7%9C%BC%E5%88%A4%E9%A2%98">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   一、最初的人工肉眼判题
-  </h2>
-  <p>
-   Hero从头至尾的实现没有借用过任何开源工具，所以它的每一步探索都显得进展缓慢、推动艰难。在今年3月份之前，在Hero上玩的人不多，所以我刚来公司时，是完全人工肉眼去看每一个用户的程序思路是否正确，不确定的便得自己复制用户的代码粘贴到编译器里进行编译，看结果是否正常。也就是说如果我出一道题：求N个字符的全排列。系统后台只做一件事情，就是把用户的代码简单保存起来。
-  </p>
-  <p>
-   但打开许多用户的答案后，才发觉他并没有实现全排列，他只是写了一个“hello world”：
-  </p>
-  <div class="highlight highlight-java">
-   <pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloWorld</span>   
-<span class="o">{</span>   
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span> <span class="n">args</span><span class="o">[])</span>   
-    <span class="o">{</span>  
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Hello World"</span><span class="o">);</span>  
-    <span class="o">}</span>   
-<span class="o">}</span>   
-</pre>
-  </div>
-  <p>
-   即用户的程序是否正确，我得人工判断。这样的人工判题持续了整整一个月，后来发觉来Hero上玩的人越来越多，每天从之前只看几份代码到需要看几百份代码，我便立马觉得不对劲了。
-  </p>
-  <p>
-   是的，必须得让机器实现自动判题。
-  </p>
-  <h2>
-   <a class="anchor" href="#%E4%BA%8C%E5%86%99%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81%E8%AE%A9%E6%9C%BA%E5%99%A8%E8%87%AA%E5%8A%A8%E5%88%A4%E9%A2%98" name="%E4%BA%8C%E5%86%99%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81%E8%AE%A9%E6%9C%BA%E5%99%A8%E8%87%AA%E5%8A%A8%E5%88%A4%E9%A2%98">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   二、写测试代码让机器自动判题
-  </h2>
-  <h3>
-   <a class="anchor" href="#21%E7%AE%80%E5%8D%95%E7%B2%97%E6%9A%B4%E7%9A%84%E4%B8%80%E7%B3%BB%E5%88%97if-else%E5%88%A4%E6%96%AD" name="21%E7%AE%80%E5%8D%95%E7%B2%97%E6%9A%B4%E7%9A%84%E4%B8%80%E7%B3%BB%E5%88%97if-else%E5%88%A4%E6%96%AD">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   2.1、简单粗暴的一系列if else判断
-  </h3>
-  <p>
-   怎么让机器实现自动判题呢？其实原理也挺简单，可以在出题时写一段测试代码，然后用这段包含了很多组测试数据的测试代码去验证用户的程序是否正确。
-  </p>
-  <p>
-   比如现在有一道题是这样子的：
-  </p>
-  <p>
-   “最长有效括号的长度：给定只包含括号字符'('和 ')'的字符串，请找出最长的有效括号内子括号的长度。
-  </p>
-  <p>
-   举几个例子如下：
-  </p>
-  <p>
-   例如对于"( ()"，最长的有效的括号中的子字符串是"()" ，有效双括号数1个，故它的长度为 2。 
-再比如对于字符串") () () )"，其中最长的有效的括号中的子字符串是"() ()"，有效双括号数2个，故它的长度为4。 
-再比如对于"( () () )"，它的长度为6。
-  </p>
-  <p>
-   换言之，便是有效双括号"()"数的两倍。
-  </p>
-  <p>
-   给定函数原型
-   <code>
-    int longestValidParentheses(string s)
-   </code>
-   ，
-  </p>
-  <div class="highlight highlight-cpp">
-   <pre><span class="cp">#include &lt;string&gt;</span>
-<span class="cp">#include &lt;iostream&gt;</span>
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-
-<span class="k">class</span> <span class="nc">Solution</span>
-<span class="p">{</span>
-  <span class="nl">public:</span>
-    <span class="kt">int</span> <span class="n">longestValidParentheses</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">// Start typing your C/C++ solution below</span>
-        <span class="c1">// DO NOT write int main() function</span>
-       <span class="c1">//....</span>
-        <span class="k">return</span> <span class="n">length</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-<span class="c1">//start 提示：自动阅卷起始唯一标识，请勿删除或增加。</span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>    
-    <span class="c1">//write your code</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="c1">//end //提示：自动阅卷结束唯一标识，请勿删除或增加。        </span>
-<span class="err">请完成此函数，实现题目所要求的功能。”</span>
-    <span class="err">如此，我可能会写这样一段测试代码来验证每一个用户的程序是否正确，如下：</span>
-<span class="c1">//start 提示：自动阅卷起始唯一标识，请勿删除或增加。  </span>
-<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>  
-<span class="p">{</span>      
-    <span class="kt">char</span><span class="o">*</span> <span class="n">la</span> <span class="o">=</span><span class="s">""</span><span class="p">;</span>  
-    <span class="kt">char</span><span class="o">*</span> <span class="n">b</span> <span class="o">=</span>    <span class="s">"("</span><span class="p">;</span>      
-    <span class="kt">char</span><span class="o">*</span> <span class="n">c</span> <span class="o">=</span>    <span class="s">")"</span>    <span class="p">;</span>  
-    <span class="kt">char</span><span class="o">*</span> <span class="n">d</span> <span class="o">=</span>    <span class="s">")("</span><span class="p">;</span>      
-
-    <span class="kt">char</span><span class="o">*</span> <span class="n">e</span> <span class="o">=</span>    <span class="s">"()"</span><span class="p">;</span>      
-    <span class="kt">char</span><span class="o">*</span> <span class="n">f</span> <span class="o">=</span>     <span class="s">"(()"</span><span class="p">;</span>      
-    <span class="kt">char</span><span class="o">*</span> <span class="n">g</span> <span class="o">=</span>    <span class="s">"())"</span><span class="p">;</span>      
-
-    <span class="kt">char</span><span class="o">*</span> <span class="n">h</span>    <span class="o">=</span> <span class="s">"()()"</span><span class="p">;</span>      
-    <span class="kt">char</span><span class="o">*</span> <span class="n">i</span>    <span class="o">=</span> <span class="s">"()(())"</span><span class="p">;</span>      
-    <span class="kt">char</span><span class="o">*</span> <span class="n">j</span> <span class="o">=</span>    <span class="s">"(()()"</span><span class="p">;</span>      
-    <span class="kt">char</span><span class="o">*</span> <span class="n">k</span> <span class="o">=</span>    <span class="s">"()(()"</span><span class="p">;</span>      
-    <span class="kt">char</span><span class="o">*</span> <span class="n">l</span> <span class="o">=</span>    <span class="s">"(()()"</span><span class="p">;</span>      
-    <span class="kt">char</span><span class="o">*</span> <span class="n">m</span> <span class="o">=</span>    <span class="s">"(()())"</span><span class="p">;</span>      
-    <span class="kt">char</span><span class="o">*</span> <span class="n">n</span> <span class="o">=</span>    <span class="s">"((()))())"</span><span class="p">;</span>      
-    <span class="kt">char</span><span class="o">*</span> <span class="n">o</span> <span class="o">=</span>    <span class="s">")()())()()("</span><span class="p">;</span>      
-    <span class="kt">char</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span>    <span class="s">")(((((()())()()))()(()))("</span><span class="p">;</span>  
-
-    <span class="n">Solution</span> <span class="n">a</span><span class="p">;</span>  
-    <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">longestValidParentheses</span><span class="p">(</span><span class="n">la</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">.</span><span class="n">longestValidParentheses</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">.</span><span class="n">longestValidParentheses</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>  
-        <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">.</span><span class="n">longestValidParentheses</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">.</span><span class="n">longestValidParentheses</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">.</span><span class="n">longestValidParentheses</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>  
-        <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">.</span><span class="n">longestValidParentheses</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">.</span><span class="n">longestValidParentheses</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">.</span><span class="n">longestValidParentheses</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">==</span> <span class="mi">6</span>  
-        <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">.</span><span class="n">longestValidParentheses</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">.</span><span class="n">longestValidParentheses</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">.</span><span class="n">longestValidParentheses</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>  
-        <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">.</span><span class="n">longestValidParentheses</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="o">==</span> <span class="mi">6</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">.</span><span class="n">longestValidParentheses</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">==</span> <span class="mi">8</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">.</span><span class="n">longestValidParentheses</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>  
-        <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">.</span><span class="n">longestValidParentheses</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">==</span> <span class="mi">22</span>  
-        <span class="p">)</span>  
-    <span class="p">{</span>  
-        <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">"Y!"</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>  
-    <span class="p">}</span>  
-    <span class="k">else</span>  
-    <span class="p">{</span>  
-        <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">"N!"</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>  
-    <span class="p">}</span>  
-
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>  
-<span class="p">}</span>  
-<span class="c1">//end //提示：自动阅卷结束唯一标识，请勿删除或增加。然后用上面那段包含测试数据的测试代码，代替用户的main函数进行判断：</span>
-<span class="c1">//start 提示：自动阅卷起始唯一标识，请勿删除或增加。  </span>
-<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>  
-<span class="p">{</span>      
-    <span class="c1">//write your code  </span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>  
-<span class="p">}</span>  
-<span class="c1">//end //提示：自动阅卷结束唯一标识，请勿删除或增加。    </span>
-</pre>
-  </div>
-  <p>
-   这样，只要在出题时写好测试代码，机器便能实现自动判题了。但很快，我们发现上述这样的测试代码有两个可以优化的地方：
-  </p>
-  <p>
-   一个for循环代替一系列if else；
-不用让机器跑完所有测试数据，而是只要有一组测试数据没有通过，程序立即退出，即只要机器找到用户第一组没有通过的测试数据即可。
-  </p>
-  <h3>
-   <a class="anchor" href="#22for%E5%BE%AA%E7%8E%AF%E4%BB%A3%E6%9B%BFif-else" name="22for%E5%BE%AA%E7%8E%AF%E4%BB%A3%E6%9B%BFif-else">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   2.2、for循环代替if else
-  </h3>
-  <p>
-   如上节所说，如果测试数据比较少量，还好说，但数据量一大，那么就得写很长很长一段的if else，那对coding的人来说显得非常业余。于是，针对下面这样一道题来看：
-  “合法字符串：用n个不同的字符（编号1 - n），组成一个字符串，有如下2点要求：
+   问题实例：
   </p>
   <ol>
    <li>
-    对于编号为i 的字符，如果2 * i &gt; n，则该字符可以作为最后一个字符，但如果该字符不是作为最后一个字符的话，则该字符后面可以接任意字符；
+    The canonical example application of MapReduce is a process to count the appearances of each different word in a set of documents:
    </li>
    <li>
-    对于编号为i的字符，如果2 * i &lt;= n，则该字符不可以作为最后一个字符，且该字符后面所紧接着的下一个字符的编号一定要 &gt;= 2 * i。
+    海量数据分布在100台电脑中，想个办法高效统计出这批数据的TOP10。
+   </li>
+   <li>
+    一共有N个机器，每个机器上有N个数。每个机器最多存O(N)个数并对它们操作。如何找到N^2个数的中数(median)？
+   </li>
+  </ol>
+  <h3>
+   <a class="anchor" href="#%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84" name="%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   基础架构
+  </h3>
+  <p>
+   想读懂此文，读者必须先要明确以下几点，以作为阅读后续内容的基础知识储备：
+  </p>
+  <ol>
+   <li>
+    Mapreduce是一种模式。
+   </li>
+   <li>
+    Hadoop是一种框架。
+   </li>
+   <li>
+    Hadoop是一个实现了mapreduce模式的开源的分布式并行编程框架。
    </li>
   </ol>
   <p>
-   问有多少长度为M且符合条件的字符串。
-  </p>
-  <p>
-   例如：N = 2，M = 3。则abb, bab, bbb是符合条件的字符串，剩下的均为不符合条件的字符串。
-输入：n,m  (2&lt;=n,m&lt;=1000000000)；
-输出：满足条件的字符串的个数，由于数据很大，输出该数Mod 10^9 + 7的结果。
-  </p>
-  <p>
-   函数头部
-  </p>
-  <p>
-   <code>
-    int validstring(int n,int m) {}
-   </code>
-   我们便可以写出如下的测试代码：
-  </p>
-  <div class="highlight highlight-cpp">
-   <pre><span class="c1">//start 提示：自动阅卷起始唯一标识，请勿删除或增加。  </span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>  
-    <span class="k">const</span> <span class="kt">int</span> <span class="n">n</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">66</span><span class="p">,</span><span class="mi">123</span><span class="p">,</span><span class="mi">31542</span><span class="cm">/*因为题目还在Hero线上，故只公开一部分测试数据*/</span><span class="p">};</span>  
-    <span class="k">const</span> <span class="kt">int</span> <span class="n">m</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="mi">1000000000</span><span class="p">,</span><span class="mi">634</span><span class="p">,</span><span class="mi">10000</span><span class="p">,</span><span class="mi">55555535</span> <span class="cm">/*只公开一部分测试数据*/</span><span class="p">};</span>  
-    <span class="k">const</span> <span class="kt">int</span> <span class="n">answer</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="mi">999999994</span><span class="p">,</span><span class="mi">171104439</span><span class="p">,</span><span class="mi">8789556</span><span class="p">,</span><span class="mi">605498333</span> <span class="cm">/*只公开一部分测试数据*/</span><span class="p">};</span>  
-    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>  
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="cm">/*实际上i不止4组*/</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>  
-        <span class="k">if</span> <span class="p">(</span><span class="n">validstring</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">m</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">!=</span> <span class="n">answer</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>  
-            <span class="k">break</span><span class="p">;</span>  
-        <span class="p">}</span>  
-    <span class="p">}</span>  
-    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>  
-        <span class="n">puts</span><span class="p">(</span><span class="s">"Y!"</span><span class="p">);</span>  
-    <span class="p">}</span>  
-    <span class="k">else</span> <span class="p">{</span>  
-        <span class="n">printf</span><span class="p">(</span><span class="s">"N!"</span><span class="p">);</span>  
-    <span class="p">}</span>  
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>  
-<span class="p">}</span>  
-<span class="c1">//end //提示：自动阅卷结束唯一标识，请勿删除或增加。</span>
-</pre>
-  </div>
-  <p>
-   如此，上面这样的一段测试代码便能让机器自动判断用户提交的每一个程序是否正确。但就像你现在去做也会体会到，系统光告诉我的程序是对是错，估计还远远不够，即如果用户的程序错了，那系统得告诉他怎么错了呀？是因为超时，还是程序本身的逻辑错了。
-  </p>
-  <p>
-   于是，系统很快便反馈了用户出错的第一组数据，怎么实现的呢？很简单，只要把上面那段判断出用户的程序是错的那部分加上出错的那一组数据即可：
-  </p>
-  <div class="highlight highlight-cpp">
-   <pre><span class="c1">//start 提示：自动阅卷起始唯一标识，请勿删除或增加。  </span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>  
-    <span class="k">const</span> <span class="kt">int</span> <span class="n">n</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">66</span><span class="p">,</span><span class="mi">123</span><span class="p">,</span><span class="mi">31542</span><span class="cm">/*因为题目还在Hero线上，故只公开一部分测试数据*/</span><span class="p">};</span>  
-    <span class="k">const</span> <span class="kt">int</span> <span class="n">m</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="mi">1000000000</span><span class="p">,</span><span class="mi">634</span><span class="p">,</span><span class="mi">10000</span><span class="p">,</span><span class="mi">55555535</span> <span class="cm">/*只公开一部分测试数据*/</span><span class="p">};</span>  
-    <span class="k">const</span> <span class="kt">int</span> <span class="n">answer</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="mi">999999994</span><span class="p">,</span><span class="mi">171104439</span><span class="p">,</span><span class="mi">8789556</span><span class="p">,</span><span class="mi">605498333</span> <span class="cm">/*只公开一部分测试数据*/</span><span class="p">};</span>  
-    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>  
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="cm">/*实际上i不止4组*/</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>  
-        <span class="k">if</span> <span class="p">(</span><span class="n">validstring</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">m</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">!=</span> <span class="n">answer</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>  
-            <span class="k">break</span><span class="p">;</span>  
-        <span class="p">}</span>  
-    <span class="p">}</span>  
-    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>  
-        <span class="n">puts</span><span class="p">(</span><span class="s">"Y!"</span><span class="p">);</span>  
-    <span class="p">}</span>  
-    <span class="k">else</span> <span class="p">{</span>  
-        <span class="n">printf</span><span class="p">(</span><span class="s">"N!</span><span class="se">\n</span><span class="s">%d %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">n</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">m</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>  
-    <span class="p">}</span>  
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>  
-<span class="p">}</span>  
-<span class="c1">//end //提示：自动阅卷结束唯一标识，请勿删除或增加。  </span>
-</pre>
-  </div>
-  <p>
-   很快，我又发现，对于出题本身来说，构造它的完整而全面的测试数据已属不易，现在还要针对每一道题目去写一份测试代码，而且是每一种语言C、C++、Java、C#都写一遍，做一次就意识到这不对劲了。可这样一段要求为每一道题每一种编程语言的写痛苦的测试代码的过程持续了整整半年，直到今年10月份。
-  </p>
-  <p>
-   那是否可以简化写这个测试代码的工作，让系统本身变得更加智能呢？因为既然关键是测试数据的构造，那么在有了测试数据的前提下，是否只要填测试数据了，而不必再写测试代码呢？请看下面本文第3节部分。
-  </p>
-  <h2>
-   <a class="anchor" href="#%E4%B8%89%E5%87%BA%E9%A2%98%E7%B3%BB%E7%BB%9F%E6%9C%AC%E8%BA%AB%E7%9A%84%E6%8C%81%E7%BB%AD%E6%94%B9%E8%BF%9B%E4%B8%8E%E4%BC%98%E5%8C%96" name="%E4%B8%89%E5%87%BA%E9%A2%98%E7%B3%BB%E7%BB%9F%E6%9C%AC%E8%BA%AB%E7%9A%84%E6%8C%81%E7%BB%AD%E6%94%B9%E8%BF%9B%E4%B8%8E%E4%BC%98%E5%8C%96">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   三、出题系统本身的持续改进与优化
-  </h2>
-  <h3>
-   <a class="anchor" href="#31%E6%BC%AB%E9%95%BF%E7%9A%84%E5%86%99%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81%E7%9A%84%E8%BF%87%E7%A8%8B" name="31%E6%BC%AB%E9%95%BF%E7%9A%84%E5%86%99%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81%E7%9A%84%E8%BF%87%E7%A8%8B">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   3.1、漫长的写测试代码的过程
-  </h3>
-  <p>
-   如上文所述，直到今年10月份，hero后台的判题机制一直都是，针对每一道题每一种语言单独写一份带main函数的测试代码，用这段测试代码替换掉用户程序里的main函数。如下图所示：右边的start end 代码 替换掉用户程序里的 start end 代码：
-  </p>
-  <p>
-   <a href="../images/38/38.1.jpg" target="_blank">
-    <img alt="" src="../images/38/38.1.jpg" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   当然，这个写测试代码的过程中，得到了好友曹鹏的鼎力相助，若不是他的支持，我也坚持不了6个月，thanks。但即便有他的帮助，这个漫长的写测试代码的过程还是令人非常煎熬。
-  </p>
-  <p>
-   此外，推动自己一定把出题的过程简化，不想写测试代码的重要原因还有一个：即正因为自己要对每一道题每一种编程语言都写一份测试代码，导致这种出题效率异常底下，这对于整个Hero系统是十分不利的。
-  </p>
-  <p>
-   因此，团队决定，把出题的接口开放，让所有人都可以来Hero上出题，此功能为：社会化出题。在Hero首页的右侧边栏，如下：
-  </p>
-  <p>
-   <a href="../images/38/38.2.jpg" target="_blank">
-    <img alt="" src="../images/38/38.2.jpg" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   这个时候，问题就来了，让自己写测试代码也就算了，虽然不轻松，但至少在曹鹏的帮助下还能应对，但怎么可以让用户也去为每一道题每一种语言写测试代码呢？然这一切只是自己的主观判断，并没有太多的实际证据支撑我的判断，于是团队决定，暂时先让社会化出题上线后再说。
+   所以，你现在，知道了什么是mapreduce，什么是hadoop，以及这两者之间最简单的联系，而本文的主旨即是，一句话概括：
+   <strong>
+    在hadoop的框架上采取mapreduce的模式处理海量数据
+   </strong>
+   。下面，咱们可以依次深入学习和了解mapreduce和hadoop这两个东西了。
   </p>
   <h3>
-   <a class="anchor" href="#32%E5%87%BA%E9%A2%98%E6%97%B6%E5%8F%AA%E5%A1%AB%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%E4%B8%8D%E5%86%99%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81" name="32%E5%87%BA%E9%A2%98%E6%97%B6%E5%8F%AA%E5%A1%AB%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%E4%B8%8D%E5%86%99%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81">
+   <a class="anchor" href="#mapreduce%E6%A8%A1%E5%BC%8F" name="mapreduce%E6%A8%A1%E5%BC%8F">
     <span class="octicon octicon-link">
     </span>
    </a>
-   3.2、出题时只填测试数据，不写测试代码
+   Mapreduce模式
   </h3>
-  <h4>
-   <a class="anchor" href="#321%E5%87%BA%E9%A2%98%E6%97%B6%E4%B8%80%E4%B8%AA%E6%A1%86%E4%B8%80%E4%B8%AA%E6%A1%86%E7%9A%84%E5%A1%AB%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE" name="321%E5%87%BA%E9%A2%98%E6%97%B6%E4%B8%80%E4%B8%AA%E6%A1%86%E4%B8%80%E4%B8%AA%E6%A1%86%E7%9A%84%E5%A1%AB%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE">
+  <p>
+   前面说了，mapreduce是一种模式，一种什么模式呢?一种云计算的核心计算模式，一种分布式运算技术，也是简化的分布式编程模式，它主要用于解决问题的程序开发模型，也是开发人员拆解问题的方法。
+  </p>
+  <p>
+   Ok，光说不上图，没用。如下图所示，mapreduce模式的主要思想是将自动分割要执行的问题（例如程序）拆解成map（映射）和reduce（化简）的方式，流程图如下图1所示：
+   <br/>
+   <a href="../images/8/8.2/8.2.1.gif" target="_blank">
+    <img alt="" src="../images/8/8.2/8.2.1.gif" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   在数据被分割后通过Map 函数的程序将数据映射成不同的区块，分配给计算机机群处理达到分布式运算的效果，在通过Reduce 函数的程序将结果汇整，从而输出开发者需要的结果。
+  </p>
+  <p>
+   MapReduce 借鉴了函数式程序设计语言的设计思想，其软件实现是指定一个Map 函数，把键值对(key/value)映射成新的键值对(key/value)，形成一系列中间结果形式的key/value 对，然后把它们传给Reduce(规约)函数，把具有相同中间形式key 的value 合并在一起。Map 和Reduce 函数具有一定的关联性。函数描述如表1 所示：
+   <br/>
+   <a href="../images/8/8.2/8.2.2.gif" target="_blank">
+    <img alt="" src="../images/8/8.2/8.2.2.gif" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   MapReduce致力于解决大规模数据处理的问题，因此在设计之初就考虑了数据的局部性原理，利用局部性原理将整个问题分而治之。MapReduce集群由普通PC机构成，为无共享式架构。在处理之前，将数据集分布至各个节点。处理时，每个节点就近读取本地存储的数据处理（map），将处理后的数据进行合并（combine）、排序（shuffle and sort）后再分发（至reduce节点），避免了大量数据的传输，提高了处理效率。无共享式架构的另一个好处是配合复制（replication）策略，集群可以具有良好的容错性，一部分节点的down机对集群的正常工作不会造成影响。
+  </p>
+  <p>
+   ok，你可以再简单看看下副图，整幅图是有关hadoop的作业调优参数及原理，图的左边是MapTask运行示意图，右边是ReduceTask运行示意图：
+   <br/>
+   <a href="../images/8/8.2/8.2.3.gif" target="_blank">
+    <img alt="" src="../images/8/8.2/8.2.3.gif" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   如上图所示，其中map阶段，当map task开始运算，并产生中间数据后并非直接而简单的写入磁盘，它首先利用内存buffer来对已经产生的buffer进行缓存，并在内存buffer中进行一些预排序来优化整个map的性能。而上图右边的reduce阶段则经历了三个阶段，分别Copy-&gt;Sort-&gt;reduce。我们能明显的看出，其中的Sort是采用的归并排序，即merge sort。
+  </p>
+  <p>
+   了解了什么是mapreduce，接下来，咱们可以来了解实现了mapreduce模式的开源框架—hadoop。
+  </p>
+  <h3>
+   <a class="anchor" href="#hadoop%E6%A1%86%E6%9E%B6" name="hadoop%E6%A1%86%E6%9E%B6">
     <span class="octicon octicon-link">
     </span>
    </a>
-   3.2.1、出题时一个框一个框的填测试数据
-  </h4>
+   Hadoop框架
+  </h3>
   <p>
-   我最担心的糟糕结果还是出现了。10月初社会化出题上线，直到10月底，尽管有一些热心的朋友在没有任何奖励的情况下来Hero上出题了，但几乎没有任何人愿意写测试代码。
+   前面说了，hadoop是一个框架，一个什么样的框架呢?Hadoop 是一个实现了MapReduce 计算模型的开源分布式并行编程框架，程序员可以借助Hadoop 编写程序，将所编写的程序运行于计算机机群上，从而实现对海量数据的处理。
   </p>
   <p>
-   尽管我们走了不少弯路，导致整个进展的过程非常缓慢，但至少还是在一直前进。
-  </p>
-  <p>
-   得益于整个团队，在11月份的时候，出题终于不用再手写测试代码了，只需要一组一组一个框一个框的去填测试数据了。
-  </p>
-  <p>
-   <a href="../images/38/38.3.jpg" target="_blank">
-    <img alt="" src="../images/38/38.3.jpg" style="max-width:100%;"/>
+   此外，Hadoop 还提供一个分布式文件系统(HDFS）及分布式数据库（HBase）用来将数据存储或部署到各个计算节点上。所以，你可以大致认为：
+   <em>
+    Hadoop=HDFS（文件系统，数据存储技术相关）+HBase（数据库）+MapReduce（数据处理）
+   </em>
+   。Hadoop 框架如图2 所示：
+   <br/>
+   <a href="../images/8/8.2/8.2.4.gif" target="_blank">
+    <img alt="" src="../images/8/8.2/8.2.4.gif" style="max-width:100%;"/>
    </a>
   </p>
-  <h4>
-   <a class="anchor" href="#322%E5%87%BA%E9%A2%98%E6%97%B6%E6%89%B9%E9%87%8F%E5%A1%AB%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE" name="322%E5%87%BA%E9%A2%98%E6%97%B6%E6%89%B9%E9%87%8F%E5%A1%AB%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE">
+  <p>
+   借助Hadoop 框架及云计算核心技术MapReduce 来实现数据的计算和存储，并且将HDFS 分布式文件系统和HBase 分布式数据库很好的融入到云计算框架中，从而实现云计算的分布式、并行计算和存储，并且得以实现很好的处理大规模数据的能力。
+  </p>
+  <h3>
+   <a class="anchor" href="#hadoop%E7%9A%84%E7%BB%84%E6%88%90%E9%83%A8%E5%88%86" name="hadoop%E7%9A%84%E7%BB%84%E6%88%90%E9%83%A8%E5%88%86">
     <span class="octicon octicon-link">
     </span>
    </a>
-   3.2.2、出题时批量填测试数据
-  </h4>
+   Hadoop的组成部分
+  </h3>
   <p>
-   如果一道题目只有不到10组测试数据，那么出题时一个框一个框的去填测试数据是没什么问题的。但问题是，不存在某一道题的测试数据少于10组的情况，多的话几百组，甚至上千组，因此，我们很快发现必须支持批量填测试数据，于是到了今年12月底，出题系统改造成了如下图所示：
-  </p>
-  <p>
-   <a href="../images/38/38.4.jpg" target="_blank">
-    <img alt="" src="../images/38/38.4.jpg" style="max-width:100%;"/>
+   我们已经知道，Hadoop是Google的MapReduce一个Java实现。MapReduce是一种简化的分布式编程模式，让程序自动分布到一个由普通机器组成的超大集群上并发执行。
+   <em>
+    Hadoop主要由HDFS、MapReduce和HBase
+   </em>
+   等组成。具体的hadoop的组成如下图：
+   <br/>
+   <a href="../images/8/8.2/8.2.5.gif" target="_blank">
+    <img alt="" src="../images/8/8.2/8.2.5.gif" style="max-width:100%;"/>
    </a>
   </p>
-  <h4>
-   <a class="anchor" href="#33%E5%90%8E%E7%BB%AD%E7%9A%84%E6%94%B9%E8%BF%9B%E4%BC%98%E5%8C%96" name="33%E5%90%8E%E7%BB%AD%E7%9A%84%E6%94%B9%E8%BF%9B%E4%BC%98%E5%8C%96">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   .3.3、后续的改进、优化
-  </h4>
   <p>
-   当然，直到现在，出题系统还有很多需要改进、优化的地方，如需支持数组，支持多行输入对应多行输出，直到最终的完全OJ模式，这些请待本文后续更新。团队还有很多事情要做，但我们一直在努力，在整个团队的推动下，Hero也一直在前进，从未退步。
+   由上图，我们可以看到：
+  </p>
+  <ol>
+   <li>
+    <p>
+     <strong>
+      Hadoop HDFS
+     </strong>
+     是Google GFS存储系统的开源实现，主要应用场景是作为并行计算环境（MapReduce）的基础组件，同时也是BigTable（如HBase、HyperTable）的底层分布式文件系统。HDFS采用master/slave架构。一个HDFS集群是有由一个Namenode和一定数目的Datanode组成。Namenode是一个中心服务器，负责管理文件系统的namespace和客户端对文件的访问。Datanode在集群中一般是一个节点一个，负责管理节点上它们附带的存储。在内部，一个文件其实分成一个或多个block，这些block存储在Datanode集合里。如下图所示（
+     <em>
+      HDFS体系结构图
+     </em>
+     ）：
+     <br/>
+     <a href="../images/8/8.2/8.2.6.gif" target="_blank">
+      <img alt="" src="../images/8/8.2/8.2.6.gif" style="max-width:100%;"/>
+     </a>
+    </p>
+   </li>
+   <li>
+    <p>
+     <strong>
+      Hadoop MapReduce
+     </strong>
+     是一个使用简易的软件框架，基于它写出来的应用程序能够运行在由上千个商用机器组成的大型集群上，并以一种可靠容错的方式并行处理上TB级别的数据集。
+    </p>
+    <p>
+     一个MapReduce作业（job）通常会把输入的数据集切分为若干独立的数据块，由 Map任务（task）以完全并行的方式处理它们。框架会对Map的输出先进行排序，然后把结果输入给Reduce任务。通常作业的输入和输出都会被存储在文件系统中。整个框架负责任务的调度和监控，以及重新执行已经失败的任务。如下图所示（
+     <em>
+      Hadoop MapReduce处理流程图
+     </em>
+     ）：
+     <br/>
+     <a href="../images/8/8.2/8.2.7.gif" target="_blank">
+      <img alt="" src="../images/8/8.2/8.2.7.gif" style="max-width:100%;"/>
+     </a>
+    </p>
+   </li>
+   <li>
+    <p>
+     <strong>
+      Hive是基于Hadoop的一个数据仓库工具，处理能力强而且成本低廉
+     </strong>
+     。
+    </p>
+    <p>
+     主要特点：
+    </p>
+    <p>
+     存储方式是将结构化的数据文件映射为一张数据库表。提供类SQL语言，实现完整的SQL查询功能。可以将SQL语句转换为MapReduce任务运行，十分适合数据仓库的统计分析。
+    </p>
+    <p>
+     不足之处：
+    </p>
+    <p>
+     采用行存储的方式（SequenceFile）来存储和读取数据。效率低：当要读取数据表某一列数据时需要先取出所有数据然后再提取出某一列的数据，效率很低。同时，它还占用较多的磁盘空间。
+    </p>
+    <p>
+     由于以上的不足，有人（查礼博士）介绍了一种将分布式数据处理系统中以记录为单位的存储结构变为以列为单位的存储结构，进而减少磁盘访问数量，提高查询处理性能。这样，由于相同属性值具有相同数据类型和相近的数据特性，以属性值为单位进行压缩存储的压缩比更高，能节省更多的存储空间。如下图所示（
+     <em>
+      行列存储的比较图
+     </em>
+     ）：
+     <br/>
+     <a href="../images/8/8.2/8.2.8.gif" target="_blank">
+      <img alt="" src="../images/8/8.2/8.2.8.gif" style="max-width:100%;"/>
+     </a>
+    </p>
+   </li>
+   <li>
+    <p>
+     <strong>
+      HBase
+     </strong>
+     <br/>
+     HBase是一个分布式的、面向列的开源数据库，它不同于一般的关系数据库,是一个适合于非结构化数据存储的数据库。另一个不同的是HBase基于列的而不是基于行的模式。HBase使用和 BigTable非常相同的数据模型。用户存储数据行在一个表里。一个数据行拥有一个可选择的键和任意数量的列，一个或多个列组成一个ColumnFamily，一个Fmaily下的列位于一个HFile中，易于缓存数据。表是疏松的存储的，因此用户可以给行定义各种不同的列。在HBase中数据按主键排序，同时表按主键划分为多个HRegion，如下图所示（
+     <em>
+      HBase数据表结构图
+     </em>
+     ）：
+     <a href="../images/8/8.2/8.2.9.gif" target="_blank">
+      <img alt="" src="../images/8/8.2/8.2.9.gif" style="max-width:100%;"/>
+     </a>
+    </p>
+   </li>
+  </ol>
+  <p>
+   Ok，行文至此，看似洋洋洒洒近千里，但若给读者造成阅读上的负担，则不是我本意。接下来的内容，我不会再引用诸多繁杂的专业术语，以给读者心里上造成不良影响。
+  </p>
+  <p>
+   我再给出一副图，算是对上文所说的hadoop框架及其组成部分做个总结，如下图所示，便是hadoop的内部结构，我们可以看到，海量的数据交给hadoop处理后，在hadoop的内部中，正如上文所述：hadoop提供一个分布式文件系统（HDFS）及分布式数据库（Hbase）用来存储或部署到各个计算点上，最终在内部采取mapreduce的模式对其数据进行处理，然后输出处理结果：
+   <br/>
+   <a href="../images/8/8.2/8.2.10.gif" target="_blank">
+    <img alt="" src="../images/8/8.2/8.2.10.gif" style="max-width:100%;"/>
+   </a>
   </p>
   <p>
    <strong>
-    相关链接
+    其它模式/方法论，结合操作系统知识
    </strong>
   </p>
-  <ul>
-   <li>
-    Hero在线编程网站：
-    <a href="http://hero.csdn.net/">
-     http://hero.csdn.net/
-    </a>
-   </li>
-   <li>
-    本文2.1节问题的在线挑战地址：
-    <a href="http://hero.csdn.net/Question/Details?ID=54&amp;ExamID=52">
-     http://hero.csdn.net/Question/Details?ID=54&amp;ExamID=52
-    </a>
-   </li>
-   <li>
-    本文2.2节问题的在线编程地址：
-    <a href="http://hero.csdn.net/Question/Details?ID=74&amp;ExamID=72">
-     http://hero.csdn.net/Question/Details?ID=74&amp;ExamID=72
-    </a>
-   </li>
-  </ul>
+  <p>
+   至此，六种处理海量数据问题的模式/方法已经阐述完毕。据观察，这方面的面试题无外乎以上一种或其变形，然题目为何取为是：秒杀99%的海量数据处理面试题，而不是100%呢。OK，给读者看最后一道题，如下：
+  </p>
+  <p>
+   <strong>
+    非常大的文件，装不进内存。每行一个int类型数据，现在要你随机取100个数。
+   </strong>
+  </p>
+  <p>
+   我们发现上述这道题，无论是以上任何一种模式/方法都不好做，那有什么好的别的方法呢？我们可以借鉴操作系统内存分页系统设计(说白了，就是映射+建索引)。
+  </p>
+  <p>
+   即针对此题，我们可以做出如下解决方案：
+  </p>
+  <p>
+   先生成4G的地址表，在把这个表划分为小的4M的小文件做个索引，二级索引。30位前十位表示第几个4M文件，后20位表示在这个4M文件的第几个，等等，基于key value来设计存储，用key来建索引。
+  </p>
+  <p>
+   但如果现在只有10000个数，然后怎么去随机从这10000个数里面随机取100个数？请读者思考。更多海里数据处理面试题，请参见此文第一部分：
+   <a href="http://blog.csdn.net/v_july_v/article/details/6685962">
+    http://blog.csdn.net/v_july_v/article/details/6685962
+   </a>
+   。
+  </p>
+  <h2>
+   <a class="anchor" href="#%E5%90%8E%E8%AE%B0" name="%E5%90%8E%E8%AE%B0">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   后记
+  </h2>
+  <p>
+   经过上面这么多海量数据处理面试题的轰炸，我们依然可以看出这类问题是有一定的解决方案/模式的，所以，不必将其神化。然有点，必须负责任的敬告大家：无论是这些海量数据处理面试题也好，还是算法也好，
+   <strong>
+    面试时
+   </strong>
+   ，70~80%的人不是倒在这两方面，而是倒在基础之上(诸如语言，数据库，操作系统，网络协议等等)，所以，
+   <strong>
+    无论任何时候，基础最重要
+   </strong>
+   ，没了基础，便什么都不是。
+  </p>
  </body>
 </html>
 		  </article>
 		  
 			<div id="nav">
 				
-					<a href="09.06~09.07.html">prev</a>
-					
+					<a href="09.07.html">prev</a>
+					|
 				
+				
+					<a href="10.01.01.html">next</a>
 				
 				<span style="float: right"><a href="index.html">Back to home</a>
 			</div>

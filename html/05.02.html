@@ -251,56 +251,6 @@
 </pre>
   </div>
   <p>
-   代码二：思路，记录以第i个结尾的最大乘积M和最小乘积m，并且记录这两个区间的起点（终点都是i），不断更新，
-   <a href="http://www.51weixue.com/thread-246-1-1.html">
-    来源
-   </a>
-   ：
-  </p>
-  <div class="highlight highlight-cpp">
-   <pre><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">maxproduct</span><span class="p">(</span><span class="kt">double</span> <span class="o">*</span><span class="n">f</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="c1">//返回最大乘积的起点终点</span>
-    <span class="kt">int</span> <span class="n">R</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>   <span class="c1">// 最大最小区间的 起点</span>
-    <span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">make_pair</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>     <span class="c1">// 最大 最小的区间下标</span>
-    <span class="kt">double</span> <span class="n">M</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">m</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">answer</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span> <span class="c1">// 最大 最小值</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">double</span> <span class="n">t0</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">M</span><span class="p">,</span> <span class="n">t1</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">t0</span> <span class="o">&gt;</span> <span class="n">t1</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">M</span> <span class="o">=</span> <span class="n">t0</span><span class="p">;</span>
-            <span class="n">m</span> <span class="o">=</span> <span class="n">t1</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span>
-        <span class="p">{</span>
-            <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="n">R</span><span class="p">;</span>
-            <span class="n">R</span> <span class="o">=</span> <span class="n">r</span><span class="p">;</span>
-            <span class="n">r</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
-            <span class="n">M</span> <span class="o">=</span> <span class="n">t1</span><span class="p">;</span>
-            <span class="n">m</span> <span class="o">=</span> <span class="n">t0</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">M</span> <span class="o">&lt;</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-        <span class="p">{</span>
-            <span class="n">M</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-            <span class="n">R</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="o">&gt;</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-        <span class="p">{</span>
-            <span class="n">m</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-            <span class="n">r</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">answer</span> <span class="o">&lt;</span> <span class="n">M</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">answer</span> <span class="o">=</span> <span class="n">M</span><span class="p">;</span>
-            <span class="n">ret</span> <span class="o">=</span> <span class="n">make_pair</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
-  </div>
-  <p>
    <strong>
     解法三、
    </strong>
@@ -316,7 +266,7 @@
    初始状态为Max[1]=Min[1]=a[1]。
   </p>
   <p>
-   C/C++代码一，很简洁的一小段代码：
+   C/C++代码一：
   </p>
   <div class="highlight highlight-c">
    <pre><span class="kt">double</span> <span class="nf">func</span><span class="p">(</span><span class="kt">double</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
@@ -372,75 +322,6 @@
     <span class="c1">//内存释放</span>
     <span class="n">delete</span> <span class="p">[]</span> <span class="n">Max</span><span class="p">;</span>
     <span class="n">delete</span> <span class="p">[]</span> <span class="n">Min</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
-  </div>
-  <p>
-   C#版完整代码(代码来自参加英雄会在线编程挑战之
-   <a href="http://hero.pongo.cn/Question/Details?ID=19&amp;ExamID=19">
-    1019、最大乘积连续子串
-   </a>
-   的在线提交代码的用户)：
-  </p>
-  <div class="highlight highlight-csharp">
-   <pre><span class="c1">//答题英雄：danielqkj</span>
-<span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
-<span class="k">public</span> <span class="k">class</span> <span class="nc">Test</span>
-<span class="p">{</span>
-    <span class="k">void</span> <span class="nf">Max</span><span class="p">(</span><span class="kt">double</span> <span class="n">a</span><span class="p">,</span> <span class="kt">double</span> <span class="n">b</span><span class="p">,</span> <span class="kt">double</span> <span class="n">c</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">double</span> <span class="n">d</span> <span class="p">=</span> <span class="p">(</span><span class="n">a</span> <span class="p">&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="p">?</span> <span class="n">a</span> <span class="p">:</span> <span class="n">b</span><span class="p">;</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">d</span> <span class="p">&gt;</span> <span class="n">c</span><span class="p">)</span> <span class="p">?</span> <span class="n">d</span> <span class="p">:</span> <span class="n">c</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">void</span> <span class="nf">Min</span><span class="p">(</span><span class="kt">double</span> <span class="n">a</span><span class="p">,</span> <span class="kt">double</span> <span class="n">b</span><span class="p">,</span> <span class="kt">double</span> <span class="n">c</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">double</span> <span class="n">d</span> <span class="p">=</span> <span class="p">(</span><span class="n">a</span> <span class="p">&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="p">?</span> <span class="n">b</span> <span class="p">:</span> <span class="n">a</span><span class="p">;</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">d</span> <span class="p">&gt;</span> <span class="n">c</span><span class="p">)</span> <span class="p">?</span> <span class="n">c</span> <span class="p">:</span> <span class="n">d</span><span class="p">;</span>
-    <span class="p">}</span>
-
-
-    <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">n</span> <span class="p">=</span> <span class="n">Int32</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="n">Console</span><span class="p">.</span><span class="n">readline</span><span class="p">());</span>
-        <span class="kt">double</span><span class="p">[]</span> <span class="n">a</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">double</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
-        <span class="kt">double</span> <span class="n">maxvalue</span> <span class="p">=</span> <span class="n">a</span><span class="p">[</span><span class="m">0</span><span class="p">];</span>
-        <span class="kt">double</span><span class="p">[]</span> <span class="n">max</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">double</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
-        <span class="kt">double</span><span class="p">[]</span> <span class="n">min</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">double</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
-        <span class="kt">double</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">;</span>
-
-        <span class="n">String</span><span class="p">[]</span> <span class="n">s</span> <span class="p">=</span> <span class="n">Console</span><span class="p">.</span><span class="n">readline</span><span class="p">().</span><span class="n">split</span><span class="p">(</span><span class="sc">' '</span><span class="p">);</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-        <span class="p">{</span>
-            <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">Double</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-        <span class="p">}</span>
-
-               <span class="n">max</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="p">=</span> <span class="n">a</span><span class="p">[</span><span class="m">0</span><span class="p">];</span>
-        <span class="n">min</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="p">=</span> <span class="n">a</span><span class="p">[</span><span class="m">0</span><span class="p">];</span>
-        <span class="n">start</span> <span class="p">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">end</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
-
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-        <span class="p">{</span>
-            <span class="n">max</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">Max</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">*</span> <span class="n">max</span><span class="p">[</span><span class="n">i</span> <span class="p">-</span> <span class="m">1</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">*</span> <span class="n">min</span><span class="p">[</span><span class="n">i</span> <span class="p">-</span> <span class="m">1</span><span class="p">]);</span>
-            <span class="n">min</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">Min</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">*</span> <span class="n">max</span><span class="p">[</span><span class="n">i</span> <span class="p">-</span> <span class="m">1</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">*</span> <span class="n">min</span><span class="p">[</span><span class="n">i</span> <span class="p">-</span> <span class="m">1</span><span class="p">]);</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="n">max</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">&gt;</span> <span class="n">maxvalue</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="n">maxvalue</span> <span class="p">=</span> <span class="n">max</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-                <span class="n">end</span> <span class="p">=</span> <span class="n">i</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-
-        <span class="kt">double</span> <span class="n">mmm</span> <span class="p">=</span> <span class="n">maxvalue</span><span class="p">;</span>
-        <span class="k">while</span> <span class="p">(</span> <span class="p">(</span><span class="n">mmm</span> <span class="p">-</span> <span class="m">0.0</span><span class="p">)</span> <span class="p">&gt;</span> <span class="m">0.00001</span> <span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">start</span> <span class="p">=</span> <span class="n">end</span><span class="p">;</span>
-            <span class="n">mmm</span> <span class="p">=</span> <span class="n">mmm</span> <span class="p">/</span> <span class="n">a</span><span class="p">[</span><span class="n">start</span><span class="p">];</span>
-        <span class="p">}</span>
-
-        <span class="n">Console</span><span class="p">.</span><span class="n">Writeline</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">start</span><span class="p">]</span> <span class="p">+</span> <span class="s">" "</span> <span class="p">+</span> <span class="n">a</span><span class="p">[</span><span class="n">end</span><span class="p">]</span> <span class="p">+</span> <span class="s">" "</span> <span class="p">+</span> <span class="n">maxvalue</span><span class="p">);</span>
-
-    <span class="p">}</span>
 <span class="p">}</span>
 </pre>
   </div>

@@ -105,184 +105,66 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E4%B9%8Bbti-map%E8%AF%A6%E8%A7%A3" name="%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E4%B9%8Bbti-map%E8%AF%A6%E8%A7%A3">
+   <a class="anchor" href="#%E4%BB%8Esetmap%E8%B0%88%E5%88%B0hashtablehash_maphash_set" name="%E4%BB%8Esetmap%E8%B0%88%E5%88%B0hashtablehash_maphash_set">
     <span class="octicon octicon-link">
     </span>
    </a>
-   海量数据处理之Bti-map详解
+   从set/map谈到hashtable/hash_map/hash_set
   </h1>
   <p>
-   Bloom Filter已在上一篇文章
-   <a href="09.03.html">
-    海量数据处理之Bloom Filter详解
-   </a>
-   中予以详细阐述，本文接下来着重阐述Bit-map。有任何问题，欢迎不吝指正。
+   稍后本文第二部分中将多次提到hash_map/hash_set，下面稍稍介绍下这些容器，以作为基础准备。一般来说，STL容器分两种，
   </p>
-  <h4>
-   <a class="anchor" href="#%E4%BB%80%E4%B9%88%E6%98%AFbit-map" name="%E4%BB%80%E4%B9%88%E6%98%AFbit-map">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   什么是Bit-map
-  </h4>
+  <ul>
+   <li>
+    序列式容器(vector/list/deque/stack/queue/heap)，
+    <br/>
+   </li>
+   <li>
+    关联式容器。关联式容器又分为set(集合)和map(映射表)两大类，以及这两大类的衍生体multiset(多键集合)和multimap(多键映射表)，这些容器均以RB-tree完成。此外，还有第3类关联式容器，如hashtable(散列表)，以及以hashtable为底层机制完成的hash_set(散列集合)/hash_map(散列映射表)/hash_multiset(散列多键集合)/hash_multimap(散列多键映射表)。也就是说，set/map/multiset/multimap都内含一个RB-tree，而hash_set/hash_map/hash_multiset/hash_multimap都内含一个hashtable。
+    <br/>
+   </li>
+  </ul>
   <p>
-   所谓的Bit-map就是用一个bit位来标记某个元素对应的Value， 而Key即是该元素。由于采用了Bit为单位来存储数据，因此在存储空间方面，可以大大节省。
-  </p>
-  <p>
-   如果说了这么多还没明白什么是Bit-map，那么我们来看一个具体的例子，假设我们要对0-7内的5个元素(4,7,2,5,3)排序（这里假设这些元素没有重复）。那么我们就可以采用Bit-map的方法来达到排序的目的。要表示8个数，我们就只需要8个Bit（1Bytes），首先我们开辟1Byte的空间，将这些空间的所有Bit位都置为0(如下图：)
+   所谓关联式容器，类似关联式数据库，每笔数据或每个元素都有一个键值(key)和一个实值(value)，即所谓的Key-Value(键-值对)。当元素被插入到关联式容器中时，容器内部结构(RB-tree/hashtable)便依照其键值大小，以某种特定规则将这个元素放置于适当位置。
   </p>
   <p>
-   <a href="/ebook/images/9/9.2/9.2.1.gif" target="_blank">
-    <img alt="" src="/ebook/images/9/9.2/9.2.1.gif" style="max-width:100%;"/>
-   </a>
+   包括在非关联式数据库中，比如，在MongoDB内，文档(document)是最基本的数据组织形式，每个文档也是以Key-Value（键-值对）的方式组织起来。一个文档可以有多个Key-Value组合，每个Value可以是不同的类型，比如String、Integer、List等等。
   </p>
-  <p>
-   然后遍历这5个元素，首先第一个元素是4，那么就把4对应的位置为1（可以这样操作 p+(i/8)|(0×01&lt;&lt;(i%8)) 当然了这里的操作涉及到Big-ending和Little-ending的情况，这里默认为Big-ending）,因为是从零开始的，所以要把第五位置为一（如下图）：
-  </p>
-  <p>
-   <a href="/ebook/images/9/9.2/9.2.2.gif" target="_blank">
-    <img alt="" src="/ebook/images/9/9.2/9.2.2.gif" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   然后再处理第二个元素7，将第八位置为1,，接着再处理第三个元素，一直到最后处理完所有的元素，将相应的位置为1，这时候的内存的Bit位的状态如下：
-  </p>
-  <p>
-   <a href="/ebook/images/9/9.2/9.2.3.gif" target="_blank">
-    <img alt="" src="/ebook/images/9/9.2/9.2.3.gif" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   然后我们现在遍历一遍Bit区域，将该位是一的位的编号输出（2，3，4，5，7），这样就达到了排序的目的。下面的代码给出了一个BitMap的用法：排序。
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="c1">//定义每个Byte中有8个Bit位  </span>
-<span class="cp">#include ＜memory.h＞  </span>
-<span class="cp">#define BYTESIZE 8  </span>
-<span class="kt">void</span> <span class="nf">SetBit</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="kt">int</span> <span class="n">posi</span><span class="p">)</span>  
-<span class="p">{</span>  
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="err">＜</span> <span class="p">(</span><span class="n">posi</span><span class="o">/</span><span class="n">BYTESIZE</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>  
-    <span class="p">{</span>  
-        <span class="n">p</span><span class="o">++</span><span class="p">;</span>  
-    <span class="p">}</span>  
-
-    <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="o">*</span><span class="n">p</span><span class="o">|</span><span class="p">(</span><span class="mh">0x01</span><span class="err">＜＜</span><span class="p">(</span><span class="n">posi</span><span class="o">%</span><span class="n">BYTESIZE</span><span class="p">));</span><span class="c1">//将该Bit位赋值1  </span>
-    <span class="k">return</span><span class="p">;</span>  
-<span class="p">}</span>  
-
-<span class="kt">void</span> <span class="nf">BitMapSortDemo</span><span class="p">()</span>  
-<span class="p">{</span>  
-    <span class="c1">//为了简单起见，我们不考虑负数  </span>
-    <span class="kt">int</span> <span class="n">num</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">9</span><span class="p">};</span>  
-
-    <span class="c1">//BufferLen这个值是根据待排序的数据中最大值确定的  </span>
-    <span class="c1">//待排序中的最大值是14，因此只需要2个Bytes(16个Bit)  </span>
-    <span class="c1">//就可以了。  </span>
-    <span class="k">const</span> <span class="kt">int</span> <span class="n">BufferLen</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>  
-    <span class="kt">char</span> <span class="o">*</span><span class="n">pBuffer</span> <span class="o">=</span> <span class="n">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">BufferLen</span><span class="p">];</span>  
-
-    <span class="c1">//要将所有的Bit位置为0，否则结果不可预知。  </span>
-    <span class="n">memset</span><span class="p">(</span><span class="n">pBuffer</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">BufferLen</span><span class="p">);</span>  
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="err">＜</span><span class="mi">9</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>  
-    <span class="p">{</span>  
-        <span class="c1">//首先将相应Bit位上置为1  </span>
-        <span class="n">SetBit</span><span class="p">(</span><span class="n">pBuffer</span><span class="p">,</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>  
-    <span class="p">}</span>  
-
-    <span class="c1">//输出排序结果  </span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="err">＜</span><span class="n">BufferLen</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="c1">//每次处理一个字节(Byte)  </span>
-    <span class="p">{</span>  
-        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="err">＜</span><span class="n">BYTESIZE</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="c1">//处理该字节中的每个Bit位  </span>
-        <span class="p">{</span>  
-            <span class="c1">//判断该位上是否是1，进行输出，这里的判断比较笨。  </span>
-            <span class="c1">//首先得到该第j位的掩码（0x01＜＜j），将内存区中的  </span>
-            <span class="c1">//位和此掩码作与操作。最后判断掩码是否和处理后的  </span>
-            <span class="c1">//结果相同  </span>
-            <span class="k">if</span><span class="p">((</span><span class="o">*</span><span class="n">pBuffer</span><span class="o">&amp;</span><span class="p">(</span><span class="mh">0x01</span><span class="err">＜＜</span><span class="n">j</span><span class="p">))</span> <span class="o">==</span> <span class="p">(</span><span class="mh">0x01</span><span class="err">＜＜</span><span class="n">j</span><span class="p">))</span>  
-            <span class="p">{</span>  
-                <span class="n">printf</span><span class="p">(</span><span class="s">"%d "</span><span class="p">,</span><span class="n">i</span><span class="o">*</span><span class="n">BYTESIZE</span> <span class="o">+</span> <span class="n">j</span><span class="p">);</span>  
-            <span class="p">}</span>  
-        <span class="p">}</span>  
-        <span class="n">pBuffer</span><span class="o">++</span><span class="p">;</span>  
-    <span class="p">}</span>  
-<span class="p">}</span>  
-
-<span class="kt">int</span> <span class="nf">_tmain</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="n">_TCHAR</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>  
-<span class="p">{</span>  
-    <span class="n">BitMapSortDemo</span><span class="p">();</span>  
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>  
-<span class="p">}</span>  
-</pre>
-  </div>
-  <p>
-   可进行数据的快速查找，判重，删除，一般来说数据范围是int的10倍以下
-  </p>
-  <h4>
-   <a class="anchor" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%8F%8A%E8%A6%81%E7%82%B9" name="%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%8F%8A%E8%A6%81%E7%82%B9">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   基本原理及要点
-  </h4>
-  <p>
-   使用bit数组来表示某些元素是否存在，比如8位电话号码.
-  </p>
-  <h4>
-   <a class="anchor" href="#%E6%89%A9%E5%B1%95" name="%E6%89%A9%E5%B1%95">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   扩展
-  </h4>
-  <p>
-   Bloom filter可以看做是对bit-map的扩展（关于Bloom filter，请参见：
-   <a href="09.03.html">
-    海量数据处理之Bloom filter详解
-   </a>
-   ）。
-  </p>
-  <h4>
-   <a class="anchor" href="#%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B" name="%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   问题实例
-  </h4>
+  <pre><code>{ "name" : "July",  
+"sex" : "male",  
+"age" : 23 }  
+</code></pre>
   <p>
    <strong>
-    1)已知某个文件内包含一些电话号码，每个号码为8位数字，统计不同号码的个数。
+    set/map/multiset/multimap
    </strong>
   </p>
   <p>
-   8位最多99 999 999，大概需要99m个bit，大概10几m字节的内存即可。 （可以理解为从0-99 999 999的数字，每个数字对应一个Bit位，所以只需要99M个Bit==1.2MBytes，这样，就用了小小的1.2M左右的内存表示了所有的8位数的电话）
+   set，同map一样，所有元素都会根据元素的键值自动被排序，因为set/map两者的所有各种操作，都只是转而调用RB-tree的操作行为，不过，值得注意的是，两者都不允许两个元素有相同的键值。
+  </p>
+  <p>
+   不同的是：set的元素不像map那样可以同时拥有实值(value)和键值(key)，set元素的键值就是实值，实值就是键值，而map的所有元素都是pair，同时拥有实值(value)和键值(key)，pair的第一个元素被视为键值，第二个元素被视为实值。
+  </p>
+  <p>
+   至于multiset/multimap，他们的特性及用法和set/map完全相同，唯一的差别就在于它们允许键值重复，即所有的插入操作基于RB-tree的insert_equal()而非insert_unique()。
   </p>
   <p>
    <strong>
-    2)2.5亿个整数中找出不重复的整数的个数，内存空间不足以容纳这2.5亿个整数。
+    hash_set/hash_map/hash_multiset/hash_multimap
    </strong>
   </p>
   <p>
-   将bit-map扩展一下，用2bit表示一个数即可，0表示未出现，1表示出现一次，2表示出现2次及以上，在遍历这些数的时候，如果对应位置的值是0，则将其置为1；如果是1，将其置为2；如果是2，则保持不变。或者我们不用2bit来进行表示，我们用两个bit-map即可模拟实现这个2bit-map，都是一样的道理。
+   hash_set/hash_map，两者的一切操作都是基于hashtable之上。不同的是，hash_set同set一样，同时拥有实值和键值，且实质就是键值，键值就是实值，而hash_map同map一样，每一个元素同时拥有一个实值(value)和一个键值(key)，所以其使用方式，和上面的map基本相同。但由于hash_set/hash_map都是基于hashtable之上，所以不具备自动排序功能。为什么?因为hashtable没有自动排序功能。
   </p>
   <p>
-   参考：
+   至于hash_multiset/hash_multimap的特性与上面的multiset/multimap完全相同，唯一的差别就是它们hash_multiset/hash_multimap的底层实现机制是hashtable（而multiset/multimap，上面说了，底层实现机制是RB-tree），所以它们的元素都不会被自动排序，不过也都允许键值重复。
   </p>
-  <ol>
-   <li>
-    <p>
-     <a href="http://www.cnblogs.com/youwang/archive/2010/07/20/1781431.html">
-      http://www.cnblogs.com/youwang/archive/2010/07/20/1781431.html
-     </a>
-    </p>
-   </li>
-   <li>
-    <p>
-     <a href="http://blog.redfox66.com/post/2010/09/26/mass-data-4-bitmap.aspx">
-      http://blog.redfox66.com/post/2010/09/26/mass-data-4-bitmap.aspx
-     </a>
-    </p>
-   </li>
-  </ol>
+  <p>
+   所以，综上，说白了，什么样的结构决定其什么样的性质，因为set/map/multiset/multimap都是基于RB-tree之上，所以有自动排序功能，而hash_set/hash_map/hash_multiset/hash_multimap都是基于hashtable之上，所以不含有自动排序功能，至于加个前缀multi_无非就是允许键值重复而已。
+  </p>
+  <p>
+   OK，接下来，请看本文第二部分、处理海量数据问题之六把密匙。
+  </p>
  </body>
 </html>
 		  </article>

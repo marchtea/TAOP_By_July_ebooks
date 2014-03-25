@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-d9c478ed7e87eebc36430a1efc4e84b17e65df06.css" />
-  <link rel="stylesheet" href="style_cache/github2-902e67494b49343625b27d5860c1e86bf5c65627.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-87cbc66c0a828647c8911f5e67d5b26b0cf62bbe.css" />
+  <link rel="stylesheet" href="style_cache/github2-f14002c8b8c821aeaeaf37b52de1d6c4d29dc214.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,1041 +105,536 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E5%85%AD%E7%AB%A0%E5%9F%BA%E4%BA%8E%E7%BB%99%E5%AE%9A%E7%9A%84%E6%96%87%E6%A1%A3%E7%94%9F%E6%88%90%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95%E7%9A%84%E7%BC%96%E7%A0%81%E4%B8%8E%E5%AE%9E%E8%B7%B5" name="%E7%AC%AC%E4%BA%8C%E5%8D%81%E5%85%AD%E7%AB%A0%E5%9F%BA%E4%BA%8E%E7%BB%99%E5%AE%9A%E7%9A%84%E6%96%87%E6%A1%A3%E7%94%9F%E6%88%90%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95%E7%9A%84%E7%BC%96%E7%A0%81%E4%B8%8E%E5%AE%9E%E8%B7%B5">
+   <a class="anchor" href="#%E5%AF%86%E5%8C%99%E4%B8%89bitmap%E5%92%8Cbloom-filter" name="%E5%AF%86%E5%8C%99%E4%B8%89bitmap%E5%92%8Cbloom-filter">
     <span class="octicon octicon-link">
     </span>
    </a>
-   第二十六章：基于给定的文档生成倒排索引的编码与实践
+   密匙三：Bitmap和Bloom filter
   </h1>
-  <p>
-   作者：July、yansha。
-  </p>
-  <p>
-   出处：结构之法算法之道
-  </p>
   <h2>
-   <a class="anchor" href="#%E5%BC%95%E8%A8%80" name="%E5%BC%95%E8%A8%80">
+   <a class="anchor" href="#bitmap" name="bitmap">
     <span class="octicon octicon-link">
     </span>
    </a>
-   引言
+   Bitmap
   </h2>
-  <p>
-   本周实现倒排索引。实现过程中，寻找资料，结果发现找份资料诸多不易：1、网上搜倒排索引实现，结果千篇一律，例子都是那几个同样的单词；2、到谷歌学术上想找点稍微有价值水平的资料，结果下篇论文还收费或者要求注册之类；3、大部分技术书籍只有理论，没有实践。于是，朋友戏言：网上一般有价值的东西不多。希望，本blog的出现能改变此现状。
-  </p>
-  <p>
-   在第二十四章、倒排索引关键词不重复Hash编码中，我们针对一个给定的倒排索引文件，提取出其中的关键词，然后针对这些关键词进行Hash不重复编码。本章，咱们再倒退一步，即给定一个正排文档（暂略过文本解析，分词等步骤，日后会慢慢考虑这些且一并予以实现），要求生成对应的倒排索引文件。同时，本章还是基于Hash索引之上（运用暴雪的Hash函数可以比较完美的解决大数据量下的冲突问题），日后自会实现B+树索引。
-  </p>
-  <p>
-   与此同时，本编程艺术系列逐步从为面试服务而转到实战性的编程当中了，教初学者如何编程，如何运用高效的算法解决实际应用中的编程问题，将逐步成为本编程艺术系列的主旨之一。
-  </p>
-  <p>
-   OK，接下来，咱们针对给定的正排文档一步一步来生成倒排索引文件，有任何问题，欢迎随时不吝赐教或批评指正。谢谢。
-  </p>
-  <h2>
-   <a class="anchor" href="#%E7%AC%AC%E4%B8%80%E8%8A%82%E7%B4%A2%E5%BC%95%E7%9A%84%E6%9E%84%E5%BB%BA%E6%96%B9%E6%B3%95" name="%E7%AC%AC%E4%B8%80%E8%8A%82%E7%B4%A2%E5%BC%95%E7%9A%84%E6%9E%84%E5%BB%BA%E6%96%B9%E6%B3%95">
+  <h3>
+   <a class="anchor" href="#%E4%BB%80%E4%B9%88%E6%98%AFbit-map" name="%E4%BB%80%E4%B9%88%E6%98%AFbit-map">
     <span class="octicon octicon-link">
     </span>
    </a>
-   第一节、索引的构建方法
-  </h2>
-  <ul>
-   <li>
-    根据信息检索导论（Christtopher D.Manning等著，王斌译）一书给的提示，我们可以选择两种构建索引的算法：BSBI算法，与SPIMI算法。
-   </li>
-  </ul>
+   什么是Bit-map
+  </h3>
   <p>
-   BSBI算法，基于磁盘的外部排序算法，此算法首先将词项映射成其ID的数据结构，如Hash映射。而后将文档解析成词项ID-文档ID对，并在内存中一直处理，直到累积至放满一个固定大小的块空间为止，我们选择合适的块大小，使之能方便加载到内存中并允许在内存中快速排序，快速排序后的块转换成倒排索引格式后写入磁盘。
+   所谓的Bit-map就是用一个bit位来标记某个元素对应的Value， 而Key即是该元素。由于采用了Bit为单位来存储数据，因此在存储空间方面，可以大大节省。
   </p>
   <p>
-   建立倒排索引的步骤如下：
-  </p>
-  <ul>
-   <li>
-    将文档分割成几个大小相等的部分；
-   </li>
-   <li>
-    对词项ID-文档ID进行排序；
-   </li>
-   <li>
-    将具有同一词项ID的所有文档ID放到倒排记录表中，其中每条倒排记录仅仅是一个文档ID；
-   </li>
-   <li>
-    将基于块的倒排索引写到磁盘上。
-   </li>
-  </ul>
-  <p>
-   此算法假如说最后可能会产生10个块。其伪码如下：
-  </p>
-  <pre><code>BSBI NDEXConSTRUCTION()
-n &lt;- 0
-while(all documents have not been processed)
-    do n&lt;-n+1
-        block &lt;- PARSENEXTBLOCK()    //文档分析
-        BSBI-INVERT(block)
-        WRITEBLOCKTODISK(block,fn)
-        MERGEBLOCKS(f1,...,fn;fmerged)
-</code></pre>
-  <p>
-   （基于块的排序索引算法，该算法将每个块的倒排索引文件存入文件f1,...,fn中，最后合并成fmerged
-如果该算法应用最后一步产生了10个块，那么接下来便会将10个块索引同时合并成一个索引文件。）
+   来看一个具体的例子，假设我们要对0-7内的5个元素(4,7,2,5,3)排序（这里假设这些元素没有重复）。那么我们就可以采用Bit-map的方法来达到排序的目的。要表示8个数，我们就只需要8个Bit（1Bytes），首先我们开辟1Byte的空间，将这些空间的所有Bit位都置为0(如下图：)
   </p>
   <p>
-   合并时，同时打开所有块对应的文件，内存中维护了为10个块准备的读缓冲区和一个为最终合并索引准备的写缓冲区。每次迭代中，利用优先级队列（如堆结构或类似的数据结构）选择最小的未处理的词项ID进行处理。如下图所示（图片引自深入搜索引擎--海里信息的压缩、索引和查询，梁斌译），分块索引，分块排序，最终全部合并（说实话，跟MapReduce还是有些类似的）：
-  </p>
-  <p>
-   <a href="../images/26/26.1.gif" target="_blank">
-    <img alt="" src="../images/26/26.1.gif" style="max-width:100%;"/>
+   <a href="/ebook/images/9/9.2/9.2.1.gif" target="_blank">
+    <img alt="" src="/ebook/images/9/9.2/9.2.1.gif" style="max-width:100%;"/>
    </a>
   </p>
   <p>
-   读入该词项的倒排记录表并合并，合并结果写回磁盘中。需要时，再次从文件中读入数据到每个读缓冲区。
+   然后遍历这5个元素，首先第一个元素是4，那么就把4对应的位置为1（可以这样操作 p+(i/8)|(0×01&lt;&lt;(i%8)) 当然了这里的操作涉及到Big-ending和Little-ending的情况，这里默认为Big-ending）,因为是从零开始的，所以要把第五位置为一（如下图）：
   </p>
   <p>
-   BSBI算法主要的时间消耗在排序上，选择什么排序方法呢，简单的快速排序足矣，其时间复杂度为O（N*logN），其中N是所需要排序的项（词项ID-文档ID对）的数目的上界。
+   <a href="/ebook/images/9/9.2/9.2.2.gif" target="_blank">
+    <img alt="" src="/ebook/images/9/9.2/9.2.2.gif" style="max-width:100%;"/>
+   </a>
   </p>
   <p>
-   SPIMI算法，内存式单遍扫描索引算法
+   然后再处理第二个元素7，将第八位置为1,，接着再处理第三个元素，一直到最后处理完所有的元素，将相应的位置为1，这时候的内存的Bit位的状态如下：
   </p>
   <p>
-   与上述BSBI算法不同的是：SPIMI使用词项而不是其ID，它将每个块的词典写入磁盘，对于写一块则重新采用新的词典，只要硬盘空间足够大，它能索引任何大小的文档集。
+   <a href="/ebook/images/9/9.2/9.2.3.gif" target="_blank">
+    <img alt="" src="/ebook/images/9/9.2/9.2.3.gif" style="max-width:100%;"/>
+   </a>
   </p>
   <p>
-   倒排索引 = 词典（关键词或词项+词项频率）+倒排记录表。建倒排索引的步骤如下：
+   然后我们现在遍历一遍Bit区域，将该位是一的位的编号输出（2，3，4，5，7），这样就达到了排序的目的。下面的代码给出了一个BitMap的用法：排序。
   </p>
-  <ul>
-   <li>
-    从头开始扫描每一个词项-文档ID（信息）对，遇一词，构建索引；
-   </li>
-   <li>
-    继续扫描，若遇一新词，则再建一新索引块（加入词典，通过Hash表实现，同时，建一新的倒排记录表）；若遇一旧词，则找到其倒排记录表的位置，添加其后
-   </li>
-   <li>
-    在内存内基于分块完成排序，后合并分块；
-   </li>
-   <li>
-    写入磁盘。
-   </li>
-  </ul>
+  <div class="highlight highlight-c">
+   <pre><span class="c1">//定义每个Byte中有8个Bit位  </span>
+<span class="cp">#include ＜memory.h＞  </span>
+<span class="cp">#define BYTESIZE 8  </span>
+<span class="kt">void</span> <span class="nf">SetBit</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="kt">int</span> <span class="n">posi</span><span class="p">)</span>  
+<span class="p">{</span>  
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="err">＜</span> <span class="p">(</span><span class="n">posi</span><span class="o">/</span><span class="n">BYTESIZE</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>  
+    <span class="p">{</span>  
+        <span class="n">p</span><span class="o">++</span><span class="p">;</span>  
+    <span class="p">}</span>  
+
+    <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="o">*</span><span class="n">p</span><span class="o">|</span><span class="p">(</span><span class="mh">0x01</span><span class="err">＜＜</span><span class="p">(</span><span class="n">posi</span><span class="o">%</span><span class="n">BYTESIZE</span><span class="p">));</span><span class="c1">//将该Bit位赋值1  </span>
+    <span class="k">return</span><span class="p">;</span>  
+<span class="p">}</span>  
+
+<span class="kt">void</span> <span class="nf">BitMapSortDemo</span><span class="p">()</span>  
+<span class="p">{</span>  
+    <span class="c1">//为了简单起见，我们不考虑负数  </span>
+    <span class="kt">int</span> <span class="n">num</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">9</span><span class="p">};</span>  
+
+    <span class="c1">//BufferLen这个值是根据待排序的数据中最大值确定的  </span>
+    <span class="c1">//待排序中的最大值是14，因此只需要2个Bytes(16个Bit)  </span>
+    <span class="c1">//就可以了。  </span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">BufferLen</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>  
+    <span class="kt">char</span> <span class="o">*</span><span class="n">pBuffer</span> <span class="o">=</span> <span class="n">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">BufferLen</span><span class="p">];</span>  
+
+    <span class="c1">//要将所有的Bit位置为0，否则结果不可预知。  </span>
+    <span class="n">memset</span><span class="p">(</span><span class="n">pBuffer</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">BufferLen</span><span class="p">);</span>  
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="err">＜</span><span class="mi">9</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>  
+    <span class="p">{</span>  
+        <span class="c1">//首先将相应Bit位上置为1  </span>
+        <span class="n">SetBit</span><span class="p">(</span><span class="n">pBuffer</span><span class="p">,</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>  
+    <span class="p">}</span>  
+
+    <span class="c1">//输出排序结果  </span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="err">＜</span><span class="n">BufferLen</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="c1">//每次处理一个字节(Byte)  </span>
+    <span class="p">{</span>  
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="err">＜</span><span class="n">BYTESIZE</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="c1">//处理该字节中的每个Bit位  </span>
+        <span class="p">{</span>  
+            <span class="c1">//判断该位上是否是1，进行输出，这里的判断比较笨。  </span>
+            <span class="c1">//首先得到该第j位的掩码（0x01＜＜j），将内存区中的  </span>
+            <span class="c1">//位和此掩码作与操作。最后判断掩码是否和处理后的  </span>
+            <span class="c1">//结果相同  </span>
+            <span class="k">if</span><span class="p">((</span><span class="o">*</span><span class="n">pBuffer</span><span class="o">&amp;</span><span class="p">(</span><span class="mh">0x01</span><span class="err">＜＜</span><span class="n">j</span><span class="p">))</span> <span class="o">==</span> <span class="p">(</span><span class="mh">0x01</span><span class="err">＜＜</span><span class="n">j</span><span class="p">))</span>  
+            <span class="p">{</span>  
+                <span class="n">printf</span><span class="p">(</span><span class="s">"%d "</span><span class="p">,</span><span class="n">i</span><span class="o">*</span><span class="n">BYTESIZE</span> <span class="o">+</span> <span class="n">j</span><span class="p">);</span>  
+            <span class="p">}</span>  
+        <span class="p">}</span>  
+        <span class="n">pBuffer</span><span class="o">++</span><span class="p">;</span>  
+    <span class="p">}</span>  
+<span class="p">}</span>  
+
+<span class="kt">int</span> <span class="nf">_tmain</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="n">_TCHAR</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>  
+<span class="p">{</span>  
+    <span class="n">BitMapSortDemo</span><span class="p">();</span>  
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>  
+<span class="p">}</span>  
+</pre>
+  </div>
   <p>
-   其伪码如下：
+   可进行数据的快速查找，判重，删除，一般来说数据范围是int的10倍以下
   </p>
-  <pre><code>SPIMI-Invert(Token_stream)
-output.file=NEWFILE()
-dictionary = NEWHASH()
-while (free memory available)
-    do token &lt;-next(token_stream) //逐一处理每个词项-文档ID对
-        if term(token) !(- dictionary
-           /*如果词项是第一次出现，那么加入hash词典，同时，建立一个新的倒排索引表*/
-           then postings_list = AddToDictionary(dictionary,term(token))
-        /*如果不是第一次出现，那么直接返回其倒排记录表，在下面添加其后*/
-        else postings_list = GetPostingList(dictionary,term(token))
-    if full(postings_list)
-        then postings_list =DoublePostingList(dictionary,term(token))
-    /*SPIMI与BSBI的区别就在于此，前者直接在倒排记录表中增加此项新纪录*/
-    AddToPosTingsList (postings_list,docID(token))
-sorted_terms &lt;- SortTerms(dictionary)
-WriteBlockToDisk(sorted_terms,dictionary,output_file)
-return output_file
-</code></pre>
+  <h3>
+   <a class="anchor" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%8F%8A%E8%A6%81%E7%82%B9" name="%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%8F%8A%E8%A6%81%E7%82%B9">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   基本原理及要点
+  </h3>
   <p>
+   使用bit数组来表示某些元素是否存在，比如8位电话号码.
+  </p>
+  <h3>
+   <a class="anchor" href="#%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B" name="%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   问题实例：
+  </h3>
+  <p>
+   “13、在2.5亿个整数中找出不重复的整数，注，内存不足以容纳这2.5亿个整数。
+  </p>
+  <p>
+   方案1：采用2-Bitmap（每个数分配2bit，00表示不存在，01表示出现一次，10表示多次，11无意义）进行，共需内存2^32 * 2 bit=1 GB内存，还可以接受。然后扫描这2.5亿个整数，查看Bitmap中相对应位，如果是00变01，01变10，10保持不变。所描完事后，查看bitmap，把对应位是01的整数输出即可。
+  </p>
+  <p>
+   方案2：也可采用与第1题类似的方法，进行划分小文件的方法。然后在小文件中找出不重复的整数，并排序。然后再进行归并，注意去除重复的元素。”
+  </p>
+  <p>
+   15、给40亿个不重复的unsigned int的整数，没排过序的，然后再给一个数，如何快速判断这个数是否在那40亿个数当中？
+  </p>
+  <p>
+   方案1：frome oo，用位图/Bitmap的方法，申请512M的内存，一个bit位代表一个unsigned int值。读入40亿个数，设置相应的bit位，读入要查询的数，查看相应bit位是否为1，为1表示存在，为0表示不存在。
+  </p>
+  <h3>
+   <a class="anchor" href="#%E6%89%A9%E5%B1%95bloom-filter" name="%E6%89%A9%E5%B1%95bloom-filter">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   扩展：Bloom Filter
+  </h3>
+  <h4>
+   <a class="anchor" href="#%E4%B8%80%E4%BB%80%E4%B9%88%E6%98%AFbloom-filter" name="%E4%B8%80%E4%BB%80%E4%B9%88%E6%98%AFbloom-filter">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   一、什么是Bloom Filter
+  </h4>
+  <p>
+   Bloom Filter，被译作称布隆过滤器，是一种空间效率很高的随机数据结构，Bloom filter可以看做是对bit-map的扩展,它的原理是，
    <strong>
-    SPIMI与BSBI的主要区别：
+    当一个元素被加入集合时，通过K个Hash函数将这个元素映射成一个位阵列（Bit array）中的K个点，把它们置为1
    </strong>
+   。检索时，我们只要看看这些点是不是都是1就（大约）知道集合中有没有它了：如果这些点有任何一个0，则被检索元素一定不在；如果都是1，则被检索元素很可能在。这就是布隆过滤器的基本思想。
   </p>
   <p>
-   SPIMI当发现关键词是第一次出现时，会直接在倒排记录表中增加一项（与BSBI算法不同）。同时，与BSBI算法一开始就整理出所有的词项ID-文档ID，并对它们进行排序的做法不同（而这恰恰是BSBI的做法），这里的每个倒排记录表都是动态增长的（也就是说，倒排记录表的大小会不断调整），同时，扫描一遍就可以实现全体倒排记录表的收集。
+   但Bloom Filter的这种高效是有一定代价的：在判断一个元素是否属于某个集合时，有可能会把不属于这个集合的元素误认为属于这个集合（false positive）。因此，Bloom Filter不适合那些“零错误”的应用场合。而在能容忍低错误率的应用场合下，Bloom Filter通过极少的错误换取了存储空间的极大节省。
   </p>
-  <p>
-   <strong>
-    SPIMI这样做有两点好处:
-   </strong>
-  </p>
-  <p>
-   由于不需要排序操作，因此处理的速度更快，
-由于保留了倒排记录表对词项的归属关系，因此能节省内存，词项的ID也不需要保存。这样，每次单独的SPIMI-Invert调用能够处理的块大小可以非常大，整个倒排索引的构建过程也可以非常高效。
-  </p>
-  <p>
-   但不得不提的是，由于事先并不知道每个词项的倒排记录表大小，算法一开始只能分配一个较小的倒排记录表空间，每次当该空间放满的时候，就会申请加倍的空间，
-  </p>
-  <p>
-   与此同时，自然而然便会浪费一部分空间（当然，此前因为不保存词项ID，倒也省下一点空间，总体而言，算作是抵销了）。
-  </p>
-  <p>
-   不过，至少SPIMI所用的空间会比BSBI所用空间少。当内存耗尽后，包括词典和倒排记录表的块索引将被写到磁盘上，但在此之前，为使倒排记录表按照词典顺序来加快最后的合并操作，所以要对词项进行排序操作。
-  </p>
-  <p>
-   小数据量与大数据量的区别
-  </p>
-  <ul>
-   <li>
-    在小数据量时，有足够的内存保证该创建过程可以一次完成；
-   </li>
-   <li>
-    数据规模增大后，可以采用分组索引，然后再归并索 引的策略。该策略是，
-   </li>
-  </ul>
-  <p>
-   建立索引的模块根据当时运行系统所在的计算机的内存大小，将索引分为 k 组，使得每组运算所需内存都小于系统能够提供的最大使用内存的大小。
-按照倒排索引的生成算法，生成 k 组倒排索引。
-然后将这 k 组索引归并，即将相同索引词对应的数据合并到一起，就得到了以索引词为主键的最终的倒排文件索引，即反向索引。
-  </p>
-  <p>
-   为了测试的方便，本文针对小数据量进行从正排文档到倒排索引文件的实现。而且针对大数量的K路归并算法或基于磁盘的外部排序算法本编程艺术系列第十章中已有详细阐述。
-  </p>
-  <h2>
-   <a class="anchor" href="#%E7%AC%AC%E4%BA%8C%E8%8A%82hash%E8%A1%A8%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%AE%9E%E7%8E%B0" name="%E7%AC%AC%E4%BA%8C%E8%8A%82hash%E8%A1%A8%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%AE%9E%E7%8E%B0">
+  <h5>
+   <a class="anchor" href="#11%E9%9B%86%E5%90%88%E8%A1%A8%E7%A4%BA%E5%92%8C%E5%85%83%E7%B4%A0%E6%9F%A5%E8%AF%A2" name="11%E9%9B%86%E5%90%88%E8%A1%A8%E7%A4%BA%E5%92%8C%E5%85%83%E7%B4%A0%E6%9F%A5%E8%AF%A2">
     <span class="octicon octicon-link">
     </span>
    </a>
-   第二节、Hash表的构建与实现
-  </h2>
+   1.1、集合表示和元素查询
+  </h5>
   <p>
-   如下，给定如下图所示的正排文档，每一行的信息分别为（中间用##########隔开）：文档ID、订阅源（子频道）、 频道分类、 网站类ID（大频道）、时间、 md5、文档权值、关键词、作者等等。
-   <a href="../images/26/26.2.gif" target="_blank">
-    <img alt="" src="../images/26/26.2.gif" style="max-width:100%;"/>
+   下面我们具体来看Bloom Filter是如何用位数组表示集合的。初始状态时，Bloom Filter是一个包含m位的位数组，每一位都置为0。
+  </p>
+  <p>
+   <a href="../images/9/9.3/9.3.1.jpg" target="_blank">
+    <img alt="" src="../images/9/9.3/9.3.1.jpg" style="max-width:100%;"/>
    </a>
   </p>
   <p>
-   要求基于给定的上述正排文档。生成如第二十四章所示的倒排索引文件（注，关键词所在的文章如果是同一个日期的话，是挨在同一行的，用“#”符号隔开）：
-   <a href="../images/26/26.3.gif" target="_blank">
-    <img alt="" src="../images/26/26.3.gif" style="max-width:100%;"/>
+   为了表达S={x
+   <sub>
+    1
+   </sub>
+   , x
+   <sub>
+    2
+   </sub>
+   ,…,x
+   <sub>
+    n
+   </sub>
+   }这样一个n个元素的集合，Bloom Filter使用k个相互独立的哈希函数（Hash Function），它们分别将集合中的每个元素映射到{1,…,m}的范围中。对任意一个元素x，第i个哈希函数映射的位置h
+   <sub>
+    i
+   </sub>
+   (x)就会被置为1（1≤i≤k）。注意，如果一个位置多次被置为1，那么只有第一次会起作用，后面几次将没有任何效果。在下图中，k=3，且有两个哈希函数选中同一个位置（从左边数第五位，即第二个“1“处）。
+  </p>
+  <p>
+   <a href="../images/9/9.3/9.3.2.jpg" target="_blank">
+    <img alt="" src="../images/9/9.3/9.3.2.jpg" style="max-width:100%;"/>
    </a>
   </p>
   <p>
-   我们知道：为网页建立全文索引是网页预处理的核心部分，包括分析网页和建立倒排文件。二者是顺序进行，先分析网页，后建立倒排文件（也称为反向索引），如图所示：
+   在判断y是否属于这个集合时，我们对y应用k次哈希函数，如果所有h
+   <sub>
+    i
+   </sub>
+   (y)的位置都是1（1≤i≤k），那么我们就认为y是集合中的元素，否则就认为y不是集合中的元素。下图中y
+   <sub>
+    1
+   </sub>
+   就不是集合中的元素（因为y1有一处指向了“0”位）。y
+   <sub>
+    2
+   </sub>
+   或者属于这个集合，或者刚好是一个false positive。
   </p>
   <p>
-   <a href="../images/26/26.4.gif" target="_blank">
-    <img alt="" src="../images/26/26.4.gif" style="max-width:100%;"/>
+   <a href="../images/9/9.3/9.3.3.jpg" target="_blank">
+    <img alt="" src="../images/9/9.3/9.3.3.jpg" style="max-width:100%;"/>
    </a>
   </p>
-  <p>
-   正如上图粗略所示，我们知道倒排索引创建的过程如下：
-  </p>
-  <ul>
-   <li>
-    写爬虫抓取相关的网页，而后提取相关网页或文章中所有的关键词；
-   </li>
-   <li>
-    分词，找出所有单词；
-   </li>
-   <li>
-    过滤不相干的信息（如广告等信息）；
-   </li>
-   <li>
-    构建倒排索引，关键词=&gt;（文章ID 出现次数 出现的位置）生成词典文件 频率文件 位置文件；
-   </li>
-   <li>
-    压缩。
-   </li>
-  </ul>
-  <p>
-   因为已经给定了正排文档，接下来，咱们跳过一系列文本解析，分词等中间步骤，直接根据正排文档生成倒排索引文档（幸亏有yansha相助，不然，寸步难行，其微博地址为：
-   <a href="http://weibo.com/yanshazi">
-    http://weibo.com/yanshazi
-   </a>
-   ，欢迎关注他）。
-  </p>
-  <p>
-   OK，闲不多说，咱们来一步一步实现吧。
-  </p>
-  <p>
-   建相关的数据结构
-  </p>
-  <p>
-   根据给定的正排文档，我们可以建立如下的两个结构体表示这些信息：文档ID、订阅源（子频道）、 频道分类、 网站类ID（大频道）、时间、 md5、文档权值、关键词、作者等等。如下所示：
-  </p>
-  <div class="highlight highlight-cpp">
-   <pre><span class="k">typedef</span> <span class="k">struct</span> <span class="n">key_node</span>
-<span class="p">{</span>
-    <span class="kt">char</span> <span class="o">*</span><span class="n">pkey</span><span class="p">;</span>     <span class="c1">// 关键词实体</span>
-    <span class="kt">int</span> <span class="n">count</span><span class="p">;</span>      <span class="c1">// 关键词出现次数</span>
-    <span class="kt">int</span> <span class="n">pos</span><span class="p">;</span>        <span class="c1">// 关键词在hash表中位置</span>
-    <span class="k">struct</span> <span class="n">doc_node</span> <span class="o">*</span><span class="n">next</span><span class="p">;</span>  <span class="c1">// 指向文档结点</span>
-<span class="p">}</span><span class="n">KEYNODE</span><span class="p">,</span> <span class="o">*</span><span class="n">key_list</span><span class="p">;</span>
-
-<span class="n">key_list</span> <span class="n">key_array</span><span class="p">[</span><span class="n">TABLE_SIZE</span><span class="p">];</span>
-
-<span class="k">typedef</span> <span class="k">struct</span> <span class="n">doc_node</span>
-<span class="p">{</span>
-    <span class="kt">char</span> <span class="n">id</span><span class="p">[</span><span class="n">WORD_MAX_LEN</span><span class="p">];</span>  <span class="c1">//文档ID</span>
-    <span class="kt">int</span> <span class="n">classOne</span><span class="p">;</span>           <span class="c1">//订阅源（子频道）</span>
-    <span class="kt">char</span> <span class="n">classTwo</span><span class="p">[</span><span class="n">WORD_MAX_LEN</span><span class="p">];</span>    <span class="c1">//频道分类</span>
-    <span class="kt">int</span> <span class="n">classThree</span><span class="p">;</span>                 <span class="c1">//网站类ID（大频道）</span>
-    <span class="kt">char</span> <span class="n">time</span><span class="p">[</span><span class="n">WORD_MAX_LEN</span><span class="p">];</span>        <span class="c1">//时间</span>
-    <span class="kt">char</span> <span class="n">md5</span><span class="p">[</span><span class="n">WORD_MAX_LEN</span><span class="p">];</span>         <span class="c1">//md5</span>
-    <span class="kt">int</span> <span class="n">weight</span><span class="p">;</span>                     <span class="c1">//文档权值</span>
-    <span class="k">struct</span> <span class="n">doc_node</span> <span class="o">*</span><span class="n">next</span><span class="p">;</span>
-<span class="p">}</span><span class="n">DOCNODE</span><span class="p">,</span> <span class="o">*</span><span class="n">doc_list</span><span class="p">;</span>
-</pre>
-  </div>
-  <p>
-   我们知道，通过第二十四章的暴雪的Hash表算法，可以比较好的避免相关冲突的问题。下面，我们再次引用其代码：
-基于暴雪的Hash之上的改造算法
-  </p>
-  <div class="highlight highlight-cpp">
-   <pre><span class="c1">//函数prepareCryptTable以下的函数生成一个长度为0x100的cryptTable[0x100]</span>
-<span class="kt">void</span> <span class="nf">PrepareCryptTable</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">seed</span> <span class="o">=</span> <span class="mh">0x00100001</span><span class="p">,</span> <span class="n">index1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">index2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span>
-
-    <span class="k">for</span><span class="p">(</span> <span class="n">index1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">index1</span> <span class="o">&lt;</span><span class="mh">0x100</span><span class="p">;</span> <span class="n">index1</span><span class="o">++</span> <span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">for</span><span class="p">(</span> <span class="n">index2</span> <span class="o">=</span> <span class="n">index1</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">,</span> <span class="n">index2</span> <span class="o">+=</span> <span class="mh">0x100</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">temp1</span><span class="p">,</span> <span class="n">temp2</span><span class="p">;</span>
-            <span class="n">seed</span> <span class="o">=</span> <span class="p">(</span><span class="n">seed</span> <span class="o">*</span> <span class="mi">125</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="o">%</span> <span class="mh">0x2AAAAB</span><span class="p">;</span>
-            <span class="n">temp1</span> <span class="o">=</span> <span class="p">(</span><span class="n">seed</span> <span class="o">&amp;</span> <span class="mh">0xFFFF</span><span class="p">)</span><span class="o">&lt;&lt;</span><span class="mh">0x10</span><span class="p">;</span>
-            <span class="n">seed</span> <span class="o">=</span> <span class="p">(</span><span class="n">seed</span> <span class="o">*</span> <span class="mi">125</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="o">%</span> <span class="mh">0x2AAAAB</span><span class="p">;</span>
-            <span class="n">temp2</span> <span class="o">=</span> <span class="p">(</span><span class="n">seed</span> <span class="o">&amp;</span> <span class="mh">0xFFFF</span><span class="p">);</span>
-            <span class="n">cryptTable</span><span class="p">[</span><span class="n">index2</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="n">temp1</span> <span class="o">|</span> <span class="n">temp2</span> <span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="c1">//函数HashString以下函数计算lpszFileName 字符串的hash值，其中dwHashType 为hash的类型，</span>
-<span class="kt">unsigned</span> <span class="kt">long</span> <span class="nf">HashString</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">lpszkeyName</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">dwHashType</span> <span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">key</span>  <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">lpszkeyName</span><span class="p">;</span>
-    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">seed1</span> <span class="o">=</span> <span class="mh">0x7FED7FED</span><span class="p">;</span>
-    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">seed2</span> <span class="o">=</span> <span class="mh">0xEEEEEEEE</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">ch</span><span class="p">;</span>
-
-    <span class="k">while</span><span class="p">(</span> <span class="o">*</span><span class="n">key</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">ch</span> <span class="o">=</span> <span class="o">*</span><span class="n">key</span><span class="o">++</span><span class="p">;</span>
-        <span class="n">seed1</span> <span class="o">=</span> <span class="n">cryptTable</span><span class="p">[(</span><span class="n">dwHashType</span><span class="o">&lt;&lt;</span><span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">ch</span><span class="p">]</span> <span class="o">^</span> <span class="p">(</span><span class="n">seed1</span> <span class="o">+</span> <span class="n">seed2</span><span class="p">);</span>
-        <span class="n">seed2</span> <span class="o">=</span> <span class="n">ch</span> <span class="o">+</span> <span class="n">seed1</span> <span class="o">+</span> <span class="n">seed2</span> <span class="o">+</span> <span class="p">(</span><span class="n">seed2</span><span class="o">&lt;&lt;</span><span class="mi">5</span><span class="p">)</span> <span class="o">+</span> <span class="mi">3</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">seed1</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="c1">//按关键字查询，如果成功返回hash表中索引位置</span>
-<span class="n">key_list</span> <span class="nf">SearchByString</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">string_in</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">const</span> <span class="kt">int</span> <span class="n">HASH_OFFSET</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">HASH_C</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">HASH_D</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">nHash</span> <span class="o">=</span> <span class="n">HashString</span><span class="p">(</span><span class="n">string_in</span><span class="p">,</span> <span class="n">HASH_OFFSET</span><span class="p">);</span>
-    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">nHashC</span> <span class="o">=</span> <span class="n">HashString</span><span class="p">(</span><span class="n">string_in</span><span class="p">,</span> <span class="n">HASH_C</span><span class="p">);</span>
-    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">nHashD</span> <span class="o">=</span> <span class="n">HashString</span><span class="p">(</span><span class="n">string_in</span><span class="p">,</span> <span class="n">HASH_D</span><span class="p">);</span>
-    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">nHashStart</span> <span class="o">=</span> <span class="n">nHash</span> <span class="o">%</span> <span class="n">TABLE_SIZE</span><span class="p">;</span>
-    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">nHashPos</span> <span class="o">=</span> <span class="n">nHashStart</span><span class="p">;</span>
-
-    <span class="k">while</span> <span class="p">(</span><span class="n">HashTable</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">].</span><span class="n">bExists</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">HashATable</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">]</span> <span class="o">==</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="n">nHashC</span> <span class="o">&amp;&amp;</span> <span class="n">HashBTable</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">]</span> <span class="o">==</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="n">nHashD</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">break</span><span class="p">;</span>
-            <span class="c1">//查询与插入不同，此处不需修改</span>
-        <span class="p">}</span>
-        <span class="k">else</span>
-        <span class="p">{</span>
-            <span class="n">nHashPos</span> <span class="o">=</span> <span class="p">(</span><span class="n">nHashPos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">TABLE_SIZE</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="n">nHashPos</span> <span class="o">==</span> <span class="n">nHashStart</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">break</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="k">if</span><span class="p">(</span> <span class="n">key_array</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">strlen</span><span class="p">(</span><span class="n">key_array</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pkey</span><span class="p">))</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="n">key_array</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">];</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="c1">//按索引查询，如果成功返回关键字（此函数在本章中没有被用到，可以忽略）</span>
-<span class="n">key_list</span> <span class="nf">SearchByIndex</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">nIndex</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">nHashPos</span> <span class="o">=</span> <span class="n">nIndex</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">nIndex</span> <span class="o">&lt;</span> <span class="n">TABLE_SIZE</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">if</span><span class="p">(</span><span class="n">key_array</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">strlen</span><span class="p">(</span><span class="n">key_array</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pkey</span><span class="p">))</span>
-        <span class="p">{</span>
-            <span class="k">return</span> <span class="n">key_array</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">];</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="c1">//插入关键字，如果成功返回hash值</span>
-<span class="kt">int</span> <span class="nf">InsertString</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">const</span> <span class="kt">int</span> <span class="n">HASH_OFFSET</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">HASH_A</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">HASH_B</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">nHash</span> <span class="o">=</span> <span class="n">HashString</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="n">HASH_OFFSET</span><span class="p">);</span>
-    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">nHashA</span> <span class="o">=</span> <span class="n">HashString</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="n">HASH_A</span><span class="p">);</span>
-    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">nHashB</span> <span class="o">=</span> <span class="n">HashString</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="n">HASH_B</span><span class="p">);</span>
-    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">nHashStart</span> <span class="o">=</span> <span class="n">nHash</span> <span class="o">%</span> <span class="n">TABLE_SIZE</span><span class="p">;</span>
-    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">nHashPos</span> <span class="o">=</span> <span class="n">nHashStart</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">len</span><span class="p">;</span>
-
-    <span class="k">while</span> <span class="p">(</span><span class="n">HashTable</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">].</span><span class="n">bExists</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">nHashPos</span> <span class="o">=</span> <span class="p">(</span><span class="n">nHashPos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">TABLE_SIZE</span><span class="p">;</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="n">nHashPos</span> <span class="o">==</span> <span class="n">nHashStart</span><span class="p">)</span>
-            <span class="k">break</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="n">len</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">str</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">HashTable</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">].</span><span class="n">bExists</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">len</span> <span class="o">&lt;</span> <span class="n">WORD_MAX_LEN</span><span class="p">))</span>
-    <span class="p">{</span>
-        <span class="n">HashATable</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">]</span> <span class="o">=</span> <span class="n">nHashA</span><span class="p">;</span>
-        <span class="n">HashBTable</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">]</span> <span class="o">=</span> <span class="n">nHashB</span><span class="p">;</span>
-
-        <span class="n">key_array</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">KEYNODE</span> <span class="o">*</span><span class="p">)</span> <span class="n">malloc</span> <span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">KEYNODE</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1</span><span class="p">);</span>
-        <span class="k">if</span><span class="p">(</span><span class="n">key_array</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">]</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">printf</span><span class="p">(</span><span class="s">"10000 EMS ERROR !!!!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="n">key_array</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pkey</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="n">len</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
-        <span class="k">if</span><span class="p">(</span><span class="n">key_array</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pkey</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">printf</span><span class="p">(</span><span class="s">"10000 EMS ERROR !!!!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="n">memset</span><span class="p">(</span><span class="n">key_array</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pkey</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">len</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
-        <span class="n">strncpy</span><span class="p">(</span><span class="n">key_array</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pkey</span><span class="p">,</span> <span class="n">str</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
-        <span class="o">*</span><span class="p">((</span><span class="n">key_array</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pkey</span><span class="p">)</span><span class="o">+</span><span class="n">len</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="n">key_array</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pos</span> <span class="o">=</span> <span class="n">nHashPos</span><span class="p">;</span>
-        <span class="n">key_array</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">count</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="n">key_array</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-        <span class="n">HashTable</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">].</span><span class="n">bExists</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="k">return</span> <span class="n">nHashPos</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">if</span><span class="p">(</span><span class="n">HashTable</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">].</span><span class="n">bExists</span><span class="p">)</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">"30000 in the hash table %s !!!</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">str</span><span class="p">);</span>
-    <span class="k">else</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">"90000 strkey error !!!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
-  </div>
-  <p>
-   有了这个Hash表，接下来，我们就可以把词插入Hash表进行存储了。
-  </p>
-  <h2>
-   <a class="anchor" href="#%E7%AC%AC%E4%B8%89%E8%8A%82%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95%E6%96%87%E4%BB%B6%E7%9A%84%E7%94%9F%E6%88%90%E4%B8%8E%E5%AE%9E%E7%8E%B0" name="%E7%AC%AC%E4%B8%89%E8%8A%82%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95%E6%96%87%E4%BB%B6%E7%9A%84%E7%94%9F%E6%88%90%E4%B8%8E%E5%AE%9E%E7%8E%B0">
+  <h5>
+   <a class="anchor" href="#12%E9%94%99%E8%AF%AF%E7%8E%87%E4%BC%B0%E8%AE%A1" name="12%E9%94%99%E8%AF%AF%E7%8E%87%E4%BC%B0%E8%AE%A1">
     <span class="octicon octicon-link">
     </span>
    </a>
-   第三节、倒排索引文件的生成与实现
-  </h2>
+   1.2、错误率估计
+  </h5>
   <p>
-   Hash表实现了（存于HashSearch.h中），还得编写一系列的函数，如下所示（所有代码还只是初步实现了功能，稍后在第四部分中将予以改进与优化）：
+   前面我们已经提到了，Bloom Filter在判断一个元素是否属于它表示的集合时会有一定的错误率（false positive rate），下面我们就来估计错误率的大小。在估计之前为了简化模型，我们假设kn1, x
+   <sub>
+    2
+   </sub>
+   ,…,x
+   <sub>
+    n
+   </sub>
+   }的所有元素都被k个哈希函数映射到m位的位数组中时，这个位数组中某一位还是0的概率是：
   </p>
-  <div class="highlight highlight-cpp">
-   <pre><span class="c1">//处理空白字符和空白行</span>
-<span class="kt">int</span> <span class="nf">GetRealString</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">pbuf</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">pbuf</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">len</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">pbuf</span><span class="p">[</span><span class="n">len</span><span class="p">]</span> <span class="o">==</span> <span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="mh">0x0d</span> <span class="o">||</span> <span class="n">pbuf</span><span class="p">[</span><span class="n">len</span><span class="p">]</span> <span class="o">==</span> <span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="mh">0x0a</span> <span class="o">||</span> <span class="n">pbuf</span><span class="p">[</span><span class="n">len</span><span class="p">]</span> <span class="o">==</span> <span class="sc">' '</span> <span class="o">||</span> <span class="n">pbuf</span><span class="p">[</span><span class="n">len</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'\t'</span><span class="p">))</span>
-    <span class="p">{</span>
-        <span class="n">len</span><span class="o">--</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="n">len</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="o">*</span><span class="n">pbuf</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span>
-        <span class="k">return</span> <span class="n">len</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="n">pbuf</span><span class="p">[</span><span class="n">len</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span>
-    <span class="k">return</span> <span class="n">len</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="c1">//重新strcoll字符串比较函数</span>
-<span class="kt">int</span> <span class="nf">strcoll</span><span class="p">(</span><span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">s1</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">s2</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">char</span> <span class="o">*</span><span class="n">c_s1</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">s1</span><span class="p">;</span>
-    <span class="kt">char</span> <span class="o">*</span><span class="n">c_s2</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">s2</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="o">*</span><span class="n">c_s1</span> <span class="o">==</span> <span class="o">*</span><span class="n">c_s2</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">c_s1</span><span class="o">++</span> <span class="o">==</span> <span class="sc">'\0'</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="o">*</span><span class="n">c_s1</span> <span class="o">-</span> <span class="o">*--</span><span class="n">c_s2</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="c1">//从行缓冲中得到各项信息，将其写入items数组</span>
-<span class="kt">void</span> <span class="nf">GetItems</span><span class="p">(</span><span class="kt">char</span> <span class="o">*&amp;</span><span class="n">move</span><span class="p">,</span> <span class="kt">int</span> <span class="o">&amp;</span><span class="n">count</span><span class="p">,</span> <span class="kt">int</span> <span class="o">&amp;</span><span class="n">wordnum</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">char</span> <span class="o">*</span><span class="n">front</span> <span class="o">=</span> <span class="n">move</span><span class="p">;</span>
-    <span class="kt">bool</span> <span class="n">flag</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">len</span><span class="p">;</span>
-    <span class="n">move</span> <span class="o">=</span> <span class="n">strstr</span><span class="p">(</span><span class="n">move</span><span class="p">,</span> <span class="s">"#####"</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">move</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span> <span class="o">==</span> <span class="sc">'#'</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">flag</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="n">move</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">len</span> <span class="o">=</span> <span class="n">move</span> <span class="o">-</span> <span class="n">front</span><span class="p">;</span>
-        <span class="n">strncpy</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="n">count</span><span class="p">],</span> <span class="n">front</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="n">items</span><span class="p">[</span><span class="n">count</span><span class="p">][</span><span class="n">len</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span>
-    <span class="n">count</span><span class="o">++</span><span class="p">;</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="n">flag</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">move</span> <span class="o">=</span> <span class="n">move</span> <span class="o">+</span> <span class="mi">10</span><span class="p">;</span>
-    <span class="p">}</span> <span class="k">else</span>
-    <span class="p">{</span>
-        <span class="n">move</span> <span class="o">=</span> <span class="n">move</span> <span class="o">+</span> <span class="mi">5</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="c1">//保存关键字相应的文档内容</span>
-<span class="n">doc_list</span> <span class="nf">SaveItems</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="n">doc_list</span> <span class="n">infolist</span> <span class="o">=</span> <span class="p">(</span><span class="n">doc_list</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">DOCNODE</span><span class="p">));</span>
-    <span class="n">strcpy_s</span><span class="p">(</span><span class="n">infolist</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">,</span> <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
-    <span class="n">infolist</span><span class="o">-&gt;</span><span class="n">classOne</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
-    <span class="n">strcpy_s</span><span class="p">(</span><span class="n">infolist</span><span class="o">-&gt;</span><span class="n">classTwo</span><span class="p">,</span> <span class="n">items</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
-    <span class="n">infolist</span><span class="o">-&gt;</span><span class="n">classThree</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
-    <span class="n">strcpy_s</span><span class="p">(</span><span class="n">infolist</span><span class="o">-&gt;</span><span class="n">time</span><span class="p">,</span> <span class="n">items</span><span class="p">[</span><span class="mi">4</span><span class="p">]);</span>
-    <span class="n">strcpy_s</span><span class="p">(</span><span class="n">infolist</span><span class="o">-&gt;</span><span class="n">md5</span><span class="p">,</span> <span class="n">items</span><span class="p">[</span><span class="mi">5</span><span class="p">]);</span>
-    <span class="n">infolist</span><span class="o">-&gt;</span><span class="n">weight</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="mi">6</span><span class="p">]);</span>
-    <span class="k">return</span> <span class="n">infolist</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="c1">//得到目录下所有文件名</span>
-<span class="kt">int</span> <span class="nf">GetFileName</span><span class="p">(</span><span class="kt">char</span> <span class="n">filename</span><span class="p">[][</span><span class="n">FILENAME_MAX_LEN</span><span class="p">])</span>
-<span class="p">{</span>
-    <span class="kt">_finddata_t</span> <span class="n">file</span><span class="p">;</span>
-    <span class="kt">long</span> <span class="n">handle</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">filenum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="c1">//C:\Users\zhangxu\Desktop\CreateInvertedIndex\data</span>
-    <span class="k">if</span> <span class="p">((</span><span class="n">handle</span> <span class="o">=</span> <span class="n">_findfirst</span><span class="p">(</span><span class="s">"C:</span><span class="se">\\</span><span class="s">Users</span><span class="se">\\</span><span class="s">zhangxu</span><span class="se">\\</span><span class="s">Desktop</span><span class="se">\\</span><span class="s">CreateInvertedIndex</span><span class="se">\\</span><span class="s">data</span><span class="se">\\</span><span class="s">*.txt"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">file</span><span class="p">))</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">"Not Found</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-        <span class="k">do</span>
-        <span class="p">{</span>
-            <span class="n">strcpy_s</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="n">filenum</span><span class="o">++</span><span class="p">],</span> <span class="n">file</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
-        <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">_findnext</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">file</span><span class="p">));</span>
-    <span class="p">}</span>
-    <span class="n">_findclose</span><span class="p">(</span><span class="n">handle</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">filenum</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="c1">//以读方式打开文件，如果成功返回文件指针</span>
-<span class="kt">FILE</span><span class="o">*</span> <span class="nf">OpenReadFile</span><span class="p">(</span><span class="kt">int</span> <span class="n">index</span><span class="p">,</span> <span class="kt">char</span> <span class="n">filename</span><span class="p">[][</span><span class="n">FILENAME_MAX_LEN</span><span class="p">])</span>
-<span class="p">{</span>
-    <span class="kt">char</span> <span class="o">*</span><span class="n">abspath</span><span class="p">;</span>
-    <span class="kt">char</span> <span class="n">dirpath</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="s">"data</span><span class="se">\\</span><span class="s">"</span><span class="p">};</span>
-    <span class="n">abspath</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="n">ABSPATH_MAX_LEN</span><span class="p">);</span>
-    <span class="n">strcpy_s</span><span class="p">(</span><span class="n">abspath</span><span class="p">,</span> <span class="n">ABSPATH_MAX_LEN</span><span class="p">,</span> <span class="n">dirpath</span><span class="p">);</span>
-    <span class="n">strcat_s</span><span class="p">(</span><span class="n">abspath</span><span class="p">,</span> <span class="n">FILENAME_MAX_LEN</span><span class="p">,</span> <span class="n">filename</span><span class="p">[</span><span class="n">index</span><span class="p">]);</span>
-
-    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span> <span class="o">=</span> <span class="n">fopen</span> <span class="p">(</span><span class="n">abspath</span><span class="p">,</span> <span class="s">"r"</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">fp</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">"open read file error!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="n">fp</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="c1">//以写方式打开文件，如果成功返回文件指针</span>
-<span class="kt">FILE</span><span class="o">*</span> <span class="nf">OpenWriteFile</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">in_file_path</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">in_file_path</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">"output file path error!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">in_file_path</span><span class="p">,</span> <span class="s">"w+"</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">fp</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">"open write file error!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">fp</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
-  </div>
   <p>
-   最后，主函数编写如下：
-  </p>
-  <div class="highlight highlight-cpp">
-   <pre><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="n">key_list</span> <span class="n">keylist</span><span class="p">;</span>
-    <span class="kt">char</span> <span class="o">*</span><span class="n">pbuf</span><span class="p">,</span> <span class="o">*</span><span class="n">move</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">filenum</span> <span class="o">=</span> <span class="n">GetFileName</span><span class="p">(</span><span class="n">filename</span><span class="p">);</span>
-    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fr</span><span class="p">;</span>
-    <span class="n">pbuf</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="n">BUF_MAX_LEN</span><span class="p">);</span>
-    <span class="n">memset</span><span class="p">(</span><span class="n">pbuf</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">BUF_MAX_LEN</span><span class="p">);</span>
-
-    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fw</span> <span class="o">=</span> <span class="n">OpenWriteFile</span><span class="p">(</span><span class="s">"index.txt"</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">fw</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="n">PrepareCryptTable</span><span class="p">();</span>    <span class="c1">//初始化Hash表</span>
-
-    <span class="kt">int</span> <span class="n">wordnum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">filenum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">fr</span> <span class="o">=</span> <span class="n">OpenReadFile</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">filename</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">fr</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">break</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="c1">// 每次读取一行处理</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">fgets</span><span class="p">(</span><span class="n">pbuf</span><span class="p">,</span> <span class="n">BUF_MAX_LEN</span><span class="p">,</span> <span class="n">fr</span><span class="p">))</span>
-        <span class="p">{</span>
-            <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-            <span class="n">move</span> <span class="o">=</span> <span class="n">pbuf</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">GetRealString</span><span class="p">(</span><span class="n">pbuf</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span>
-                <span class="k">continue</span><span class="p">;</span>
-
-            <span class="k">while</span> <span class="p">(</span><span class="n">move</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="c1">// 找到第一个非'#'的字符</span>
-                <span class="k">while</span> <span class="p">(</span><span class="o">*</span><span class="n">move</span> <span class="o">==</span> <span class="sc">'#'</span><span class="p">)</span>
-                    <span class="n">move</span><span class="o">++</span><span class="p">;</span>
-
-                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">move</span><span class="p">,</span> <span class="s">""</span><span class="p">))</span>
-                    <span class="k">break</span><span class="p">;</span>
-
-                <span class="n">GetItems</span><span class="p">(</span><span class="n">move</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">wordnum</span><span class="p">);</span>
-            <span class="p">}</span>
-
-            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="c1">// 将关键字对应的文档内容加入文档结点链表中</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">keylist</span> <span class="o">=</span> <span class="n">SearchByString</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>     <span class="c1">//到hash表内查询</span>
-                <span class="p">{</span>
-                    <span class="n">doc_list</span> <span class="n">infolist</span> <span class="o">=</span> <span class="n">SaveItems</span><span class="p">();</span>
-                    <span class="n">infolist</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">keylist</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-                    <span class="n">keylist</span><span class="o">-&gt;</span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
-                    <span class="n">keylist</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">infolist</span><span class="p">;</span>
-                <span class="p">}</span>
-                <span class="k">else</span>
-                <span class="p">{</span>
-                    <span class="c1">// 如果关键字第一次出现，则将其加入hash表</span>
-                    <span class="kt">int</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">InsertString</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>       <span class="c1">//插入hash表</span>
-                    <span class="n">keylist</span> <span class="o">=</span> <span class="n">key_array</span><span class="p">[</span><span class="n">pos</span><span class="p">];</span>
-                    <span class="n">doc_list</span> <span class="n">infolist</span> <span class="o">=</span> <span class="n">SaveItems</span><span class="p">();</span>
-                    <span class="n">infolist</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-                    <span class="n">keylist</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">infolist</span><span class="p">;</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-                    <span class="p">{</span>
-                        <span class="n">strcpy_s</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">wordnum</span><span class="o">++</span><span class="p">],</span> <span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-                    <span class="p">}</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="c1">// 通过快排对关键字进行排序</span>
-    <span class="n">qsort</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">WORD_MAX_NUM</span><span class="p">,</span> <span class="n">WORD_MAX_LEN</span><span class="p">,</span> <span class="n">strcoll</span><span class="p">);</span>
-
-    <span class="c1">// 遍历关键字数组，将关键字及其对应的文档内容写入文件中</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">WORD_MAX_NUM</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">keylist</span> <span class="o">=</span> <span class="n">SearchByString</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">keylist</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">fprintf</span><span class="p">(</span><span class="n">fw</span><span class="p">,</span> <span class="s">"%s %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">keylist</span><span class="o">-&gt;</span><span class="n">count</span><span class="p">);</span>
-            <span class="n">doc_list</span> <span class="n">infolist</span> <span class="o">=</span> <span class="n">keylist</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">keylist</span><span class="o">-&gt;</span><span class="n">count</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="c1">//文档ID，订阅源（子频道） 频道分类 网站类ID（大频道） 时间  md5，文档权值</span>
-                <span class="n">fprintf</span><span class="p">(</span><span class="n">fw</span><span class="p">,</span> <span class="s">"%s %d %s %d %s %s %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">infolist</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">,</span> <span class="n">infolist</span><span class="o">-&gt;</span><span class="n">classOne</span><span class="p">,</span>
-                    <span class="n">infolist</span><span class="o">-&gt;</span><span class="n">classTwo</span><span class="p">,</span> <span class="n">infolist</span><span class="o">-&gt;</span><span class="n">classThree</span><span class="p">,</span> <span class="n">infolist</span><span class="o">-&gt;</span><span class="n">time</span><span class="p">,</span> <span class="n">infolist</span><span class="o">-&gt;</span><span class="n">md5</span><span class="p">,</span> <span class="n">infolist</span><span class="o">-&gt;</span><span class="n">weight</span><span class="p">);</span>
-                <span class="n">infolist</span> <span class="o">=</span> <span class="n">infolist</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="n">free</span><span class="p">(</span><span class="n">pbuf</span><span class="p">);</span>
-    <span class="n">fclose</span><span class="p">(</span><span class="n">fr</span><span class="p">);</span>
-    <span class="n">fclose</span><span class="p">(</span><span class="n">fw</span><span class="p">);</span>
-    <span class="n">system</span><span class="p">(</span><span class="s">"pause"</span><span class="p">);</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
-  </div>
-  <p>
-   程序编译运行后，生成的倒排索引文件为index.txt，其与原来给定的正排文档对照如下：
-   <a href="../images/26/26.5.gif" target="_blank">
-    <img alt="" src="../images/26/26.5.gif" style="max-width:100%;"/>
+   <a href="https://camo.githubusercontent.com/9f38ec46f43d40341ae9d7426ad6265dc28a901a/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d70273d2535436c65667428312d25354366726163253742312537442537426d2537442535437269676874292535452537426b6e253744253543617070726f78253230652535452537422d6b6e2f6d253744" target="_blank">
+    <img alt="img" data-canonical-src="http://chart.apis.google.com/chart?cht=tx&amp;chl=p'=%5Cleft(1-%5Cfrac%7B1%7D%7Bm%7D%5Cright)%5E%7Bkn%7D%5Capprox%20e%5E%7B-kn/m%7D" src="https://camo.githubusercontent.com/9f38ec46f43d40341ae9d7426ad6265dc28a901a/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d70273d2535436c65667428312d25354366726163253742312537442537426d2537442535437269676874292535452537426b6e253744253543617070726f78253230652535452537422d6b6e2f6d253744" style="max-width:100%;"/>
    </a>
   </p>
   <p>
-   有没有发现关键词奥恰洛夫出现在的三篇文章是同一个日期1210的，貌似与本文开头指定的倒排索引格式要求不符？因为第二部分开头中，已明确说明：“注，关键词所在的文章如果是同一个日期的话，是挨在同一行的，用“#”符号隔开”。OK，有疑问是好事，代表你思考了，请直接转至下文第4部分。
+   其中1/m表示任意一个哈希函数选中这一位的概率（前提是哈希函数是完全随机的），(1-1/m)表示哈希一次没有选中这一位的概率。要把S完全映射到位数组中，需要做kn次哈希。某一位还是0意味着kn次哈希都没有选中它，因此这个概率就是（1-1/m）的kn次方。令p = e
+   <sup>
+    -kn/m
+   </sup>
+   是为了简化运算，这里用到了计算e时常用的近似：
   </p>
-  <h2>
-   <a class="anchor" href="#%E7%AC%AC%E5%9B%9B%E8%8A%82%E7%A8%8B%E5%BA%8F%E9%9C%80%E6%B1%82%E5%8A%9F%E8%83%BD%E7%9A%84%E6%94%B9%E8%BF%9B" name="%E7%AC%AC%E5%9B%9B%E8%8A%82%E7%A8%8B%E5%BA%8F%E9%9C%80%E6%B1%82%E5%8A%9F%E8%83%BD%E7%9A%84%E6%94%B9%E8%BF%9B">
+  <p>
+   <a href="https://camo.githubusercontent.com/933b482ccc329e8776c5794a85991b13dfcadbdc/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d2535436c696d2535436c696d6974735f2537427825354372696768746172726f77253543696e6674792537442535436c65667428312d2535436672616325374231253744253742782537442535437269676874292535452537422d782537443d65" target="_blank">
+    <img alt="img" data-canonical-src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%5Clim%5Climits_%7Bx%5Crightarrow%5Cinfty%7D%5Cleft(1-%5Cfrac%7B1%7D%7Bx%7D%5Cright)%5E%7B-x%7D=e" src="https://camo.githubusercontent.com/933b482ccc329e8776c5794a85991b13dfcadbdc/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d2535436c696d2535436c696d6974735f2537427825354372696768746172726f77253543696e6674792537442535436c65667428312d2535436672616325374231253744253742782537442535437269676874292535452537422d782537443d65" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   令ρ为位数组中0的比例，则ρ的数学期望E(ρ)= p’。在ρ已知的情况下，要求的错误率（false positive rate）为：
+  </p>
+  <p>
+   <a href="https://camo.githubusercontent.com/7be38b6bcd1c6688da0e9ec7a971357fc2d6dfc8/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d28312d25354372686f292535456b253543617070726f7828312d7027292535456b253543617070726f7828312d70292535456b" target="_blank">
+    <img alt="img" data-canonical-src="http://chart.apis.google.com/chart?cht=tx&amp;chl=(1-%5Crho)%5Ek%5Capprox(1-p')%5Ek%5Capprox(1-p)%5Ek" src="https://camo.githubusercontent.com/7be38b6bcd1c6688da0e9ec7a971357fc2d6dfc8/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d28312d25354372686f292535456b253543617070726f7828312d7027292535456b253543617070726f7828312d70292535456b" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   (1-ρ)为位数组中1的比例，(1-ρ)
+   <sup>
+    k
+   </sup>
+   就表示k次哈希都刚好选中1的区域，即false positive rate。上式中第二步近似在前面已经提到了，现在来看第一步近似。p’只是ρ的数学期望，在实际中ρ的值有可能偏离它的数学期望值。M. Mitzenmacher已经证明
+   <sup>
+    [2]
+   </sup>
+   ，位数组中0的比例非常集中地分布在它的数学期望值的附近。因此，第一步的近似得以成立。分别将p和p’代入上式中，得：
+  </p>
+  <p>
+   <a href="https://camo.githubusercontent.com/706a0e0c3454137b3e7e46974bf2c036e5f4f032/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d66273d2535436c65667428312d2535436c65667428312d25354366726163253742312537442537426d2537442535437269676874292535452537426b6e2537442535437269676874292535456b3d28312d7027292535456b" target="_blank">
+    <img alt="img" data-canonical-src="http://chart.apis.google.com/chart?cht=tx&amp;chl=f'=%5Cleft(1-%5Cleft(1-%5Cfrac%7B1%7D%7Bm%7D%5Cright)%5E%7Bkn%7D%5Cright)%5Ek=(1-p')%5Ek" src="https://camo.githubusercontent.com/706a0e0c3454137b3e7e46974bf2c036e5f4f032/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d66273d2535436c65667428312d2535436c65667428312d25354366726163253742312537442537426d2537442535437269676874292535452537426b6e2537442535437269676874292535456b3d28312d7027292535456b" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   <a href="https://camo.githubusercontent.com/df149bb0de6739a79222d6b9066fe3bdf8d7f731/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d663d2535436c65667428312d652535452537422d6b6e2f6d2537442535437269676874292535456b3d28312d70292535456b" target="_blank">
+    <img alt="img" data-canonical-src="http://chart.apis.google.com/chart?cht=tx&amp;chl=f=%5Cleft(1-e%5E%7B-kn/m%7D%5Cright)%5Ek=(1-p)%5Ek" src="https://camo.githubusercontent.com/df149bb0de6739a79222d6b9066fe3bdf8d7f731/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d663d2535436c65667428312d652535452537422d6b6e2f6d2537442535437269676874292535456b3d28312d70292535456b" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   相比p’和f’，使用p和f通常在分析中更为方便。
+  </p>
+  <h5>
+   <a class="anchor" href="#13%E6%9C%80%E4%BC%98%E7%9A%84%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0%E4%B8%AA%E6%95%B0" name="13%E6%9C%80%E4%BC%98%E7%9A%84%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0%E4%B8%AA%E6%95%B0">
     <span class="octicon octicon-link">
     </span>
    </a>
-   第四节、程序需求功能的改进
-  </h2>
-  <h3>
-   <a class="anchor" href="#%E5%AF%B9%E7%9B%B8%E5%90%8C%E6%97%A5%E6%9C%9F%E4%B8%8E%E4%B8%8D%E5%90%8C%E6%97%A5%E6%9C%9F%E7%9A%84%E5%A4%84%E7%90%86" name="%E5%AF%B9%E7%9B%B8%E5%90%8C%E6%97%A5%E6%9C%9F%E4%B8%8E%E4%B8%8D%E5%90%8C%E6%97%A5%E6%9C%9F%E7%9A%84%E5%A4%84%E7%90%86">
+   1.3、最优的哈希函数个数
+  </h5>
+  <p>
+   既然Bloom Filter要靠多个哈希函数将集合映射到位数组中，那么应该选择几个哈希函数才能使元素查询时的错误率降到最低呢？这里有两个互斥的理由：如果哈希函数的个数多，那么在对一个不属于集合的元素进行查询时得到0的概率就大；但另一方面，如果哈希函数的个数少，那么位数组中的0就多。为了得到最优的哈希函数个数，我们需要根据上一小节中的错误率公式进行计算。
+  </p>
+  <p>
+   先用p和f进行计算。注意到f = exp(k ln(1 − e
+   <sup>
+    −kn/m
+   </sup>
+   ))，我们令g = k ln(1 − e
+   <sup>
+    −kn/m
+   </sup>
+   )，只要让g取到最小，f自然也取到最小。由于p = e
+   <sup>
+    -kn/m
+   </sup>
+   ，我们可以将g写成
+  </p>
+  <p>
+   <a href="https://camo.githubusercontent.com/18745855685838b90b4765ca2f3d76ee0cec6f05/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d673d2d253543667261632537426d2537442537426e2537442535436c6e2870292535436c6e28312d7029" target="_blank">
+    <img alt="img" data-canonical-src="http://chart.apis.google.com/chart?cht=tx&amp;chl=g=-%5Cfrac%7Bm%7D%7Bn%7D%5Cln(p)%5Cln(1-p)" src="https://camo.githubusercontent.com/18745855685838b90b4765ca2f3d76ee0cec6f05/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d673d2d253543667261632537426d2537442537426e2537442535436c6e2870292535436c6e28312d7029" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   根据对称性法则可以很容易看出当p = 1/2，也就是k = ln2· (m/n)时，g取得最小值。在这种情况下，最小错误率f等于(1/2)
+   <sup>
+    k
+   </sup>
+   ≈ (0.6185)
+   <sup>
+    m/n
+   </sup>
+   。另外，注意到p是位数组中某一位仍是0的概率，所以p = 1/2对应着位数组中0和1各一半。换句话说，要想保持错误率低，最好让位数组有一半还空着。
+  </p>
+  <p>
+   需要强调的一点是，p = 1/2时错误率最小这个结果并不依赖于近似值p和f。同样对于f’ = exp(k ln(1 − (1 − 1/m)
+   <sup>
+    kn
+   </sup>
+   ))，g’ = k ln(1 − (1 − 1/m)
+   <sup>
+    kn
+   </sup>
+   )，p’ = (1 − 1/m)
+   <sup>
+    kn
+   </sup>
+   ，我们可以将g’写成
+  </p>
+  <p>
+   <a href="https://camo.githubusercontent.com/c5a7166edde1f33c6e460ef34b2384b881ae4f8c/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d67273d25354366726163253742312537442537426e2535436c6e28312d312f6d292537442535436c6e287027292535436c6e28312d702729" target="_blank">
+    <img alt="img" data-canonical-src="http://chart.apis.google.com/chart?cht=tx&amp;chl=g'=%5Cfrac%7B1%7D%7Bn%5Cln(1-1/m)%7D%5Cln(p')%5Cln(1-p')" src="https://camo.githubusercontent.com/c5a7166edde1f33c6e460ef34b2384b881ae4f8c/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d67273d25354366726163253742312537442537426e2535436c6e28312d312f6d292537442535436c6e287027292535436c6e28312d702729" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   同样根据对称性法则可以得到当p’ = 1/2时，g’取得最小值。
+  </p>
+  <h5>
+   <a class="anchor" href="#14%E4%BD%8D%E6%95%B0%E7%BB%84%E7%9A%84%E5%A4%A7%E5%B0%8F" name="14%E4%BD%8D%E6%95%B0%E7%BB%84%E7%9A%84%E5%A4%A7%E5%B0%8F">
     <span class="octicon octicon-link">
     </span>
    </a>
-   对相同日期与不同日期的处理
-  </h3>
+   1.4、位数组的大小
+  </h5>
   <p>
-   细心的读者可能还是会注意到：在第二部分开头中，要求基于给定的上述正排文档。生成如第二十四章所示的倒排索引文件是下面这样子的，即是：
-   <a href="../images/26/26.6.gif" target="_blank">
-    <img alt="" src="../images/26/26.6.gif" style="max-width:100%;"/>
+   下面我们来看看，在不超过一定错误率的情况下，Bloom Filter至少需要多少位才能表示全集中任意n个元素的集合。假设全集中共有u个元素，允许的最大错误率为є，下面我们来求位数组的位数m。
+  </p>
+  <p>
+   假设X为全集中任取n个元素的集合，F(X)是表示X的位数组。那么对于集合X中任意一个元素x，在s = F(X)中查询x都能得到肯定的结果，即s能够接受x。显然，由于Bloom Filter引入了错误，s能够接受的不仅仅是X中的元素，它还能够є (u - n)个false positive。因此，对于一个确定的位数组来说，它能够接受总共n + є (u - n)个元素。在n + є (u - n)个元素中，s真正表示的只有其中n个，所以一个确定的位数组可以表示
+  </p>
+  <p>
+   <a href="https://camo.githubusercontent.com/ec8494457b4173b98b9db1d22a6bb7219a5caf87/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d435f2537426e253242253543657073696c6f6e28752d6e292537442535456e" target="_blank">
+    <img alt="img" data-canonical-src="http://chart.apis.google.com/chart?cht=tx&amp;chl=C_%7Bn%2B%5Cepsilon(u-n)%7D%5En" src="https://camo.githubusercontent.com/ec8494457b4173b98b9db1d22a6bb7219a5caf87/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d435f2537426e253242253543657073696c6f6e28752d6e292537442535456e" style="max-width:100%;"/>
    </a>
   </p>
   <p>
-   也就是说，上面建索引的过程本该是如下的：
-   <a href="../images/26/26.7.gif" target="_blank">
-    <img alt="" src="../images/26/26.7.gif" style="max-width:100%;"/>
+   个集合。m位的位数组共有2
+   <sup>
+    m
+   </sup>
+   个不同的组合，进而可以推出，m位的位数组可以表示
+  </p>
+  <p>
+   <a href="https://camo.githubusercontent.com/b07e4a1b453ba68feb7be42bce7c7f3692791682/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d322535456d435f2537426e253242253543657073696c6f6e28752d6e292537442535456e" target="_blank">
+    <img alt="img" data-canonical-src="http://chart.apis.google.com/chart?cht=tx&amp;chl=2%5EmC_%7Bn%2B%5Cepsilon(u-n)%7D%5En" src="https://camo.githubusercontent.com/b07e4a1b453ba68feb7be42bce7c7f3692791682/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d322535456d435f2537426e253242253543657073696c6f6e28752d6e292537442535456e" style="max-width:100%;"/>
    </a>
   </p>
   <p>
-   与第一部分所述的SMIPI算法有什么区别？对的，就在于对在同一个日期的出现的关键词的处理。如果是遇一旧词，则找到其倒排记录表的位置：相同日期，添加到之前同一日期的记录之后（第一个记录的后面记下同一日期的记录数目）；不同日期，另起一行新增记录。
+   个集合。全集中n个元素的集合总共有
   </p>
-  <ul>
-   <li>
-    相同（单个）日期，根据文档权值排序
-   </li>
-   <li>
-    不同日期，根据时间排序
-   </li>
-  </ul>
   <p>
-   代码主要修改如下：
-  </p>
-  <div class="highlight highlight-cpp">
-   <pre><span class="c1">//function: 对链表进行冒泡排序</span>
-<span class="kt">void</span> <span class="nf">ListSort</span><span class="p">(</span><span class="n">key_list</span> <span class="n">keylist</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">doc_list</span> <span class="n">p</span> <span class="o">=</span> <span class="n">keylist</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-    <span class="n">doc_list</span> <span class="n">final</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">bool</span> <span class="n">isfinish</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">!=</span> <span class="n">final</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">time</span><span class="p">,</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">time</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="n">SwapDocNode</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
-                <span class="n">isfinish</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">final</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
-        <span class="n">p</span> <span class="o">=</span> <span class="n">keylist</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">isfinish</span> <span class="o">||</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">==</span> <span class="n">final</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">break</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="n">key_list</span> <span class="n">keylist</span><span class="p">;</span>
-    <span class="kt">char</span> <span class="o">*</span><span class="n">pbuf</span><span class="p">,</span> <span class="o">*</span><span class="n">move</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">filenum</span> <span class="o">=</span> <span class="n">GetFileName</span><span class="p">(</span><span class="n">filename</span><span class="p">);</span>
-    <span class="kt">FILE</span> <span class="o">*</span><span class="n">frp</span><span class="p">;</span>
-    <span class="n">pbuf</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="n">BUF_MAX_LEN</span><span class="p">);</span>
-    <span class="n">memset</span><span class="p">(</span><span class="n">pbuf</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">BUF_MAX_LEN</span><span class="p">);</span>
-
-    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fwp</span> <span class="o">=</span> <span class="n">OpenWriteFile</span><span class="p">(</span><span class="s">"index.txt"</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">fwp</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="n">PrepareCryptTable</span><span class="p">();</span>
-
-    <span class="kt">int</span> <span class="n">wordnum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">filenum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">frp</span> <span class="o">=</span> <span class="n">OpenReadFile</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">filename</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">frp</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">break</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="c1">// 每次读取一行处理</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">fgets</span><span class="p">(</span><span class="n">pbuf</span><span class="p">,</span> <span class="n">BUF_MAX_LEN</span><span class="p">,</span> <span class="n">frp</span><span class="p">))</span>
-        <span class="p">{</span>
-            <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-            <span class="n">move</span> <span class="o">=</span> <span class="n">pbuf</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">GetRealString</span><span class="p">(</span><span class="n">pbuf</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span>
-                <span class="k">continue</span><span class="p">;</span>
-
-            <span class="k">while</span> <span class="p">(</span><span class="n">move</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="c1">// 找到第一个非'#'的字符</span>
-                <span class="k">while</span> <span class="p">(</span><span class="o">*</span><span class="n">move</span> <span class="o">==</span> <span class="sc">'#'</span><span class="p">)</span>
-                    <span class="n">move</span><span class="o">++</span><span class="p">;</span>
-
-                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">move</span><span class="p">,</span> <span class="s">""</span><span class="p">))</span>
-                    <span class="k">break</span><span class="p">;</span>
-
-                <span class="n">GetItems</span><span class="p">(</span><span class="n">move</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">wordnum</span><span class="p">);</span>
-            <span class="p">}</span>
-
-            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-                <span class="c1">// 将关键字对应的文档内容加入文档结点链表中</span>
-                <span class="c1">// 如果关键字第一次出现，则将其加入hash表</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">keylist</span> <span class="o">=</span> <span class="n">SearchByString</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="p">{</span>
-                    <span class="n">doc_list</span> <span class="n">infolist</span> <span class="o">=</span> <span class="n">SaveItems</span><span class="p">();</span>
-                    <span class="n">infolist</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">keylist</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-                    <span class="n">keylist</span><span class="o">-&gt;</span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
-                    <span class="n">keylist</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">infolist</span><span class="p">;</span>
-                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                    <span class="kt">int</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">InsertString</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-                    <span class="n">keylist</span> <span class="o">=</span> <span class="n">key_array</span><span class="p">[</span><span class="n">pos</span><span class="p">];</span>
-                    <span class="n">doc_list</span> <span class="n">infolist</span> <span class="o">=</span> <span class="n">SaveItems</span><span class="p">();</span>
-                    <span class="n">infolist</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-                    <span class="n">keylist</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">infolist</span><span class="p">;</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-                        <span class="n">strcpy_s</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">wordnum</span><span class="o">++</span><span class="p">],</span> <span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-                    <span class="p">}</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="c1">// 通过快排对关键字进行排序</span>
-    <span class="n">qsort</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">WORD_MAX_NUM</span><span class="p">,</span> <span class="n">WORD_MAX_LEN</span><span class="p">,</span> <span class="n">strcoll</span><span class="p">);</span>
-
-    <span class="c1">// 遍历关键字数组，将关键字及其对应的文档内容写入文件中</span>
-    <span class="kt">int</span> <span class="n">rownum</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">WORD_MAX_NUM</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">keylist</span> <span class="o">=</span> <span class="n">SearchByString</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">keylist</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">doc_list</span> <span class="n">infolist</span> <span class="o">=</span> <span class="n">keylist</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-
-            <span class="kt">char</span> <span class="n">date</span><span class="p">[</span><span class="mi">9</span><span class="p">];</span>
-
-            <span class="c1">// 截取年月日</span>
-            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">keylist</span><span class="o">-&gt;</span><span class="n">count</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="n">strncpy_s</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">infolist</span><span class="o">-&gt;</span><span class="n">time</span><span class="p">,</span> <span class="mi">8</span><span class="p">);</span>
-                <span class="n">date</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span>
-                <span class="n">strncpy_s</span><span class="p">(</span><span class="n">infolist</span><span class="o">-&gt;</span><span class="n">time</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="mi">9</span><span class="p">);</span>
-                <span class="n">infolist</span> <span class="o">=</span> <span class="n">infolist</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-            <span class="p">}</span>
-
-            <span class="c1">// 对链表根据时间进行排序</span>
-            <span class="n">ListSort</span><span class="p">(</span><span class="n">keylist</span><span class="p">);</span>
-
-            <span class="n">infolist</span> <span class="o">=</span> <span class="n">keylist</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-            <span class="kt">int</span> <span class="o">*</span><span class="n">count</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">WORD_MAX_NUM</span><span class="p">];</span>
-            <span class="n">memset</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">WORD_MAX_NUM</span><span class="p">);</span>
-            <span class="n">strcpy_s</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">infolist</span><span class="o">-&gt;</span><span class="n">time</span><span class="p">);</span>
-            <span class="kt">int</span> <span class="n">num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-            <span class="c1">// 得到单个日期的文档数目</span>
-            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">keylist</span><span class="o">-&gt;</span><span class="n">count</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">infolist</span><span class="o">-&gt;</span><span class="n">time</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="n">count</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
-                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                    <span class="n">count</span><span class="p">[</span><span class="o">++</span><span class="n">num</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
-                <span class="p">}</span>
-                <span class="n">strcpy_s</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">infolist</span><span class="o">-&gt;</span><span class="n">time</span><span class="p">);</span>
-                <span class="n">infolist</span> <span class="o">=</span> <span class="n">infolist</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="n">fprintf</span><span class="p">(</span><span class="n">fwp</span><span class="p">,</span> <span class="s">"%s %d %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">num</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">rownum</span><span class="p">);</span>
-            <span class="n">WriteFile</span><span class="p">(</span><span class="n">keylist</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="n">fwp</span><span class="p">,</span> <span class="n">count</span><span class="p">);</span>
-            <span class="n">rownum</span><span class="o">++</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="n">free</span><span class="p">(</span><span class="n">pbuf</span><span class="p">);</span>
-<span class="c1">//  fclose(frp);</span>
-    <span class="n">fclose</span><span class="p">(</span><span class="n">fwp</span><span class="p">);</span>
-    <span class="n">system</span><span class="p">(</span><span class="s">"pause"</span><span class="p">);</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
-  </div>
-  <p>
-   修改后编译运行，生成的index.txt文件如下：
-   <a href="../images/26/26.8.gif" target="_blank">
-    <img alt="" src="../images/26/26.8.gif" style="max-width:100%;"/>
+   <a href="https://camo.githubusercontent.com/6ae48ae48f73fdfc1dce6c5b333473fcc184264e/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d435f253742752537442535456e" target="_blank">
+    <img alt="img" data-canonical-src="http://chart.apis.google.com/chart?cht=tx&amp;chl=C_%7Bu%7D%5En" src="https://camo.githubusercontent.com/6ae48ae48f73fdfc1dce6c5b333473fcc184264e/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d435f253742752537442535456e" style="max-width:100%;"/>
    </a>
   </p>
-  <h3>
-   <a class="anchor" href="#%E4%B8%BA%E5%85%B3%E9%94%AE%E8%AF%8D%E6%B7%BB%E4%B8%8A%E7%BC%96%E7%A0%81" name="%E4%B8%BA%E5%85%B3%E9%94%AE%E8%AF%8D%E6%B7%BB%E4%B8%8A%E7%BC%96%E7%A0%81">
+  <p>
+   个，因此要让m位的位数组能够表示所有n个元素的集合，必须有
+  </p>
+  <p>
+   <a href="https://camo.githubusercontent.com/e39dc78f8a8a6c587babccdd06160eef47832386/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d322535456d435f2537426e253242253543657073696c6f6e28752d6e292537442535456e253543676571253230435f253742752537442535456e" target="_blank">
+    <img alt="img" data-canonical-src="http://chart.apis.google.com/chart?cht=tx&amp;chl=2%5EmC_%7Bn%2B%5Cepsilon(u-n)%7D%5En%5Cgeq%20C_%7Bu%7D%5En" src="https://camo.githubusercontent.com/e39dc78f8a8a6c587babccdd06160eef47832386/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d322535456d435f2537426e253242253543657073696c6f6e28752d6e292537442535456e253543676571253230435f253742752537442535456e" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   即：
+  </p>
+  <p>
+   <a href="https://camo.githubusercontent.com/8babb7c1ab4acbe2b09c9a7edc6062c20c8fefdd/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d6d2535436765712535436c6f675f3225354366726163253742435f253742752537442535456e253744253742435f2537426e253242253543657073696c6f6e28752d6e292537442535456e253744253543617070726f782535436c6f675f3225354366726163253742435f253742752537442535456e253744253742435f253742253543657073696c6f6e253230752537442535456e2537442535436765712535436c6f675f32253543657073696c6f6e2535452537422d6e2537443d6e2535436c6f675f3228312f253543657073696c6f6e29" target="_blank">
+    <img alt="img" data-canonical-src="http://chart.apis.google.com/chart?cht=tx&amp;chl=m%5Cgeq%5Clog_2%5Cfrac%7BC_%7Bu%7D%5En%7D%7BC_%7Bn%2B%5Cepsilon(u-n)%7D%5En%7D%5Capprox%5Clog_2%5Cfrac%7BC_%7Bu%7D%5En%7D%7BC_%7B%5Cepsilon%20u%7D%5En%7D%5Cgeq%5Clog_2%5Cepsilon%5E%7B-n%7D=n%5Clog_2(1/%5Cepsilon)" src="https://camo.githubusercontent.com/8babb7c1ab4acbe2b09c9a7edc6062c20c8fefdd/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d6d2535436765712535436c6f675f3225354366726163253742435f253742752537442535456e253744253742435f2537426e253242253543657073696c6f6e28752d6e292537442535456e253744253543617070726f782535436c6f675f3225354366726163253742435f253742752537442535456e253744253742435f253742253543657073696c6f6e253230752537442535456e2537442535436765712535436c6f675f32253543657073696c6f6e2535452537422d6e2537443d6e2535436c6f675f3228312f253543657073696c6f6e29" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   上式中的近似前提是n和єu相比很小，这也是实际情况中常常发生的。根据上式，我们得出结论：在错误率不大于є的情况下，m至少要等于n log
+   <sub>
+    2
+   </sub>
+   (1/є)才能表示任意n个元素的集合。
+  </p>
+  <p>
+   上一小节中我们曾算出当k = ln2· (m/n)时错误率f最小，这时f = (1/2)
+   <sup>
+    k
+   </sup>
+   = (1/2)
+   <sup>
+    mln2 / n
+   </sup>
+   。现在令f≤є，可以推出
+  </p>
+  <p>
+   <a href="https://camo.githubusercontent.com/cba31bbdaf04ccdd2749dbfdb33575fa2dd19117/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d6d2535436765712532306e253543667261632537422535436c6f675f3228312f253543657073696c6f6e292537442537422535436c6e253230322537443d6e2535436c6f675f322535436c6f675f3228312f253543657073696c6f6e29" target="_blank">
+    <img alt="img" data-canonical-src="http://chart.apis.google.com/chart?cht=tx&amp;chl=m%5Cgeq%20n%5Cfrac%7B%5Clog_2(1/%5Cepsilon)%7D%7B%5Cln%202%7D=n%5Clog_2%5Clog_2(1/%5Cepsilon)" src="https://camo.githubusercontent.com/cba31bbdaf04ccdd2749dbfdb33575fa2dd19117/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d6d2535436765712532306e253543667261632537422535436c6f675f3228312f253543657073696c6f6e292537442537422535436c6e253230322537443d6e2535436c6f675f322535436c6f675f3228312f253543657073696c6f6e29" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   这个结果比前面我们算得的下界n log
+   <sub>
+    2
+   </sub>
+   (1/є)大了log
+   <sub>
+    2
+   </sub>
+   e≈ 1.44倍。这说明在哈希函数的个数取到最优时，要让错误率不超过є，m至少需要取到最小值的1.44倍。
+  </p>
+  <h5>
+   <a class="anchor" href="#15%E6%A6%82%E6%8B%AC" name="15%E6%A6%82%E6%8B%AC">
     <span class="octicon octicon-link">
     </span>
    </a>
-   为关键词添上编码
-  </h3>
+   1.5、概括
+  </h5>
   <p>
-   如上图所示，已经满足需求了。但可以再在每个关键词的背后添加一个计数表示索引到了第多少个关键词：
-   <a href="../images/26/26.9.gif" target="_blank">
-    <img alt="" src="../images/26/26.9.gif" style="max-width:100%;"/>
-   </a>
+   在计算机科学中，我们常常会碰到时间换空间或者空间换时间的情况，即为了达到某一个方面的最优而牺牲另一个方面。Bloom Filter在时间空间这两个因素之外又引入了另一个因素：错误率。在使用Bloom Filter判断一个元素是否属于某个集合时，会有一定的错误率。也就是说，有可能把不属于这个集合的元素误认为属于这个集合（False Positive），但不会把属于这个集合的元素误认为不属于这个集合（False Negative）。在增加了错误率这个因素之后，Bloom Filter通过允许少量的错误来节省大量的存储空间。
   </p>
-  <h2>
-   <a class="anchor" href="#%E7%AC%AC%E4%BA%94%E8%8A%82%E7%AE%97%E6%B3%95%E7%9A%84%E4%BA%8C%E6%AC%A1%E6%94%B9%E8%BF%9B" name="%E7%AC%AC%E4%BA%94%E8%8A%82%E7%AE%97%E6%B3%95%E7%9A%84%E4%BA%8C%E6%AC%A1%E6%94%B9%E8%BF%9B">
+  <p>
+   自从Burton Bloom在70年代提出Bloom Filter之后，Bloom Filter就被广泛用于拼写检查和数据库系统中。近一二十年，伴随着网络的普及和发展，Bloom Filter在网络领域获得了新生，各种Bloom Filter变种和新的应用不断出现。可以预见，随着网络应用的不断深入，新的变种和应用将会继续出现，Bloom Filter必将获得更大的发展。
+  </p>
+  <h4>
+   <a class="anchor" href="#%E4%BA%8C%E9%80%82%E7%94%A8%E8%8C%83%E5%9B%B4" name="%E4%BA%8C%E9%80%82%E7%94%A8%E8%8C%83%E5%9B%B4">
     <span class="octicon octicon-link">
     </span>
    </a>
-   第五节、算法的二次改进
-  </h2>
-  <h3>
-   <a class="anchor" href="#%E7%9C%81%E5%8E%BB%E4%BA%8C%E6%AC%A1hash" name="%E7%9C%81%E5%8E%BB%E4%BA%8C%E6%AC%A1hash">
+   二、适用范围
+  </h4>
+  <p>
+   可以用来实现数据字典，进行数据的判重，或者集合求交集
+  </p>
+  <h4>
+   <a class="anchor" href="#%E4%B8%89%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%8F%8A%E8%A6%81%E7%82%B9" name="%E4%B8%89%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%8F%8A%E8%A6%81%E7%82%B9">
     <span class="octicon octicon-link">
     </span>
    </a>
-   省去二次Hash
-  </h3>
+   三、基本原理及要点
+  </h4>
   <p>
-   针对本文评论下读者的留言，做了下思考，自觉可以省去二次hash：
+   对于原理来说很简单，位数组+k个独立hash函数。将hash函数对应的值的位数组置1，查找时如果发现所有hash函数对应位都是1说明存在，很明显这 个过程并不保证查找的结果是100%正确的。同时也不支持删除一个已经插入的关键字，因为该关键字对应的位会牵动到其他的关键字。所以一个简单的改进就是 counting Bloom filter，用一个counter数组代替位数组，就可以支持删除了。
   </p>
-  <div class="highlight highlight-cpp">
-   <pre>        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="c1">// 将关键字对应的文档内容加入文档结点链表中</span>
-            <span class="c1">//也就是说当查询到hash表中没有某个关键词之,后便会插入</span>
-            <span class="c1">//而查询的时候，search会调用hashstring，得到了nHashC ，nHashD</span>
-            <span class="c1">//插入的时候又调用了一次hashstring，得到了nHashA，nHashB</span>
-            <span class="c1">//而如果查询的时候，是针对同一个关键词查询的，所以也就是说nHashC&amp;nHashD，与nHashA&amp;nHashB是相同的，无需二次hash</span>
-            <span class="c1">//所以，若要改进，改的也就是下面这个if~else语句里头。July，2011.12.30。</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">keylist</span> <span class="o">=</span> <span class="n">SearchByString</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>     <span class="c1">//到hash表内查询</span>
-            <span class="p">{</span>
-                <span class="n">doc_list</span> <span class="n">infolist</span> <span class="o">=</span> <span class="n">SaveItems</span><span class="p">();</span>
-                <span class="n">infolist</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">keylist</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-                <span class="n">keylist</span><span class="o">-&gt;</span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
-                <span class="n">keylist</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">infolist</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">else</span>
-            <span class="p">{</span>
-                <span class="c1">// 如果关键字第一次出现，则将其加入hash表</span>
-                <span class="kt">int</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">InsertString</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>       <span class="c1">//插入hash表</span>
-                <span class="n">keylist</span> <span class="o">=</span> <span class="n">key_array</span><span class="p">[</span><span class="n">pos</span><span class="p">];</span>
-                <span class="n">doc_list</span> <span class="n">infolist</span> <span class="o">=</span> <span class="n">SaveItems</span><span class="p">();</span>
-                <span class="n">infolist</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-                <span class="n">keylist</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">infolist</span><span class="p">;</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="n">strcpy_s</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">wordnum</span><span class="o">++</span><span class="p">],</span> <span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-<span class="c1">// 通过快排对关键字进行排序</span>
-<span class="n">qsort</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">WORD_MAX_NUM</span><span class="p">,</span> <span class="n">WORD_MAX_LEN</span><span class="p">,</span> <span class="n">strcoll</span><span class="p">);</span>
-</pre>
-  </div>
-  <h3>
-   <a class="anchor" href="#%E9%99%A4%E5%8E%BB%E6%8E%92%E5%BA%8F%E9%92%88%E5%AF%B9%E4%B8%8D%E5%90%8C%E6%97%A5%E6%9C%9F%E7%9A%84%E8%AE%B0%E5%BD%95%E7%9B%B4%E6%8E%A5%E6%8F%92%E5%85%A5" name="%E9%99%A4%E5%8E%BB%E6%8E%92%E5%BA%8F%E9%92%88%E5%AF%B9%E4%B8%8D%E5%90%8C%E6%97%A5%E6%9C%9F%E7%9A%84%E8%AE%B0%E5%BD%95%E7%9B%B4%E6%8E%A5%E6%8F%92%E5%85%A5">
+  <p>
+   还有一个比较重要的问题，如 何根据输入元素个数n，确定位数组m的大小及hash函数个数。当hash函数个数
+   <code>
+    k=(ln2)*(m/n)
+   </code>
+   时错误率最小。在错误率不大于E的情况 下，m至少要等于
+   <code>
+    n*lg(1/E)
+   </code>
+   才能表示任意n个元素的集合。但m还应该更大些，因为还要保证bit数组里至少一半为0，则m应 该
+   <code>
+    &gt;=nlg(1/E)*lge
+   </code>
+   大概就是
+   <code>
+    nlg(1/E)1.44
+   </code>
+   倍(lg表示以2为底的对数)。
+  </p>
+  <p>
+   举个例子我们假设错误率为0.01，则此时m应大概是n的13倍。这样k大概是8个。
+  </p>
+  <p>
+   注意这里m与n的单位不同，m是bit为单位，而n则是以元素个数为单位(准确的说是不同元素的个数)。通常单个元素的长度都是有很多bit的。所以使用bloom filter内存上通常都是节省的。
+  </p>
+  <h4>
+   <a class="anchor" href="#%E5%9B%9B%E6%89%A9%E5%B1%95" name="%E5%9B%9B%E6%89%A9%E5%B1%95">
     <span class="octicon octicon-link">
     </span>
    </a>
-   除去排序，针对不同日期的记录直接插入
-  </h3>
-  <div class="highlight highlight-cpp">
-   <pre><span class="c1">//对链表进行冒泡排序。这里可以改成快速排序：等到统计完所有有关这个关键词的文章之后，才能对他集体快排。</span>
-<span class="c1">//但其实完全可以用插入排序，不同日期的，根据时间的先后找到插入位置进行插入：</span>
-<span class="c1">//假如说已有三条不同日期的记录 A B C</span>
-<span class="c1">//来了D后，发现D在C之前，B之后，那么就必须为它找到B C之间的插入位置，</span>
-<span class="c1">//A B D C。July、2011.12.31。</span>
-<span class="kt">void</span> <span class="nf">ListSort</span><span class="p">(</span><span class="n">key_list</span> <span class="n">keylist</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">doc_list</span> <span class="n">p</span> <span class="o">=</span> <span class="n">keylist</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-    <span class="n">doc_list</span> <span class="n">final</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">bool</span> <span class="n">isfinish</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">!=</span> <span class="n">final</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">time</span><span class="p">,</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">time</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">//不同日期的按最早到最晚排序</span>
-            <span class="p">{</span>
-                <span class="n">SwapDocNode</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
-                <span class="n">isfinish</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">final</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
-        <span class="n">p</span> <span class="o">=</span> <span class="n">keylist</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">isfinish</span> <span class="o">||</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">==</span> <span class="n">final</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">break</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre>
-  </div>
+   四、扩展
+  </h4>
   <p>
-   综上两节免去冒泡排序和，省去二次hash和免去冒泡排序，修改后如下：
+   Bloom filter将集合中的元素映射到位数组中，用k（k为哈希函数个数）个映射位是否全1表示元素在不在这个集合中。Counting bloom filter（CBF）将位数组中的每一位扩展为一个counter，从而支持了元素的删除操作。Spectral Bloom Filter（SBF）将其与集合元素的出现次数关联。SBF采用counter中的最小值来近似表示元素的出现频率。
   </p>
-  <div class="highlight highlight-cpp">
-   <pre>        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1">// 将关键字对应的文档内容加入文档结点链表中</span>
-            <span class="c1">// 如果关键字第一次出现，则将其加入hash表</span>
-            <span class="n">InitHashValue</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">hashvalue</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">keynode</span> <span class="o">=</span> <span class="n">SearchByString</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">hashvalue</span><span class="p">))</span> <span class="p">{</span>
-                <span class="n">doc_list</span> <span class="n">infonode</span> <span class="o">=</span> <span class="n">SaveItems</span><span class="p">();</span>
-                <span class="n">doc_list</span> <span class="n">p</span> <span class="o">=</span> <span class="n">keynode</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-                <span class="c1">// 根据时间由早到晚排序</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">infonode</span><span class="o">-&gt;</span><span class="n">time</span><span class="p">,</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">time</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="c1">//考虑infonode插入keynode后的情况</span>
-                    <span class="n">infonode</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
-                    <span class="n">keynode</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">infonode</span><span class="p">;</span>
-                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                    <span class="c1">//考虑其他情况</span>
-                    <span class="n">doc_list</span> <span class="n">pre</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
-                    <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-                    <span class="k">while</span> <span class="p">(</span><span class="n">p</span><span class="p">)</span>
-                    <span class="p">{</span>
-                        <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">infonode</span><span class="o">-&gt;</span><span class="n">time</span><span class="p">,</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">time</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-                            <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-                            <span class="n">pre</span> <span class="o">=</span> <span class="n">pre</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-                        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                            <span class="k">break</span><span class="p">;</span>
-                        <span class="p">}</span>
-                    <span class="p">}</span>
-                    <span class="n">infonode</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
-                    <span class="n">pre</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">infonode</span><span class="p">;</span>
-                <span class="p">}</span>
-                <span class="n">keynode</span><span class="o">-&gt;</span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
-            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                <span class="kt">int</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">InsertString</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">hashvalue</span><span class="p">);</span>
-                <span class="n">keynode</span> <span class="o">=</span> <span class="n">key_array</span><span class="p">[</span><span class="n">pos</span><span class="p">];</span>
-                <span class="n">doc_list</span> <span class="n">infolist</span> <span class="o">=</span> <span class="n">SaveItems</span><span class="p">();</span>
-                <span class="n">infolist</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-                <span class="n">keynode</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">infolist</span><span class="p">;</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="n">strcpy_s</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">wordnum</span><span class="o">++</span><span class="p">],</span> <span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="c1">// 通过快排对关键字进行排序</span>
-<span class="n">qsort</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">WORD_MAX_NUM</span><span class="p">,</span> <span class="n">WORD_MAX_LEN</span><span class="p">,</span> <span class="n">strcoll</span><span class="p">);</span>
-</pre>
-  </div>
-  <p>
-   修改后编译运行的效果图如下（用了另外一份更大的数据文件进行测试）：
-   <a href="../images/26/26.10.gif" target="_blank">
-    <img alt="" src="../images/26/26.10.gif" style="max-width:100%;"/>
+  <h4>
+   <a class="anchor" href="#%E4%BA%94%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B" name="%E4%BA%94%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B">
+    <span class="octicon octicon-link">
+    </span>
    </a>
+   五、问题实例
+  </h4>
+  <p>
+   可以看下上文中的第6题：
+给你A,B两个文件，各存放50亿条URL，每条URL占用64字节，内存限制是4G，让你找出A,B文件共同的URL。如果是三个乃至n个文件呢？
+  </p>
+  <p>
+   根据这个问题我们来计算下内存的占用，4G=2^32大概是40亿*8大概是340亿，n=50亿，如果按出错率0.01算需要的大概是650亿个bit。 现在可用的是340亿，相差并不多，这样可能会使出错率上升些。另外如果这些urlip是一一对应的，就可以转换成ip，则大大简单了。
+  </p>
+  <p>
+   同时，上文的第5题：给定a、b两个文件，各存放50亿个url，每个url各占64字节，内存限制是4G，让你找出a、b文件共同的url？如果允许有一定的错误率，可以使用Bloom filter，4G内存大概可以表示340亿bit。将其中一个文件中的url使用Bloom filter映射为这340亿bit，然后挨个读取另外一个文件的url，检查是否与Bloom filter，如果是，那么该url应该是共同的url（注意会有一定的错误率）。”
   </p>
  </body>
 </html>
@@ -1151,7 +646,7 @@ return output_file
 					|
 				
 				
-					<a href="09.06~09.07.html">next</a>
+					<a href="09.06.html">next</a>
 				
 				<span style="float: right"><a href="index.html">Back to home</a>
 			</div>

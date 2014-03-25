@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-d9c478ed7e87eebc36430a1efc4e84b17e65df06.css" />
-  <link rel="stylesheet" href="style_cache/github2-902e67494b49343625b27d5860c1e86bf5c65627.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-87cbc66c0a828647c8911f5e67d5b26b0cf62bbe.css" />
+  <link rel="stylesheet" href="style_cache/github2-f14002c8b8c821aeaeaf37b52de1d6c4d29dc214.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,321 +105,214 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0%E4%BA%B2%E5%92%8C%E6%95%B0%E9%97%AE%E9%A2%98--%E6%B1%82%E8%A7%A3500%E4%B8%87%E4%BB%A5%E5%86%85%E7%9A%84%E4%BA%B2%E5%92%8C%E6%95%B0" name="%E7%AC%AC%E5%85%AD%E7%AB%A0%E4%BA%B2%E5%92%8C%E6%95%B0%E9%97%AE%E9%A2%98--%E6%B1%82%E8%A7%A3500%E4%B8%87%E4%BB%A5%E5%86%85%E7%9A%84%E4%BA%B2%E5%92%8C%E6%95%B0">
+   <a class="anchor" href="#%E8%8D%B7%E5%85%B0%E5%9B%BD%E6%97%97%E9%97%AE%E9%A2%98" name="%E8%8D%B7%E5%85%B0%E5%9B%BD%E6%97%97%E9%97%AE%E9%A2%98">
     <span class="octicon octicon-link">
     </span>
    </a>
-   第六章：亲和数问题--求解500万以内的亲和数
+   荷兰国旗问题
   </h1>
-  <p>
-   作者：上善若水、July、yansha
-  </p>
-  <h2>
+  <h3>
    <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
     <span class="octicon octicon-link">
     </span>
    </a>
    题目描述
-  </h2>
+  </h3>
   <p>
-   求500万以内的所有亲和数
+   现有红白蓝三个不同颜色的小球，乱序排列在一起，请重新排列这些小球，使得红白蓝三色的同颜色的球在一起。这个问题之所以叫
+   <strong>
+    荷兰国旗
+   </strong>
+   ，是因为我们可以将红白蓝三色小球想象成条状物，有序排列后正好组成荷兰国旗。如下图所示：
   </p>
   <p>
-   如果两个数a和b，a的所有真因数之和等于b,b的所有真因数之和等于a,则称a,b是一对亲和数。
-例如220和284，1184和1210，2620和2924。
+   <a href="../images/41%7E42/41.1.jpg" target="_blank">
+    <img alt="img" src="../images/41%7E42/41.1.jpg" style="max-width:100%;"/>
+   </a>
   </p>
-  <h2>
+  <h3>
    <a class="anchor" href="#%E6%80%9D%E8%B7%AF%E5%88%86%E6%9E%90" name="%E6%80%9D%E8%B7%AF%E5%88%86%E6%9E%90">
     <span class="octicon octicon-link">
     </span>
    </a>
    思路分析
-  </h2>
+  </h3>
   <p>
-   首先得明确到底是什么是亲和数?
-  </p>
-  <p>
-   亲和数问题最早是由毕达哥拉斯学派发现和研究的。他们在研究数字的规律的时候发现有以下性质特点的两个数:
-  </p>
-  <p>
-   220的真因子是：1、2、4、5、10、11、20、22、44、55、110；
-  </p>
-  <p>
-   284的真因子是：1、2、4、71、142。
-  </p>
-  <p>
-   而这两个数恰恰等于对方的真因子各自加起来的和（sum[i]表示数i 的各个真因子的和），即
-  </p>
-  <p>
-   220=1+2+4+71+142=sum[284],
-  </p>
-  <p>
-   284=1+2+4+5+10+11+20+22+44+55+110=sum[220]。
-  </p>
-  <p>
-   得284的真因子之和sum[284]=220，且220的真因子之和sum[220]=284，即有sum[220]=sum[sum[284]]=284。
-  </p>
-  <p>
-   如此，是否已看出丝毫端倪?
-  </p>
-  <p>
-   如上所示，考虑到1是每个整数的因子，把出去整数本身之外的所有因子叫做这个数的“真因子”。如果两个整数，其中每一个真因子的和都恰好等于另一个数，那么这两个数，就构成一对“亲和数”（有关亲和数的更多讨论，可参考
-   <a href="http://t.cn/hesH09">
-    这里
-   </a>
-   )。
-  </p>
-  <p>
-   <strong>
-    求解
-   </strong>
-   :
-    了解了什么是亲和数，接下来咱们一步一步来解决上面提出的问题（以下内容大部引自水的原话，同时水哥有一句原话，
-   <strong>
-    “在你真正弄弄懂这个范例之前，你不配说你懂数据结构和算法”
-   </strong>
-   ）。
+   初看此题，我们貌似除了暴力解决并无好的办法，但联想到我们所熟知的快速排序算法呢？我们知道，快速排序时基于分治模式处理的，对一个典型子数组A[p...r]排序的分治过程为三个步骤：
   </p>
   <ol>
    <li>
-    看到这个问题后，第一想法是什么？模拟搜索+剪枝？回溯？时间复杂度有多大？其中bn为an的伪亲和数，即bn是an的真因数之和大约是多少？至少是10^13（@iicup：N^1.5 对于5*10^6 , 次数大致 10^10 而不是 10^13.）的数量级的。那么对于每秒千万次运算的计算机来说，大概在1000多天也就是3年内就可以搞定了（iicup的计算: 10^13 / 10^7 =1000000(秒) 大约 278 小时. ）。如果是基于这个基数在优化，你无法在一天内得到结果的。
+    分解：A[p..r]被划分为俩个（可能空）的子数组A[p ..q-1]和A[q+1...r]，使得A[p...q-1] &lt;= A[q] &lt;= A[q+1...r]
    </li>
    <li>
-    一个不错的算法应该在半小时之内搞定这个问题，当然这样的算法有很多。节约时间的做法是可以生成伴随数组，也就是空间换时间，但是那样，空间代价太大，因为数据规模庞大。
+    解决：通过递归调用快速排序，对子数组A[p...q-1]和A[q+1...r]排序。
    </li>
    <li>
-    在稍后的算法中，依然使用的伴随数组，只不过，因为题目的特殊性，只是它方便和巧妙地利用了下标作为伴随数组，来节约时间。同时，将回溯的思想换成递推的思想(预处理数组的时间复杂度为
-    <strong>
-     O(N*logN)
-    </strong>
-    (logN为调和级数)，扫描数组的时间复杂度为线性
-    <strong>
-     O(N)
-    </strong>
-    。所以，总的时间复杂度为
-    <strong>
-     O(N*logN+N)
-    </strong>
-    (其中logN为调和级数))。
+    合并。
    </li>
   </ol>
-  <h2>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80%E4%BC%B4%E9%9A%8F%E6%95%B0%E7%BB%84%E7%BA%BF%E6%80%A7%E9%81%8D%E5%8E%86" name="%E8%A7%A3%E6%B3%95%E4%B8%80%E4%BC%B4%E9%9A%8F%E6%95%B0%E7%BB%84%E7%BA%BF%E6%80%A7%E9%81%8D%E5%8E%86">
-    <span class="octicon octicon-link">
-    </span>
+  <p>
+   也就是说，快速排序的主要思想便是依托于一个partition分治过程，每一趟排序的过程中，选取的主元都会把整个数组排列成一大一小的序列，继而递归排序完整个数组。
+  </p>
+  <p>
+   如下伪代码所示：
+  </p>
+  <p>
+   快速排序算法的关键是PARTITION过程，它对A[p...r]进行就地重排：
+  </p>
+  <pre><code>PARTITION(A, p, r)
+1  x ← A[r]
+2  i ← p - 1
+3  for j ← p to r - 1
+4       do if A[j] ≤ x
+5             then i ← i + 1
+6                  exchange A[i] &lt;-&gt; A[j]
+7  exchange A[i + 1] &lt;-&gt; A[r]
+8  return i + 1
+</code></pre>
+  <p>
+   继而递归完成整个排序过程：
+  </p>
+  <pre><code>QUICKSORT(A, p, r)
+1 if p &lt; r
+2    then q ← PARTITION(A, p, r)   //关键
+3         QUICKSORT(A, p, q - 1)
+4         QUICKSORT(A, q + 1, r)
+</code></pre>
+  <p>
+   举个例子如下：
+   <code>
+    i
+   </code>
+   指向数组头部前一个位置，
+   <code>
+    j
+   </code>
+   指向数组头部元素，
+   <code>
+    j
+   </code>
+   在前，
+   <code>
+    i
+   </code>
+   在后，双双从左向右移动。
+  </p>
+  <p>
+   ① j 指向元素2时，i 也指向元素2，2与2互换不变
+  </p>
+  <pre><code>i  p/j
+
+    2   8   7   1   3   5   6   4(主元)
+</code></pre>
+  <p>
+   ② 于是j 继续后移，直到指向了1，1 &lt;= 4，于是i++，i 指向8，故j 所指元素1 与 i 所指元素8 位置互换：
+  </p>
+  <pre><code>    i       j
+
+2   1   7   8   3   5   6   4
+</code></pre>
+  <p>
+   ③ j 继续后移，指到了元素3,3 &lt;= 4，于是同样i++，i 指向7，故j 所指元素3 与 i 所指元素7 位置互换：
+  </p>
+  <pre><code>        i       j
+
+2   1   3   8   7   5   6   4
+</code></pre>
+  <p>
+   ④ j 一路后移，没有再碰到比主元4小的元素：
+  </p>
+  <pre><code>        i               j
+
+2   1   3   8   7   5   6   4
+</code></pre>
+  <p>
+   ⑤ 最后，A[i + 1] &lt;-&gt; A[r]，即8与4交换，所以，数组最终变成了如下形式：
+  </p>
+  <pre><code>    2   1   3   4   7   5   6   8
+</code></pre>
+  <p>
+   ok，至此快速排序第一趟完成。就这样，4把整个数组分成了俩部分，2 1 3,7 5 6 8，再递归对这俩部分分别进行排序。
+  </p>
+  <p>
+   全部过程可以参看此文：
+   <a href="http://blog.csdn.net/v_july_v/article/details/6116297">
+    快速排序算法
    </a>
-   解法一、伴随数组线性遍历
-  </h2>
-  <p>
-   依据上文的思路分析，可以编写如下代码：
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="c1">//求解亲和数问题</span>
-
-<span class="c1">//第一个for和第二个for循环是logN*N（调和级数）次遍历,第三个for循环扫描O(N)。</span>
-<span class="c1">//所以总的时间复杂度为 O(N*logN) + O(n) =O(N*logN+N)（其中logN为调和级数）。</span>
-
-<span class="c1">//关于第一个for和第二个for寻找中，调和级数的说明：</span>
-<span class="c1">//比如给2的倍数加2，那么应该是  n/2次，3的倍数加3 应该是 n/3次，...</span>
-<span class="c1">//那么其实就是n*（1+1/2+1/3+1/4+...1/(n/2)）=n*（调和级数）=n*logn。</span>
-
-<span class="c1">//copyright@ 上善若水</span>
-<span class="c1">//July、updated，2011.05.24。</span>
-<span class="cp">#include&lt;stdio.h&gt;</span>
-
-<span class="kt">int</span> <span class="n">sum</span><span class="p">[</span><span class="mi">5000010</span><span class="p">];</span>   <span class="c1">//为防越界</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">5000000</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-        <span class="n">sum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>  <span class="c1">//1是所有数的真因数所以全部置1</span>
-
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">+</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">5000000</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>  <span class="c1">//预处理，预处理是logN（调和级数）*N。</span>
-        <span class="c1">//@litaoye：调和级数1/2 + 1/3 + 1/4......的和近似为ln(n)，</span>
-        <span class="c1">//因此O(n *(1/2 + 1/3 + 1/4......)) = O(n * ln(n)) = O(N*log(N))。</span>
-    <span class="p">{</span>
-        <span class="c1">//5000000以下最大的真因数是不超过它的一半的</span>
-        <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">i</span><span class="p">;</span>  <span class="c1">//因为真因数，所以不能算本身，所以从它的2倍开始</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">j</span> <span class="o">&lt;=</span> <span class="mi">5000000</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="c1">//将所有i的倍数的位置上加i</span>
-            <span class="n">sum</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">i</span><span class="p">;</span>
-            <span class="n">j</span> <span class="o">+=</span> <span class="n">i</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">220</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">5000000</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>   <span class="c1">//扫描，O（N）。</span>
-    <span class="p">{</span>
-        <span class="c1">// 一次遍历，因为知道最小是220和284因此从220开始</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">sum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="o">&amp;&amp;</span> <span class="n">sum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">5000000</span> <span class="o">&amp;&amp;</span> <span class="n">sum</span><span class="p">[</span><span class="n">sum</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">==</span> <span class="n">i</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="c1">//去重，不越界，满足亲和</span>
-            <span class="n">printf</span><span class="p">(</span><span class="s">"%d %d/n"</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">sum</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
-  </div>
-  <p>
-   <strong>
-    运行结果
-   </strong>
-   :
+   ，或看下我以前在学校里画的图：
   </p>
   <p>
-   <a href="../images/6.1.jpg" target="_blank">
-    <img alt="" src="../images/6.1.jpg" style="max-width:100%;"/>
+   <a href="../images/41%7E42/41.2.jpg" target="_blank">
+    <img alt="img" src="../images/41%7E42/41.2.jpg" style="max-width:100%;"/>
    </a>
   </p>
-  <blockquote>
-   <p>
-    @上善若水：
-   </p>
-   <p>
-    1、可能大家理解的还不是很清晰，我们建立一个5 000 000 的数组，从1到2 500 000开始，在每一个下标是i的倍数的位置上加上i，那么在循环结束之后，我们得到的是什么？是类似埃斯托拉晒求素数的数组（当然里面有真的亲和数），然后只需要一次遍历就可以轻松找到所有的亲和数了。时间复杂度，线性。
-   </p>
-   <p>
-    2、我们可以清晰的发现连续数据的映射可以通过数组结构本身的特点替代，用来节约空间，这是数据结构的艺术。在大规模连续数据的回溯处理上，可以通过转化为递推生成的方法，逆向思维操作，这是算法的艺术。
-   </p>
-   <p>
-    3、把最简单的东西运用的最巧妙的人，要比用复杂方法解决复杂问题的人要头脑清晰。
-   </p>
-  </blockquote>
+  <p>
+   而我们面对的问题是，重新排列使得所有球排列成三个不同颜色的球，是否可以设定三个指针，借鉴partition过程呢？
+  </p>
   <h3>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80%E7%9A%84%E6%9E%84%E9%80%A0%E4%B8%8E%E8%A7%A3%E9%87%8A" name="%E8%A7%A3%E6%B3%95%E4%B8%80%E7%9A%84%E6%9E%84%E9%80%A0%E4%B8%8E%E8%A7%A3%E9%87%8A">
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80partition%E5%88%86%E6%B2%BB" name="%E8%A7%A3%E6%B3%95%E4%B8%80partition%E5%88%86%E6%B2%BB">
     <span class="octicon octicon-link">
     </span>
    </a>
-   解法一的构造与解释
+   解法一、partition分治
   </h3>
   <p>
-   我再来具体解释下上述程序的原理，ok，举个例子，假设是求10以内的亲和数，求解步骤如下：
+   通过前面的分析得知，这个问题，类似快排中partition过程。只是需要用到三个指针，一前begin，一中current，一后end，俩俩交换。
+  </p>
+  <ol>
+   <li>
+    current遍历，整个数组序列，current指1不动，
+   </li>
+   <li>
+    current指0，与begin交换，而后current++，begin++，
+   </li>
+   <li>
+    current指2，与end交换，而后，current不动，end--。
+   </li>
+  </ol>
+  <p>
+   为什么，第三步，current指2，与end交换之后，current不动了列，对的，正如algorithm__所说：current之所以与begin交换后，current++、begin++，是因为此无后顾之忧。而current与end交换后，current不动，end--，是因有后顾之忧。
   </p>
   <p>
-   因为所有数的真因数都包含1，所以，先在各个数的下方全部置1
+   读者可以试想，你最终的目的无非就是为了让0、1、2有序排列，试想，如果第三步，current与end交换之前，万一end之前指的是0，而current交换之后，current此刻指的是0了，此时，current能动么？不能动啊，指的是0，还得与begin交换列。
   </p>
   <p>
-   1. 然后取i=2,3,4,5（i&lt;=10/2），j依次对应的位置为j=（4、6、8、10），（6、9）,（8）,（10）各数所对应的位置。依据j所找到的位置，在j所指的各个数的下面加上各个真因子i（i=2、3、4、5）。
+   ok，说这么多，你可能不甚明了，直接引用下gnuhpc的图，就一目了然了：
   </p>
   <p>
-   2. 整个过程，即如下图所示（如sum[6]=1+2+3=6，sum[10]=1+2+5=8.）:
-  </p>
-  <p>
-   <a href="../images/6.2.jpg" target="_blank">
-    <img alt="" src="../images/6.2.jpg" style="max-width:100%;"/>
+   <a href="../images/41%7E42/41.3.jpg" target="_blank">
+    <img alt="img" src="../images/41%7E42/41.3.jpg" style="max-width:100%;"/>
    </a>
   </p>
   <p>
-   3. 然后一次遍历i从220开始到5000000，i每遍历一个数后,
-将i对应的数下面的各个真因子加起来得到一个和sum[i]，如果这个和sum[i]==某个i’，且sum[i‘]=i，
-那么这两个数i和i’，即为一对亲和数。
+   参考代码如下：
   </p>
-  <p>
-   4. i=2；sum[4]+=2，sum[6]+=2，sum[8]+=2，sum[10]+=2，sum[12]+=2...
-i=3，sum[6]+=3，sum[9]+=3...
-  </p>
-  <p>
-   5. i=220时，sum[220]=284，i=284时，sum[284]=220；即sum[220]=sum[sum[284]]=284，
-得出220与284是一对亲和数。所以，最终输出220、284，...
-  </p>
-  <h2>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" name="%E8%A7%A3%E6%B3%95%E4%BA%8C">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   解法二
-  </h2>
-  <blockquote>
-   <p>
-    litaoye专门为本亲和数问题开帖子继续阐述，有兴趣的朋友可继续参见
-    <a href="http://topic.csdn.net/u/20110526/21/129c2235-1f44-42e9-a55f-878920c21e19.html">
-     这里
-    </a>
-    。同时，任何人对本亲和数问题有任何问题，也可以回复到上述帖子上。
-   </p>
-  </blockquote>
-  <div class="highlight highlight-csharp">
-   <pre><span class="c1">//求解亲和数问题</span>
-<span class="c1">//copyright@ litaoye</span>
-<span class="c1">//July、胡滨，updated，2011.05.26。</span>
-<span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+  <div class="highlight highlight-cpp">
+   <pre><span class="c1">//引用自gnuhpc  </span>
+<span class="k">while</span><span class="p">(</span> <span class="n">current</span><span class="o">&lt;=</span><span class="n">end</span> <span class="p">)</span>        
+<span class="p">{</span>             
+  <span class="k">if</span><span class="p">(</span> <span class="n">array</span><span class="p">[</span><span class="n">current</span><span class="p">]</span> <span class="o">==</span><span class="mi">0</span> <span class="p">)</span>             
+   <span class="p">{</span>                 
+      <span class="n">swap</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">current</span><span class="p">],</span><span class="n">array</span><span class="p">[</span><span class="n">begin</span><span class="p">]);</span>                  
+      <span class="n">current</span><span class="o">++</span><span class="p">;</span>                  
+      <span class="n">begin</span><span class="o">++</span><span class="p">;</span>            
+   <span class="p">}</span>             
+   <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="n">array</span><span class="p">[</span><span class="n">current</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">)</span>            
+   <span class="p">{</span>                 
+      <span class="n">current</span><span class="o">++</span><span class="p">;</span>            
+   <span class="p">}</span>   
 
-<span class="k">namespace</span> <span class="nn">CSharpTest</span>
-<span class="p">{</span>
-    <span class="k">class</span> <span class="nc">Program</span>
-    <span class="p">{</span>
-        <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">()</span>
-        <span class="p">{</span>
-            <span class="kt">int</span> <span class="n">max</span> <span class="p">=</span> <span class="m">5000000</span><span class="p">;</span>
-            <span class="n">DateTime</span> <span class="n">start</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">;</span>
-            <span class="kt">int</span><span class="p">[]</span> <span class="n">counter</span> <span class="p">=</span> <span class="n">CreateCounter</span><span class="p">(</span><span class="n">max</span><span class="p">);</span>
-
-            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">counter</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-            <span class="p">{</span>
-                <span class="kt">int</span> <span class="n">num</span> <span class="p">=</span> <span class="n">counter</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">-</span> <span class="n">i</span><span class="p">;</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="p">&lt;</span> <span class="n">counter</span><span class="p">.</span><span class="n">Length</span> <span class="p">&amp;&amp;</span> <span class="n">num</span> <span class="p">&gt;</span> <span class="n">i</span> <span class="p">&amp;&amp;</span> <span class="n">counter</span><span class="p">[</span><span class="n">num</span><span class="p">]</span> <span class="p">==</span> <span class="n">counter</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-                    <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"{0} {1}"</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">num</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">((</span><span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span> <span class="p">-</span> <span class="n">start</span><span class="p">).</span><span class="n">TotalSeconds</span><span class="p">);</span>
-
-            <span class="n">Console</span><span class="p">.</span><span class="n">ReadKey</span><span class="p">();</span>
-        <span class="p">}</span>
-
-        <span class="k">static</span> <span class="kt">int</span><span class="p">[]</span> <span class="nf">CreateCounter</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">primes</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;();</span>
-            <span class="kt">int</span><span class="p">[]</span> <span class="n">counter</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">n</span> <span class="p">+</span> <span class="m">1</span><span class="p">];</span>
-            <span class="n">counter</span><span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
-
-            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">2</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-            <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">counter</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="n">counter</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">i</span> <span class="p">+</span> <span class="m">1</span><span class="p">;</span>
-                    <span class="n">primes</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-                <span class="p">}</span>
-
-                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="p">&lt;</span> <span class="n">primes</span><span class="p">.</span><span class="n">Count</span><span class="p">;</span> <span class="n">j</span><span class="p">++)</span>
-                <span class="p">{</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="n">primes</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">*</span> <span class="n">i</span> <span class="p">&gt;</span> <span class="n">n</span><span class="p">)</span>
-                        <span class="k">break</span><span class="p">;</span>
-
-                    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="p">%</span> <span class="n">primes</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span>
-                    <span class="p">{</span>
-                        <span class="kt">int</span> <span class="n">k</span> <span class="p">=</span> <span class="n">i</span><span class="p">;</span>
-                        <span class="kt">int</span> <span class="n">l</span> <span class="p">=</span> <span class="n">primes</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">*</span> <span class="n">primes</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
-
-                        <span class="k">while</span> <span class="p">(</span><span class="n">k</span> <span class="p">%</span> <span class="n">primes</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span>
-                        <span class="p">{</span>
-                            <span class="n">l</span> <span class="p">*=</span> <span class="n">primes</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
-                            <span class="n">k</span> <span class="p">/=</span> <span class="n">primes</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
-                        <span class="p">}</span>
-
-                        <span class="n">counter</span><span class="p">[</span><span class="n">primes</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">*</span> <span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">counter</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="p">*</span> <span class="p">(</span><span class="n">l</span> <span class="p">-</span> <span class="m">1</span><span class="p">)</span> <span class="p">/</span> <span class="p">(</span><span class="n">primes</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">-</span> <span class="m">1</span><span class="p">);</span>
-                        <span class="k">break</span><span class="p">;</span>
-                    <span class="p">}</span>
-                    <span class="k">else</span>
-                        <span class="n">counter</span><span class="p">[</span><span class="n">primes</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">*</span> <span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">counter</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">*</span> <span class="p">(</span><span class="n">primes</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">+</span> <span class="m">1</span><span class="p">);</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-
-            <span class="k">return</span> <span class="n">counter</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="cm">/*</span>
-<span class="cm">测试结果：</span>
-<span class="cm">0.484375</span>
-<span class="cm">0.484375</span>
-<span class="cm">0.46875</span>
-<span class="cm">单位second。</span>
-<span class="cm">*/</span>
+   <span class="k">else</span> <span class="c1">//When array[current] =2   </span>
+   <span class="p">{</span>               
+      <span class="n">swap</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">current</span><span class="p">],</span><span class="n">array</span><span class="p">[</span><span class="n">end</span><span class="p">]);</span>                
+      <span class="n">end</span><span class="o">--</span><span class="p">;</span>            
+   <span class="p">}</span>      
+<span class="p">}</span>  
 </pre>
   </div>
+  <p>
+   本章完。
+  </p>
  </body>
 </html>
 		  </article>
