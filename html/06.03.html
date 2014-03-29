@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title><link rel="stylesheet" href="style_cache/github-b4baae9c06716bcd0a8068e3030607851f19b980.css" />
+  <link rel="stylesheet" href="style_cache/github2-4940da06adce480cfcfba223624a2b2f09e8f90f.css" />
+  <style>
+    .file-box {
+      margin: 64px auto;
+      width: 920px;
+    }
+	body {
+		font-size: 14px;
+		line-height: 22px;
+		<!--font-family: "adelle",Georgia,"Times New Roman",serif;-->
+		color: #4e443c;
+		background: #f0efe7;
+	}
+
+	.book-toc {
+
+	}
+	a {
+		color: #0388a6;
+		text-decoration: none;
+	}
+	a:hover {
+		color: #04b1d8;
+		text-decoration: none;
+	}
+	ol.book-toc li.chapter{
+		margin-bottom:0.6em
+	}
+	ol.book-toc, ol{
+		list-style-type: disc
+	}
+	ol.book-toc{
+		margin:30px 36px
+	}
+	ol.book-toc a{
+		padding-left:4px
+	}
+	li {
+		line-height: 22px;
+	}
+	h1, h2, h3, h4, h5, h6, li, p, a, ol, div{
+		margin: 0;
+		padding: 0;
+		border: 0;
+		vertical-align: baseline;
+	}
+	ul, ol {
+		padding: 0;
+		margin: 0 0 11px 25px;
+	}
+	h1 {
+		font-size: 36px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	h2 {
+		font-size: 18px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h1{
+		font-size: 22px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	ol.book-toc h2 {
+		font-size: 16px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	p {
+		margin: 0 0 11px;
+		font-size: 14px;
+		line-height: 22px;
+	}
+	div {
+		display: block;
+	}
+	div#nav{
+		padding: 30px
+	}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="file-box">
+	<div class="file">
+		<div id="readme" class="blob instapaper_body announce md">
+		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
+			<html>
+ <body>
+  <h2>
+   <a class="anchor" href="#%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86%E6%8F%90%E5%8F%96%E5%87%BA%E6%9F%90%E6%97%A5%E8%AE%BF%E9%97%AE%E7%99%BE%E5%BA%A6%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E9%82%A3%E4%B8%AAip" name="%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86%E6%8F%90%E5%8F%96%E5%87%BA%E6%9F%90%E6%97%A5%E8%AE%BF%E9%97%AE%E7%99%BE%E5%BA%A6%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E9%82%A3%E4%B8%AAip">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   第三部分、提取出某日访问百度次数最多的那个IP
+  </h2>
+  <p>
+   问题描述：海量日志数据，提取出某日访问百度次数最多的那个IP。
+  </p>
+  <p>
+   方法: 计数法
+  </p>
+  <p>
+   假设一天之内某个IP访问百度的次数不超过40亿次,则访问次数可以用unsigned int表示。用数组统计出每个IP地址出现的 次数, 即可得到访问次数最大的IP地址。
+  </p>
+  <p>
+   IP地址是32位的二进制数,所以共有N=2^32个不同的IP地址，创建一个大小为N的的数组count，即可统计出每个IP的访问次数,而sizeof(count) == 4G*4 = 16G,远远超过了32位计算机所支持的内存大小,因此不能直接创建这个数组.下面采用划分法解决这个问题。
+  </p>
+  <p>
+   假设允许使用的内存是512M,  512M/4=128M 即512M内存可以统计128M个不同的IP地址的访问次数。而N/128M = 4G/128M = 32 ,所以只要把IP地址划分成32个不同的区间,分别统计出每个区间中访问次数最大的IP,然后就可以计算出所有IP地址中访问次数最大的IP了.
+  </p>
+  <p>
+   因为2^5=32, 所以可以把IP地址的最高5位作为区间编号,剩下的27为作为区间内的值,建立32个临时文件,代表32个区间,把相同区间的IP地址保存到同一临时文件中.
+  </p>
+  <p>
+   例如:
+  </p>
+  <p>
+   IP1=0x1f4e2342
+  </p>
+  <p>
+   IP1的高5位是id1  =  IP1 &gt;&gt; 27 = 0x11 = 3
+  </p>
+  <p>
+   IP1的其余27位是value1  =  IP1 &amp; 0x07ffffff = 0x074e2342
+  </p>
+  <p>
+   所以把 value1 保存在tmp3文件中.
+  </p>
+  <p>
+   由id1和value1可以还原成IP1, 即 IP1 =(id1 &lt;&lt; 27) | value1
+  </p>
+  <p>
+   按照上面的方法可以得到32个临时文件,每个临时文件中的IP地址的取值范围属于[0-128M),因此可以统计出每个IP地址的访问次数.从而找到访问次数最大的IP地址
+  </p>
+  <p>
+   程序源码:
+  </p>
+  <div class="highlight highlight-cpp">
+   <pre><span class="cp">#include &lt;fstream&gt;  </span>
+<span class="cp">#include &lt;iostream&gt;  </span>
+<span class="cp">#include &lt;ctime&gt;  </span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>  
+<span class="cp">#define N 32           </span><span class="c1">//临时文件数  </span>
+
+<span class="cp">#define ID(x)  (x&gt;&gt;27)                 </span><span class="c1">//x对应的文件编号  </span>
+<span class="cp">#define VALUE(x) (x&amp;0x07ffffff)        </span><span class="c1">//x在文件中保存的值  </span>
+<span class="cp">#define MAKE_IP(x,y)  ((x&lt;&lt;27)|y)      </span><span class="c1">//由文件编号和值得到IP地址.  </span>
+
+<span class="cp">#define MEM_SIZE  128*1024*1024       </span><span class="c1">//需分配内存的大小为 MEM_SIZE*sizeof(unsigned)     </span>
+
+<span class="kt">char</span><span class="o">*</span> <span class="n">data_path</span><span class="o">=</span><span class="s">"D:/test/ip.dat"</span><span class="p">;</span>        <span class="c1">//ip数据  </span>
+
+<span class="c1">//产生n个随机IP地址  </span>
+<span class="kt">void</span> <span class="nf">make_data</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">n</span><span class="p">)</span>         
+<span class="p">{</span>
+    <span class="n">ofstream</span> <span class="n">out</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span><span class="n">ios</span><span class="o">::</span><span class="n">out</span><span class="o">|</span><span class="n">ios</span><span class="o">::</span><span class="n">binary</span><span class="p">);</span>  
+    <span class="n">srand</span><span class="p">((</span><span class="kt">unsigned</span><span class="p">)(</span><span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">)));</span>  
+    <span class="k">if</span> <span class="p">(</span><span class="n">out</span><span class="p">)</span>  
+    <span class="p">{</span>  
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="p">{</span>  
+            <span class="kt">unsigned</span> <span class="n">val</span><span class="o">=</span><span class="kt">unsigned</span><span class="p">(</span><span class="n">rand</span><span class="p">());</span>           
+            <span class="n">val</span> <span class="o">=</span> <span class="p">(</span><span class="n">val</span><span class="o">&lt;&lt;</span><span class="mi">24</span><span class="p">)</span><span class="o">|</span><span class="n">val</span><span class="p">;</span>              <span class="c1">//产生unsigned类型的随机数  </span>
+
+            <span class="n">out</span><span class="p">.</span><span class="n">write</span><span class="p">((</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">val</span><span class="p">,</span><span class="k">sizeof</span> <span class="p">(</span><span class="kt">unsigned</span><span class="p">));</span>  
+        <span class="p">}</span>  
+    <span class="p">}</span>  
+<span class="p">}</span>  
+
+<span class="c1">//找到访问次数最大的ip地址  </span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>  
+<span class="p">{</span>  
+    <span class="c1">//make_data(100);     //   </span>
+    <span class="n">make_data</span><span class="p">(</span><span class="mi">100000000</span><span class="p">);</span>       <span class="c1">//产生测试用的IP数据  </span>
+    <span class="n">fstream</span> <span class="n">arr</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>  
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>                 <span class="c1">//创建N个临时文件  </span>
+    <span class="p">{</span>  
+        <span class="kt">char</span> <span class="n">tmp_path</span><span class="p">[</span><span class="mi">128</span><span class="p">];</span>     <span class="c1">//临时文件路径  </span>
+        <span class="n">sprintf</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">,</span><span class="s">"D:/test/tmp%d.dat"</span><span class="p">,</span><span class="n">i</span><span class="p">);</span>  
+        <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">open</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">,</span> <span class="n">ios</span><span class="o">::</span><span class="n">trunc</span><span class="o">|</span><span class="n">ios</span><span class="o">::</span><span class="n">in</span><span class="o">|</span><span class="n">ios</span><span class="o">::</span><span class="n">out</span><span class="o">|</span><span class="n">ios</span><span class="o">::</span><span class="n">binary</span><span class="p">);</span>  <span class="c1">//打开第i个文件  </span>
+
+        <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>  
+        <span class="p">{</span>  
+            <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">"open file"</span><span class="o">&lt;&lt;</span><span class="n">i</span><span class="o">&lt;&lt;</span><span class="s">"error"</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>  
+        <span class="p">}</span>  
+    <span class="p">}</span>  
+
+    <span class="n">ifstream</span> <span class="n">infile</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span><span class="n">ios</span><span class="o">::</span><span class="n">in</span><span class="o">|</span><span class="n">ios</span><span class="o">::</span><span class="n">binary</span><span class="p">);</span>   <span class="c1">//读入测试用的IP数据  </span>
+    <span class="kt">unsigned</span> <span class="n">data</span><span class="p">;</span>  
+
+    <span class="k">while</span><span class="p">(</span><span class="n">infile</span><span class="p">.</span><span class="n">read</span><span class="p">((</span><span class="kt">char</span><span class="o">*</span><span class="p">)(</span><span class="o">&amp;</span><span class="n">data</span><span class="p">),</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span>  
+    <span class="p">{</span>  
+        <span class="kt">unsigned</span> <span class="n">val</span><span class="o">=</span><span class="n">VALUE</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>  
+        <span class="kt">int</span> <span class="n">key</span><span class="o">=</span><span class="n">ID</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>  
+        <span class="n">arr</span><span class="p">[</span><span class="n">ID</span><span class="p">(</span><span class="n">data</span><span class="p">)].</span><span class="n">write</span><span class="p">((</span><span class="kt">char</span><span class="o">*</span><span class="p">)(</span><span class="o">&amp;</span><span class="n">val</span><span class="p">),</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">val</span><span class="p">));</span>           <span class="c1">//保存到临时文件件中  </span>
+    <span class="p">}</span>  
+
+    <span class="k">for</span><span class="p">(</span><span class="kt">unsigned</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>  
+    <span class="p">{</span>  
+        <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">seekg</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>  
+    <span class="p">}</span>  
+    <span class="kt">unsigned</span> <span class="n">max_ip</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>    <span class="c1">//出现次数最多的ip地址  </span>
+    <span class="kt">unsigned</span> <span class="n">max_times</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>     <span class="c1">//最大只出现的次数  </span>
+
+    <span class="c1">//分配512M内存,用于统计每个数出现的次数  </span>
+    <span class="kt">unsigned</span> <span class="o">*</span><span class="n">count</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">unsigned</span><span class="p">[</span><span class="n">MEM_SIZE</span><span class="p">];</span>    
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>  
+    <span class="p">{</span>  
+        <span class="n">memset</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">unsigned</span><span class="p">)</span><span class="o">*</span><span class="n">MEM_SIZE</span><span class="p">);</span>  
+
+        <span class="c1">//统计每个临时文件件中不同数字出现的次数  </span>
+        <span class="kt">unsigned</span> <span class="n">data</span><span class="p">;</span>  
+        <span class="k">while</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">read</span><span class="p">((</span><span class="kt">char</span><span class="o">*</span><span class="p">)(</span><span class="o">&amp;</span><span class="n">data</span><span class="p">),</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">unsigned</span><span class="p">)))</span>       
+        <span class="p">{</span>  
+            <span class="o">++</span><span class="n">count</span><span class="p">[</span><span class="n">data</span><span class="p">];</span>  
+        <span class="p">}</span>  
+
+        <span class="c1">//找出出现次数最多的IP地址  </span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">unsigned</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">MEM_SIZE</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>                             
+        <span class="p">{</span>  
+            <span class="k">if</span><span class="p">(</span><span class="n">max_times</span><span class="o">&lt;</span><span class="n">count</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>             
+            <span class="p">{</span>  
+                <span class="n">max_times</span> <span class="o">=</span> <span class="n">count</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>  
+                <span class="n">max_ip</span> <span class="o">=</span> <span class="n">MAKE_IP</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">);</span>        <span class="c1">// 恢复成原ip地址.  </span>
+            <span class="p">}</span>  
+        <span class="p">}</span>  
+    <span class="p">}</span>  
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">count</span><span class="p">;</span> 
+    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">result</span><span class="o">=</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="p">)(</span><span class="o">&amp;</span><span class="n">max_ip</span><span class="p">);</span>  
+    <span class="n">printf</span><span class="p">(</span><span class="s">"出现次数最多的IP为:%d.%d.%d.%d,共出现%d次"</span><span class="p">,</span>   
+           <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">max_times</span><span class="p">);</span>  
+<span class="p">}</span>
+</pre>
+  </div>
+  <p>
+   执行结果：
+  </p>
+  <p>
+   <a href="../images/12.1.gif" target="_blank">
+    <img alt="" src="../images/12.1.gif" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   --
+   <strong>
+    luuillu
+   </strong>
+   。
+  </p>
+ </body>
+</html>
+		  </article>
+		  
+			<div id="nav">
+				
+					<a href="06.02.html">prev</a>
+					|
+				
+				
+					<a href="06.04.html">next</a>
+				
+				<span style="float: right"><a href="index.html">Back to home</a>
+			</div>
+		  
+		</div>
+	</div>
+  </div>
+  
+  <div>&nbsp;</div>
+  </div>
+  <div style="text-align:center; margin-bottom: 30px">
+	  Generated by <a href="https://github.com/marchtea/md_to_github_html">mdtogh</a>
+  </div>
+</body>
+</html>

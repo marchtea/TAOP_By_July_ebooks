@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-87cbc66c0a828647c8911f5e67d5b26b0cf62bbe.css" />
-  <link rel="stylesheet" href="style_cache/github2-f14002c8b8c821aeaeaf37b52de1d6c4d29dc214.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-b4baae9c06716bcd0a8068e3030607851f19b980.css" />
+  <link rel="stylesheet" href="style_cache/github2-4940da06adce480cfcfba223624a2b2f09e8f90f.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -581,42 +581,29 @@
    </p>
   </blockquote>
   <h2>
-   <a class="anchor" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE" name="%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE">
+   <a class="anchor" href="#%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98" name="%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98">
     <span class="octicon octicon-link">
     </span>
    </a>
-   参考文献
+   类似问题
   </h2>
-  <ol>
-   <li>
-    Mark Allen Weiss的数据结构与算法分析--c语言描述，第7章第7.7.6节，线性期望时间的选择算法，第10章第10.2.3节，选择问题
-   </li>
-   <li>
-    算法导论，第九章第9.2节，以线性期望时间做选择，第九章第9.3节，最快情况线性时间的选择
-   </li>
-   <li>
-    编程之美第一版，第141页，第2.5节 寻找最大的k个数（找最大或最小，一个道理）
-   </li>
-   <li>
-    维基百科，
-    <a href="http://en.wikipedia.org/wiki/Selection_algorithm">
-     http://en.wikipedia.org/wiki/Selection_algorithm
-    </a>
-    。
-   </li>
-   <li>
-    M. Blum, R.W. Floyd, V. Pratt, R. Rivest and R. Tarjan, "Time bounds for selection,"J. Comput. System Sci. 7 (1973) 448-461.
-   </li>
-   <li>
-    <a href="http://blog.csdn.net/v_JULY_v/archive/2011/03/07/6228235.aspx">
-     当今世界最受人们重视的十大经典算法
-    </a>
-    里提到的，BFPRT 算法。
-   </li>
-   <li>
-    编程珠玑II 第15章第15.2节程序。
-   </li>
-  </ol>
+  <p>
+   1、谷歌面试题：输入是两个整数数组，他们任意两个数的和又可以组成一个数组，求这个和中前k个数怎么做？
+  </p>
+  <p>
+   点评：Ben
+  </p>
+  <pre><code> “假设两个整数数组为A和B，各有N个元素，任意两个数的和组成的数组C有N^2个元素。
+   那么可以把这些和看成N个有序数列：
+          A[1]+B[1] &lt;= A[1]+B[2] &lt;= A[1]+B[3] &lt;=…
+          A[2]+B[1] &lt;= A[2]+B[2] &lt;= A[2]+B[3] &lt;=…
+          …
+         A[N]+B[1] &lt;= A[N]+B[2] &lt;= A[N]+B[3] &lt;=…
+    问题转变成，在这N个有序数列里，找到前k小的元素”
+</code></pre>
+  <p>
+   2、有两个序列A和B,A=(a1,a2,...,ak),B=(b1,b2,...,bk),A和B都按升序排列，对于1&lt;=i,j&lt;=k，求k个最小的（ai+bj），要求算法尽量高效。
+  </p>
  </body>
 </html>
 		  </article>

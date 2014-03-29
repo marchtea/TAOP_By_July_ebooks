@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-87cbc66c0a828647c8911f5e67d5b26b0cf62bbe.css" />
-  <link rel="stylesheet" href="style_cache/github2-f14002c8b8c821aeaeaf37b52de1d6c4d29dc214.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-b4baae9c06716bcd0a8068e3030607851f19b980.css" />
+  <link rel="stylesheet" href="style_cache/github2-4940da06adce480cfcfba223624a2b2f09e8f90f.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,25 +105,36 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0%E4%B8%89%E7%BB%AD%E6%B1%82%E6%95%B0%E7%BB%84%E4%B8%AD%E7%BB%99%E5%AE%9A%E4%B8%8B%E6%A0%87%E5%8C%BA%E9%97%B4%E5%86%85%E7%9A%84%E7%AC%AC-k-%E5%B0%8F%E5%A4%A7%E5%85%83%E7%B4%A0" name="%E7%AC%AC%E4%B8%89%E7%AB%A0%E4%B8%89%E7%BB%AD%E6%B1%82%E6%95%B0%E7%BB%84%E4%B8%AD%E7%BB%99%E5%AE%9A%E4%B8%8B%E6%A0%87%E5%8C%BA%E9%97%B4%E5%86%85%E7%9A%84%E7%AC%AC-k-%E5%B0%8F%E5%A4%A7%E5%85%83%E7%B4%A0">
+   <a class="anchor" href="#%E6%B1%82%E6%95%B0%E7%BB%84%E4%B8%AD%E7%BB%99%E5%AE%9A%E4%B8%8B%E6%A0%87%E5%8C%BA%E9%97%B4%E5%86%85%E7%9A%84%E7%AC%AC-k-%E5%B0%8F%E5%85%83%E7%B4%A0" name="%E6%B1%82%E6%95%B0%E7%BB%84%E4%B8%AD%E7%BB%99%E5%AE%9A%E4%B8%8B%E6%A0%87%E5%8C%BA%E9%97%B4%E5%86%85%E7%9A%84%E7%AC%AC-k-%E5%B0%8F%E5%85%83%E7%B4%A0">
     <span class="octicon octicon-link">
     </span>
    </a>
-   第三章三续：求数组中给定下标区间内的第 K 小(大)元素
+   求数组中给定下标区间内的第 K 小元素
   </h1>
-  <p>
-   作者：July、上善若水、编程艺术室。
-  </p>
   <h2>
-   <a class="anchor" href="#%E7%AC%AC%E4%B8%80%E8%8A%82%E5%AF%BB%E6%89%BE%E7%BB%99%E5%AE%9A%E5%8C%BA%E9%97%B4%E5%86%85%E7%9A%84%E7%AC%ACk%E5%B0%8F%E5%A4%A7%E7%9A%84%E5%85%83%E7%B4%A0" name="%E7%AC%AC%E4%B8%80%E8%8A%82%E5%AF%BB%E6%89%BE%E7%BB%99%E5%AE%9A%E5%8C%BA%E9%97%B4%E5%86%85%E7%9A%84%E7%AC%ACk%E5%B0%8F%E5%A4%A7%E7%9A%84%E5%85%83%E7%B4%A0">
+   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
     <span class="octicon octicon-link">
     </span>
    </a>
-   第一节、寻找给定区间内的第k小（大）的元素
+   题目描述
   </h2>
   <p>
-   给定数组，给定区间，求第K小的数如何处理？求最小的k个元素用最大堆，求最大的k的元素用最小堆。OK，常规方法请查阅：程序员编程艺术：第三章、寻找最小的k个数。
+   给定数组，给定区间，求第K小的数如何处理？求最小的k个元素用最大堆，求最大的k的元素用最小堆。
   </p>
+  <h2>
+   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   分析与解法
+  </h2>
+  <h3>
+   <a class="anchor" href="#%E5%B8%B8%E8%A7%84%E8%A7%A3%E6%B3%95" name="%E5%B8%B8%E8%A7%84%E8%A7%A3%E6%B3%95">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   常规解法
+  </h3>
   <p>
    1、排序，快速排序。我们知道，快速排序平均所费时间为
    <code>
@@ -216,8 +227,15 @@
    </code>
    。
   </p>
+  <h3>
+   <a class="anchor" href="#%E4%BC%B4%E9%9A%8F%E6%95%B0%E7%BB%84%E8%A7%A3%E6%B3%95" name="%E4%BC%B4%E9%9A%8F%E6%95%B0%E7%BB%84%E8%A7%A3%E6%B3%95">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   伴随数组解法
+  </h3>
   <p>
-   下面我们给出伴随数组解法。我们知道，通常来讲，寻找给定区间内的第k小（大）的元素的问题是ACM中一类常用的数据结构的一个典型例题，即划分树/逆向归并树，通常用线段树的结构存储。
+   我们知道，通常来讲，寻找给定区间内的第k小的元素的问题是ACM中一类常用的数据结构的一个典型例题，即划分树/逆向归并树，通常用线段树的结构存储。
   </p>
   <p>
    当然这里暂且不表，尚不说划分树思想的神奇，就是线段树的结构，一般没有ACM基础的人也都觉得难以理解。所以，这里提供一个时间效率尚可，空间代价还要略小的巧妙解法—伴随数组。
@@ -281,13 +299,6 @@
   <p>
    而这个伴随数组，或者说原序列各数的索引则帮我们或者说是帮电脑记下了原来的数，已让我们后来遍历时能识别排序后序列中的数是否是给定下标区间中的某一个数。如果是原给定下标区间中的数，则k--，否则k不变。
   </p>
-  <h3>
-   <a class="anchor" href="#%E7%AC%AC%E4%BA%8C%E8%8A%82%E9%87%87%E7%94%A8%E4%BC%B4%E9%9A%8F%E6%95%B0%E7%BB%84%E6%96%B9%E6%A1%88%E7%9A%84%E5%AE%9E%E7%8E%B0" name="%E7%AC%AC%E4%BA%8C%E8%8A%82%E9%87%87%E7%94%A8%E4%BC%B4%E9%9A%8F%E6%95%B0%E7%BB%84%E6%96%B9%E6%A1%88%E7%9A%84%E5%AE%9E%E7%8E%B0">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   第二节、采用伴随数组方案的实现
-  </h3>
   <p>
    上述采用伴随数组的方法巧妙且简单，也很好理解和实现，关键 就是在于题目要求是在给定下标区间中找寻第k小（大）的元素，所以，基本上在排序
    <code>
@@ -420,11 +431,11 @@
 </pre>
   </div>
   <h3>
-   <a class="anchor" href="#%E7%AC%AC%E4%B8%89%E8%8A%82%E7%9B%B4%E6%8E%A5%E6%8E%92%E5%BA%8F%E7%BB%99%E5%AE%9A%E4%B8%8B%E6%A0%87%E5%8C%BA%E9%97%B4%E7%9A%84%E6%95%B0" name="%E7%AC%AC%E4%B8%89%E8%8A%82%E7%9B%B4%E6%8E%A5%E6%8E%92%E5%BA%8F%E7%BB%99%E5%AE%9A%E4%B8%8B%E6%A0%87%E5%8C%BA%E9%97%B4%E7%9A%84%E6%95%B0">
+   <a class="anchor" href="#%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95" name="%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95">
     <span class="octicon octicon-link">
     </span>
    </a>
-   第三节、直接排序给定下标区间的数
+   问题扩展
   </h3>
   <p>
    你可能会忽略一个重要的事实，不知读者是否意识到。题目是要求我们在数组中求给定下标区间内某一第k小的数，即我们只要找到这个第k小的数，就够了。但上述程序显示的一个弊端，就是它先对整个数组进行了排序，然后采用伴随数组的解法寻找到第k小的数。而事实是，我们不需要对整个数组进行排序，我们只需要对我们要寻找的那个数的数组中给定下标区间的数进行部分排序，即可。
@@ -512,11 +523,11 @@
    ok，更多请看下文第四节中的“百家争鸣”与“经典对白”。
   </p>
   <h3>
-   <a class="anchor" href="#%E7%AC%AC%E5%9B%9B%E8%8A%82%E4%BC%B4%E9%9A%8F%E6%95%B0%E7%BB%84%E7%9A%84%E4%BC%98%E5%8A%BF%E6%89%80%E5%9C%A8" name="%E7%AC%AC%E5%9B%9B%E8%8A%82%E4%BC%B4%E9%9A%8F%E6%95%B0%E7%BB%84%E7%9A%84%E4%BC%98%E5%8A%BF%E6%89%80%E5%9C%A8">
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E6%80%BB%E7%BB%93" name="%E8%A7%A3%E6%B3%95%E6%80%BB%E7%BB%93">
     <span class="octicon octicon-link">
     </span>
    </a>
-   第四节、伴随数组的优势所在
+   解法总结
   </h3>
   <h4>
    <a class="anchor" href="#%E7%99%BE%E5%AE%B6%E4%BA%89%E9%B8%A3" name="%E7%99%BE%E5%AE%B6%E4%BA%89%E9%B8%A3">

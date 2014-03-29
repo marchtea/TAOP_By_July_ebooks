@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title><link rel="stylesheet" href="style_cache/github-b4baae9c06716bcd0a8068e3030607851f19b980.css" />
+  <link rel="stylesheet" href="style_cache/github2-4940da06adce480cfcfba223624a2b2f09e8f90f.css" />
+  <style>
+    .file-box {
+      margin: 64px auto;
+      width: 920px;
+    }
+	body {
+		font-size: 14px;
+		line-height: 22px;
+		<!--font-family: "adelle",Georgia,"Times New Roman",serif;-->
+		color: #4e443c;
+		background: #f0efe7;
+	}
+
+	.book-toc {
+
+	}
+	a {
+		color: #0388a6;
+		text-decoration: none;
+	}
+	a:hover {
+		color: #04b1d8;
+		text-decoration: none;
+	}
+	ol.book-toc li.chapter{
+		margin-bottom:0.6em
+	}
+	ol.book-toc, ol{
+		list-style-type: disc
+	}
+	ol.book-toc{
+		margin:30px 36px
+	}
+	ol.book-toc a{
+		padding-left:4px
+	}
+	li {
+		line-height: 22px;
+	}
+	h1, h2, h3, h4, h5, h6, li, p, a, ol, div{
+		margin: 0;
+		padding: 0;
+		border: 0;
+		vertical-align: baseline;
+	}
+	ul, ol {
+		padding: 0;
+		margin: 0 0 11px 25px;
+	}
+	h1 {
+		font-size: 36px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	h2 {
+		font-size: 18px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h1{
+		font-size: 22px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	ol.book-toc h2 {
+		font-size: 16px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	p {
+		margin: 0 0 11px;
+		font-size: 14px;
+		line-height: 22px;
+	}
+	div {
+		display: block;
+	}
+	div#nav{
+		padding: 30px
+	}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="file-box">
+	<div class="file">
+		<div id="readme" class="blob instapaper_body announce md">
+		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
+			<html>
+ <body>
+  <h1>
+   <a class="anchor" href="#%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%E9%9A%8F%E6%9C%BA%E5%8F%96%E5%87%BA%E5%85%B6%E4%B8%AD%E4%B9%8B%E4%B8%80%E5%85%83%E7%B4%A0" name="%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%E9%9A%8F%E6%9C%BA%E5%8F%96%E5%87%BA%E5%85%B6%E4%B8%AD%E4%B9%8B%E4%B8%80%E5%85%83%E7%B4%A0">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   第二部分、随机取出其中之一元素
+  </h1>
+  <h3>
+   <a class="anchor" href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0" name="%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   问题描述
+  </h3>
+  <p>
+   1．一个文件中含有n个元素，只能遍历一遍，要求等概率随机取出其中之一。
+  </p>
+  <p>
+   先讲一个例子，5个人抽5个签，只有一个签意味着“中签”，轮流抽签，那么这种情况，估计这5个人都不会有异议，都觉得这种方法是公平的，这确实也是公平的，“抓阄”的方法已经有很长的历史了，要是不公平的话老祖先们就不干了。
+  </p>
+  <p>
+   或许有人觉得先抓的人中签的概率会大一些，因为要是前面的人中了，后面的中签概率就是0了，也可能有人会觉得后面抓的人更有优势，因为前面拿去了不中的签，后面中签的概率就大，那么我们就计算一下吧。
+  </p>
+  <h3>
+   <a class="anchor" href="#%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90" name="%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   问题分析
+  </h3>
+  <p>
+   第一个人中签的概率是1/5,
+  </p>
+  <p>
+   第二个人中签的情况只能在第一个人未中时才有可能，所以他中的概率是4/5 X 1/4 = 1/5（4/5表示第一个人未中，1/4表示在剩下的4个签里中签的概率），所以，第二个人最终的中签概率也是1/5，
+  </p>
+  <p>
+   同理，第三个人中签的概率为：第一个人未中的概率 * 第二个人未中的概率 * 第三个人中的概率，即为：4/5 * 3/4 * 1/3 = 1/5，
+  </p>
+  <p>
+   一样的可以求出第四和第五个人的概率都为1/5，也就是说先后顺序不影响公平性。
+  </p>
+  <p>
+   说这个问题是要说明这种前后有关联的事件的概率计算的方式，我们回到第1个问题。前几天我的一个同学电面百度是被问到这个问题，他想了想回答说，依次遍历，遇到每一个元素都生成一个随机数作为标记，如果当前生成的随机数大于为之前保留的元素生成的随机数就替换，这样操作直到文件结束。
+  </p>
+  <p>
+   但面试官问到：如果生成的随机数和之前保留的元素的随机数一样大的话，要不要替换呢？
+  </p>
+  <p>
+   你也许会想，一个double的范围可以是-1.79E+308 ~ +1.79E+308，要让两个随机生成的double相等的概率不是一般的微乎其微啊！但计算机世界里有条很让人伤心的“真理”：可能发生的事件，总会发生！
+  </p>
+  <p>
+   那我们遇到这种情况，是换还是不换？To be or not to be， that’s a question！
+  </p>
+  <p>
+   就好比，两个人百米赛跑，测出来的时间一样，如果只能有一个人得冠军的话，对于另一个人始终是不公平的，那么只能再跑一次，一决雌雄了！
+  </p>
+  <h3>
+   <a class="anchor" href="#%E6%88%91%E7%9A%84%E7%AD%96%E7%95%A5" name="%E6%88%91%E7%9A%84%E7%AD%96%E7%95%A5">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   我的策略
+  </h3>
+  <p>
+   下面，说一个个人认为比较满足要求的选取策略：
+  </p>
+  <p>
+   顺序遍历，当前遍历的元素为第L个元素，变量e表示之前选取了的某一个元素，此时生成一个随机数r，如果r%L == 0(当然0也可以是0~L-1中的任何一个，概率都是一样的), 我们将e的值替换为当前值，否则扫描下一个元素直到文件结束。
+  </p>
+  <p>
+   你要是给面试官说明了这样一个策略后，面试官百分之一千会问你这样做是等概率吗？那我们来证明一下。
+  </p>
+  <h3>
+   <a class="anchor" href="#%E8%AF%81%E6%98%8E" name="%E8%AF%81%E6%98%8E">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   证明
+  </h3>
+  <p>
+   在遍历到第1个元素的时候，即L为1，那么r%L必然为0，所以e为第一个元素，p=100%，
+  </p>
+  <p>
+   遍历到第2个元素时，L为2，r%L==0的概率为1/2, 这个时候，第1个元素不被替换的概率为1*(1-1/2)=1/2,
+  </p>
+  <p>
+   第1个元素被替换，也就是第2个元素被选中的概率为1/2,你可以看到，只有2时，这两个元素是等概率的机会被选中的。
+  </p>
+  <p>
+   继续，遍历到第3个元素的时候，r%L==0的概率为1/3，前面被选中的元素不被替换的概率为1/2*(1-1/3)=1/3,前面被选中的元素被替换的概率，即第3个元素被选中的概率为1/3。
+  </p>
+  <p>
+   归纳法证明，这样走到第L个元素时，这L个元素中任一被选中的概率都是1/L，那么走到L+1时，第L+1个元素选中的概率为1/(L+1), 之前选中的元素不被替换，即继续被选中的概率为1/L*(1-1/(L+1)) = 1/(L+1)。证毕。
+  </p>
+  <p>
+   也就是说，走到文件最后，每一个元素最终被选出的概率为1/n， n为文件中元素的总数。好歹我们是一个技术博客，看不到一丁点代码多少有点遗憾，给出一个选取策略的伪代码，如下：
+  </p>
+  <p>
+   <strong>
+    伪代码
+   </strong>
+  </p>
+  <pre><code>  Element RandomPick(file):
+  Int length = 1;
+  While (length &lt;= file.size)
+    If (rand() % length == 0)
+      Picked = File[length];
+    Length++;
+  Return picked
+</code></pre>
+  <p>
+   近日，看见我的一些同学在他们的面经里面常推荐结构之法算法之道这个博客，感谢东南大学计算机学院即将找工作的同学们对本博的关注，欢迎批评指正！--
+   <strong>
+    BigPotato
+   </strong>
+   。
+  </p>
+ </body>
+</html>
+		  </article>
+		  
+			<div id="nav">
+				
+					<a href="06.01.html">prev</a>
+					|
+				
+				
+					<a href="06.03.html">next</a>
+				
+				<span style="float: right"><a href="index.html">Back to home</a>
+			</div>
+		  
+		</div>
+	</div>
+  </div>
+  
+  <div>&nbsp;</div>
+  </div>
+  <div style="text-align:center; margin-bottom: 30px">
+	  Generated by <a href="https://github.com/marchtea/md_to_github_html">mdtogh</a>
+  </div>
+</body>
+</html>

@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-87cbc66c0a828647c8911f5e67d5b26b0cf62bbe.css" />
-  <link rel="stylesheet" href="style_cache/github2-f14002c8b8c821aeaeaf37b52de1d6c4d29dc214.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-b4baae9c06716bcd0a8068e3030607851f19b980.css" />
+  <link rel="stylesheet" href="style_cache/github2-4940da06adce480cfcfba223624a2b2f09e8f90f.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,29 +105,29 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#%E7%AC%AC%E5%9B%9B%E5%8D%81%E4%BA%8C%E7%AB%A0%E7%9F%A9%E9%98%B5%E7%9B%B8%E4%B9%98%E4%B9%8Bstrassen%E7%AE%97%E6%B3%95" name="%E7%AC%AC%E5%9B%9B%E5%8D%81%E4%BA%8C%E7%AB%A0%E7%9F%A9%E9%98%B5%E7%9B%B8%E4%B9%98%E4%B9%8Bstrassen%E7%AE%97%E6%B3%95">
+   <a class="anchor" href="#%E7%9F%A9%E9%98%B5%E7%9B%B8%E4%B9%98%E4%B9%8Bstrassen%E7%AE%97%E6%B3%95" name="%E7%9F%A9%E9%98%B5%E7%9B%B8%E4%B9%98%E4%B9%8Bstrassen%E7%AE%97%E6%B3%95">
     <span class="octicon octicon-link">
     </span>
    </a>
-   第四十二章：矩阵相乘之Strassen算法
+   矩阵相乘之Strassen算法
   </h1>
-  <h3>
+  <h2>
    <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
     <span class="octicon octicon-link">
     </span>
    </a>
    题目描述
-  </h3>
+  </h2>
   <p>
    请编程实现矩阵乘法，并考虑当矩阵规模较大时的优化方法。
   </p>
-  <h3>
-   <a class="anchor" href="#%E6%80%9D%E8%B7%AF%E5%88%86%E6%9E%90" name="%E6%80%9D%E8%B7%AF%E5%88%86%E6%9E%90">
+  <h2>
+   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
     <span class="octicon octicon-link">
     </span>
    </a>
-   思路分析
-  </h3>
+   分析与解法
+  </h2>
   <p>
    根据wikipedia上的介绍：两个矩阵的乘法仅当第一个矩阵B的列数和另一个矩阵A的行数相等时才能定义。如A是m×n矩阵和B是n×p矩阵，它们的乘积AB是一个m×p矩阵，它的一个元素其中 1 ≤ i ≤ m, 1 ≤ j ≤ p。
   </p>
@@ -147,11 +147,13 @@
   <p>
    下面咱们来具体解决这个矩阵相乘的问题。
   </p>
-  <p>
-   <strong>
-    解法一、暴力解法
-   </strong>
-  </p>
+  <h3>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80%E6%9A%B4%E5%8A%9B%E8%A7%A3%E6%B3%95" name="%E8%A7%A3%E6%B3%95%E4%B8%80%E6%9A%B4%E5%8A%9B%E8%A7%A3%E6%B3%95">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法一、暴力解法
+  </h3>
   <p>
    其实，通过前面的分析，我们已经很明显的看出，两个具有相同维数的矩阵相乘，其复杂度为O(n^3)，参考代码如下：
   </p>
@@ -282,13 +284,6 @@
     <img alt="" src="../images/41%7E42/42.9.png" style="max-width:100%;"/>
    </a>
   </p>
-  <h3>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%89%E6%8C%81%E7%BB%AD%E4%BC%98%E5%8C%96" name="%E8%A7%A3%E6%B3%95%E4%B8%89%E6%8C%81%E7%BB%AD%E4%BC%98%E5%8C%96">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   解法三、持续优化
-  </h3>
   <p>
    根据wikipedia上的介绍，后来，Coppersmith–Winograd 算法把 N* N大小的矩阵乘法的时间复杂度降低到了：
    <a href="https://camo.githubusercontent.com/3828207037dbef5a343930907319c428337e9443/687474703a2f2f6c617465782e636f6465636f67732e636f6d2f6769662e6c617465783f2537424f286e253545253742322e33373534373725374429253744" target="_blank">

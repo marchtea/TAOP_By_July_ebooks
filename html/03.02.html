@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-87cbc66c0a828647c8911f5e67d5b26b0cf62bbe.css" />
-  <link rel="stylesheet" href="style_cache/github2-f14002c8b8c821aeaeaf37b52de1d6c4d29dc214.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-b4baae9c06716bcd0a8068e3030607851f19b980.css" />
+  <link rel="stylesheet" href="style_cache/github2-4940da06adce480cfcfba223624a2b2f09e8f90f.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -111,12 +111,6 @@
    </a>
    第二十三章：杨氏矩阵查找
   </h1>
-  <p>
-   作者：July、yansha。编程艺术室出品。
-  </p>
-  <p>
-   出处：结构之法算法之道
-  </p>
   <h2>
    <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
     <span class="octicon octicon-link">
@@ -136,12 +130,19 @@
    </a>
   </p>
   <h2>
+   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   分析与解法
+  </h2>
+  <h3>
    <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80%E5%88%86%E6%B2%BB%E6%B3%95" name="%E8%A7%A3%E6%B3%95%E4%B8%80%E5%88%86%E6%B2%BB%E6%B3%95">
     <span class="octicon octicon-link">
     </span>
    </a>
    解法一、分治法
-  </h2>
+  </h3>
   <p>
    以查找数字6为例，把整个矩阵，分为四个小矩阵，配以二分查找，如果要找的数是6介于对角线上相邻的两个数4、10，可以排除掉左上和右下的两个矩形，而递归在左下和右上的两个矩形继续找，如下图所示：
    <br/>
@@ -149,13 +150,13 @@
     <img alt="img" src="../images/23%7E24/23.2.gif" style="max-width:100%;"/>
    </a>
   </p>
-  <h2>
+  <h3>
    <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C%E5%AE%9A%E4%BD%8D%E6%B3%95" name="%E8%A7%A3%E6%B3%95%E4%BA%8C%E5%AE%9A%E4%BD%8D%E6%B3%95">
     <span class="octicon octicon-link">
     </span>
    </a>
    解法二、定位法
-  </h2>
+  </h3>
   <p>
    首先直接定位到最右上角的元素，再配以二分查找，比要找的数（6）大就往左走，比要找数（6）的小就往下走，直到找到要找的数字（6）为止，这个方法的时间复杂度O（m+n）。如下图所示：
    <br/>
@@ -176,6 +177,16 @@
     http://blog.csdn.net/zhanglei8893/article/details/6234564
    </a>
    ，除此之外，何海涛先生一书剑指offer中也收集了此题，感兴趣的朋友也可以去看看。
+  </p>
+  <h2>
+   <a class="anchor" href="#%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98" name="%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   类似问题
+  </h2>
+  <p>
+   行列都递增的矩阵，求中位数。
   </p>
  </body>
 </html>

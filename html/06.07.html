@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title><link rel="stylesheet" href="style_cache/github-b4baae9c06716bcd0a8068e3030607851f19b980.css" />
+  <link rel="stylesheet" href="style_cache/github2-4940da06adce480cfcfba223624a2b2f09e8f90f.css" />
+  <style>
+    .file-box {
+      margin: 64px auto;
+      width: 920px;
+    }
+	body {
+		font-size: 14px;
+		line-height: 22px;
+		<!--font-family: "adelle",Georgia,"Times New Roman",serif;-->
+		color: #4e443c;
+		background: #f0efe7;
+	}
+
+	.book-toc {
+
+	}
+	a {
+		color: #0388a6;
+		text-decoration: none;
+	}
+	a:hover {
+		color: #04b1d8;
+		text-decoration: none;
+	}
+	ol.book-toc li.chapter{
+		margin-bottom:0.6em
+	}
+	ol.book-toc, ol{
+		list-style-type: disc
+	}
+	ol.book-toc{
+		margin:30px 36px
+	}
+	ol.book-toc a{
+		padding-left:4px
+	}
+	li {
+		line-height: 22px;
+	}
+	h1, h2, h3, h4, h5, h6, li, p, a, ol, div{
+		margin: 0;
+		padding: 0;
+		border: 0;
+		vertical-align: baseline;
+	}
+	ul, ol {
+		padding: 0;
+		margin: 0 0 11px 25px;
+	}
+	h1 {
+		font-size: 36px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	h2 {
+		font-size: 18px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h1{
+		font-size: 22px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	ol.book-toc h2 {
+		font-size: 16px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	p {
+		margin: 0 0 11px;
+		font-size: 14px;
+		line-height: 22px;
+	}
+	div {
+		display: block;
+	}
+	div#nav{
+		padding: 30px
+	}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="file-box">
+	<div class="file">
+		<div id="readme" class="blob instapaper_body announce md">
+		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
+			<html>
+ <body>
+  <h2>
+   <a class="anchor" href="#%E7%AC%AC%E5%8D%81%E5%85%AB%E7%AB%A0%E5%A5%87%E5%81%B6%E8%B0%83%E5%BA%8F" name="%E7%AC%AC%E5%8D%81%E5%85%AB%E7%AB%A0%E5%A5%87%E5%81%B6%E8%B0%83%E5%BA%8F">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   第十八章、奇偶调序
+  </h2>
+  <p>
+   题目：输入一个整数数组，调整数组中数字的顺序，使得所有奇数位于数组的前半部分，
+  </p>
+  <p>
+   所有偶数位于数组的后半部分。要求时间复杂度为O(n)。
+  </p>
+  <p>
+   分析：
+  </p>
+  <ol>
+   <li>
+    <p>
+     你当然可以从头扫描这个数组，每碰到一个偶数时，拿出这个数字，并把位于这个数字后面的所有数字往前挪动一位。挪完之后在数组的末尾有一个空位，这时把该偶数放入这个空位。由于碰到一个偶数，需要移动O(n)个数字，只是这种方法总的时间复杂度是O(n^2)，不符合要求，pass
+    </p>
+   </li>
+   <li>
+    <p>
+     很简单，维护两个指针，一个指针指向数组的第一个数字，向后移动；一个个指针指向最后一个数字，向前移动。如果第一个指针指向的数字是偶数而第二个指针指向的数字是奇数，我们就交换这两个数字。
+    </p>
+   </li>
+  </ol>
+  <p>
+   思路有了，接下来，写代码实现：
+  </p>
+  <div class="highlight highlight-cpp">
+   <pre><span class="c1">//思路，很简答，俩指针，一首一尾  </span>
+<span class="c1">//如果第一个指针指向的数字是偶数而第二个指针指向的数字是奇数，  </span>
+<span class="c1">//我们就交换这两个数字  </span>
+
+<span class="c1">// 2 1 3 4 6 5 7   </span>
+<span class="c1">// 7 1 3 4 6 5 2  </span>
+<span class="c1">// 7 1 3 5 6 4 2  </span>
+
+<span class="c1">//如果限制空间复杂度为O（1），时间为O（N），且奇偶数之间相对顺序不变，就相当于正负数间顺序调整的那道题了。  </span>
+
+<span class="c1">//copyright@2010 zhedahht。</span>
+<span class="kt">void</span> <span class="nf">Reorder</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">pData</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">length</span><span class="p">,</span> <span class="kt">bool</span> <span class="p">(</span><span class="o">*</span><span class="n">func</span><span class="p">)(</span><span class="kt">int</span><span class="p">));</span>
+<span class="kt">bool</span> <span class="nf">isEven</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">ReorderOddEven</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">pData</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">length</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">pData</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">;</span>
+
+    <span class="n">Reorder</span><span class="p">(</span><span class="n">pData</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">isEven</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="nf">Reorder</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">pData</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">length</span><span class="p">,</span> <span class="kt">bool</span> <span class="p">(</span><span class="o">*</span><span class="n">func</span><span class="p">)(</span><span class="kt">int</span><span class="p">))</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">pData</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">pBegin</span> <span class="o">=</span> <span class="n">pData</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">pEnd</span> <span class="o">=</span> <span class="n">pData</span> <span class="o">+</span> <span class="n">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">pBegin</span> <span class="o">&lt;</span> <span class="n">pEnd</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// if *pBegin does not satisfy func, move forward</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">pBegin</span><span class="p">))</span>  <span class="c1">//如果是奇数, 则向后移一个位置</span>
+        <span class="p">{</span>
+            <span class="n">pBegin</span> <span class="o">++</span><span class="p">;</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">// if *pEnd does not satisfy func, move backward</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">pEnd</span><span class="p">))</span>     <span class="c1">//如是是偶数, 则向前移一个位置</span>
+        <span class="p">{</span>
+            <span class="n">pEnd</span> <span class="o">--</span><span class="p">;</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">// if *pBegin satisfy func while *pEnd does not,</span>
+        <span class="c1">// swap these integers</span>
+        <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="o">*</span><span class="n">pBegin</span><span class="p">;</span>
+        <span class="o">*</span><span class="n">pBegin</span> <span class="o">=</span> <span class="o">*</span><span class="n">pEnd</span><span class="p">;</span>
+        <span class="o">*</span><span class="n">pEnd</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kt">bool</span> <span class="nf">isEven</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">n</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+  </div>
+  <p>
+   细心的读者想必注意到了上述程序注释中所说的“如果限制空间复杂度为O（1），时间为O（N）就相当于正负数间顺序调整的那道题了”，没错，它与个人之前整理的一文中的第5题极其类似：5、一个未排序整数数组，有正负数，重新排列使负数排在正数前面，并且要求不改变原来的正负数之间相对顺序 比如： input: 1,7,-5,9,-12,15 ans: -5,-12,1,7,9,15 要求时间复杂度O(N),空间O(1) 。（
+   <strong>
+    此题一直没看到令我满意的答案，一般达不到题目所要求的：时间复杂度O(N),空间O(1)，且保证原来正负数之间的相对位置不变
+   </strong>
+   ）。
+  </p>
+  <p>
+   如果你想到了绝妙的解决办法，不妨在本文评论下告知于我，或者来信指导（
+   <a href="mailto:zhoulei0907@yahoo.cn">
+    zhoulei0907@yahoo.cn
+   </a>
+   ），谢谢。
+  </p>
+ </body>
+</html>
+		  </article>
+		  
+			<div id="nav">
+				
+					<a href="06.06.html">prev</a>
+					|
+				
+				
+					<a href="06.08.html">next</a>
+				
+				<span style="float: right"><a href="index.html">Back to home</a>
+			</div>
+		  
+		</div>
+	</div>
+  </div>
+  
+  <div>&nbsp;</div>
+  </div>
+  <div style="text-align:center; margin-bottom: 30px">
+	  Generated by <a href="https://github.com/marchtea/md_to_github_html">mdtogh</a>
+  </div>
+</body>
+</html>

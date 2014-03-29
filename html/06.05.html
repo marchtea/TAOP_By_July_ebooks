@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title><link rel="stylesheet" href="style_cache/github-b4baae9c06716bcd0a8068e3030607851f19b980.css" />
+  <link rel="stylesheet" href="style_cache/github2-4940da06adce480cfcfba223624a2b2f09e8f90f.css" />
+  <style>
+    .file-box {
+      margin: 64px auto;
+      width: 920px;
+    }
+	body {
+		font-size: 14px;
+		line-height: 22px;
+		<!--font-family: "adelle",Georgia,"Times New Roman",serif;-->
+		color: #4e443c;
+		background: #f0efe7;
+	}
+
+	.book-toc {
+
+	}
+	a {
+		color: #0388a6;
+		text-decoration: none;
+	}
+	a:hover {
+		color: #04b1d8;
+		text-decoration: none;
+	}
+	ol.book-toc li.chapter{
+		margin-bottom:0.6em
+	}
+	ol.book-toc, ol{
+		list-style-type: disc
+	}
+	ol.book-toc{
+		margin:30px 36px
+	}
+	ol.book-toc a{
+		padding-left:4px
+	}
+	li {
+		line-height: 22px;
+	}
+	h1, h2, h3, h4, h5, h6, li, p, a, ol, div{
+		margin: 0;
+		padding: 0;
+		border: 0;
+		vertical-align: baseline;
+	}
+	ul, ol {
+		padding: 0;
+		margin: 0 0 11px 25px;
+	}
+	h1 {
+		font-size: 36px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	h2 {
+		font-size: 18px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h1{
+		font-size: 22px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	ol.book-toc h2 {
+		font-size: 16px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	p {
+		margin: 0 0 11px;
+		font-size: 14px;
+		line-height: 22px;
+	}
+	div {
+		display: block;
+	}
+	div#nav{
+		padding: 30px
+	}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="file-box">
+	<div class="file">
+		<div id="readme" class="blob instapaper_body announce md">
+		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
+			<html>
+ <body>
+  <h2>
+   <a class="anchor" href="#%E7%AC%AC%E5%8D%81%E5%85%AD%E7%AB%A0%E5%85%A8%E6%8E%92%E5%88%97%E9%97%AE%E9%A2%98" name="%E7%AC%AC%E5%8D%81%E5%85%AD%E7%AB%A0%E5%85%A8%E6%8E%92%E5%88%97%E9%97%AE%E9%A2%98">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   第十六章、全排列问题
+  </h2>
+  <p>
+   题目：输入一个字符串，打印出该字符串中字符的所有排列。
+  </p>
+  <p>
+   例如输入字符串abc，则输出由字符a、b、c 所能排列出来的所有字符串
+  </p>
+  <p>
+   abc、acb、bac、bca、cab 和 cba。
+  </p>
+  <p>
+   分析：此题最初整理于去年的微软面试100题中第53题，第二次整理于微软、Google等公司非常好的面试题及解答[第61-70题] 
+第67题。无独有偶，这个问题今年又出现于今年的2011.10.09百度笔试题中。ok，接下来，咱们先好好分析这个问题。
+  </p>
+  <p>
+   <strong>
+    解法一、递归实现
+   </strong>
+  </p>
+  <p>
+   从集合中依次选出每一个元素，作为排列的第一个元素，然后对剩余的元素进行全排列，如此递归处理，从而得到所有元素的全排列。以对字符串abc进行全排列为例，我们可以这么做：以abc为例
+  </p>
+  <p>
+   固定a，求后面bc的排列：abc，acb，求好后，a和b交换，得到bac
+  </p>
+  <p>
+   固定b，求后面ac的排列：bac，bca，求好后，c放到第一位置，得到cba
+  </p>
+  <p>
+   固定c，求后面ba的排列：cba，cab。代码可如下编写所示：
+  </p>
+  <div class="highlight highlight-cpp">
+   <pre><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">CalcAllPermutation_R</span><span class="p">(</span><span class="n">T</span> <span class="n">perm</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">first</span><span class="p">,</span> <span class="kt">int</span> <span class="n">num</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">first</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">first</span> <span class="o">+</span> <span class="n">num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">swap</span><span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">perm</span><span class="p">[</span><span class="n">first</span><span class="p">]);</span>
+        <span class="n">CalcAllPermutation_R</span><span class="p">(</span><span class="n">perm</span><span class="p">,</span> <span class="n">first</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">swap</span><span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">perm</span><span class="p">[</span><span class="n">first</span><span class="p">]);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
+  </div>
+  <p>
+   或者如此编写，亦可：
+  </p>
+  <div class="highlight highlight-cpp">
+   <pre><span class="kt">void</span> <span class="nf">Permutation</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">pStr</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">pBegin</span><span class="p">);</span>
+
+<span class="kt">void</span> <span class="nf">Permutation</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">pStr</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Permutation</span><span class="p">(</span><span class="n">pStr</span><span class="p">,</span> <span class="n">pStr</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">Permutation</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">pStr</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">pBegin</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">pStr</span> <span class="o">||</span> <span class="o">!</span><span class="n">pBegin</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">pBegin</span> <span class="o">==</span> <span class="sc">'\0'</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">pStr</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">pCh</span> <span class="o">=</span> <span class="n">pBegin</span><span class="p">;</span> <span class="o">*</span><span class="n">pCh</span> <span class="o">!=</span> <span class="sc">'\0'</span><span class="p">;</span> <span class="o">++</span> <span class="n">pCh</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// swap pCh and pBegin</span>
+            <span class="kt">char</span> <span class="n">temp</span> <span class="o">=</span> <span class="o">*</span><span class="n">pCh</span><span class="p">;</span>
+            <span class="o">*</span><span class="n">pCh</span> <span class="o">=</span> <span class="o">*</span><span class="n">pBegin</span><span class="p">;</span>
+            <span class="o">*</span><span class="n">pBegin</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+
+            <span class="n">Permutation</span><span class="p">(</span><span class="n">pStr</span><span class="p">,</span> <span class="n">pBegin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="c1">// restore pCh and pBegin</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="o">*</span><span class="n">pCh</span><span class="p">;</span>
+            <span class="o">*</span><span class="n">pCh</span> <span class="o">=</span> <span class="o">*</span><span class="n">pBegin</span><span class="p">;</span>
+            <span class="o">*</span><span class="n">pBegin</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
+  </div>
+  <p>
+   <strong>
+    解法二、字典序排列
+   </strong>
+  </p>
+  <p>
+   把升序的排列（当然，也可以实现为降序）作为当前排列开始，然后依次计算当前排列的下一个字典序排列。
+  </p>
+  <p>
+   对当前排列从后向前扫描，找到一对为升序的相邻元素，记为i和j（i &lt; j）。如果不存在这样一对为升序的相邻元素，则所有排列均已找到，算法结束；否则，重新对当前排列从后向前扫描，找到第一个大于i的元素k，交换i和k，然后对从j开始到结束的子序列反转，则此时得到的新排列就为下一个字典序排列。这种方式实现得到的所有排列是按字典序有序的，这也是C++ STL算法next_permutation的思想。算法实现如下：
+  </p>
+  <div class="highlight highlight-cpp">
+   <pre><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">CalcAllPermutation</span><span class="p">(</span><span class="n">T</span> <span class="n">perm</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">num</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">num</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">perm</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">break</span><span class="p">;</span>  <span class="c1">// 已经找到所有排列</span>
+
+        <span class="kt">int</span> <span class="n">k</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">k</span> <span class="o">=</span> <span class="n">num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">i</span><span class="p">;</span> <span class="o">--</span><span class="n">k</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">swap</span><span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">perm</span><span class="p">[</span><span class="n">k</span><span class="p">]);</span>
+        <span class="n">reverse</span><span class="p">(</span><span class="n">perm</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">perm</span> <span class="o">+</span> <span class="n">num</span><span class="p">);</span>
+
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
+  </div>
+  <p>
+   扩展：如果不是求字符的所有排列，而是求字符的所有组合，应该怎么办呢？当输入的字符串中含有相同的字符串时，相同的字符交换位置是不同的排列，但是同一个组合。举个例子，如果输入abc，它的组合有a、b、c、ab、ac、bc、abc。
+  </p>
+  <h2>
+   <a class="anchor" href="#%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98" name="%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   类似问题
+  </h2>
+  <p>
+   已知字符串里的字符是互不相同的，现在任意组合，比如ab，则输出aa，ab，ba，bb，编程按照字典序输出所有的组合。
+  </p>
+  <p>
+   点评：非简单的全排列问题（跟全排列的形式不同,abc全排列的话，只有6个不同的输出）。
+本题可用递归的思想，设置一个变量表示已输出的个数，然后当个数达到字符串长度时，就输出。
+  </p>
+  <div class="highlight highlight-c">
+   <pre><span class="c1">//假设str已经有序，from 一直很安静  </span>
+<span class="kt">void</span> <span class="nf">perm</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">,</span> <span class="kt">int</span> <span class="n">size</span><span class="p">,</span> <span class="kt">int</span> <span class="n">resPos</span><span class="p">)</span>  
+<span class="p">{</span>  
+    <span class="k">if</span><span class="p">(</span><span class="n">resPos</span> <span class="o">==</span> <span class="n">size</span><span class="p">)</span>  
+    <span class="n">print</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>  
+    <span class="k">else</span>  
+    <span class="p">{</span>  
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>  
+        <span class="p">{</span>  
+      <span class="n">result</span><span class="p">[</span><span class="n">resPos</span><span class="p">]</span> <span class="o">=</span> <span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>  
+      <span class="n">perm</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">resPos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>  
+    <span class="p">}</span>  
+    <span class="p">}</span>  
+<span class="p">}</span>  
+</pre>
+  </div>
+ </body>
+</html>
+		  </article>
+		  
+			<div id="nav">
+				
+					<a href="06.04.html">prev</a>
+					|
+				
+				
+					<a href="06.06.html">next</a>
+				
+				<span style="float: right"><a href="index.html">Back to home</a>
+			</div>
+		  
+		</div>
+	</div>
+  </div>
+  
+  <div>&nbsp;</div>
+  </div>
+  <div style="text-align:center; margin-bottom: 30px">
+	  Generated by <a href="https://github.com/marchtea/md_to_github_html">mdtogh</a>
+  </div>
+</body>
+</html>
