@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-b4baae9c06716bcd0a8068e3030607851f19b980.css" />
-  <link rel="stylesheet" href="style_cache/github2-4940da06adce480cfcfba223624a2b2f09e8f90f.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-dfc6417658d5b6b7dd3d1e58c09c2c25dee7506e.css" />
+  <link rel="stylesheet" href="style_cache/github2-b564d9e99bd5747d2d0901c61c403e758a5e5ef1.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,21 +105,21 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#%E5%AF%86%E5%8C%99%E4%B8%89bitmap%E5%92%8Cbloom-filter" name="%E5%AF%86%E5%8C%99%E4%B8%89bitmap%E5%92%8Cbloom-filter">
+   <a class="anchor" href="#%E5%AF%86%E5%8C%99%E4%B8%89bitmap%E5%92%8Cbloom-filter" name="user-content-%E5%AF%86%E5%8C%99%E4%B8%89bitmap%E5%92%8Cbloom-filter">
     <span class="octicon octicon-link">
     </span>
    </a>
    密匙三：Bitmap和Bloom filter
   </h1>
   <h2>
-   <a class="anchor" href="#bitmap" name="bitmap">
+   <a class="anchor" href="#bitmap" name="user-content-bitmap">
     <span class="octicon octicon-link">
     </span>
    </a>
    Bitmap
   </h2>
   <h3>
-   <a class="anchor" href="#%E4%BB%80%E4%B9%88%E6%98%AFbit-map" name="%E4%BB%80%E4%B9%88%E6%98%AFbit-map">
+   <a class="anchor" href="#%E4%BB%80%E4%B9%88%E6%98%AFbit-map" name="user-content-%E4%BB%80%E4%B9%88%E6%98%AFbit-map">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -218,7 +218,7 @@
    可进行数据的快速查找，判重，删除，一般来说数据范围是int的10倍以下
   </p>
   <h3>
-   <a class="anchor" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%8F%8A%E8%A6%81%E7%82%B9" name="%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%8F%8A%E8%A6%81%E7%82%B9">
+   <a class="anchor" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%8F%8A%E8%A6%81%E7%82%B9" name="user-content-%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%8F%8A%E8%A6%81%E7%82%B9">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -228,7 +228,7 @@
    使用bit数组来表示某些元素是否存在，比如8位电话号码.
   </p>
   <h3>
-   <a class="anchor" href="#%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B" name="%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B">
+   <a class="anchor" href="#%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B" name="user-content-%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -250,14 +250,14 @@
    方案1：frome oo，用位图/Bitmap的方法，申请512M的内存，一个bit位代表一个unsigned int值。读入40亿个数，设置相应的bit位，读入要查询的数，查看相应bit位是否为1，为1表示存在，为0表示不存在。
   </p>
   <h3>
-   <a class="anchor" href="#%E6%89%A9%E5%B1%95bloom-filter" name="%E6%89%A9%E5%B1%95bloom-filter">
+   <a class="anchor" href="#%E6%89%A9%E5%B1%95bloom-filter" name="user-content-%E6%89%A9%E5%B1%95bloom-filter">
     <span class="octicon octicon-link">
     </span>
    </a>
    扩展：Bloom Filter
   </h3>
   <h4>
-   <a class="anchor" href="#%E4%B8%80%E4%BB%80%E4%B9%88%E6%98%AFbloom-filter" name="%E4%B8%80%E4%BB%80%E4%B9%88%E6%98%AFbloom-filter">
+   <a class="anchor" href="#%E4%B8%80%E4%BB%80%E4%B9%88%E6%98%AFbloom-filter" name="user-content-%E4%B8%80%E4%BB%80%E4%B9%88%E6%98%AFbloom-filter">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -274,7 +274,7 @@
    但Bloom Filter的这种高效是有一定代价的：在判断一个元素是否属于某个集合时，有可能会把不属于这个集合的元素误认为属于这个集合（false positive）。因此，Bloom Filter不适合那些“零错误”的应用场合。而在能容忍低错误率的应用场合下，Bloom Filter通过极少的错误换取了存储空间的极大节省。
   </p>
   <h5>
-   <a class="anchor" href="#11%E9%9B%86%E5%90%88%E8%A1%A8%E7%A4%BA%E5%92%8C%E5%85%83%E7%B4%A0%E6%9F%A5%E8%AF%A2" name="11%E9%9B%86%E5%90%88%E8%A1%A8%E7%A4%BA%E5%92%8C%E5%85%83%E7%B4%A0%E6%9F%A5%E8%AF%A2">
+   <a class="anchor" href="#11%E9%9B%86%E5%90%88%E8%A1%A8%E7%A4%BA%E5%92%8C%E5%85%83%E7%B4%A0%E6%9F%A5%E8%AF%A2" name="user-content-11%E9%9B%86%E5%90%88%E8%A1%A8%E7%A4%BA%E5%92%8C%E5%85%83%E7%B4%A0%E6%9F%A5%E8%AF%A2">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -333,7 +333,7 @@
    </a>
   </p>
   <h5>
-   <a class="anchor" href="#12%E9%94%99%E8%AF%AF%E7%8E%87%E4%BC%B0%E8%AE%A1" name="12%E9%94%99%E8%AF%AF%E7%8E%87%E4%BC%B0%E8%AE%A1">
+   <a class="anchor" href="#12%E9%94%99%E8%AF%AF%E7%8E%87%E4%BC%B0%E8%AE%A1" name="user-content-12%E9%94%99%E8%AF%AF%E7%8E%87%E4%BC%B0%E8%AE%A1">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -400,7 +400,7 @@
    相比p’和f’，使用p和f通常在分析中更为方便。
   </p>
   <h5>
-   <a class="anchor" href="#13%E6%9C%80%E4%BC%98%E7%9A%84%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0%E4%B8%AA%E6%95%B0" name="13%E6%9C%80%E4%BC%98%E7%9A%84%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0%E4%B8%AA%E6%95%B0">
+   <a class="anchor" href="#13%E6%9C%80%E4%BC%98%E7%9A%84%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0%E4%B8%AA%E6%95%B0" name="user-content-13%E6%9C%80%E4%BC%98%E7%9A%84%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0%E4%B8%AA%E6%95%B0">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -464,7 +464,7 @@
    同样根据对称性法则可以得到当p’ = 1/2时，g’取得最小值。
   </p>
   <h5>
-   <a class="anchor" href="#14%E4%BD%8D%E6%95%B0%E7%BB%84%E7%9A%84%E5%A4%A7%E5%B0%8F" name="14%E4%BD%8D%E6%95%B0%E7%BB%84%E7%9A%84%E5%A4%A7%E5%B0%8F">
+   <a class="anchor" href="#14%E4%BD%8D%E6%95%B0%E7%BB%84%E7%9A%84%E5%A4%A7%E5%B0%8F" name="user-content-14%E4%BD%8D%E6%95%B0%E7%BB%84%E7%9A%84%E5%A4%A7%E5%B0%8F">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -552,7 +552,7 @@
    e≈ 1.44倍。这说明在哈希函数的个数取到最优时，要让错误率不超过є，m至少需要取到最小值的1.44倍。
   </p>
   <h5>
-   <a class="anchor" href="#15%E6%A6%82%E6%8B%AC" name="15%E6%A6%82%E6%8B%AC">
+   <a class="anchor" href="#15%E6%A6%82%E6%8B%AC" name="user-content-15%E6%A6%82%E6%8B%AC">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -565,7 +565,7 @@
    自从Burton Bloom在70年代提出Bloom Filter之后，Bloom Filter就被广泛用于拼写检查和数据库系统中。近一二十年，伴随着网络的普及和发展，Bloom Filter在网络领域获得了新生，各种Bloom Filter变种和新的应用不断出现。可以预见，随着网络应用的不断深入，新的变种和应用将会继续出现，Bloom Filter必将获得更大的发展。
   </p>
   <h4>
-   <a class="anchor" href="#%E4%BA%8C%E9%80%82%E7%94%A8%E8%8C%83%E5%9B%B4" name="%E4%BA%8C%E9%80%82%E7%94%A8%E8%8C%83%E5%9B%B4">
+   <a class="anchor" href="#%E4%BA%8C%E9%80%82%E7%94%A8%E8%8C%83%E5%9B%B4" name="user-content-%E4%BA%8C%E9%80%82%E7%94%A8%E8%8C%83%E5%9B%B4">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -575,7 +575,7 @@
    可以用来实现数据字典，进行数据的判重，或者集合求交集
   </p>
   <h4>
-   <a class="anchor" href="#%E4%B8%89%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%8F%8A%E8%A6%81%E7%82%B9" name="%E4%B8%89%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%8F%8A%E8%A6%81%E7%82%B9">
+   <a class="anchor" href="#%E4%B8%89%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%8F%8A%E8%A6%81%E7%82%B9" name="user-content-%E4%B8%89%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%8F%8A%E8%A6%81%E7%82%B9">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -610,7 +610,7 @@
    注意这里m与n的单位不同，m是bit为单位，而n则是以元素个数为单位(准确的说是不同元素的个数)。通常单个元素的长度都是有很多bit的。所以使用bloom filter内存上通常都是节省的。
   </p>
   <h4>
-   <a class="anchor" href="#%E5%9B%9B%E6%89%A9%E5%B1%95" name="%E5%9B%9B%E6%89%A9%E5%B1%95">
+   <a class="anchor" href="#%E5%9B%9B%E6%89%A9%E5%B1%95" name="user-content-%E5%9B%9B%E6%89%A9%E5%B1%95">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -620,7 +620,7 @@
    Bloom filter将集合中的元素映射到位数组中，用k（k为哈希函数个数）个映射位是否全1表示元素在不在这个集合中。Counting bloom filter（CBF）将位数组中的每一位扩展为一个counter，从而支持了元素的删除操作。Spectral Bloom Filter（SBF）将其与集合元素的出现次数关联。SBF采用counter中的最小值来近似表示元素的出现频率。
   </p>
   <h4>
-   <a class="anchor" href="#%E4%BA%94%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B" name="%E4%BA%94%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B">
+   <a class="anchor" href="#%E4%BA%94%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B" name="user-content-%E4%BA%94%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B">
     <span class="octicon octicon-link">
     </span>
    </a>

@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-b4baae9c06716bcd0a8068e3030607851f19b980.css" />
-  <link rel="stylesheet" href="style_cache/github2-4940da06adce480cfcfba223624a2b2f09e8f90f.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-dfc6417658d5b6b7dd3d1e58c09c2c25dee7506e.css" />
+  <link rel="stylesheet" href="style_cache/github2-b564d9e99bd5747d2d0901c61c403e758a5e5ef1.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,14 +105,14 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#%E5%AF%BB%E6%89%BE%E6%9C%80%E5%B0%8F%E7%9A%84k%E4%B8%AA%E6%95%B0" name="%E5%AF%BB%E6%89%BE%E6%9C%80%E5%B0%8F%E7%9A%84k%E4%B8%AA%E6%95%B0">
+   <a class="anchor" href="#%E5%AF%BB%E6%89%BE%E6%9C%80%E5%B0%8F%E7%9A%84k%E4%B8%AA%E6%95%B0" name="user-content-%E5%AF%BB%E6%89%BE%E6%9C%80%E5%B0%8F%E7%9A%84k%E4%B8%AA%E6%95%B0">
     <span class="octicon octicon-link">
     </span>
    </a>
    寻找最小的k个数
   </h1>
   <h2>
-   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -125,14 +125,14 @@
    例如输入1，2，3，4，5，6，7和8这8个数字，则最小的4个数字为1，2，3和4。
   </p>
   <h2>
-   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
     <span class="octicon octicon-link">
     </span>
    </a>
    分析与解法
   </h2>
   <h3>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="%E8%A7%A3%E6%B3%95%E4%B8%80">
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -153,7 +153,7 @@
    。
   </p>
   <h3>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" name="%E8%A7%A3%E6%B3%95%E4%BA%8C">
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -170,14 +170,14 @@
    。
   </p>
   <h3>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%89" name="%E8%A7%A3%E6%B3%95%E4%B8%89">
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%89" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%89">
     <span class="octicon octicon-link">
     </span>
    </a>
    解法三
   </h3>
   <p>
-   当然，更好的办法是维护k个元素的最大堆，原理与上述第2个方案一致，即用容量为k的最大堆存储最先遍历到的k个数，并假设它们即是最小的k个数，建堆费时O（k）后，有k1&lt;k2&lt;...&lt;kmax（kmax设为大顶堆中最大元素）。继续遍历数列，每次遍历一个元素x，与堆顶元素比较，x&lt;kmax，更新堆（用时logk），否则不更新堆。这样下来，总费时
+   当然，更好的办法是维护k个元素的最大堆，原理与上述第2个方案一致，即用容量为k的最大堆存储最先遍历到的k个数，并假设它们即是最小的k个数，建堆费时O(k*logk)后，有k1&lt;k2&lt;...&lt;kmax（kmax设为大顶堆中最大元素）。继续遍历数列，每次遍历一个元素x，与堆顶元素比较，x&lt;kmax，更新堆（用时logk），否则不更新堆。这样下来，总费时
    <code>
     O（k+（n-k）*logk）=O（n*logk）
    </code>
@@ -188,7 +188,7 @@
    。
   </p>
   <h3>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%9B%9B" name="%E8%A7%A3%E6%B3%95%E5%9B%9B">
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%9B%9B" name="user-content-%E8%A7%A3%E6%B3%95%E5%9B%9B">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -280,7 +280,7 @@
    取三数中值作为枢纽元，可以消除最坏情况而保证此算法是O（N）的。不过，这还只局限在理论意义上。
   </p>
   <h3>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%94" name="%E8%A7%A3%E6%B3%95%E4%BA%94">
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%94" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%94">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -454,7 +454,7 @@
    结论： 如你所见，RANDOMIZED-SELECT有线性期望时间O（N）的复杂度，但此RANDOMIZED-SELECT算法在最坏情况下有O（N^2）的复杂度。所以，我们得找出一种在最坏情况下也为线性时间的算法。
   </p>
   <h3>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%94-1" name="%E8%A7%A3%E6%B3%95%E4%BA%94-1">
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%94-1" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%94-1">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -581,7 +581,7 @@
    </p>
   </blockquote>
   <h2>
-   <a class="anchor" href="#%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98" name="%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98">
+   <a class="anchor" href="#%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98" name="user-content-%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98">
     <span class="octicon octicon-link">
     </span>
    </a>

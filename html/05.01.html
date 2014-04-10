@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-b4baae9c06716bcd0a8068e3030607851f19b980.css" />
-  <link rel="stylesheet" href="style_cache/github2-4940da06adce480cfcfba223624a2b2f09e8f90f.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-dfc6417658d5b6b7dd3d1e58c09c2c25dee7506e.css" />
+  <link rel="stylesheet" href="style_cache/github2-b564d9e99bd5747d2d0901c61c403e758a5e5ef1.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,14 +105,14 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97lcs%E9%97%AE%E9%A2%98" name="%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97lcs%E9%97%AE%E9%A2%98">
+   <a class="anchor" href="#%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97lcs%E9%97%AE%E9%A2%98" name="user-content-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97lcs%E9%97%AE%E9%A2%98">
     <span class="octicon octicon-link">
     </span>
    </a>
    第十一章：最长公共子序列（LCS）问题
   </h1>
   <h2>
-   <a class="anchor" href="#%E7%AC%AC%E4%B8%80%E8%8A%82%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0" name="%E7%AC%AC%E4%B8%80%E8%8A%82%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0">
+   <a class="anchor" href="#%E7%AC%AC%E4%B8%80%E8%8A%82%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0" name="user-content-%E7%AC%AC%E4%B8%80%E8%8A%82%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -128,7 +128,7 @@
    注意最长公共子串（Longest CommonSubstring）和最长公共子序列（LongestCommon Subsequence, LCS）的区别：子串（Substring）是串的一个连续的部分，子序列（Subsequence）则是从不改变序列的顺序，而从序列中去掉任意的元素而获得的新序列；更简略地说，前者（子串）的字符的位置必须连续，后者（子序列LCS）则不必。比如字符串acdfg同akdfc的最长公共子串为df，而他们的最长公共子序列是adf。LCS可以使用动态规划法解决。下文具体描述。
   </p>
   <h2>
-   <a class="anchor" href="#%E7%AC%AC%E4%BA%8C%E8%8A%82lcs%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3%E6%80%9D%E8%B7%AF" name="%E7%AC%AC%E4%BA%8C%E8%8A%82lcs%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3%E6%80%9D%E8%B7%AF">
+   <a class="anchor" href="#%E7%AC%AC%E4%BA%8C%E8%8A%82lcs%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3%E6%80%9D%E8%B7%AF" name="user-content-%E7%AC%AC%E4%BA%8C%E8%8A%82lcs%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3%E6%80%9D%E8%B7%AF">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -198,14 +198,14 @@
    行文至此，其实对这个LCS的动态规划解法已叙述殆尽，不过，为了成书的某种必要性，下面，我试着再多加详细阐述这个问题。
   </p>
   <h2>
-   <a class="anchor" href="#%E7%AC%AC%E4%B8%89%E8%8A%82%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E7%AE%97%E6%B3%95%E8%A7%A3lcs%E9%97%AE%E9%A2%98" name="%E7%AC%AC%E4%B8%89%E8%8A%82%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E7%AE%97%E6%B3%95%E8%A7%A3lcs%E9%97%AE%E9%A2%98">
+   <a class="anchor" href="#%E7%AC%AC%E4%B8%89%E8%8A%82%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E7%AE%97%E6%B3%95%E8%A7%A3lcs%E9%97%AE%E9%A2%98" name="user-content-%E7%AC%AC%E4%B8%89%E8%8A%82%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E7%AE%97%E6%B3%95%E8%A7%A3lcs%E9%97%AE%E9%A2%98">
     <span class="octicon octicon-link">
     </span>
    </a>
    第三节、动态规划算法解LCS问题
   </h2>
   <h3>
-   <a class="anchor" href="#%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E7%BB%93%E6%9E%84" name="%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E7%BB%93%E6%9E%84">
+   <a class="anchor" href="#%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E7%BB%93%E6%9E%84" name="user-content-%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E7%BB%93%E6%9E%84">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -233,7 +233,7 @@
    </li>
   </ol>
   <h3>
-   <a class="anchor" href="#%E5%AD%90%E9%97%AE%E9%A2%98%E7%9A%84%E9%80%92%E5%BD%92%E7%BB%93%E6%9E%84" name="%E5%AD%90%E9%97%AE%E9%A2%98%E7%9A%84%E9%80%92%E5%BD%92%E7%BB%93%E6%9E%84">
+   <a class="anchor" href="#%E5%AD%90%E9%97%AE%E9%A2%98%E7%9A%84%E9%80%92%E5%BD%92%E7%BB%93%E6%9E%84" name="user-content-%E5%AD%90%E9%97%AE%E9%A2%98%E7%9A%84%E9%80%92%E5%BD%92%E7%BB%93%E6%9E%84">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -254,7 +254,7 @@
    </a>
   </p>
   <h3>
-   <a class="anchor" href="#%E8%AE%A1%E7%AE%97%E6%9C%80%E4%BC%98%E5%80%BC" name="%E8%AE%A1%E7%AE%97%E6%9C%80%E4%BC%98%E5%80%BC">
+   <a class="anchor" href="#%E8%AE%A1%E7%AE%97%E6%9C%80%E4%BC%98%E5%80%BC" name="user-content-%E8%AE%A1%E7%AE%97%E6%9C%80%E4%BC%98%E5%80%BC">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -320,7 +320,7 @@ end;
    这种方法是按照反序来找LCS的每一个元素的。由于每个数组单元的计算耗费Ο(1)时间，算法LCS_LENGTH耗时Ο(mn)。
   </p>
   <h3>
-   <a class="anchor" href="#%E6%9E%84%E9%80%A0%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97" name="%E6%9E%84%E9%80%A0%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97">
+   <a class="anchor" href="#%E6%9E%84%E9%80%A0%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97" name="user-content-%E6%9E%84%E9%80%A0%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -361,7 +361,7 @@ end;
    </li>
   </ul>
   <h3>
-   <a class="anchor" href="#%E7%AE%97%E6%B3%95%E7%9A%84%E6%94%B9%E8%BF%9B" name="%E7%AE%97%E6%B3%95%E7%9A%84%E6%94%B9%E8%BF%9B">
+   <a class="anchor" href="#%E7%AE%97%E6%B3%95%E7%9A%84%E6%94%B9%E8%BF%9B" name="user-content-%E7%AE%97%E6%B3%95%E7%9A%84%E6%94%B9%E8%BF%9B">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -377,7 +377,7 @@ end;
    另外，如果只需要计算最长公共子序列的长度，则算法的空间需求还可大大减少。事实上，在计算c[i,j]时，只用到数组c的第i行和第i-1行。因此，只要用2行的数组空间就可以计算出最长公共子序列的长度。更进一步的分析还可将空间需求减至min(m, n)。
   </p>
   <h2>
-   <a class="anchor" href="#%E7%AC%AC%E5%9B%9B%E8%8A%82%E7%BC%96%E7%A0%81%E5%AE%9E%E7%8E%B0lcs%E9%97%AE%E9%A2%98" name="%E7%AC%AC%E5%9B%9B%E8%8A%82%E7%BC%96%E7%A0%81%E5%AE%9E%E7%8E%B0lcs%E9%97%AE%E9%A2%98">
+   <a class="anchor" href="#%E7%AC%AC%E5%9B%9B%E8%8A%82%E7%BC%96%E7%A0%81%E5%AE%9E%E7%8E%B0lcs%E9%97%AE%E9%A2%98" name="user-content-%E7%AC%AC%E5%9B%9B%E8%8A%82%E7%BC%96%E7%A0%81%E5%AE%9E%E7%8E%B0lcs%E9%97%AE%E9%A2%98">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -482,7 +482,7 @@ end;
 </pre>
   </div>
   <h2>
-   <a class="anchor" href="#%E7%AC%AC%E4%BA%94%E8%8A%82%E6%94%B9%E8%BF%9B%E7%9A%84%E7%AE%97%E6%B3%95" name="%E7%AC%AC%E4%BA%94%E8%8A%82%E6%94%B9%E8%BF%9B%E7%9A%84%E7%AE%97%E6%B3%95">
+   <a class="anchor" href="#%E7%AC%AC%E4%BA%94%E8%8A%82%E6%94%B9%E8%BF%9B%E7%9A%84%E7%AE%97%E6%B3%95" name="user-content-%E7%AC%AC%E4%BA%94%E8%8A%82%E6%94%B9%E8%BF%9B%E7%9A%84%E7%AE%97%E6%B3%95">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -500,7 +500,7 @@ end;
    求出每列元素，一直到发现第p+1 行都为null 时退出循环，得出矩阵L(k,m)后，B[L(1,m-p+1)]B[L(2,m-p+2)]…B[L(p,m)]即为A 和B 的LCS，其中p 为LCS 的长度。
   </p>
   <h3>
-   <a class="anchor" href="#%E4%B8%BB%E8%A6%81%E5%AE%9A%E4%B9%89%E5%8F%8A%E5%AE%9A%E7%90%86" name="%E4%B8%BB%E8%A6%81%E5%AE%9A%E4%B9%89%E5%8F%8A%E5%AE%9A%E7%90%86">
+   <a class="anchor" href="#%E4%B8%BB%E8%A6%81%E5%AE%9A%E4%B9%89%E5%8F%8A%E5%AE%9A%E7%90%86" name="user-content-%E4%B8%BB%E8%A6%81%E5%AE%9A%E4%B9%89%E5%8F%8A%E5%AE%9A%E7%90%86">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -551,7 +551,7 @@ end;
    设p=Maxk(L(k ， m) ≠ null) ， 可以证明L 矩阵中L(p,m) 所在的对角线,L(1,m-p+1),L(2,m-p+2)…L(p-1,m-1),L(p,m) 所对应的子序列B[L(1,m-p+1)]B[L(2,m-p+2)]…B[L(p,m)]即为A 和B 的LCS，p 为该LCS 的长度。这样，LCS 问题的求解就转化为对m m L × 矩阵的求解。
   </p>
   <h3>
-   <a class="anchor" href="#%E7%AE%97%E6%B3%95%E6%80%9D%E6%83%B3" name="%E7%AE%97%E6%B3%95%E6%80%9D%E6%83%B3">
+   <a class="anchor" href="#%E7%AE%97%E6%B3%95%E6%80%9D%E6%83%B3" name="user-content-%E7%AE%97%E6%B3%95%E6%80%9D%E6%83%B3">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -572,7 +572,7 @@ end;
    则A 和B 的LCS 为B[1]B[2]B[4]B[6]=cdbc, LCS 的长度为4。
   </p>
   <h3>
-   <a class="anchor" href="#%E7%AE%97%E6%B3%95%E4%BC%AA%E4%BB%A3%E7%A0%81" name="%E7%AE%97%E6%B3%95%E4%BC%AA%E4%BB%A3%E7%A0%81">
+   <a class="anchor" href="#%E7%AE%97%E6%B3%95%E4%BC%AA%E4%BB%A3%E7%A0%81" name="user-content-%E7%AE%97%E6%B3%95%E4%BC%AA%E4%BB%A3%E7%A0%81">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -608,7 +608,7 @@ end;
 }  
 </code></pre>
   <h2>
-   <a class="anchor" href="#%E7%BB%93%E8%AF%AD" name="%E7%BB%93%E8%AF%AD">
+   <a class="anchor" href="#%E7%BB%93%E8%AF%AD" name="user-content-%E7%BB%93%E8%AF%AD">
     <span class="octicon octicon-link">
     </span>
    </a>

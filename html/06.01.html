@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-b4baae9c06716bcd0a8068e3030607851f19b980.css" />
-  <link rel="stylesheet" href="style_cache/github2-4940da06adce480cfcfba223624a2b2f09e8f90f.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-dfc6417658d5b6b7dd3d1e58c09c2c25dee7506e.css" />
+  <link rel="stylesheet" href="style_cache/github2-b564d9e99bd5747d2d0901c61c403e758a5e5ef1.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,12 +105,29 @@
 			<html>
  <body>
   <h2>
-   <a class="anchor" href="#%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%E4%BB%8E%E4%B8%80%E9%81%93%E9%A2%98%E6%BC%AB%E8%B0%88%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%BB%A5%E5%8F%8A%E5%8E%8B%E7%BC%A9%E4%BD%8D%E5%9B%BE%E7%AE%97%E6%B3%95" name="%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%E4%BB%8E%E4%B8%80%E9%81%93%E9%A2%98%E6%BC%AB%E8%B0%88%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%BB%A5%E5%8F%8A%E5%8E%8B%E7%BC%A9%E4%BD%8D%E5%9B%BE%E7%AE%97%E6%B3%95">
+   <a class="anchor" href="#40%E4%BA%BF%E4%B8%AA%E6%95%B0%E4%B8%AD%E5%BF%AB%E9%80%9F%E6%9F%A5%E6%89%BE" name="user-content-40%E4%BA%BF%E4%B8%AA%E6%95%B0%E4%B8%AD%E5%BF%AB%E9%80%9F%E6%9F%A5%E6%89%BE">
     <span class="octicon octicon-link">
     </span>
    </a>
-   第一部分、从一道题，漫谈数据结构、以及压缩、位图算法
+   40亿个数中快速查找
   </h2>
+  <h3>
+   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   题目描述
+  </h3>
+  <p>
+   给40亿个不重复的unsigned int的整数，没排过序的，然后再给一个数，如何快速判断这个数是否在那40亿个数当中？
+  </p>
+  <h3>
+   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   分析与解法
+  </h3>
   <p>
    海量数据处理往往会很有趣，有趣在什么地方呢？
   </p>
@@ -125,21 +142,15 @@
     处理，数据是一次调用还是反复调用，因为针对时间和空间，通常来说，多次调用的话，势必会增加预处理以减少每次调用的时候的时间代价。
    </li>
   </ul>
-  <h3>
-   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E5%A6%82%E4%B8%8B" name="%E9%A2%98%E7%9B%AE%E5%A6%82%E4%B8%8B">
+  <h4>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
     <span class="octicon octicon-link">
     </span>
    </a>
-   题目如下
-  </h3>
+   解法一
+  </h4>
   <p>
-   7、腾讯面试题：给40亿个不重复的unsigned int的整数，没排过序的，然后再给一个数，如何快速判断这个数是否在那40亿个数当中？
-  </p>
-  <p>
-   <strong>
-    分析
-   </strong>
-   ：1个unsigned int占用4字节，40亿大约是4G个数，那么一共大约要用16G的内存空间，如果内存不够大，反复和硬盘交换数据的话，后果不堪设想。
+   咱们回到眼前要解决的这个问题，1个unsigned int占用4字节，40亿大约是4G个数，那么一共大约要用16G的内存空间，如果内存不够大，反复和硬盘交换数据的话，后果不堪设想。
   </p>
   <p>
    那么怎么储存这么多的数据呢？还记得伴随数组么？还是那种思想，利用内存地址代替下标。
@@ -174,11 +185,13 @@
   <p>
    问题到这里，其实基本上已经完事了，判断本身，在位图算法这里就是找到对应的内存位置是否为1就可以了。
   </p>
-  <p>
-   <strong>
-    当数据超出可接受范围之后…
-   </strong>
-  </p>
+  <h4>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法二
+  </h4>
   <p>
    当然，下面就要开始说一说，当数据超出了可以接受的范围之后的事情了。比如， 2^66范围的数据检索，也会是一个问题
   </p>
@@ -209,11 +222,13 @@
   <p>
    原始数据中，只包括4个字符(Character),A,B,C,D,四个字符可以用一个2bit的数表示，0-A,1-B,2-C,3-D,从最直观的角度看，原始字符串存在重复字符：ABCCAABCDDAACCDB，用4代表AB,5代表CC，上面的字符串可以替代表示为:45A4CDDAA5DB,这样是不是就比原数据短了一些呢！
   </p>
-  <p>
-   <strong>
-    LZW算法的适用范围
-   </strong>
-  </p>
+  <h3>
+   <a class="anchor" href="#%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95" name="user-content-%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   问题扩展
+  </h3>
   <p>
    为了区别代表串的值(Code)和原来的单个的数据值(String)，需要使它们的数值域不重合，上面用0-3来代表A-D,那么AB就必须用大于3的数值来代替，再举另外一个例子，原来的数值范围可以用8bit来表示，那么就认为原始的数的范围是0～255，压缩程序生成的标号的范围就不能为0～255（如果是0-255，就重复了）。只能从256开始，但是这样一来就超过了8位的表示范围了，所以必须要扩展数据的位数，至少扩展一位，但是这样不是增加了1个字符占用的空间了么？但是却可以用一个字符代表几个字符，比如原来255是8bit,但是现在用256来表示254，255两个数，还是划得来的。从这个原理可以看出LZW算法的适用范围是原始数据串最好是有大量的子串多次重复出现，重复的越多，压缩效果越好。反之则越差，可能真的不减反增了。
   </p>

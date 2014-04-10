@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-b4baae9c06716bcd0a8068e3030607851f19b980.css" />
-  <link rel="stylesheet" href="style_cache/github2-4940da06adce480cfcfba223624a2b2f09e8f90f.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-dfc6417658d5b6b7dd3d1e58c09c2c25dee7506e.css" />
+  <link rel="stylesheet" href="style_cache/github2-b564d9e99bd5747d2d0901c61c403e758a5e5ef1.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,7 +105,7 @@
 			<html>
  <body>
   <h2>
-   <a class="anchor" href="#%E7%AC%AC%E4%B8%89%E5%8D%81%E5%85%AD%E7%AB%A0%E6%90%9C%E7%B4%A2%E5%85%B3%E9%94%AE%E8%AF%8D%E6%99%BA%E8%83%BD%E6%8F%90%E7%A4%BAsuggestion" name="%E7%AC%AC%E4%B8%89%E5%8D%81%E5%85%AD%E7%AB%A0%E6%90%9C%E7%B4%A2%E5%85%B3%E9%94%AE%E8%AF%8D%E6%99%BA%E8%83%BD%E6%8F%90%E7%A4%BAsuggestion">
+   <a class="anchor" href="#%E7%AC%AC%E4%B8%89%E5%8D%81%E5%85%AD%E7%AB%A0%E6%90%9C%E7%B4%A2%E5%85%B3%E9%94%AE%E8%AF%8D%E6%99%BA%E8%83%BD%E6%8F%90%E7%A4%BAsuggestion" name="user-content-%E7%AC%AC%E4%B8%89%E5%8D%81%E5%85%AD%E7%AB%A0%E6%90%9C%E7%B4%A2%E5%85%B3%E9%94%AE%E8%AF%8D%E6%99%BA%E8%83%BD%E6%8F%90%E7%A4%BAsuggestion">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -157,14 +157,14 @@
    方法就是这样子的：Trie树+TOP K算法，但在实际中，真的只要Trie树 + TOP K算法就够了么，有什么需要考虑的细节？OK，请看下文娓娓道来。
   </p>
   <h3>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80trie%E6%A0%91--top-k" name="%E8%A7%A3%E6%B3%95%E4%B8%80trie%E6%A0%91--top-k">
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80trie%E6%A0%91--top-k" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80trie%E6%A0%91--top-k">
     <span class="octicon octicon-link">
     </span>
    </a>
    解法一、Trie树 + TOP K
   </h3>
   <h4>
-   <a class="anchor" href="#%E6%AD%A5%E9%AA%A4%E4%B8%80trie%E6%A0%91%E5%AD%98%E5%82%A8%E5%89%8D%E7%BC%80%E5%90%8E%E7%BC%80" name="%E6%AD%A5%E9%AA%A4%E4%B8%80trie%E6%A0%91%E5%AD%98%E5%82%A8%E5%89%8D%E7%BC%80%E5%90%8E%E7%BC%80">
+   <a class="anchor" href="#%E6%AD%A5%E9%AA%A4%E4%B8%80trie%E6%A0%91%E5%AD%98%E5%82%A8%E5%89%8D%E7%BC%80%E5%90%8E%E7%BC%80" name="user-content-%E6%AD%A5%E9%AA%A4%E4%B8%80trie%E6%A0%91%E5%AD%98%E5%82%A8%E5%89%8D%E7%BC%80%E5%90%8E%E7%BC%80">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -240,7 +240,7 @@
    借用上面的图，当用户输入前缀a的时候，搜索框可能会展示以a为前缀的“abcd”，“abd”等关键词，再当用户输入前缀b的时候，搜索框下面可能会提示以b为前缀的“bcd”等关键词，如此，实现搜索引擎智能提示suggestion的第一个步骤便清晰了，即用trie树存储大量字符串，当前缀固定时，存储相对来说比较热的后缀。那又如何统计热词呢？请看下文步骤二、TOP K算法统计热词。
   </p>
   <h4>
-   <a class="anchor" href="#%E6%AD%A5%E9%AA%A4%E4%BA%8Ctop-k%E7%AE%97%E6%B3%95%E7%BB%9F%E8%AE%A1%E7%83%AD%E8%AF%8D" name="%E6%AD%A5%E9%AA%A4%E4%BA%8Ctop-k%E7%AE%97%E6%B3%95%E7%BB%9F%E8%AE%A1%E7%83%AD%E8%AF%8D">
+   <a class="anchor" href="#%E6%AD%A5%E9%AA%A4%E4%BA%8Ctop-k%E7%AE%97%E6%B3%95%E7%BB%9F%E8%AE%A1%E7%83%AD%E8%AF%8D" name="user-content-%E6%AD%A5%E9%AA%A4%E4%BA%8Ctop-k%E7%AE%97%E6%B3%95%E7%BB%9F%E8%AE%A1%E7%83%AD%E8%AF%8D">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -334,7 +334,7 @@
    此外，在工程实现的时候，前端往往采用了ajax技术来保障速度上的优势，不然等用户输入完毕了咱的推荐词还在慢悠悠的传输中，那也就没有多少意义了。由于前端讨论和咱们这里的讨论关系不大，感兴趣的朋友可以参考相关资料。
   </p>
   <h3>
-   <a class="anchor" href="#%E6%89%A9%E5%B1%95%E9%98%85%E8%AF%BB" name="%E6%89%A9%E5%B1%95%E9%98%85%E8%AF%BB">
+   <a class="anchor" href="#%E6%89%A9%E5%B1%95%E9%98%85%E8%AF%BB" name="user-content-%E6%89%A9%E5%B1%95%E9%98%85%E8%AF%BB">
     <span class="octicon octicon-link">
     </span>
    </a>

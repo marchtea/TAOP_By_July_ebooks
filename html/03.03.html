@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-b4baae9c06716bcd0a8068e3030607851f19b980.css" />
-  <link rel="stylesheet" href="style_cache/github2-4940da06adce480cfcfba223624a2b2f09e8f90f.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-dfc6417658d5b6b7dd3d1e58c09c2c25dee7506e.css" />
+  <link rel="stylesheet" href="style_cache/github2-b564d9e99bd5747d2d0901c61c403e758a5e5ef1.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,14 +105,14 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%B8%80%E7%AB%A0%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E8%B6%85%E8%BF%87%E4%B8%80%E5%8D%8A%E7%9A%84%E6%95%B0%E5%AD%97" name="%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%B8%80%E7%AB%A0%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E8%B6%85%E8%BF%87%E4%B8%80%E5%8D%8A%E7%9A%84%E6%95%B0%E5%AD%97">
+   <a class="anchor" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%B8%80%E7%AB%A0%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E8%B6%85%E8%BF%87%E4%B8%80%E5%8D%8A%E7%9A%84%E6%95%B0%E5%AD%97" name="user-content-%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%B8%80%E7%AB%A0%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E8%B6%85%E8%BF%87%E4%B8%80%E5%8D%8A%E7%9A%84%E6%95%B0%E5%AD%97">
     <span class="octicon octicon-link">
     </span>
    </a>
    第二十一章：出现次数超过一半的数字
   </h1>
   <h2>
-   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -139,7 +139,7 @@
    一个数组中有很多数，现在我们要找出这个数组中那个超过出现次数一半的数字，怎么找呢?大凡当我们碰到某一个杂乱无序的东西时，我们人的内心本质期望是希望把它梳理成有序的。所以，我们得分两种情况来讨论，无序和有序。
   </p>
   <h2>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="%E8%A7%A3%E6%B3%95%E4%B8%80">
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -157,7 +157,7 @@
    ，至于选取什么排序方法则不在话下，最常用的快速排序O（N*logN）即可。排完序呢，直接遍历。在遍历整个数组的同时统计每个数字的出现次数，然后把那个出现次数超过一半的数字直接输出，题目便解答完成了。总的时间复杂度为O（N*logN+N）。
   </p>
   <h2>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" name="%E8%A7%A3%E6%B3%95%E4%BA%8C">
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -171,7 +171,7 @@
    或者经过上述由无序的数组变成有序后的数组呢？是否在排完序O（N*logN）后，真的还需要再遍历一次整个数组么?我们知道，既然是数组的话，那么我们可以根据数组索引支持直接定向到某一个数。我们发现，一个数字在数组中的出现次数超过了一半，那么在已排好序的数组索引的N/2处（从零开始编号），就一定是这个数字。自此，我们只需要对整个数组排完序之后，然后直接输出数组中的第N/2处的数字即可，这个数字即是整个数组中出现次数超过一半的数字，总的时间复杂度由于少了最后一次整个数组的遍历，缩小到O（N*logN）。
   </p>
   <h2>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%89" name="%E8%A7%A3%E6%B3%95%E4%B8%89">
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%89" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%89">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -189,7 +189,7 @@
    ，找出每一个数字在对应的位置处出现的次数，输出那个出现次数超过一半的数字即可。
   </p>
   <h2>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%9B%9B" name="%E8%A7%A3%E6%B3%95%E5%9B%9B">
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%9B%9B" name="user-content-%E8%A7%A3%E6%B3%95%E5%9B%9B">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -214,7 +214,7 @@
    但是如果是5，5，5，5，1，还能运用上述思路么？额，别急，请看下文思路5。
   </p>
   <h2>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%94" name="%E8%A7%A3%E6%B3%95%E4%BA%94">
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%94" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%94">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -363,7 +363,7 @@ i=4，candidate=1，nTimes=1；
    最后，上述代码加了一个判断，如果数组中并不包含这么一个数字，那么输入也是无效的。因此在函数结束前还加了一段代码来验证输入是不是有效的。
   </p>
   <h2>
-   <a class="anchor" href="#%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95" name="%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95">
+   <a class="anchor" href="#%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95" name="user-content-%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -482,7 +482,7 @@ i=4，candidate=1，nTimes=1；
 </pre>
   </div>
   <h2>
-   <a class="anchor" href="#%E7%BB%A7%E7%BB%AD%E6%B7%B1%E5%85%A5" name="%E7%BB%A7%E7%BB%AD%E6%B7%B1%E5%85%A5">
+   <a class="anchor" href="#%E7%BB%A7%E7%BB%AD%E6%B7%B1%E5%85%A5" name="user-content-%E7%BB%A7%E7%BB%AD%E6%B7%B1%E5%85%A5">
     <span class="octicon octicon-link">
     </span>
    </a>

@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-b4baae9c06716bcd0a8068e3030607851f19b980.css" />
-  <link rel="stylesheet" href="style_cache/github2-4940da06adce480cfcfba223624a2b2f09e8f90f.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-dfc6417658d5b6b7dd3d1e58c09c2c25dee7506e.css" />
+  <link rel="stylesheet" href="style_cache/github2-b564d9e99bd5747d2d0901c61c403e758a5e5ef1.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,7 +105,7 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%BA%8C%E7%AB%A0%E6%9C%80%E7%9F%AD%E6%91%98%E8%A6%81%E7%9A%84%E7%94%9F%E6%88%90" name="%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%BA%8C%E7%AB%A0%E6%9C%80%E7%9F%AD%E6%91%98%E8%A6%81%E7%9A%84%E7%94%9F%E6%88%90">
+   <a class="anchor" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%BA%8C%E7%AB%A0%E6%9C%80%E7%9F%AD%E6%91%98%E8%A6%81%E7%9A%84%E7%94%9F%E6%88%90" name="user-content-%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%BA%8C%E7%AB%A0%E6%9C%80%E7%9F%AD%E6%91%98%E8%A6%81%E7%9A%84%E7%94%9F%E6%88%90">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -175,11 +175,11 @@
    那么，我们该怎么做呢？
   </p>
   <h4>
-   <a class="anchor" href="#%E6%80%9D%E8%B7%AF%E4%B8%80" name="%E6%80%9D%E8%B7%AF%E4%B8%80">
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
     <span class="octicon octicon-link">
     </span>
    </a>
-   思路一：
+   解法一：
   </h4>
   <p>
    在分析问题之前，先通过一个实际的例子来探讨。比如在本博客第一篇置顶文章的开头，有这么一段话：
@@ -261,11 +261,11 @@
    要遍历所有其他的关键词（M），对于每个关键词，要遍历整个网页的词（N），而每个关键词在整个网页中的每一次出现，要遍历所有的Seq，以更新这个关键词与所有其他关键词的最小距离。所以算法复杂度为：O（N^2 * M）。
   </p>
   <h4>
-   <a class="anchor" href="#%E6%80%9D%E8%B7%AF%E4%BA%8C" name="%E6%80%9D%E8%B7%AF%E4%BA%8C">
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C">
     <span class="octicon octicon-link">
     </span>
    </a>
-   思路二：
+   解法二：
   </h4>
   <p>
    我们试着降低此问题的复杂度。因为上述思路一再进行查找的时候，总是重复地循环，效率不高。那么怎么简化呢？先来看看这些序列：
@@ -330,7 +330,7 @@
    小结：上述思路二相比于思路一，很明显提高了不小效率。我们在匹配的过程中利用了可以省去其中某些死板的步骤，这让我想到了KMP算法的匹配过程。同样是经过观察，比较，最后总结归纳出的高效算法。我想，一定还有更好的办法，只是我们目前还没有看到，想到，待我们去发现，创造。
   </p>
   <h4>
-   <a class="anchor" href="#%E6%80%9D%E8%B7%AF%E4%B8%89" name="%E6%80%9D%E8%B7%AF%E4%B8%89">
+   <a class="anchor" href="#%E6%80%9D%E8%B7%AF%E4%B8%89" name="user-content-%E6%80%9D%E8%B7%AF%E4%B8%89">
     <span class="octicon octicon-link">
     </span>
    </a>

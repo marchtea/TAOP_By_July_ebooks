@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-b4baae9c06716bcd0a8068e3030607851f19b980.css" />
-  <link rel="stylesheet" href="style_cache/github2-4940da06adce480cfcfba223624a2b2f09e8f90f.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-dfc6417658d5b6b7dd3d1e58c09c2c25dee7506e.css" />
+  <link rel="stylesheet" href="style_cache/github2-b564d9e99bd5747d2d0901c61c403e758a5e5ef1.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,33 +105,49 @@
 			<html>
  <body>
   <h2>
-   <a class="anchor" href="#%E7%AC%AC%E5%8D%81%E5%85%AB%E7%AB%A0%E5%A5%87%E5%81%B6%E8%B0%83%E5%BA%8F" name="%E7%AC%AC%E5%8D%81%E5%85%AB%E7%AB%A0%E5%A5%87%E5%81%B6%E8%B0%83%E5%BA%8F">
+   <a class="anchor" href="#%E5%A5%87%E5%81%B6%E8%B0%83%E5%BA%8F" name="user-content-%E5%A5%87%E5%81%B6%E8%B0%83%E5%BA%8F">
     <span class="octicon octicon-link">
     </span>
    </a>
-   第十八章、奇偶调序
+   奇偶调序
   </h2>
+  <h3>
+   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   题目描述
+  </h3>
   <p>
-   题目：输入一个整数数组，调整数组中数字的顺序，使得所有奇数位于数组的前半部分，
+   输入一个整数数组，调整数组中数字的顺序，使得所有奇数位于数组的前半部分，所有偶数位于数组的后半部分。要求时间复杂度为O(n)。
   </p>
+  <h3>
+   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   分析与解法
+  </h3>
+  <h4>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法一
+  </h4>
   <p>
-   所有偶数位于数组的后半部分。要求时间复杂度为O(n)。
+   最容易想到的办法是从头扫描这个数组，每碰到一个偶数时，拿出这个数字，并把位于这个数字后面的所有数字往前挪动一位。挪完之后在数组的末尾有一个空位，这时把该偶数放入这个空位。由于碰到一个偶数，需要移动O(n)个数字，只是这种方法总的时间复杂度是O(n^2)，不符合要求。
   </p>
+  <h4>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法二
+  </h4>
   <p>
-   分析：
+   再细想下，我们发觉可以考虑维护两个指针，一个指针指向数组的第一个数字，向后移动；一个个指针指向最后一个数字，向前移动。如果第一个指针指向的数字是偶数而第二个指针指向的数字是奇数，我们就交换这两个数字。
   </p>
-  <ol>
-   <li>
-    <p>
-     你当然可以从头扫描这个数组，每碰到一个偶数时，拿出这个数字，并把位于这个数字后面的所有数字往前挪动一位。挪完之后在数组的末尾有一个空位，这时把该偶数放入这个空位。由于碰到一个偶数，需要移动O(n)个数字，只是这种方法总的时间复杂度是O(n^2)，不符合要求，pass
-    </p>
-   </li>
-   <li>
-    <p>
-     很简单，维护两个指针，一个指针指向数组的第一个数字，向后移动；一个个指针指向最后一个数字，向前移动。如果第一个指针指向的数字是偶数而第二个指针指向的数字是奇数，我们就交换这两个数字。
-    </p>
-   </li>
-  </ol>
   <p>
    思路有了，接下来，写代码实现：
   </p>
@@ -190,19 +206,15 @@
 <span class="p">}</span>
 </pre>
   </div>
-  <p>
-   细心的读者想必注意到了上述程序注释中所说的“如果限制空间复杂度为O（1），时间为O（N）就相当于正负数间顺序调整的那道题了”，没错，它与个人之前整理的一文中的第5题极其类似：5、一个未排序整数数组，有正负数，重新排列使负数排在正数前面，并且要求不改变原来的正负数之间相对顺序 比如： input: 1,7,-5,9,-12,15 ans: -5,-12,1,7,9,15 要求时间复杂度O(N),空间O(1) 。（
-   <strong>
-    此题一直没看到令我满意的答案，一般达不到题目所要求的：时间复杂度O(N),空间O(1)，且保证原来正负数之间的相对位置不变
-   </strong>
-   ）。
-  </p>
-  <p>
-   如果你想到了绝妙的解决办法，不妨在本文评论下告知于我，或者来信指导（
-   <a href="mailto:zhoulei0907@yahoo.cn">
-    zhoulei0907@yahoo.cn
+  <h3>
+   <a class="anchor" href="#%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98" name="user-content-%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98">
+    <span class="octicon octicon-link">
+    </span>
    </a>
-   ），谢谢。
+   类似问题
+  </h3>
+  <p>
+   一个未排序整数数组，有正负数，重新排列使负数排在正数前面，并且要求不改变原来的正负数之间相对顺序 比如： input: 1,7,-5,9,-12,15 ans: -5,-12,1,7,9,15 要求时间复杂度O(N),空间O(1)。
   </p>
  </body>
 </html>
