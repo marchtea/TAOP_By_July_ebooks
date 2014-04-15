@@ -111,6 +111,13 @@
    </a>
    第三十章：字符串转换成整数
   </h1>
+  <h2>
+   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   题目描述
+  </h2>
   <p>
    输入一个表示整数的字符串，把该字符串转换成整数并输出，例如输入字符串"345"，则输出整数345。
   </p>
@@ -121,6 +128,13 @@
    </code>
    ，完成函数StrToInt，实现字符串转换成整数的功能，不得用库函数atoi（即便准许使用，其对于溢出情况的处理也达不到题目的要求，详情请参看下文第7节末）。
   </p>
+  <h2>
+   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   分析与解法
+  </h2>
   <p>
    我们来一步一步分析（共9小节，重点在下文第8小节及后续内容），直至写出第一份准确的代码：
   </p>
@@ -480,105 +494,7 @@
      6
     </strong>
    </em>
-   . 那到底该如何解决这个数据溢出的问题呢？咱们先来看看Microsoft是如何实现atoi的吧：
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="c1">//atol函数  </span>
-<span class="c1">//Copyright (c) 1989-1997, Microsoft Corporation. All rights reserved.  </span>
-<span class="kt">long</span> <span class="kr">__cdecl</span> <span class="nf">atol</span><span class="p">(</span>  
-    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">nptr</span>  
-    <span class="p">)</span>  
-<span class="p">{</span>  
-    <span class="kt">int</span> <span class="n">c</span><span class="p">;</span> <span class="cm">/* current char */</span>  
-    <span class="kt">long</span> <span class="n">total</span><span class="p">;</span> <span class="cm">/* current total */</span>  
-    <span class="kt">int</span> <span class="n">sign</span><span class="p">;</span> <span class="cm">/* if '-', then negative, otherwise positive */</span>  
-
-    <span class="cm">/* skip whitespace */</span>  
-    <span class="k">while</span> <span class="p">(</span> <span class="n">isspace</span><span class="p">((</span><span class="kt">int</span><span class="p">)(</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="p">)</span><span class="o">*</span><span class="n">nptr</span><span class="p">)</span> <span class="p">)</span>  
-        <span class="o">++</span><span class="n">nptr</span><span class="p">;</span>  
-
-    <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="p">)</span><span class="o">*</span><span class="n">nptr</span><span class="o">++</span><span class="p">;</span>  
-    <span class="n">sign</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span> <span class="cm">/* save sign indication */</span>  
-    <span class="k">if</span> <span class="p">(</span><span class="n">c</span> <span class="o">==</span> <span class="sc">'-'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'+'</span><span class="p">)</span>  
-        <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="p">)</span><span class="o">*</span><span class="n">nptr</span><span class="o">++</span><span class="p">;</span> <span class="cm">/* skip sign */</span>  
-
-    <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  
-
-    <span class="k">while</span> <span class="p">(</span><span class="n">isdigit</span><span class="p">(</span><span class="n">c</span><span class="p">))</span> <span class="p">{</span>  
-        <span class="n">total</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">total</span> <span class="o">+</span> <span class="p">(</span><span class="n">c</span> <span class="o">-</span> <span class="sc">'0'</span><span class="p">);</span> <span class="cm">/* accumulate digit */</span>  
-        <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="p">)</span><span class="o">*</span><span class="n">nptr</span><span class="o">++</span><span class="p">;</span> <span class="cm">/* get next char */</span>  
-    <span class="p">}</span>  
-
-    <span class="k">if</span> <span class="p">(</span><span class="n">sign</span> <span class="o">==</span> <span class="sc">'-'</span><span class="p">)</span>  
-        <span class="k">return</span> <span class="o">-</span><span class="n">total</span><span class="p">;</span>  
-    <span class="k">else</span>  
-        <span class="k">return</span> <span class="n">total</span><span class="p">;</span> <span class="cm">/* return result, negated if necessary */</span>  
-<span class="p">}</span>  
-</pre>
-  </div>
-  <p>
-   其中，isspace和isdigit函数的实现代码为：
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="n">isspace</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span>    
-<span class="p">{</span>    
-    <span class="k">if</span><span class="p">(</span><span class="n">x</span><span class="o">==</span><span class="sc">' '</span><span class="o">||</span><span class="n">x</span><span class="o">==</span><span class="err">'</span><span class="o">/</span><span class="n">t</span><span class="err">'</span><span class="o">||</span><span class="n">x</span><span class="o">==</span><span class="err">'</span><span class="o">/</span><span class="n">n</span><span class="err">'</span><span class="o">||</span><span class="n">x</span><span class="o">==</span><span class="err">'</span><span class="o">/</span><span class="n">f</span><span class="err">'</span><span class="o">||</span><span class="n">x</span><span class="o">==</span><span class="err">'</span><span class="o">/</span><span class="n">b</span><span class="err">'</span><span class="o">||</span><span class="n">x</span><span class="o">==</span><span class="err">'</span><span class="o">/</span><span class="n">r</span><span class="err">'</span><span class="p">)</span>    
-        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>    
-    <span class="k">else</span>     
-        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>    
-<span class="p">}</span>    
-
-<span class="n">isdigit</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span>    
-<span class="p">{</span>    
-    <span class="k">if</span><span class="p">(</span><span class="n">x</span><span class="o">&lt;=</span><span class="sc">'9'</span><span class="o">&amp;&amp;</span><span class="n">x</span><span class="o">&gt;=</span><span class="sc">'0'</span><span class="p">)</span>             
-        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>     
-    <span class="k">else</span>     
-        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>    
-<span class="p">}</span>   
-</pre>
-  </div>
-  <p>
-   然后atoi调用上面的atol函数，如下所示：
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="c1">//atoi调用上述的atol  </span>
-<span class="kt">int</span> <span class="kr">__cdecl</span> <span class="nf">atoi</span><span class="p">(</span>  
-    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">nptr</span>  
-    <span class="p">)</span>  
-<span class="p">{</span>  
-    <span class="c1">//Overflow is not detected. Because of this, we can just use  </span>
-    <span class="k">return</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">atol</span><span class="p">(</span><span class="n">nptr</span><span class="p">);</span>  
-<span class="p">}</span>  
-</pre>
-  </div>
-  <p>
-   但很遗憾的是，上述atoi标准代码依然返回的是long：
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="kt">long</span> <span class="n">total</span><span class="p">;</span> <span class="cm">/* current total */</span>  
-<span class="k">if</span> <span class="p">(</span><span class="n">sign</span> <span class="o">==</span> <span class="sc">'-'</span><span class="p">)</span>  
-    <span class="k">return</span> <span class="o">-</span><span class="n">total</span><span class="p">;</span>  
-<span class="k">else</span>  
-    <span class="k">return</span> <span class="n">total</span><span class="p">;</span> <span class="cm">/* return result, negated if necessary */</span>  
-</pre>
-  </div>
-  <p>
-   再者，下面这里定义成long的total与10相乘，即total*10很容易溢出：
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="kt">long</span> <span class="n">total</span><span class="p">;</span> <span class="cm">/* current total */</span>  
-<span class="n">total</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">total</span> <span class="o">+</span> <span class="p">(</span><span class="n">c</span> <span class="o">-</span> <span class="sc">'0'</span><span class="p">);</span> <span class="cm">/* accumulate digit */</span>  
-</pre>
-  </div>
-  <p>
-   最后，根据本文评论下的读者meiyuli反应：“测试数据是字符串"-21474836480"，api算出来的是-2147483648，用上述代码算出来的结果是0”，如此，上述微软的这个atoi源码是有问题的。
-   <br/>
-   <em>
-    <strong>
-     7
-    </strong>
-   </em>
-   . microsoft既然不行，读者想必很自然的想到linux。So，咱们接下来便看看linux内核中是如何实现此字符串转换为整数的问题的。linux内核中提供了以下几个函数：
+   . 咱们接下来便看看linux内核中是如何实现此字符串转换为整数的问题的。linux内核中提供了以下几个函数：
   </p>
   <ol>
    <li>
@@ -854,7 +770,7 @@
   <p>
    <em>
     <strong>
-     8
+     7
     </strong>
    </em>
    . 根据我们第1小节达成一致的字符串转换成整数的思路：“每扫描到一个字符，我们便把在之前得到的数字乘以10，然后再加上当前字符表示的数字”，相信读者已经觉察到，在扫描到最后一个字符的时候，如果之前得到的数比较大，此时若再让其扩大10倍，相对来说是比较容易溢出的。
@@ -1031,7 +947,7 @@
   <p>
    <em>
     <strong>
-     9
+     8
     </strong>
    </em>
    . 最后看下Nut/OS中atoi的实现，同时，本小节内容主要来自参考文献条目9，即MJN的博客：
@@ -1322,75 +1238,6 @@
   <p>
    OK，字符串转换成整数这一问题已基本解决。但如果面试官继续问你，如何把整数转换成字符串呢？欢迎于本文评论下或hero上show出你的思路或代码。
   </p>
-  <h2>
-   <a class="anchor" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E5%8F%8A%E6%8E%A8%E8%8D%90%E9%98%85%E8%AF%BB" name="user-content-%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E5%8F%8A%E6%8E%A8%E8%8D%90%E9%98%85%E8%AF%BB">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   参考文献及推荐阅读
-  </h2>
-  <ol>
-   <li>
-    <a href="">
-     http://zhedahht.blog.163.com/blog/static/25411174200731139971/
-    </a>
-    ；
-   </li>
-   <li>
-    字符串转换成整数题目
-    <a href="http://hero.pongo.cn/Question/Details?ID=47&amp;ExamID=45">
-     完整描述
-    </a>
-    ；
-    <br/>
-   </li>
-   <li>
-    linux3.8.4版本下的相关字符串整数转换函数
-    <a href="https://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable.git/tree/lib/vsprintf.c?id=refs/tags/v3.9.4%5D">
-     概览
-    </a>
-    ；
-    <br/>
-   </li>
-   <li>
-    关于linux中的
-    <a href="http://blog.21ic.com/user1/5593/archives/2010/68193.html%5D">
-     likely和unlikely
-    </a>
-    ；
-    <br/>
-   </li>
-   <li>
-    atio函数的
-    <a href="http://blog.csdn.net/njnu_mjn/article/details/9099405">
-     实现
-    </a>
-    ；
-    <br/>
-   </li>
-   <li>
-    atoi函数的实现: linux内核atoi函数的测试：
-    <a href="">
-     http://blog.csdn.net/njnu_mjn/article/details/9104143
-    </a>
-    ；
-    <br/>
-   </li>
-   <li>
-    Nut/OS中
-    <a href="http://www.ethernut.de/api/atoi_8c_source.html">
-     atoi函数的实现
-    </a>
-    ；
-    <br/>
-    一读者写的hero上“字符串转换成整数”一题的
-    <a href="http://blog.csdn.net/u011070134/article/details/9116831">
-     解题报告
-    </a>
-    （测试正确）；
-    <br/>
-   </li>
-  </ol>
   <h2>
    <a class="anchor" href="#%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98" name="user-content-%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98">
     <span class="octicon octicon-link">

@@ -131,9 +131,6 @@
    </a>
    分析与解法
   </h3>
-  <p>
-   分析：在九月腾讯，创新工场，淘宝等公司最新面试十三题中第23题又出现了这个问题，题目描述如下：23、人人笔试1：一个人上台阶可以一次上1个，2个，或者3个，问这个人上n层的台阶，总共有几种走法？咱们先撇开这个人人笔试的问题（其实差别就在于人人笔试题中多了一次可以跳三级的情况而已），先来看这个第27题。
-  </p>
   <h4>
    <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
     <span class="octicon octicon-link">
@@ -160,7 +157,7 @@ f(n)=      2                             n = 2
   <div class="highlight highlight-cpp">
    <pre><span class="kt">long</span> <span class="kt">long</span> <span class="nf">Fibonacci_Solution1</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">result</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">};</span>
+    <span class="kt">int</span> <span class="n">result</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">};</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
 
@@ -174,7 +171,7 @@ f(n)=      2                             n = 2
   <pre><code>        / 1                                      n = 1
 f(n)=     2                                      n = 2
           4                                      n = 3       //111, 12, 21, 3
-        \ f(n-1)+(f-2)+f(n-3)                    n &gt; 3
+        \ f(n-1)+f(n-2)+f(n-3)                   n &gt; 3
 </code></pre>
   <h4>
    <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C">

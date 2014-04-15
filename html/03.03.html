@@ -122,7 +122,7 @@
    题目：数组中有一个数字出现的次数超过了数组长度的一半，找出这个数字。
   </p>
   <p>
-   分析：编程之美上也有这道题，不过它变换了题目的表述形，如下：
+   分析：编程之美上也有这道题，不过它变换了题目的表述形式，如下：
   </p>
   <p>
    Tango是微软亚洲研究院的一个试验项目，如图1所示。研究院的员工和实习生们都很喜欢在Tango上面交流灌水。传说，Tango有一大“水王”，他不但喜欢发帖，还会回复其他ID发的每个帖子。坊间风闻该“水王”发帖数目超过了帖子总数的一半。如果你有一个当前论坛上所有帖子（包括回帖）的列表，其中帖子作者的ID也在表中，你能快速找出这个传说中的Tango水王吗？
@@ -136,7 +136,7 @@
    图1  Tango
   </p>
   <p>
-   一个数组中有很多数，现在我们要找出这个数组中那个超过出现次数一半的数字，怎么找呢?大凡当我们碰到某一个杂乱无序的东西时，我们人的内心本质期望是希望把它梳理成有序的。所以，我们得分两种情况来讨论，无序和有序。
+   一个数组中有很多数，现在我们要找出其中那个出现次数超过总数一半的数字，怎么找呢?大凡当我们碰到某一个杂乱无序的东西时，我们人的内心本质期望是希望把它梳理成有序的。所以，我们得分两种情况来讨论，无序和有序。
   </p>
   <h2>
    <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
@@ -196,7 +196,7 @@
    解法四
   </h2>
   <p>
-   Hash表需要O（N）的开销空间，且要设计hash函数，还有没有更好的办法呢?我们可以试着这么考虑，如果
+   Hash表需要O（N）的空间开销，且要设计hash函数，还有没有更好的办法呢?我们可以试着这么考虑，如果
    <strong>
     每次删除两个不同的数
    </strong>
@@ -240,7 +240,7 @@
      第二个例子，0，1，2，1，1 :
     </p>
     <p>
-     开始时，保存candidate是数字0，ntimes为1，遍历到数字1后，与数字0不同，则ntime减1变为零,；接下来，遍历到数字2，2与1不同，candidate保存数字2，且ntimes重新设为1；继续遍历到第4个数字1时，与2不同，ntimes减一为零，同时candidate保存为1；最终遍历到最后一个数字还是1，与我们之前candidate保存的数字1相同，ntime加一为1。最后返回的是之前保存的candidate为1。
+     开始时，保存candidate是数字0，nTimes为1；遍历到数字1后，与数字0不同，则nTimes减1变为零；接下来，遍历到数字2，2与1不同，candidate保存数字2，且nTimes重新设为1；继续遍历到第4个数字1时，与2不同，nTimes减1为零，同时candidate保存为1；最终遍历到最后一个数字还是1，与我们之前candidate保存的数字1相同，nTimes加1为1。最后返回的是之前保存的candidate为1。
     </p>
    </li>
   </ul>
@@ -253,11 +253,11 @@
    针对上述程序，我再说详细点，0，1，2，1，1 ：
   </p>
   <pre><code>i=0，candidate=0，nTimes=1；
-i=1，a[1]=0 ！= candidate，nTimes--，=0；
+i=1，a[1] != candidate，nTimes--，=0；
 i=2，candidate=2，nTimes=1；
-i=3，a[3] ！= candidate，nTimes--，=0；
+i=3，a[3] != candidate，nTimes--，=0；
 i=4，candidate=1，nTimes=1；
-如果是0，1，2，1，1，1的话，那么i=5，a[5]=1=candidate，nTimes++，=2；......
+如果是0，1，2，1，1，1的话，那么i=5，a[5] == candidate，nTimes++，=2；......
 </code></pre>
   <p>
    ok，思路清楚了，完整的代码如下：
@@ -324,7 +324,7 @@ i=4，candidate=1，nTimes=1；
 
     <span class="c1">//检测输入是否有效。  </span>
     <span class="n">times</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  
-    <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>  
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>  
     <span class="p">{</span>  
         <span class="k">if</span><span class="p">(</span><span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">result</span><span class="p">)</span>  
             <span class="n">times</span><span class="o">++</span><span class="p">;</span>  
@@ -378,10 +378,10 @@ i=4，candidate=1，nTimes=1；
   <p>
    因为，很明显，如果是刚好出现一半的话，如此例： 0，1，2，1 ：
   </p>
-  <pre><code>遍历到0 时 candidate为0，times为1
-遍历到1时  与candidate不同，times减为0
-遍历到2时， times为0，则candidate更新为2，times加1
-遍历到1时， 与candidate不同，则times减为0；我们需要返回所保存candidate（数字2）的下一个数字即数字1。
+  <pre><code>遍历到0时，candidate为0，times为1
+遍历到1时，与candidate不同，times减为0
+遍历到2时，times为0，则candidate更新为2，times加1
+遍历到1时，与candidate不同，则times减为0；我们需要返回所保存candidate（数字2）的下一个数字，即数字1。
 </code></pre>
   <p>
    所以，如果还运用上面的程序的话，那么只能返回我们要找的数字1的前一个数字，即遍历到1之前所保存的candidate=2，试问如何让程序能返回我们需要的数字1呢？望读者思考之。
@@ -395,10 +395,10 @@ i=4，candidate=1，nTimes=1；
 
 <span class="kt">int</span> <span class="nf">Find</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">N</span><span class="p">)</span>  
 <span class="p">{</span>  
-    <span class="kt">int</span> <span class="n">candidate1</span><span class="p">,</span><span class="n">candidate2</span><span class="p">;</span>  
+    <span class="kt">int</span> <span class="n">candidate1</span><span class="p">,</span> <span class="n">candidate2</span><span class="p">;</span>  
     <span class="kt">int</span> <span class="n">nTimes1</span><span class="p">,</span> <span class="n">nTimes2</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span>  
 
-    <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">nTimes1</span> <span class="o">=</span> <span class="n">nTimes2</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>  
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">nTimes1</span> <span class="o">=</span> <span class="n">nTimes2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>  
     <span class="p">{</span>  
         <span class="k">if</span><span class="p">(</span><span class="n">nTimes1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>  
         <span class="p">{</span>  
@@ -494,7 +494,7 @@ i=4，candidate=1，nTimes=1；
    </strong>
   </p>
   <p>
-   美国选举一般要求找到的票数超过一半的人。于是有人就开始研究如何用线性时间找到这个人或者证明这个人不存在。Robert S. Boyer 和 J Strother Moore 发表了一片关于这个算法的论文。内容和上文提到的算法是一致的，只是多了理论分析和FORTRAN实现部分。
+   美国选举一般要求找到票数超过一半的人。于是有人就开始研究如何用线性时间找到这个人或者证明这个人不存在。Robert S. Boyer 和 J Strother Moore 发表了一片关于这个算法的论文。内容和上文提到的算法是一致的，只是多了理论分析和FORTRAN实现部分。
   </p>
   <p>
    MJRTY - A Fast Majority Vote Algorithm, with R.S. Boyer. In R.S. Boyer (ed.), Automated Reasoning: Essays in Honor of Woody Bledsoe, Automated Reasoning Series, Kluwer Academic Publishers, Dordrecht, The Netherlands, 1981, pp. 105-117.

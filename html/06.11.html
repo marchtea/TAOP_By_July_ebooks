@@ -104,95 +104,20 @@
 		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
 			<html>
  <body>
-  <h1>
+  <h2>
    <a class="anchor" href="#%E7%AC%AC%E4%B8%89%E5%8D%81%E4%BA%8C%E7%AB%A0%E6%9C%80%E5%B0%8F%E6%93%8D%E4%BD%9C%E6%95%B0" name="user-content-%E7%AC%AC%E4%B8%89%E5%8D%81%E4%BA%8C%E7%AB%A0%E6%9C%80%E5%B0%8F%E6%93%8D%E4%BD%9C%E6%95%B0">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   第三十二章：最小操作数
-  </h1>
-  <p>
-   作者：July、caopengcs、红色标记。致谢：fuwutu、demo。
-  </p>
-  <p>
-   时间：二零一三年八月十二日
-  </p>
-  <h2>
-   <a class="anchor" href="#%E9%A2%98%E8%AE%B0" name="user-content-%E9%A2%98%E8%AE%B0">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   题记
-  </h2>
-  <p>
-   再过一两月，便又到了每年的九月十月校招高峰期，在此依次推荐：
-  </p>
-  <ol>
-   <li>
-    <p>
-     <a href="http://blog.csdn.net/column/details/taopp.html">
-      程序员编程艺术
-     </a>
-     ；
-    </p>
-   </li>
-   <li>
-    <p>
-     <a href="http://blog.csdn.net/v_july_v/article/details/7382693">
-      秒杀99%的海量数据处理面试题
-     </a>
-     ；
-    </p>
-   </li>
-   <li>
-    <p>
-     《编程之美》；
-    </p>
-   </li>
-   <li>
-    <p>
-     <a href="http://blog.csdn.net/column/details/ms100.html">
-      微软面试100题系列
-     </a>
-     ；
-    </p>
-   </li>
-   <li>
-    <p>
-     《剑指offer》
-    </p>
-   </li>
-  </ol>
-  <p>
-   一年半前在学校的那会，我曾经无比疯狂的创作程序员编程艺术这个系列，因为当时我坚信它能帮到更多的人找到更好的工作，此刻今后，我更加无比坚信这点。
-  </p>
-  <p>
-   同时，相信你也已看到，编程艺术系列的创作原则是把受众定位为一个编程初学者，从看到问题后最先想到的思路开始讲解，一点一点改进，不断优化。
-  </p>
-  <p>
-   而本文主要讲下述两个问题：
-  </p>
-  <ul>
-   <li>
-    第三十二章：最小操作数问题，主要由caopengcs完成；
-   </li>
-   <li>
-    第三十三章：木块砌墙问题，主要由红色标记和caopengcs完成。
-   </li>
-  </ul>
-  <p>
-   全文由July统一整理修订完成。OK，还是很真诚的那句话：有任何问题，欢迎读者随时批评指正，感谢。
-  </p>
-  <h2>
-   <a class="anchor" href="#%E7%AC%AC%E4%B8%89%E5%8D%81%E4%BA%8C%E7%AB%A0%E6%9C%80%E5%B0%8F%E6%93%8D%E4%BD%9C%E6%95%B0-1" name="user-content-%E7%AC%AC%E4%B8%89%E5%8D%81%E4%BA%8C%E7%AB%A0%E6%9C%80%E5%B0%8F%E6%93%8D%E4%BD%9C%E6%95%B0-1">
     <span class="octicon octicon-link">
     </span>
    </a>
    第三十二章、最小操作数
   </h2>
-  <p>
-   题目详情如下：
-  </p>
+  <h3>
+   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   题目描述
+  </h3>
   <p>
    给定一个单词集合Dict，其中每个单词的长度都相同。现从此单词集合Dict中抽取两个单词A、B，我们希望通过若干次操作把单词A变成单词B，每次操作可以改变单词的一个字母，同时，新产生的单词必须是在给定的单词集合Dict中。求所有行得通步数最少的修改方法。
   </p>
@@ -219,11 +144,15 @@
   <p>
    "hit" -&gt;  "hot" -&gt;  "lot" -&gt;  "log"  -&gt;"cog"。
   </p>
+  <h2>
+   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   分析与解法
+  </h2>
   <p>
-   <strong>
-    详解
-   </strong>
-   ：本题是一个典型的图搜索算法问题。此题看似跟本系列的第29章的字符串编辑距离相似，但其实区别特别大，原因是最短编辑距离是让某个单词增加一个字符或减少一个字符或修改一个字符达到目标单词，来求变换的最少次数，但此最小操作数问题就只是改变一个字符。
+   本题是一个典型的图搜索算法问题。此题看似跟本系列的第29章的字符串编辑距离相似，但其实区别特别大，原因是最短编辑距离是让某个单词增加一个字符或减少一个字符或修改一个字符达到目标单词，来求变换的最少次数，但此最小操作数问题就只是改变一个字符。
   </p>
   <p>
    通过

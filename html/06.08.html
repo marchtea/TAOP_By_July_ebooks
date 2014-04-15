@@ -135,48 +135,6 @@
    代码，可编写如下：
   </p>
   <div class="highlight highlight-cpp">
-   <pre><span class="cp">#include &lt;iostream&gt;</span>
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-
-<span class="c1">//查找第一个只出现一次的字符，第1个程序</span>
-<span class="c1">//copyright@ Sorehead &amp;&amp; July</span>
-<span class="c1">//July、updated，2011.04.24.</span>
-<span class="kt">char</span> <span class="nf">find_first_unique_char</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">data</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
-    <span class="kt">char</span> <span class="o">*</span><span class="n">p</span><span class="p">;</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="n">str</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
-        <span class="k">return</span> <span class="sc">'\0'</span><span class="p">;</span>
-
-    <span class="n">memset</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">data</span><span class="p">));</span>    <span class="c1">//数组元素先全部初始化为0</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">str</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="o">*</span><span class="n">p</span> <span class="o">!=</span> <span class="sc">'\0'</span><span class="p">)</span>
-        <span class="n">data</span><span class="p">[(</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="p">)</span><span class="o">*</span><span class="n">p</span><span class="o">++</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>  <span class="c1">//遍历字符串，在相应位置++，（同时，下标强制转换）</span>
-
-    <span class="k">while</span> <span class="p">(</span><span class="o">*</span><span class="n">str</span> <span class="o">!=</span> <span class="sc">'\0'</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">data</span><span class="p">[(</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="p">)</span><span class="o">*</span><span class="n">str</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1">//最后，输出那个第一个只出现次数为1的字符</span>
-            <span class="k">return</span> <span class="o">*</span><span class="n">str</span><span class="p">;</span>
-
-        <span class="n">str</span><span class="o">++</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="sc">'\0'</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">char</span> <span class="o">*</span><span class="n">str</span> <span class="o">=</span> <span class="s">"afaccde"</span><span class="p">;</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">find_first_unique_char</span><span class="p">(</span><span class="n">str</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
-  </div>
-  <p>
-   当然，代码也可以这么写（测试正确）：
-  </p>
-  <div class="highlight highlight-cpp">
    <pre><span class="c1">//查找第一个只出现一次的字符，第2个程序</span>
 <span class="c1">//copyright@ yansha</span>
 <span class="c1">//July、updated，2011.04.24.</span>

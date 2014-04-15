@@ -26,7 +26,7 @@ For windows users, instead of using git, you can download [github for windows](h
 
 ##Current Version
 
-updated 2014/04/11
+updated 2014/04/15
 
 ##TODO
 Add Pdf format.

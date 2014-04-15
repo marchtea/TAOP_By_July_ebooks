@@ -111,8 +111,15 @@
    </a>
    第十六章、全排列问题
   </h2>
+  <h3>
+   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   题目描述
+  </h3>
   <p>
-   题目：输入一个字符串，打印出该字符串中字符的所有排列。
+   输入一个字符串，打印出该字符串中字符的所有排列。
   </p>
   <p>
    例如输入字符串abc，则输出由字符a、b、c 所能排列出来的所有字符串
@@ -120,15 +127,20 @@
   <p>
    abc、acb、bac、bca、cab 和 cba。
   </p>
-  <p>
-   分析：此题最初整理于去年的微软面试100题中第53题，第二次整理于微软、Google等公司非常好的面试题及解答[第61-70题] 
-第67题。无独有偶，这个问题今年又出现于今年的2011.10.09百度笔试题中。ok，接下来，咱们先好好分析这个问题。
-  </p>
-  <p>
-   <strong>
-    解法一、递归实现
-   </strong>
-  </p>
+  <h3>
+   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   分析与解法
+  </h3>
+  <h4>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法一、递归实现
+  </h4>
   <p>
    从集合中依次选出每一个元素，作为排列的第一个元素，然后对剩余的元素进行全排列，如此递归处理，从而得到所有元素的全排列。以对字符串abc进行全排列为例，我们可以这么做：以abc为例
   </p>
@@ -198,11 +210,13 @@
 <span class="p">}</span>
 </pre>
   </div>
-  <p>
-   <strong>
-    解法二、字典序排列
-   </strong>
-  </p>
+  <h4>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C%E5%AD%97%E5%85%B8%E5%BA%8F%E6%8E%92%E5%88%97" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C%E5%AD%97%E5%85%B8%E5%BA%8F%E6%8E%92%E5%88%97">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法二、字典序排列
+  </h4>
   <p>
    把升序的排列（当然，也可以实现为降序）作为当前排列开始，然后依次计算当前排列的下一个字典序排列。
   </p>
@@ -236,8 +250,7 @@
         <span class="p">}</span>
 
         <span class="n">swap</span><span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">perm</span><span class="p">[</span><span class="n">k</span><span class="p">]);</span>
-        <span class="n">reverse</span><span class="p">(</span><span class="n">perm</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">perm</span> <span class="o">+</span> <span class="n">num</span><span class="p">);</span>
-
+        <span class="n">reverse</span><span class="p">(</span><span class="n">perm</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">perm</span> <span class="o">+</span> <span class="n">num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </pre>
@@ -245,13 +258,13 @@
   <p>
    扩展：如果不是求字符的所有排列，而是求字符的所有组合，应该怎么办呢？当输入的字符串中含有相同的字符串时，相同的字符交换位置是不同的排列，但是同一个组合。举个例子，如果输入abc，它的组合有a、b、c、ab、ac、bc、abc。
   </p>
-  <h2>
+  <h3>
    <a class="anchor" href="#%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98" name="user-content-%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98">
     <span class="octicon octicon-link">
     </span>
    </a>
    类似问题
-  </h2>
+  </h3>
   <p>
    已知字符串里的字符是互不相同的，现在任意组合，比如ab，则输出aa，ab，ba，bb，编程按照字典序输出所有的组合。
   </p>
@@ -260,20 +273,21 @@
 本题可用递归的思想，设置一个变量表示已输出的个数，然后当个数达到字符串长度时，就输出。
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="c1">//假设str已经有序，from 一直很安静  </span>
-<span class="kt">void</span> <span class="nf">perm</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">,</span> <span class="kt">int</span> <span class="n">size</span><span class="p">,</span> <span class="kt">int</span> <span class="n">resPos</span><span class="p">)</span>  
-<span class="p">{</span>  
-    <span class="k">if</span><span class="p">(</span><span class="n">resPos</span> <span class="o">==</span> <span class="n">size</span><span class="p">)</span>  
-    <span class="n">print</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>  
-    <span class="k">else</span>  
-    <span class="p">{</span>  
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>  
-        <span class="p">{</span>  
-      <span class="n">result</span><span class="p">[</span><span class="n">resPos</span><span class="p">]</span> <span class="o">=</span> <span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>  
-      <span class="n">perm</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">resPos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>  
-    <span class="p">}</span>  
-    <span class="p">}</span>  
-<span class="p">}</span>  
+   <pre><span class="c1">//copyright@ 一直很安静 &amp;&amp; World Gao</span>
+<span class="c1">//假设str已经有序</span>
+<span class="kt">void</span> <span class="nf">perm</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">result</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">,</span> <span class="kt">int</span> <span class="n">size</span><span class="p">,</span> <span class="kt">int</span> <span class="n">resPos</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="n">resPos</span> <span class="o">==</span> <span class="n">size</span><span class="p">)</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">result</span><span class="p">);</span>
+  <span class="k">else</span>
+    <span class="p">{</span>
+      <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="n">result</span><span class="p">[</span><span class="n">resPos</span><span class="p">]</span> <span class="o">=</span> <span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+          <span class="n">perm</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">str</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">resPos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </pre>
   </div>
  </body>
