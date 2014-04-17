@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-dfc6417658d5b6b7dd3d1e58c09c2c25dee7506e.css" />
-  <link rel="stylesheet" href="style_cache/github2-b564d9e99bd5747d2d0901c61c403e758a5e5ef1.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-a687b0143289bd423496ec9d647f9fc3d3658f04.css" />
+  <link rel="stylesheet" href="style_cache/github2-87324053b23976a533e826dadeb355628991adcc.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -104,320 +104,367 @@
 		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
 			<html>
  <body>
-  <h1>
-   <a class="anchor" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0%E7%BB%AD%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E7%83%AD%E9%97%A8%E6%9F%A5%E8%AF%A2%E7%BB%9F%E8%AE%A1" name="user-content-%E7%AC%AC%E4%B8%89%E7%AB%A0%E7%BB%AD%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E7%83%AD%E9%97%A8%E6%9F%A5%E8%AF%A2%E7%BB%9F%E8%AE%A1">
+  <h2>
+   <a class="anchor" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E7%AB%A0%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95" name="user-content-%E7%AC%AC%E4%BA%8C%E5%8D%81%E7%AB%A0%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95">
     <span class="octicon octicon-link">
     </span>
    </a>
-   第三章续：搜索引擎热门查询统计
-  </h1>
+   第二十章、一致性哈希算法
+  </h2>
   <p>
-   <strong>
-    题目描述
-   </strong>
-   ：
-搜索引擎会通过日志文件把用户每次检索使用的所有检索串都记录下来，每个查询串的长度为1-255字节。
-   <br/>
-   假设目前有一千万个记录（这些查询串的重复度比较高，虽然总数是1千万，但如果除去重复后，不超过3百万个。一个查询串的重复度越高，说明查询它的用户越多，也就是越热门。），请你统计最热门的10个查询串，要求使用的内存不能超过1G。
+   tencent2012笔试题附加题
   </p>
   <p>
-   分析：这个问题在之前的这篇文章
-   <a href="http://blog.csdn.net/v_JULY_v/article/details/6256463">
-    十一、从头到尾彻底解析Hash表算法
-   </a>
-   里，已经有所解答。方法是:
+   问题描述： 例如手机朋友网有n个服务器，为了方便用户的访问会在服务器上缓存数据，因此用户每次访问的时候最好能保持同一台服务器。
   </p>
   <p>
-   <strong>
-    第一步
-   </strong>
-   、先对这批海量数据预处理，在O(N)的时间内用Hash表完成统计；
-   <br/>
-   <strong>
-    第二步
-   </strong>
-   、借助堆这个数据结构，找出Top K，时间复杂度为N‘logK。
-   <br/>
-   即，借助堆结构，我们可以在log量级的时间内查找和调整/移动。因此，维护一个K(该题目中是10)大小的小根堆（K1&gt;K2&gt;....Kmin，Kmin设为堆顶元素），然后遍历300万的Query，分别和根元素Kmin进行对比比较（如上第2节思路3所述，若X&gt;Kmin，则更新并调整堆，否则，不更新），我们最终的时间复杂度是：O(N) + N'*O(logK)，（N为1000万，N’为300万）。
+   已有的做法是根据ServerIPIndex[QQNUM%n]得到请求的服务器，这种方法很方便将用户分到不同的服务器上去。但是如果一台服务器死掉了，那么n就变为了n-1，那么ServerIPIndex[QQNUM%n]与ServerIPIndex[QQNUM%（n-1）]基本上都不一样了，所以大多数用户的请求都会转到其他服务器，这样会发生大量访问错误。
   </p>
   <p>
-   或者：采用trie树，关键字域存该查询串出现的次数，没有出现为0。最后用10个元素的最小推来对出现频率进行排序。
+   问： 如何改进或者换一种方法，使得：
   </p>
   <p>
-   ok，本章里，咱们来实现这个问题，为了降低实现上的难度，假设这些记录全部是一些英文单词，即用户在搜索框里敲入一个英文单词，然后查询搜索结果，最后，要你统计输入单词中频率最大的前K个单词。ok，复杂问题简单化了之后，编写代码实现也相对轻松多了，画的简单示意图（绘制者，yansha），如下：
+   (1) 一台服务器死掉后，不会造成大面积的访问错误，
   </p>
   <p>
-   <a href="../images/3/3.1/3.1.1.jpg" target="_blank">
-    <img alt="" src="../images/3/3.1/3.1.1.jpg" style="max-width:100%;"/>
-   </a>
+   (2)原有的访问基本还是停留在同一台服务器上；
   </p>
   <p>
-   <strong>
-    完整源码
-   </strong>
-   ：
+   (3)尽量考虑负载均衡。（思路：往分布式一致哈希算法方面考虑。）
   </p>
-  <div class="highlight highlight-c">
-   <pre><span class="c1">//copyright@yansha &amp;&amp;July</span>
-<span class="c1">//July、updated，2011.05.08</span>
-
-<span class="c1">//题目描述：</span>
-<span class="c1">//搜索引擎会通过日志文件把用户每次检索使用的所有检索串都记录下来，每个查询串的</span>
-<span class="c1">//长度为1-255字节。假设目前有一千万个记录（这些查询串的重复度比较高，虽然总数是1千万，但如果</span>
-<span class="c1">//除去重复后，不超过3百万个。一个查询串的重复度越高，说明查询它的用户越多，也就是越热门），</span>
-<span class="c1">//请你统计最热门的10个查询串，要求使用的内存不能超过1G。</span>
-
-<span class="cp">#include &lt;iostream&gt;</span>
-<span class="cp">#include &lt;stdio.h&gt;</span>
-<span class="cp">#include &lt;string.h&gt;</span>
-<span class="cp">#include &lt;assert.h&gt;</span>
-<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
-
-<span class="cp">#define HASHLEN 2807303</span>
-<span class="cp">#define WORDLEN 30</span>
-
-<span class="c1">// 结点指针</span>
-<span class="k">typedef</span> <span class="k">struct</span> <span class="n">node_no_space</span> <span class="o">*</span><span class="n">ptr_no_space</span><span class="p">;</span>
-<span class="k">typedef</span> <span class="k">struct</span> <span class="n">node_has_space</span> <span class="o">*</span><span class="n">ptr_has_space</span><span class="p">;</span>
-<span class="n">ptr_no_space</span> <span class="n">head</span><span class="p">[</span><span class="n">HASHLEN</span><span class="p">];</span>
-
-<span class="k">struct</span> <span class="n">node_no_space</span>
-<span class="p">{</span>
-    <span class="kt">char</span> <span class="o">*</span><span class="n">word</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">count</span><span class="p">;</span>
-    <span class="n">ptr_no_space</span> <span class="n">next</span><span class="p">;</span>
-<span class="p">};</span>
-
-<span class="k">struct</span> <span class="n">node_has_space</span>
-<span class="p">{</span>
-    <span class="kt">char</span> <span class="n">word</span><span class="p">[</span><span class="n">WORDLEN</span><span class="p">];</span>
-    <span class="kt">int</span> <span class="n">count</span><span class="p">;</span>
-    <span class="n">ptr_has_space</span> <span class="n">next</span><span class="p">;</span>
-<span class="p">};</span>
-
-<span class="c1">// 最简单hash函数</span>
-<span class="kt">int</span> <span class="nf">hash_function</span><span class="p">(</span><span class="kt">char</span> <span class="k">const</span> <span class="o">*</span><span class="n">p</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">value</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="o">*</span><span class="n">p</span> <span class="o">!=</span> <span class="sc">'\0'</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span> <span class="o">*</span> <span class="mi">31</span> <span class="o">+</span> <span class="o">*</span><span class="n">p</span><span class="o">++</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">value</span> <span class="o">&gt;</span> <span class="n">HASHLEN</span><span class="p">)</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span> <span class="o">%</span> <span class="n">HASHLEN</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">value</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="c1">// 添加单词到hash表</span>
-<span class="kt">void</span> <span class="nf">append_word</span><span class="p">(</span><span class="kt">char</span> <span class="k">const</span> <span class="o">*</span><span class="n">str</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="n">hash_function</span><span class="p">(</span><span class="n">str</span><span class="p">);</span>
-    <span class="n">ptr_no_space</span> <span class="n">p</span> <span class="o">=</span> <span class="n">head</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">p</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">word</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">count</span><span class="p">)</span><span class="o">++</span><span class="p">;</span>
-            <span class="k">return</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="c1">// 新建一个结点</span>
-    <span class="n">ptr_no_space</span> <span class="n">q</span> <span class="o">=</span> <span class="n">new</span> <span class="n">node_no_space</span><span class="p">;</span>
-    <span class="n">q</span><span class="o">-&gt;</span><span class="n">count</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="n">q</span><span class="o">-&gt;</span><span class="n">word</span> <span class="o">=</span> <span class="n">new</span> <span class="kt">char</span> <span class="p">[</span><span class="n">strlen</span><span class="p">(</span><span class="n">str</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
-    <span class="n">strcpy</span><span class="p">(</span><span class="n">q</span><span class="o">-&gt;</span><span class="n">word</span><span class="p">,</span> <span class="n">str</span><span class="p">);</span>
-    <span class="n">q</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">head</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
-    <span class="n">head</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">q</span><span class="p">;</span>
-<span class="p">}</span>
-
-
-<span class="c1">// 将单词处理结果写入文件</span>
-<span class="kt">void</span> <span class="nf">write_to_file</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">"result.txt"</span><span class="p">,</span> <span class="s">"w"</span><span class="p">);</span>
-    <span class="n">assert</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
-
-    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">HASHLEN</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">ptr_no_space</span> <span class="n">p</span> <span class="o">=</span> <span class="n">head</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="n">p</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">;</span> <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span>
-            <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%s  %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">word</span><span class="p">,</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">count</span><span class="p">);</span>
-        <span class="n">i</span><span class="o">++</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="n">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="c1">// 从上往下筛选，保持小根堆</span>
-<span class="kt">void</span> <span class="nf">sift_down</span><span class="p">(</span><span class="n">node_has_space</span> <span class="n">heap</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">len</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">min_index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">i</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="n">len</span> <span class="o">&amp;&amp;</span> <span class="n">heap</span><span class="p">[</span><span class="n">left</span><span class="p">].</span><span class="n">count</span> <span class="o">&lt;</span> <span class="n">heap</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">count</span><span class="p">)</span>
-        <span class="n">min_index</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span>
-    <span class="k">else</span>
-        <span class="n">min_index</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="n">right</span> <span class="o">&lt;=</span> <span class="n">len</span> <span class="o">&amp;&amp;</span> <span class="n">heap</span><span class="p">[</span><span class="n">right</span><span class="p">].</span><span class="n">count</span> <span class="o">&lt;</span> <span class="n">heap</span><span class="p">[</span><span class="n">min_index</span><span class="p">].</span><span class="n">count</span><span class="p">)</span>
-        <span class="n">min_index</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="n">min_index</span> <span class="o">!=</span> <span class="n">i</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="c1">// 交换结点元素</span>
-        <span class="n">swap</span><span class="p">(</span><span class="n">heap</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">count</span><span class="p">,</span> <span class="n">heap</span><span class="p">[</span><span class="n">min_index</span><span class="p">].</span><span class="n">count</span><span class="p">);</span>
-
-        <span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="n">WORDLEN</span><span class="p">];</span>
-        <span class="n">strcpy</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">heap</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">word</span><span class="p">);</span>
-        <span class="n">strcpy</span><span class="p">(</span><span class="n">heap</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">word</span><span class="p">,</span> <span class="n">heap</span><span class="p">[</span><span class="n">min_index</span><span class="p">].</span><span class="n">word</span><span class="p">);</span>
-        <span class="n">strcpy</span><span class="p">(</span><span class="n">heap</span><span class="p">[</span><span class="n">min_index</span><span class="p">].</span><span class="n">word</span><span class="p">,</span> <span class="n">buffer</span><span class="p">);</span>
-
-        <span class="n">sift_down</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">min_index</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="c1">// 建立小根堆</span>
-<span class="kt">void</span> <span class="nf">build_min_heap</span><span class="p">(</span><span class="n">node_has_space</span> <span class="n">heap</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">len</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">;</span>
-
-    <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="n">len</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">index</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
-        <span class="n">sift_down</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="c1">// 去除字符串前后符号</span>
-<span class="kt">void</span> <span class="nf">handle_symbol</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">&lt;</span> <span class="sc">'0'</span> <span class="o">||</span> <span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">&gt;</span> <span class="sc">'9'</span> <span class="o">&amp;&amp;</span> <span class="n">str</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">&lt;</span> <span class="sc">'A'</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">&gt;</span> <span class="sc">'Z'</span> <span class="o">&amp;&amp;</span> <span class="n">str</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">&lt;</span> <span class="sc">'a'</span><span class="p">)</span> <span class="o">||</span> <span class="n">str</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">&gt;</span> <span class="sc">'z'</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">str</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span>
-        <span class="n">n</span><span class="o">--</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">while</span> <span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="sc">'0'</span> <span class="o">||</span> <span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="sc">'9'</span> <span class="o">&amp;&amp;</span> <span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="sc">'A'</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="sc">'Z'</span> <span class="o">&amp;&amp;</span> <span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="sc">'a'</span><span class="p">)</span> <span class="o">||</span> <span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="sc">'z'</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
-            <span class="n">i</span><span class="o">++</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span>
-        <span class="n">n</span><span class="o">--</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">char</span> <span class="n">str</span><span class="p">[</span><span class="n">WORDLEN</span><span class="p">];</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">HASHLEN</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-        <span class="n">head</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-
-    <span class="c1">// 将字符串用hash函数转换成一个整数并统计出现频率</span>
-    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp_passage</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">"string.txt"</span><span class="p">,</span> <span class="s">"r"</span><span class="p">);</span>
-    <span class="n">assert</span><span class="p">(</span><span class="n">fp_passage</span><span class="p">);</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">fscanf</span><span class="p">(</span><span class="n">fp_passage</span><span class="p">,</span> <span class="s">"%s"</span><span class="p">,</span> <span class="n">str</span><span class="p">)</span> <span class="o">!=</span> <span class="n">EOF</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">str</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="n">handle_symbol</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
-        <span class="n">append_word</span><span class="p">(</span><span class="n">str</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="n">fclose</span><span class="p">(</span><span class="n">fp_passage</span><span class="p">);</span>
-
-    <span class="c1">// 将统计结果输入文件</span>
-    <span class="n">write_to_file</span><span class="p">();</span>
-
-    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
-    <span class="n">ptr_has_space</span> <span class="n">heap</span> <span class="o">=</span> <span class="n">new</span> <span class="n">node_has_space</span> <span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
-
-    <span class="kt">int</span> <span class="n">c</span><span class="p">;</span>
-
-    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp_word</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">"result.txt"</span><span class="p">,</span> <span class="s">"r"</span><span class="p">);</span>
-    <span class="n">assert</span><span class="p">(</span><span class="n">fp_word</span><span class="p">);</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">fscanf</span><span class="p">(</span><span class="n">fp_word</span><span class="p">,</span> <span class="s">"%s %d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">str</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">c</span><span class="p">);</span>
-        <span class="n">heap</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">count</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
-        <span class="n">strcpy</span><span class="p">(</span><span class="n">heap</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">word</span><span class="p">,</span> <span class="n">str</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="c1">// 建立小根堆</span>
-    <span class="n">build_min_heap</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
-
-    <span class="c1">// 查找出现频率最大的10个单词</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">fscanf</span><span class="p">(</span><span class="n">fp_word</span><span class="p">,</span> <span class="s">"%s %d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">str</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">c</span><span class="p">)</span> <span class="o">!=</span> <span class="n">EOF</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">c</span> <span class="o">&gt;</span> <span class="n">heap</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">count</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">heap</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">count</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
-            <span class="n">strcpy</span><span class="p">(</span><span class="n">heap</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">word</span><span class="p">,</span> <span class="n">str</span><span class="p">);</span>
-            <span class="n">sift_down</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="n">fclose</span><span class="p">(</span><span class="n">fp_word</span><span class="p">);</span>
-
-    <span class="c1">// 输出出现频率最大的单词</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">)</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">heap</span><span class="p">[</span><span class="n">k</span><span class="p">].</span><span class="n">count</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="n">heap</span><span class="p">[</span><span class="n">k</span><span class="p">].</span><span class="n">word</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
-  </div>
+  <ol>
+   <li>
+    <p>
+     最土的办法还是用模余方法：做法很简单，假设有N台服务器，现在完好的是M（M&lt;=N),先用N求模，如果不落在完好的机器上，然后再用N-1求模，直到M.这种方式对于坏的机器不多的情况下，具有更好的稳定性。
+    </p>
+   </li>
+   <li>
+    <p>
+     一致性哈希算法。
+    </p>
+   </li>
+  </ol>
   <p>
-   <strong>
-    程序测试
-   </strong>
-   ：咱们接下来，来对下面的通过用户输入单词后，搜索引擎记录下来，“大量”单词记录进行统计（同时，令K=10，即要你找出10个最热门查询的单词）：
-  </p>
-  <p>
-   <a href="../images/3/3.1/3.1.2.jpg" target="_blank">
-    <img alt="" src="../images/3/3.1/3.1.2.jpg" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   <strong>
-    运行结果
-   </strong>
-   ：根据程序的运行结果，可以看到，搜索引擎记录下来的查询次数最多的10个单词为（注，并未要求这10个数要有序输出）：in（312次），it（384次），a（432），that（456），MPQ（408），of（504），and（624），is（456），the（1008），to（936）。
-  </p>
-  <p>
-   <a href="../images/3/3.1/3.1.3.jpg" target="_blank">
-    <img alt="" src="../images/3/3.1/3.1.3.jpg" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   <strong>
-    读者反馈from 杨忠胜
-   </strong>
-   ：3.1节的代码第38行 hash_function(char const *p)有误吧，这样的话，不能修改p的值（但是函数需要修改指针的值），要想不修改*p指向的内容，应该是const char *p; 此外，您程序中的/t,  /n有误，C语言是\t,\n。
-   <br/>
-   感谢这位读者的来信，日后统一订正。谢谢。
+   下面，本文剩下部分重点来讲讲这个一致性哈希算法。
   </p>
   <h3>
-   <a class="anchor" href="#%E6%89%A9%E5%B1%95%E7%BB%9F%E8%AE%A1%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E6%95%B0%E6%8D%AE" name="user-content-%E6%89%A9%E5%B1%95%E7%BB%9F%E8%AE%A1%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E6%95%B0%E6%8D%AE">
+   <a class="anchor" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF" name="user-content-%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF">
     <span class="octicon octicon-link">
     </span>
    </a>
-   扩展、统计出现次数最多的数据
+   应用场景
   </h3>
   <p>
-   <strong>
-    题目描述
-   </strong>
-   ：
-给你上千万或上亿数据（有重复），统计其中出现次数最多的前N个数据。
+   在做服务器负载均衡时候可供选择的负载均衡的算法有很多，包括：  轮循算法（Round Robin）、哈希算法（HASH）、最少连接算法（Least Connection）、响应速度算法（Response Time）、加权法（Weighted ）等。其中哈希算法是最为常用的算法.
   </p>
   <p>
-   分析：上千万或上亿的数据，现在的机器的内存应该能存下（也许可以，也许不可以）。所以考虑采用hash_map/搜索二叉树/红黑树等来进行统计次数。然后就是取出前N个出现次数最多的数据了。当然，也可以堆实现。
+   典型的应用场景是： 有N台服务器提供缓存服务，需要对服务器进行负载均衡，将请求平均分发到每台服务器上，每台机器负责1/N的服务。
   </p>
   <p>
-   ok，此题与上题类似，最好的方法是用hash_map统计出现的次数，然后再借用堆找出出现次数最多的N个数据。不过，上一题统计搜索引擎最热门的查询已经采用过hash表统计单词出现的次数，特此，本题咱们改用红黑树取代之前的用hash表，来完成最初的统计，然后用堆更新，找出出现次数最多的前N个数据。
+   常用的算法是对hash结果取余数 (hash() mod N)：对机器编号从0到N-1，按照自定义的hash()算法，对每个请求的hash()值按N取模，得到余数i，然后将请求分发到编号为i的机器。但这样的算法方法存在致命问题，如果某一台机器宕机，那么应该落在该机器的请求就无法得到正确的处理，这时需要将当掉的服务器从算法从去除，此时候会有(N-1)/N的服务器的缓存数据需要重新进行计算；如果新增一台机器，会有N /(N+1)的服务器的缓存数据需要进行重新计算。对于系统而言，这通常是不可接受的颠簸（因为这意味着大量缓存的失效或者数据需要转移）。那么，如何设计一个负载均衡策略，使得受到影响的请求尽可能的少呢？
+  </p>
+  <p>
+   在Memcached、Key-Value Store、Bittorrent DHT、LVS中都采用了Consistent Hashing算法，可以说Consistent Hashing 是分布式系统负载均衡的首选算法。
+  </p>
+  <h3>
+   <a class="anchor" href="#consistent-hashing%E7%AE%97%E6%B3%95%E6%8F%8F%E8%BF%B0" name="user-content-consistent-hashing%E7%AE%97%E6%B3%95%E6%8F%8F%E8%BF%B0">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   Consistent Hashing算法描述
+  </h3>
+  <p>
+   下面以Memcached中的Consisten Hashing算法为例说明。
+  </p>
+  <p>
+   consistent hashing 算法早在 1997 年就在论文
+   <a href="http://dl.acm.org/citation.cfm?id=258660">
+    Consistent hashing and random trees
+   </a>
+   中被提出，目前在 cache 系统中应用越来越广泛；
+  </p>
+  <h3>
+   <a class="anchor" href="#%E5%9F%BA%E6%9C%AC%E5%9C%BA%E6%99%AF" name="user-content-%E5%9F%BA%E6%9C%AC%E5%9C%BA%E6%99%AF">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   基本场景
+  </h3>
+  <p>
+   比如你有 N 个 cache 服务器（后面简称 cache ），那么如何将一个对象 object 映射到 N 个 cache 上呢，你很可能会采用类似下面的通用方法计算 object 的 hash 值，然后均匀的映射到到 N 个 cache ；
+  </p>
+  <p>
+   hash(object)%N
+  </p>
+  <p>
+   一切都运行正常，再考虑如下的两种情况；
+  </p>
+  <ol>
+   <li>
+    一个 cache 服务器 m down 掉了（在实际应用中必须要考虑这种情况），这样所有映射到 cache m 的对象都会失效，怎么办，需要把 cache m 从 cache 中移除，这时候 cache 是 N-1 台，映射公式变成了 hash(object)%(N-1) ；
+   </li>
+   <li>
+    由于访问加重，需要添加 cache ，这时候 cache 是 N+1 台，映射公式变成了 hash(object)%(N+1) ；
+   </li>
+  </ol>
+  <p>
+   1 和 2 意味着什么？这意味着突然之间几乎所有的 cache 都失效了。对于服务器而言，这是一场灾难，洪水般的访问都会直接冲向后台服务器；再来考虑第三个问题，由于硬件能力越来越强，你可能想让后面添加的节点多做点活，显然上面的 hash 算法也做不到。
+  </p>
+  <p>
+   有什么方法可以改变这个状况呢，这就是consistent hashing。
+  </p>
+  <h3>
+   <a class="anchor" href="#hash-%E7%AE%97%E6%B3%95%E5%92%8C%E5%8D%95%E8%B0%83%E6%80%A7" name="user-content-hash-%E7%AE%97%E6%B3%95%E5%92%8C%E5%8D%95%E8%B0%83%E6%80%A7">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   hash 算法和单调性
+  </h3>
+  <p>
+   Hash 算法的一个衡量指标是单调性（ Monotonicity ），定义如下：
+  </p>
+  <p>
+   单调性是指如果已经有一些内容通过哈希分派到了相应的缓冲中，又有新的缓冲加入到系统中。哈希的结果应能够保证原有已分配的内容可以被映射到新的缓冲中去，而不会被映射到旧的缓冲集合中的其他缓冲区。
+  </p>
+  <p>
+   容易看到，上面的简单 hash 算法 hash(object)%N 难以满足单调性要求。
+  </p>
+  <h3>
+   <a class="anchor" href="#consistent-hashing-%E7%AE%97%E6%B3%95%E7%9A%84%E5%8E%9F%E7%90%86" name="user-content-consistent-hashing-%E7%AE%97%E6%B3%95%E7%9A%84%E5%8E%9F%E7%90%86">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   consistent hashing 算法的原理
+  </h3>
+  <p>
+   consistent hashing 是一种 hash 算法，简单的说，在移除 / 添加一个 cache 时，它能够尽可能小的改变已存在 key 映射关系，尽可能的满足单调性的要求。
+  </p>
+  <p>
+   下面就来按照 5 个步骤简单讲讲 consistent hashing 算法的基本原理。
+  </p>
+  <h5>
+   <a class="anchor" href="#%E7%8E%AF%E5%BD%A2hash-%E7%A9%BA%E9%97%B4" name="user-content-%E7%8E%AF%E5%BD%A2hash-%E7%A9%BA%E9%97%B4">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   环形hash 空间
+  </h5>
+  <p>
+   考虑通常的 hash 算法都是将 value 映射到一个 32 为的 key 值，也即是 0~2^32-1 次方的数值空间；我们可以将这个空间想象成一个首（ 0 ）尾（ 2^32-1 ）相接的圆环，如下面图 1 所示的那样。
+  </p>
+  <p>
+   <a href="../images/16%7E20/20.1.jpg" target="_blank">
+    <img alt="" src="../images/16%7E20/20.1.jpg" style="max-width:100%;" title="图 1 环形 hash 空间"/>
+   </a>
+  </p>
+  <p>
+   图 1 环形 hash 空间
+  </p>
+  <h5>
+   <a class="anchor" href="#%E6%8A%8A%E5%AF%B9%E8%B1%A1%E6%98%A0%E5%B0%84%E5%88%B0hash-%E7%A9%BA%E9%97%B4" name="user-content-%E6%8A%8A%E5%AF%B9%E8%B1%A1%E6%98%A0%E5%B0%84%E5%88%B0hash-%E7%A9%BA%E9%97%B4">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   把对象映射到hash 空间
+  </h5>
+  <p>
+   接下来考虑 4 个对象 object1~object4 ，通过 hash 函数计算出的 hash 值 key 在环上的分布如图 2 所示。
+  </p>
+  <p>
+   hash(object1) = key1;
+  </p>
+  <p>
+   … …
+  </p>
+  <p>
+   hash(object4) = key4;
+  </p>
+  <p>
+   <a href="../images/16%7E20/20.2.jpg" target="_blank">
+    <img alt="" src="../images/16%7E20/20.2.jpg" style="max-width:100%;" title="图 2 4 个对象的 key 值分布"/>
+   </a>
+  </p>
+  <p>
+   图 2 4 个对象的 key 值分布
+  </p>
+  <h5>
+   <a class="anchor" href="#%E6%8A%8Acache-%E6%98%A0%E5%B0%84%E5%88%B0hash-%E7%A9%BA%E9%97%B4" name="user-content-%E6%8A%8Acache-%E6%98%A0%E5%B0%84%E5%88%B0hash-%E7%A9%BA%E9%97%B4">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   把cache 映射到hash 空间
+  </h5>
+  <p>
+   Consistent hashing 的基本思想就是将对象和 cache 都映射到同一个 hash 数值空间中，并且使用相同的hash 算法。
+  </p>
+  <p>
+   假设当前有 A,B 和 C 共 3 台 cache ，那么其映射结果将如图 3 所示，他们在 hash 空间中，以对应的 hash值排列。
+  </p>
+  <p>
+   hash(cache A) = key A;
+  </p>
+  <p>
+   … …
+  </p>
+  <p>
+   hash(cache C) = key C;
+  </p>
+  <p>
+   <a href="../images/16%7E20/20.3.jpg" target="_blank">
+    <img alt="" src="../images/16%7E20/20.3.jpg" style="max-width:100%;" title="图 3 cache 和对象的 key 值分布"/>
+   </a>
+  </p>
+  <p>
+   图 3 cache 和对象的 key 值分布
+  </p>
+  <p>
+   说到这里，顺便提一下 cache 的 hash 计算，一般的方法可以使用 cache 机器的 IP 地址或者机器名作为hash 输入。
+  </p>
+  <h5>
+   <a class="anchor" href="#%E6%8A%8A%E5%AF%B9%E8%B1%A1%E6%98%A0%E5%B0%84%E5%88%B0cache" name="user-content-%E6%8A%8A%E5%AF%B9%E8%B1%A1%E6%98%A0%E5%B0%84%E5%88%B0cache">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   把对象映射到cache
+  </h5>
+  <p>
+   现在 cache 和对象都已经通过同一个 hash 算法映射到 hash 数值空间中了，接下来要考虑的就是如何将对象映射到 cache 上面了。
+  </p>
+  <p>
+   在这个环形空间中，如果沿着顺时针方向从对象的 key 值出发，直到遇见一个 cache ，那么就将该对象存储在这个 cache 上，因为对象和 cache 的 hash 值是固定的，因此这个 cache 必然是唯一和确定的。这样不就找到了对象和 cache 的映射方法了吗？！
+  </p>
+  <p>
+   依然继续上面的例子（参见图 3 ），那么根据上面的方法，对象 object1 将被存储到 cache A 上； object2和 object3 对应到 cache C ； object4 对应到 cache B ；
+  </p>
+  <h5>
+   <a class="anchor" href="#%E8%80%83%E5%AF%9Fcache-%E7%9A%84%E5%8F%98%E5%8A%A8" name="user-content-%E8%80%83%E5%AF%9Fcache-%E7%9A%84%E5%8F%98%E5%8A%A8">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   考察cache 的变动
+  </h5>
+  <p>
+   前面讲过，通过 hash 然后求余的方法带来的最大问题就在于不能满足单调性，当 cache 有所变动时，cache 会失效，进而对后台服务器造成巨大的冲击，现在就来分析分析 consistent hashing 算法。
+  </p>
+  <h6>
+   <a class="anchor" href="#%E7%A7%BB%E9%99%A4-cache" name="user-content-%E7%A7%BB%E9%99%A4-cache">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   移除 cache
+  </h6>
+  <p>
+   考虑假设 cache B 挂掉了，根据上面讲到的映射方法，这时受影响的将仅是那些沿 cache B 顺时针遍历直到下一个 cache （ cache C ）之间的对象，也即是本来映射到 cache B 上的那些对象。
+  </p>
+  <p>
+   因此这里仅需要变动对象 object4 ，将其重新映射到 cache C 上即可；参见图 4 。
+  </p>
+  <p>
+   <a href="../images/16%7E20/20.4.jpg" target="_blank">
+    <img alt="" src="../images/16%7E20/20.4.jpg" style="max-width:100%;" title="图 4 Cache B 被移除后的 cache 映射"/>
+   </a>
+  </p>
+  <p>
+   图 4 Cache B 被移除后的 cache 映射
+  </p>
+  <h6>
+   <a class="anchor" href="#%E6%B7%BB%E5%8A%A0-cache" name="user-content-%E6%B7%BB%E5%8A%A0-cache">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   添加 cache
+  </h6>
+  <p>
+   再考虑添加一台新的 cache D 的情况，假设在这个环形 hash 空间中， cache D 被映射在对象 object2 和object3 之间。这时受影响的将仅是那些沿 cache D 逆时针遍历直到下一个 cache （ cache B ）之间的对象（它们是也本来映射到 cache C 上对象的一部分），将这些对象重新映射到 cache D 上即可。
+  </p>
+  <p>
+   因此这里仅需要变动对象 object2 ，将其重新映射到 cache D 上；参见图 5 。
+  </p>
+  <p>
+   <a href="../images/16%7E20/20.5.jpg" target="_blank">
+    <img alt="" src="../images/16%7E20/20.5.jpg" style="max-width:100%;" title="图 5 添加 cache D 后的映射关系"/>
+   </a>
+  </p>
+  <p>
+   图 5 添加 cache D 后的映射关系
+  </p>
+  <h4>
+   <a class="anchor" href="#%E8%99%9A%E6%8B%9F%E8%8A%82%E7%82%B9" name="user-content-%E8%99%9A%E6%8B%9F%E8%8A%82%E7%82%B9">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   虚拟节点
+  </h4>
+  <p>
+   考量 Hash 算法的另一个指标是平衡性 (Balance) ，定义如下：
+  </p>
+  <h5>
+   <a class="anchor" href="#%E5%B9%B3%E8%A1%A1%E6%80%A7" name="user-content-%E5%B9%B3%E8%A1%A1%E6%80%A7">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   平衡性
+  </h5>
+  <p>
+   平衡性是指哈希的结果能够尽可能分布到所有的缓冲中去，这样可以使得所有的缓冲空间都得到利用。
+  </p>
+  <p>
+   hash 算法并不是保证绝对的平衡，如果 cache 较少的话，对象并不能被均匀的映射到 cache 上，比如在上面的例子中，仅部署 cache A 和 cache C 的情况下，在 4 个对象中， cache A 仅存储了 object1 ，而 cache C 则存储了 object2 、 object3 和 object4 ；分布是很不均衡的。
+  </p>
+  <p>
+   为了解决这种情况， consistent hashing 引入了“虚拟节点”的概念，它可以如下定义：
+  </p>
+  <p>
+   “虚拟节点”（ virtual node ）是实际节点在 hash 空间的复制品（ replica ），一实际个节点对应了若干个“虚拟节点”，这个对应个数也成为“复制个数”，“虚拟节点”在 hash 空间中以 hash 值排列。
+  </p>
+  <p>
+   仍以仅部署 cache A 和 cache C 的情况为例，在图 4 中我们已经看到， cache 分布并不均匀。现在我们引入虚拟节点，并设置“复制个数”为 2 ，这就意味着一共会存在 4 个“虚拟节点”， cache A1, cache A2 代表了 cache A ； cache C1, cache C2 代表了 cache C ；假设一种比较理想的情况，参见图 6 。
+  </p>
+  <p>
+   <a href="../images/16%7E20/20.6.jpg" target="_blank">
+    <img alt="" src="../images/16%7E20/20.6.jpg" style="max-width:100%;" title="图 6 引入“虚拟节点”后的映射关系"/>
+   </a>
+  </p>
+  <p>
+   图 6 引入“虚拟节点”后的映射关系
+  </p>
+  <p>
+   此时，对象到“虚拟节点”的映射关系为：
+  </p>
+  <p>
+   objec1-&gt;cache A2 ； objec2-&gt;cache A1 ； objec3-&gt;cache C1 ； objec4-&gt;cache C2 ；
+  </p>
+  <p>
+   因此对象 object1 和 object2 都被映射到了 cache A 上，而 object3 和 object4 映射到了 cache C 上；平衡性有了很大提高。
+  </p>
+  <p>
+   引入“虚拟节点”后，映射关系就从 { 对象 -&gt; 节点 } 转换到了 { 对象 -&gt; 虚拟节点 } 。查询物体所在 cache时的映射关系如图 7 所示。
+  </p>
+  <p>
+   <a href="../images/16%7E20/20.7.jpg" target="_blank">
+    <img alt="" src="../images/16%7E20/20.7.jpg" style="max-width:100%;" title="图 7 查询对象所在 cache"/>
+   </a>
+  </p>
+  <p>
+   图 7 查询对象所在 cache
+  </p>
+  <p>
+   “虚拟节点”的 hash 计算可以采用对应节点的 IP 地址加数字后缀的方式。例如假设 cache A 的 IP 地址为202.168.14.241 。
+  </p>
+  <p>
+   引入“虚拟节点”前，计算 cache A 的 hash 值：
+  </p>
+  <p>
+   Hash(“202.168.14.241”);
+  </p>
+  <p>
+   引入“虚拟节点”后，计算“虚拟节”点 cache A1 和 cache A2 的 hash 值：
+  </p>
+  <p>
+   Hash(“202.168.14.241#1”);  // cache A1
+  </p>
+  <p>
+   Hash(“202.168.14.241#2”);  // cache A2
   </p>
  </body>
 </html>
