@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-a687b0143289bd423496ec9d647f9fc3d3658f04.css" />
-  <link rel="stylesheet" href="style_cache/github2-87324053b23976a533e826dadeb355628991adcc.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-5da842ffec8a31b5975487ab1278c7ac16876671.css" />
+  <link rel="stylesheet" href="style_cache/github2-0a16120e50749ebd0a7bbb45d3c848b65919ec7e.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -456,6 +456,77 @@
     http://stackoverflow.com/questions/9047908/swap-the-elements-of-two-sequences-such-that-the-difference-of-the-element-sums
    </a>
    。感兴趣的可以看看。
+  </p>
+  <h2>
+   <a class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   举一反三
+  </h2>
+  <p>
+   1、《挑战程序设计竞赛》的开票有个类似的抽签问题，挺有意思，题目如下：
+  </p>
+  <p>
+   将写有数字的n个纸片放入一个纸箱子中，然后你和你的朋友从纸箱子中抽取4张纸片，每次记下纸片上的数字后放回子箱子中，如果这4个数字的和是m，代表你赢，否则就是你的朋友赢。
+  </p>
+  <p>
+   请编写一个程序，当纸片上所写的数字是k1，k2，k3，k4，..，kn时，是否存在抽取4次和为m的方案，如果存在，输出YES；否则，输出NO。
+  </p>
+  <p>
+   限制条件：
+  </p>
+  <ul>
+   <li>
+    1 &lt;= n &lt;= 50
+   </li>
+   <li>
+    1 &lt;= m &lt;= 10^8
+   </li>
+   <li>
+    1 &lt;= ki &lt;= 10^8
+   </li>
+  </ul>
+  <p>
+   分析：最容易想到的方案是用4个for循环直接穷举所有方案，时间复杂度为O（N^4）,主体代码如下：
+  </p>
+  <div class="highlight highlight-c">
+   <pre><span class="c1">//通过4重for循环枚举所有方案</span>
+<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">,</span> <span class="n">a</span><span class="o">++</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">b</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">b</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">b</span><span class="o">++</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">+</span> <span class="n">k</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">+</span> <span class="n">k</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">+</span> <span class="n">k</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">f</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
+  </div>
+  <p>
+   但如果当n远大于50时，则程序会显得非常吃力，如此，我们需要找到更好的办法。
+  </p>
+  <p>
+   提供两个思路：
+  </p>
+  <p>
+   ①最内侧关于d的循环所做的事情：检查是否有d满足ka+ kb +kc + kd = m，移动下式子，等价于：检查是否有d使得kd = m - ka - kb - kc，也就是说，只要检查k中所有元素，判断是否有等于m-ka-kb-ka 的元素即可。设m-ka-kb-ka = x，接下来，就是要看x是否存在于数组k中，此时，可以先把数组k排序，然后利用二分查找在数组k中找x；
+  </p>
+  <p>
+   ②进一步，内侧的两个循环所做的事情：检查是否有c和d满足kc + kd = m - ka -kb。同样，可以预先枚举出kc+kd所得的n^2数字并排好序，便可以利用二分搜索继续求解。
+  </p>
+  <p>
+   2、给定整数a1、a2、a3、...、an，判断是否可以从中选出若干个数，使得它们的和等于k（k任意给定，且满足-10^8 &lt;= k &lt;= 10^8）。
+  </p>
+  <p>
+   分析：此题相对于本节“寻找满足条件的多个数”如出一辙，不同的是此题只要求判断，不要求把所有可能的组合给输出来。因为此题需要考虑到加上a[i]和不加上a[i]的情况，故可以采用深度优先搜索的办法，递归解决。
   </p>
  </body>
 </html>
