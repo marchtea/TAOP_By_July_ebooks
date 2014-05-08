@@ -105,11 +105,11 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#%E7%AC%AC%E4%B8%89%E5%8D%81%E4%B8%80%E7%AB%A0%E5%B8%A6%E9%80%9A%E9%85%8D%E7%AC%A6%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E9%97%AE%E9%A2%98" name="user-content-%E7%AC%AC%E4%B8%89%E5%8D%81%E4%B8%80%E7%AB%A0%E5%B8%A6%E9%80%9A%E9%85%8D%E7%AC%A6%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E9%97%AE%E9%A2%98">
+   <a class="anchor" href="#%E5%B8%A6%E9%80%9A%E9%85%8D%E7%AC%A6%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E9%97%AE%E9%A2%98" name="user-content-%E5%B8%A6%E9%80%9A%E9%85%8D%E7%AC%A6%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E9%97%AE%E9%A2%98">
     <span class="octicon octicon-link">
     </span>
    </a>
-   第三十一章：带通配符的字符串匹配问题
+   带通配符的字符串匹配问题
   </h1>
   <p>
    字符串匹配问题，给定一串字符串，按照指定规则对其进行匹配，并将匹配的结果保存至output数组中，多个匹配项用空格间隔，最后一个不需要空格。
@@ -156,11 +156,11 @@
    3. input=aaa，rule=aa时，返回一个结果aa，即可。
   </p>
   <h2>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80%E7%9B%B4%E6%8E%A5%E5%8C%B9%E9%85%8D" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80%E7%9B%B4%E6%8E%A5%E5%8C%B9%E9%85%8D">
     <span class="octicon octicon-link">
     </span>
    </a>
-   解法一
+   解法一、直接匹配
   </h2>
   <p>
    本题与上述第三十章的题不同，上题字符串转换成整数更多考察对思维的全面性和对细节的处理，本题则更多的是编程技巧。闲不多说，直接上代码：
@@ -406,20 +406,103 @@
 <span class="p">}</span>
 </pre>
   </div>
-  <h2>
-   <a class="anchor" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E5%8F%8A%E6%8E%A8%E8%8D%90%E9%98%85%E8%AF%BB" name="user-content-%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E5%8F%8A%E6%8E%A8%E8%8D%90%E9%98%85%E8%AF%BB">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   参考文献及推荐阅读
-  </h2>
-  <p>
-   1.字符串匹配问题题目
-   <a href="http://hero.pongo.cn/Question/Details?ID=28&amp;ExamID=28">
-    完整描述
-   </a>
-   ；
-  </p>
+  <div class="highlight highlight-java">
+   <pre>
+    <span class="cm">/**</span>
+<span class="cm">     * 平均O(n+m)  最坏O(n*m)</span>
+<span class="cm">     * 约定 * : ANY&gt;=0    ,   ? : ANY=1</span>
+<span class="cm">     *</span>
+<span class="cm">     * @author Spance.Wong</span>
+<span class="cm">     */</span>
+    <span class="kd">static</span> <span class="kd">class</span> <span class="nc">WildCardMatcher</span> <span class="o">{</span>
+
+        <span class="cm">/**</span>
+<span class="cm">         * 仅为了方便实验</span>
+<span class="cm">         *</span>
+<span class="cm">         * @param input</span>
+<span class="cm">         * @param pattern</span>
+<span class="cm">         * @return</span>
+<span class="cm">         */</span>
+        <span class="kd">static</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">matches</span><span class="o">(</span><span class="n">String</span> <span class="n">input</span><span class="o">,</span> <span class="n">String</span> <span class="n">pattern</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">String</span><span class="o">[]</span> <span class="n">pa</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">"\\*+"</span><span class="o">);</span>    <span class="c1">// 分割不是重点，故未做重点实现</span>
+            <span class="k">return</span> <span class="nf">matches</span><span class="o">(</span><span class="n">input</span><span class="o">,</span> <span class="n">pa</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="cm">/**</span>
+<span class="cm">         * 从input中查找通配符序列</span>
+<span class="cm">         *</span>
+<span class="cm">         * @param input</span>
+<span class="cm">         * @param patterns</span>
+<span class="cm">         * @return</span>
+<span class="cm">         */</span>
+        <span class="kd">static</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">matches</span><span class="o">(</span><span class="n">CharSequence</span> <span class="n">input</span><span class="o">,</span> <span class="n">String</span><span class="o">[]</span> <span class="n">patterns</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">input</span><span class="o">.</span><span class="na">length</span><span class="o">(),</span> <span class="n">m</span> <span class="o">=</span> <span class="n">patterns</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;();</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">,</span> <span class="n">right</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>   <span class="c1">// 以i为起点，执行m趟匹配，每趟i至少前进p[j].length长度</span>
+                    <span class="kt">long</span> <span class="n">region</span> <span class="o">=</span> <span class="n">lookBehind</span><span class="o">(</span><span class="n">input</span><span class="o">,</span> <span class="n">i</span><span class="o">,</span> <span class="n">patterns</span><span class="o">[</span><span class="n">j</span><span class="o">]);</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">j</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">region</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>   <span class="c1">// 模式序列的第二个开始使用贪婪匹配</span>
+                        <span class="kt">long</span> <span class="n">greedyRegion</span><span class="o">;</span>
+                        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">region</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span> <span class="o">;</span> <span class="n">k</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">greedyRegion</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="n">greedyRegion</span> <span class="o">=</span> <span class="n">lookBehind</span><span class="o">(</span><span class="n">input</span><span class="o">,</span> <span class="n">k</span><span class="o">,</span> <span class="n">patterns</span><span class="o">[</span><span class="n">j</span><span class="o">]);</span>
+                            <span class="k">if</span> <span class="o">(</span><span class="n">greedyRegion</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span>    <span class="c1">// 贪婪找到，继续贪婪尝试</span>
+                                <span class="n">region</span> <span class="o">=</span> <span class="n">greedyRegion</span><span class="o">;</span>
+                            <span class="k">else</span>
+                                <span class="k">break</span><span class="o">;</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">region</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>   <span class="c1">// pattern[j]失败，则本趟失败</span>
+                        <span class="n">i</span> <span class="o">=</span> <span class="o">((</span><span class="kt">int</span><span class="o">)</span> <span class="o">-</span><span class="n">region</span><span class="o">)</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+                        <span class="k">break</span><span class="o">;</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                        <span class="n">i</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">region</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="n">j</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span>     <span class="c1">// 模式序列的第一个找到，记左边界，在高32位</span>
+                            <span class="n">left</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">region</span> <span class="o">&gt;&gt;</span> <span class="mi">32</span><span class="o">);</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="n">j</span> <span class="o">==</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span>     <span class="c1">// 模式序列的最后一个找到，记右边界，在低32位</span>
+                            <span class="n">right</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">region</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">left</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">right</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">)</span>
+                    <span class="n">result</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">input</span><span class="o">.</span><span class="na">subSequence</span><span class="o">(</span><span class="n">left</span><span class="o">,</span> <span class="n">right</span> <span class="o">+</span> <span class="mi">1</span><span class="o">).</span><span class="na">toString</span><span class="o">());</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="cm">/**</span>
+<span class="cm">         * 在input的i位置开始向后扫描非贪婪查找pattern，在pattern尾匹配时回溯确认</span>
+<span class="cm">         *</span>
+<span class="cm">         * @param in</span>
+<span class="cm">         * @param i</span>
+<span class="cm">         * @param pattern</span>
+<span class="cm">         * @return</span>
+<span class="cm">         */</span>
+        <span class="kd">static</span> <span class="kt">long</span> <span class="nf">lookBehind</span><span class="o">(</span><span class="n">CharSequence</span> <span class="n">in</span><span class="o">,</span> <span class="kt">int</span> <span class="n">i</span><span class="o">,</span> <span class="n">CharSequence</span> <span class="n">pattern</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">in</span><span class="o">.</span><span class="na">length</span><span class="o">(),</span> <span class="n">pLen</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="na">length</span><span class="o">(),</span> <span class="n">_pMax</span> <span class="o">=</span> <span class="n">pLen</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="kt">char</span> <span class="n">pEnd</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">_pMax</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">len</span> <span class="o">-</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">pLen</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">for</span> <span class="o">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">_pMax</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>  <span class="c1">// 以 i + pLen - 1 起步</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">in</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">==</span> <span class="n">pEnd</span> <span class="o">||</span> <span class="n">pEnd</span> <span class="o">==</span> <span class="sc">'?'</span><span class="o">)</span> <span class="o">{</span>     <span class="c1">// 与pa末尾相同，i即右边界</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="n">pLen</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span>
+                            <span class="k">return</span> <span class="o">((</span><span class="kt">long</span><span class="o">)</span> <span class="n">i</span><span class="o">)</span> <span class="o">&lt;&lt;</span> <span class="mi">32</span> <span class="o">|</span> <span class="n">i</span><span class="o">;</span>
+                        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">_pMax</span><span class="o">;</span> <span class="n">j</span><span class="o">--)</span> <span class="o">{</span>   <span class="c1">// 则至多回溯pLen长找左边界</span>
+                            <span class="kt">char</span> <span class="n">p</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">_pMax</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="o">);</span>
+                            <span class="k">if</span> <span class="o">(</span><span class="n">in</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">j</span><span class="o">)</span> <span class="o">==</span> <span class="n">p</span> <span class="o">||</span> <span class="n">p</span> <span class="o">==</span> <span class="sc">'?'</span><span class="o">)</span> <span class="o">{</span>
+                                <span class="k">if</span> <span class="o">(</span><span class="n">j</span> <span class="o">==</span> <span class="n">i</span> <span class="o">-</span> <span class="n">_pMax</span><span class="o">)</span>     <span class="c1">// 找到左边界即j</span>
+                                    <span class="k">return</span> <span class="o">((</span><span class="kt">long</span><span class="o">)</span> <span class="n">j</span><span class="o">)</span> <span class="o">&lt;&lt;</span> <span class="mi">32</span> <span class="o">|</span> <span class="n">i</span><span class="o">;</span>
+                            <span class="o">}</span> <span class="k">else</span>
+                                <span class="k">break</span><span class="o">;</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="o">-</span><span class="n">i</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+
+</pre>
+  </div>
  </body>
 </html>
 		  </article>
@@ -430,7 +513,7 @@
 					|
 				
 				
-					<a href="02.01.html">next</a>
+					<a href="01.04.html">next</a>
 				
 				<span style="float: right"><a href="index.html">Back to home</a>
 			</div>

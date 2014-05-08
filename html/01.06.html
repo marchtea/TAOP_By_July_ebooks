@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title><link rel="stylesheet" href="style_cache/github-5da842ffec8a31b5975487ab1278c7ac16876671.css" />
+  <link rel="stylesheet" href="style_cache/github2-0a16120e50749ebd0a7bbb45d3c848b65919ec7e.css" />
+  <style>
+    .file-box {
+      margin: 64px auto;
+      width: 920px;
+    }
+	body {
+		font-size: 14px;
+		line-height: 22px;
+		<!--font-family: "adelle",Georgia,"Times New Roman",serif;-->
+		color: #4e443c;
+		background: #f0efe7;
+	}
+
+	.book-toc {
+
+	}
+	a {
+		color: #0388a6;
+		text-decoration: none;
+	}
+	a:hover {
+		color: #04b1d8;
+		text-decoration: none;
+	}
+	ol.book-toc li.chapter{
+		margin-bottom:0.6em
+	}
+	ol.book-toc, ol{
+		list-style-type: disc
+	}
+	ol.book-toc{
+		margin:30px 36px
+	}
+	ol.book-toc a{
+		padding-left:4px
+	}
+	li {
+		line-height: 22px;
+	}
+	h1, h2, h3, h4, h5, h6, li, p, a, ol, div{
+		margin: 0;
+		padding: 0;
+		border: 0;
+		vertical-align: baseline;
+	}
+	ul, ol {
+		padding: 0;
+		margin: 0 0 11px 25px;
+	}
+	h1 {
+		font-size: 36px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	h2 {
+		font-size: 18px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h1{
+		font-size: 22px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	ol.book-toc h2 {
+		font-size: 16px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	p {
+		margin: 0 0 11px;
+		font-size: 14px;
+		line-height: 22px;
+	}
+	div {
+		display: block;
+	}
+	div#nav{
+		padding: 30px
+	}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="file-box">
+	<div class="file">
+		<div id="readme" class="blob instapaper_body announce md">
+		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
+			<html>
+ <body>
+  <h2>
+   <a class="anchor" href="#%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2" name="user-content-%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   最长回文子串
+  </h2>
+  <h3>
+   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   题目描述
+  </h3>
+  <p>
+   查找一个字符串中的最长回文字串。
+  </p>
+  <h3>
+   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   分析与解法
+  </h3>
+  <p>
+   最容易想到的办法是枚举所有的子串，分别判断其是否为回文。这个思路初看起来是正确的，但却做了很多无用功，如果一个长的子串包含另一个短一些的子串，那么对子串的回文判断其实是不需要的。
+  </p>
+  <h4>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法一
+  </h4>
+  <p>
+   那么如何高效的进行判断呢？借鉴KMP算法的做法，既然对短的子串的判断和包含它的长的子串的判断重复了，我们何不复用下短的子串的判断呢，即让短的子串的判断成为长的子串的判断的一个部分。
+  </p>
+  <p>
+   没错，扩展法。从一个字符开始，向两边扩展，看看最多能到多长，使其保持为回文。这也就是为什么我们在上一节里面要提出解法二的原因。
+  </p>
+  <p>
+   具体而言，我们可以枚举中心位置，然后再在该位置上用扩展法，记录并更新得到的最长的回文长度，即为所求。代码如下：
+  </p>
+  <div class="highlight highlight-cpp">
+   <pre><span class="cm">/**  </span>
+<span class="cm"> *find the longest palindrome in a string, n is the length of string s </span>
+<span class="cm"> *Copyright(C) fairywell 2011 </span>
+<span class="cm"> */</span>  
+<span class="kt">int</span> <span class="nf">LongestPalindrome</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>  
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">max</span><span class="p">;</span>  
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>  
+    <span class="n">max</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// i is the middle point of the palindrome  </span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">);</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="c1">// if the lengthof the palindrome is odd  </span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="p">])</span> 
+              <span class="k">break</span><span class="p">;</span>  
+        <span class="k">if</span> <span class="p">(</span><span class="n">j</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span> <span class="o">&gt;</span> <span class="n">max</span><span class="p">)</span> 
+          <span class="n">max</span> <span class="o">=</span> <span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>  
+        <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">);</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="c1">// for theeven case  </span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span> 
+              <span class="k">break</span><span class="p">;</span>  
+        <span class="k">if</span> <span class="p">(</span><span class="n">j</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">2</span> <span class="o">&gt;</span> <span class="n">max</span><span class="p">)</span> 
+          <span class="n">max</span> <span class="o">=</span> <span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span><span class="p">;</span>  
+    <span class="p">}</span>  
+    <span class="k">return</span> <span class="n">max</span><span class="p">;</span>  
+<span class="p">}</span>  
+</pre>
+  </div>
+  <p>
+   代码稍微难懂一点的地方就是内层的两个 for 循环，它们分别对于以 i 为中心的，长度为奇数和偶数的两种情况，整个代码遍历中心位置 i 并以之扩展，找出最长的回文。
+  </p>
+  <p>
+   当然，还有更先进但也更复杂的方法，比如用 s 和逆置 s' 的组合 s$s' 来建立后缀树的方法也能找到最长回文，但构建的过程比较复杂，所以在实践中用的比较少，感兴趣的朋友可以参考相应资料。--well。
+  </p>
+  <h4>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8Con%E8%A7%A3%E6%B3%95" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8Con%E8%A7%A3%E6%B3%95">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法二、O(N)解法
+  </h4>
+  <p>
+   参考：
+   <a href="http://bbs.dlut.edu.cn/bbstcon.php?board=Competition&amp;gid=23474">
+    http://bbs.dlut.edu.cn/bbstcon.php?board=Competition&amp;gid=23474
+   </a>
+   ，或这篇文章：
+   <a href="http://www.felix021.com/blog/read.php?2040">
+    http://www.felix021.com/blog/read.php?2040
+   </a>
+   ，或：
+   <a href="http://leetcode.com/2011/11/longest-palindromic-substring-part-ii.html">
+    http://leetcode.com/2011/11/longest-palindromic-substring-part-ii.html
+   </a>
+   ，待续。
+  </p>
+ </body>
+</html>
+		  </article>
+		  
+			<div id="nav">
+				
+					<a href="01.05.html">prev</a>
+					|
+				
+				
+					<a href="02.00.html">next</a>
+				
+				<span style="float: right"><a href="index.html">Back to home</a>
+			</div>
+		  
+		</div>
+	</div>
+  </div>
+  
+  <div>&nbsp;</div>
+  </div>
+  <div style="text-align:center; margin-bottom: 30px">
+	  Generated by <a href="https://github.com/marchtea/md_to_github_html">mdtogh</a>
+  </div>
+</body>
+</html>
