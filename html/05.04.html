@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-5da842ffec8a31b5975487ab1278c7ac16876671.css" />
-  <link rel="stylesheet" href="style_cache/github2-0a16120e50749ebd0a7bbb45d3c848b65919ec7e.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-dc3b5ef1bc6b1a7195c5411444124d626d072527.css" />
+  <link rel="stylesheet" href="style_cache/github2-7d1aff25db06f83ddd546f0c3a61c74a4a805d56.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,19 +105,12 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#%E7%AC%AC%E5%9B%9B%E5%8D%81%E4%B8%89%E7%AB%A0%E5%8A%A0%E6%9D%83%E5%8C%BA%E9%97%B4%E8%B0%83%E5%BA%A6" name="user-content-%E7%AC%AC%E5%9B%9B%E5%8D%81%E4%B8%89%E7%AB%A0%E5%8A%A0%E6%9D%83%E5%8C%BA%E9%97%B4%E8%B0%83%E5%BA%A6">
+   <a class="anchor" href="#%E6%A0%BC%E5%AD%90%E5%8F%96%E6%95%B0%E9%97%AE%E9%A2%98" name="user-content-%E6%A0%BC%E5%AD%90%E5%8F%96%E6%95%B0%E9%97%AE%E9%A2%98">
     <span class="octicon octicon-link">
     </span>
    </a>
-   第四十三章：加权区间调度
+   格子取数问题
   </h1>
-  <p>
-   作者:
-   <a href="https://github.com/wihoho">
-    wihoho
-   </a>
-   时间：2014/2/21
-  </p>
   <h2>
    <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
     <span class="octicon octicon-link">
@@ -126,187 +119,439 @@
    题目描述
   </h2>
   <p>
-   给定一组时间间隔$$(s_i, f_i)$$ 每一个时间间隔的价值为$v_i$$$,现在需要找到这组时间的子集$$S$$使得 $$\sum_{i \in S}^{i} v_i$$最大，并且这个子集的所有间隔都不相交。
+   有n*n个格子，每个格子里有正数或者0，从最左上角往最右下角走，只能向下和向右，一共走两次（即从左上角走到右下角走两趟），把所有经过的格子的数加起来，求最大值SUM，且两次如果经过同一个格子，则最后总和SUM中该格子的计数只加一次。
   </p>
   <p>
-   举一个简单的例子，如下图所示
-   <a href="../images/43/example1.png" target="_blank">
-    <img alt="" src="../images/43/example1.png" style="max-width:100%;"/>
+   <a href="../images/34/34.1.jpg" target="_blank">
+    <img alt="" src="../images/34/34.1.jpg" style="max-width:100%;"/>
    </a>
   </p>
-  <p>
-   那么对于这个例子，正确答案是只选择
-   <code>
-    v2
-   </code>
-   ，最大的价值为3。
-  </p>
   <h2>
-   <a class="anchor" href="#%E6%80%9D%E8%B7%AF%E4%B8%8E%E5%88%86%E6%9E%90" name="user-content-%E6%80%9D%E8%B7%AF%E4%B8%8E%E5%88%86%E6%9E%90">
+   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
     <span class="octicon octicon-link">
     </span>
    </a>
-   思路与分析
+   分析与解法
   </h2>
   <p>
-   此标题对应准确的英文是
-   <code>
-    Weighted Interval Scheduling
-   </code>
-   。个人觉得这是一个dynamic programing相关并且相对容易的问题，LCS都需要 2-D 数组，而这个只需要 1-D 数组。
+   初看到此题，因为要让两次走下来的路径总和最大，读者可能最初想到的思路可能是让每一次的路径都是最优的，即不顾全局，只看局部，让第一次和第二次的路径都是最优。
   </p>
-  <h2>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
+  <p>
+   但问题马上就来了，虽然这一算法保证了连续的两次走法都是最优的，但却不能保证总体最优，相应的反例也不难给出，请看下图：
+  </p>
+  <p>
+   <a href="../images/34/34.2.jpg" target="_blank">
+    <img alt="" src="../images/34/34.2.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   上图中，图一是原始图，那么我们有以下两种走法可供我们选择：
+  </p>
+  <ul>
+   <li>
+    如果按照上面的局部贪优走法，那么第一次势必会如图二那样走，导致的结果是第二次要么取到2，要么取到3，
+   </li>
+   <li>
+    但若不按照上面的局部贪优走法，那么第一次可以如图三那样走，从而第二次走的时候能取到2 4 4，很显然，这种走法求得的最终SUM值更大；
+   </li>
+  </ul>
+  <p>
+   为了便于读者理解，我把上面的走法在图二中标记出来，而把应该正确的走法在上图三中标示出来，如下图所示：
+  </p>
+  <p>
+   <a href="../images/34/34.3.jpg" target="_blank">
+    <img alt="" src="../images/34/34.3.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   也就是说，上面图二中的走法太追求每一次最优，所以第一次最优，导致第二次将是很差；而图三第一次虽然不是最优，但保证了第二次不差，所以图三的结果优于图二。由此可知不要只顾局部而贪图一时最优，而丧失了全局最优。
+  </p>
+  <h3>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80%E7%9B%B4%E6%8E%A5%E6%90%9C%E7%B4%A2" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80%E7%9B%B4%E6%8E%A5%E6%90%9C%E7%B4%A2">
     <span class="octicon octicon-link">
     </span>
    </a>
-   解法一
-  </h2>
+   解法一、直接搜索
+  </h3>
   <p>
-   既然已经知道需要使用动态规划，那么我们需要做的就是找到相关的公式。在此之前，让我们先定义几个变量。
+   局部贪优不行，我们可以考虑穷举，但最终将导致复杂度过高，所以咱们得另寻良策。
+@西芹_new，针对此题，可以使用直接搜索法，一共搜（2n-2）步，每一步有四种走法，考虑不相交等条件可以剪去很多枝，代码如下：
   </p>
-  <p>
-   $$OPT(j)$$: 当只有从
-   <code>
-    1,2...j
-   </code>
-   个时间间隔时的最优解
-$$p(j)$$: 第j个时间间隔左边的第一个不跟它相交的时间间隔的位置
-$$v_j$$:第j个时间间隔的价值
-  </p>
-  <p>
-   现在我们就进入到正确的解法当中，需要进行以下几步：
-  </p>
-  <ol>
-   <li>
-    根据每个时间间隔的结束时间来对所有的时间间隔进行排序
-   </li>
-   <li>
-    动态规划的公式如下 $$OPT(j) = max(v_j + OPT(p(j)), OPT(j-1))$$
-   </li>
-   <li>
-    OPT这个数组的最后一个值为最优解
-   </li>
-  </ol>
-  <p>
-   相对来说，还是比较好理解的，对于第j个时间间隔而言，我们会有2个选择：
-  </p>
-  <ol>
-   <li>
-    把第j个时间间隔加到子集S当中去，那么$$OPT(j) = v_j + OPT(p(j))$$
-   </li>
-   <li>
-    不加第j个时间间隔，此时$$OPT(j) = OPT(j-1)$$
-   </li>
-  </ol>
-  <h2>
-   <a class="anchor" href="#%E4%BB%A3%E7%A0%81%E4%B8%80" name="user-content-%E4%BB%A3%E7%A0%81%E4%B8%80">
+  <div class="highlight highlight-cpp">
+   <pre><span class="c1">//copyright@西芹_new 2013</span>
+<span class="cp">#include "stdafx.h"</span>
+<span class="cp">#include &lt;iostream&gt;</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="cp">#define N 5</span>
+<span class="kt">int</span> <span class="n">map</span><span class="p">[</span><span class="mi">5</span><span class="p">][</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span>
+<span class="p">{</span>
+    <span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">},</span>
+    <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">},</span>
+    <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">},</span>
+    <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">},</span>
+    <span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">}</span>
+<span class="p">};</span>
+<span class="kt">int</span> <span class="n">sumMax</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">p1x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">p1y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">p2x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">p2y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">curMax</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">dfs</span><span class="p">(</span> <span class="kt">int</span> <span class="n">index</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">N</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="n">curMax</span> <span class="o">&gt;</span> <span class="n">sumMax</span><span class="p">)</span>
+            <span class="n">sumMax</span> <span class="o">=</span> <span class="n">curMax</span><span class="p">;</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="p">(</span><span class="n">p1x</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">p1y</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="p">(</span><span class="n">p2x</span> <span class="o">==</span> <span class="n">N</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">p2y</span> <span class="o">==</span> <span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="n">p1x</span> <span class="o">&gt;=</span> <span class="n">p2x</span> <span class="o">&amp;&amp;</span> <span class="n">p1y</span> <span class="o">&gt;=</span> <span class="n">p2y</span> <span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">//right right</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">p1x</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">N</span> <span class="o">&amp;&amp;</span> <span class="n">p2x</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">N</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">p1x</span><span class="o">++</span><span class="p">;</span>
+        <span class="n">p2x</span><span class="o">++</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="n">map</span><span class="p">[</span><span class="n">p1x</span><span class="p">][</span><span class="n">p1y</span><span class="p">]</span> <span class="o">+</span> <span class="n">map</span><span class="p">[</span><span class="n">p2x</span><span class="p">][</span><span class="n">p2y</span><span class="p">];</span>
+        <span class="n">curMax</span> <span class="o">+=</span> <span class="n">sum</span><span class="p">;</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">curMax</span> <span class="o">-=</span> <span class="n">sum</span><span class="p">;</span>
+        <span class="n">p1x</span><span class="o">--</span><span class="p">;</span>
+        <span class="n">p2x</span><span class="o">--</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">//down down</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">p1y</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">N</span> <span class="o">&amp;&amp;</span> <span class="n">p2y</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">N</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">p1y</span><span class="o">++</span><span class="p">;</span>
+        <span class="n">p2y</span><span class="o">++</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="n">map</span><span class="p">[</span><span class="n">p1x</span><span class="p">][</span><span class="n">p1y</span><span class="p">]</span> <span class="o">+</span> <span class="n">map</span><span class="p">[</span><span class="n">p2x</span><span class="p">][</span><span class="n">p2y</span><span class="p">];</span>
+        <span class="n">curMax</span> <span class="o">+=</span> <span class="n">sum</span><span class="p">;</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">curMax</span> <span class="o">-=</span> <span class="n">sum</span><span class="p">;</span>
+        <span class="n">p1y</span><span class="o">--</span><span class="p">;</span>
+        <span class="n">p2y</span><span class="o">--</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">//rd</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">p1x</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">N</span> <span class="o">&amp;&amp;</span> <span class="n">p2y</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">N</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">p1x</span><span class="o">++</span><span class="p">;</span>
+        <span class="n">p2y</span><span class="o">++</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="n">map</span><span class="p">[</span><span class="n">p1x</span><span class="p">][</span><span class="n">p1y</span><span class="p">]</span> <span class="o">+</span> <span class="n">map</span><span class="p">[</span><span class="n">p2x</span><span class="p">][</span><span class="n">p2y</span><span class="p">];</span>
+        <span class="n">curMax</span> <span class="o">+=</span> <span class="n">sum</span><span class="p">;</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">curMax</span> <span class="o">-=</span> <span class="n">sum</span><span class="p">;</span>
+        <span class="n">p1x</span><span class="o">--</span><span class="p">;</span>
+        <span class="n">p2y</span><span class="o">--</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">//dr</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">p1y</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">N</span> <span class="o">&amp;&amp;</span> <span class="n">p2x</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">N</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">p1y</span><span class="o">++</span><span class="p">;</span>
+        <span class="n">p2x</span><span class="o">++</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="n">map</span><span class="p">[</span><span class="n">p1x</span><span class="p">][</span><span class="n">p1y</span><span class="p">]</span> <span class="o">+</span> <span class="n">map</span><span class="p">[</span><span class="n">p2x</span><span class="p">][</span><span class="n">p2y</span><span class="p">];</span>
+        <span class="n">curMax</span> <span class="o">+=</span> <span class="n">sum</span><span class="p">;</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">curMax</span> <span class="o">-=</span> <span class="n">sum</span><span class="p">;</span>
+        <span class="n">p1y</span><span class="o">--</span><span class="p">;</span>
+        <span class="n">p2x</span><span class="o">--</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">_tmain</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="n">_TCHAR</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="n">curMax</span> <span class="o">=</span> <span class="n">map</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+    <span class="n">dfs</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">sumMax</span> <span class="o">-</span> <span class="n">map</span><span class="p">[</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+  </div>
+  <h3>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92">
     <span class="octicon octicon-link">
     </span>
    </a>
-   代码一
-  </h2>
-  <pre><code> public int getMaxWorkingTime(List&lt;Interval&gt; intervals) {
-
-        if (intervals == null || intervals.size() == 0)
-            return 0;
-
-        int numberOfInterval = intervals.size();
-        Interval[] arrayOfIntervals = new Interval[numberOfInterval];
-        for(int i = 0; i &lt; numberOfInterval; i ++){
-            if (intervals.get(i) == null)
-                throw new IllegalArgumentException("The argument (a list of intervals) must not contain null!");
-
-            arrayOfIntervals[i] = intervals.get(i);
-        }
-
-        // Sort these intervals according to their finishing time
-        Arrays.sort(arrayOfIntervals, new Comparator&lt;Interval&gt;() {
-            @Override
-            public int compare(Interval interval, Interval interval2) {
-                return ((Integer)interval.getEndMinuteUnit()).compareTo(interval2.getEndMinuteUnit());
-            }
-        });
-
-        // Get the array, where each value represents the nearest interval of the current interval without overlapping
-        int[] nearestNonOverlappedIndexes = getNearestNonOverlappedInterval(arrayOfIntervals);
-
-        // Cache the optimal value for each index
-        int[] longestWorkingTimeSoFar = new int[numberOfInterval];
-
-        longestWorkingTimeSoFar[0] = arrayOfIntervals[0].getIntervalMinute();
-        for(int i = 1; i &lt; numberOfInterval; i ++){
-
-            // count the current interval arrayOfIntervals[i]
-            int value1 = 0;
-            if(nearestNonOverlappedIndexes[i] &gt; -1)
-                value1 = arrayOfIntervals[i].getIntervalMinute() + longestWorkingTimeSoFar[nearestNonOverlappedIndexes[i]];
-            else
-                value1 = arrayOfIntervals[i].getIntervalMinute();
-
-            // do not count the current interval arrayOfIntervals[i]
-            int value2 = longestWorkingTimeSoFar[i -1];
-
-            longestWorkingTimeSoFar[i] = Math.max(value1,value2);
-        }
-
-        // Return the last value in the array of longestWorkingTimeSoFar as the optimal solution
-        return longestWorkingTimeSoFar[numberOfInterval-1];
-    }
-
-
-    /**
-     * This method calculates an array of indexes.
-     * For instance, the jth value of the returned array indicates the interval which is nearest to jth interval without overlapping.
-     *
-     * @param intervals a list of sorted intervals according to their finishing time
-     * @return an array of indexes
-     */
-    public int[] getNearestNonOverlappedInterval(Interval[] intervals){
-        if(intervals == null || intervals.length == 0)
-            throw new IllegalArgumentException("The argument can not be null or empty!");
-
-        int[] indexTable = new int[intervals.length];
-        for(int i = 0; i &lt; intervals.length; i ++){
-            Interval interval = intervals[i];
-
-            // Traverses the left side and find the first interval which does  not overlap with intervals[i]
-            int j = i - 1;
-            for(; j &gt;= 0; j --){
-                if(! checkOverlap(interval, intervals[j]))
-                    break;
-            }
-
-            indexTable[i] = j;
-        }
-
-        return indexTable;
-
-    }
-
-    /**
-     * Checks whether two intervals overlap with each other or not
-     * @param one an interval
-     * @param two another interval
-     * @return true or false
-     */
-    public boolean checkOverlap(Interval one, Interval two){
-        return one.getBeginMinuteUnit() &lt;= two.getEndMinuteUnit() &amp;&amp; two.getBeginMinuteUnit() &lt;= one.getEndMinuteUnit();
-    }
-}
+   解法二、动态规划
+  </h3>
+  <p>
+   上述解法一的搜索解法是的时间复杂度是指数型的，如果是只走一次的话，是经典的dp。
+  </p>
+  <h4>
+   <a class="anchor" href="#21dp%E6%80%9D%E8%B7%AF%E8%AF%A6%E8%A7%A3" name="user-content-21dp%E6%80%9D%E8%B7%AF%E8%AF%A6%E8%A7%A3">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   2.1、DP思路详解
+  </h4>
+  <p>
+   故正如@绿色夹克衫所说：此题也可以用动态规划求解，主要思路就是同时DP 2次所走的状态。
+  </p>
+  <p>
+   1、先来分析一下这个问题，为了方便讨论，先对矩阵做一个编号，且以5*5的矩阵为例（给这个矩阵起个名字叫M1）：
+  </p>
+  <p>
+   M1
+  0  1  2  3  4
+  1  2  3  4  5
+  2  3  4  5  6
+  3  4  5  6  7
+  4  5  6  7  8
+  </p>
+  <p>
+   从左上(0)走到右下(8)共需要走8步（2*5-2）。我们设所走的步数为s。因为限定了只能向右和向下走，因此无论如何走，经过8步后（s = 8)都将走到右下。而DP的状态也是依据所走的步数来记录的。
+  </p>
+  <p>
+   再来分析一下经过其他s步后所处的位置，根据上面的讨论，可以知道：
+  </p>
+  <ul>
+   <li>
+    经过8步后，一定处于右下角(8)；
+   </li>
+   <li>
+    那么经过5步后(s = 5)，肯定会处于编号为5的位置；
+   </li>
+   <li>
+    3步后肯定处于编号为3的位置；
+   </li>
+   <li>
+    s = 4的时候，处于编号为4的位置，此时对于方格中，共有5（相当于n）个不同的位置，也是所有编号中最多的。
+   </li>
+  </ul>
+  <p>
+   故推广来说，对于n*n的方格，总共需要走2n - 2步，且当s = n - 1时，编号为n个，也是编号数最多的。
+  </p>
+  <p>
+   如果用DP[s,i,j]来记录2次所走的状态获得的最大值，其中s表示走s步，i和j分别表示在s步后第1趟走的位置和第2趟走的位置。
+  </p>
+  <p>
+   2、为了方便描述，再对矩阵做一个编号（给这个矩阵起个名字叫M2）：
+  </p>
+  <p>
+   M2
+  0  0  0  0  0
+  1  1  1  1  1
+  2  2  2  2 2
+  3  3  3  3  3
+  4  4  4  4  4
+  </p>
+  <p>
+   把之前定的M1矩阵也再贴下：
+  </p>
+  <p>
+   M1 
+  0  1  2  3  4
+  1  2  3  4  5
+  2  3  4  5  6
+  3  4  5  6  7
+  4  5  6  7  8
+我们先看M1，在经过6步后，肯定处于M1中编号为6的位置。而M1中共有3个编号为6的，它们分别对应M2中的2 3 4。故对于M2来说，假设第1次经过6步走到了M2中的2，第2次经过6步走到了M2中的4，DP[s,i,j] 则对应 DP[6,2,4]。由于s = 2n - 2,0 &lt;= i &lt;= j &lt;= n，所以这个DP共有O(n^3)个状态。
+  </p>
+  <p>
+   M1
+  0  1  2  3  4
+  1  2  3  4  5
+  2  3  4  5  6
+  3  4  5  6  7
+  4  5  6  7  8
+再来分析一下状态转移，以DP[6,2,3]为例(就是上面M1中加粗的部分)，可以到达DP[6,2,3]的状态包括DP[5,1,2]，DP[5,1,3]，DP[5,2,2]，DP[5,2,3]。
+  </p>
+  <p>
+   3、下面，我们就来看看这几个状态：DP[5,1,2]，DP[5,1,3]，DP[5,2,2]，DP[5,2,3]，用加粗表示位置DP[5,1,2]    DP[5,1,3]    DP[5,2,2]    DP[5,2,3] （加红表示要达到的状态DP[6,2,3]）
+  </p>
+  <p>
+   0 1 2 3 4    0 1 2 3 4    0 1 2 3 4    0 1 2 3 4
+  1 2 3 4 5    1 2 3 4 5    1 2 3 4 5    1 2 3 4 5
+  2 3 4 5 6    2 3 4 5 6    2 3 4 5 6    2 3 4 5 6
+  3 4 5 6 7    3 4 5 6 7    3 4 5 6 7    3 4 5 6 7
+  4 5 6 7 8    4 5 6 7 8    4 5 6 7 8    4 5 6 7 8
+因此：
+  </p>
+  <pre><code>DP[6,2,3] = Max(DP[5,1,2] ，DP[5,1,3]，DP[5,2,2]，DP[5,2,3]) + 6,2和6,3格子中对应的数值    （式一） 
 </code></pre>
-  <h2>
-   <a class="anchor" href="#%E5%8F%82%E8%80%83%E4%B8%8E%E5%BC%95%E7%94%A8" name="user-content-%E5%8F%82%E8%80%83%E4%B8%8E%E5%BC%95%E7%94%A8">
+  <p>
+   上面（式一）所示的这个递推看起来没有涉及：“如果两次经过同一个格子，那么该数只加一次的这个条件”，讨论这个条件需要换一个例子，以DP[6,2,2]为例：DP[6,2,2]可以由DP[5,1,1]，DP[5,1,2]，DP[5,2,2]到达，但由于i = j，也就是2次走到同一个格子，那么数值只能加1次。
+所以当i = j时，
+  </p>
+  <pre><code>DP[6,2,2] = Max(DP[5,1,1]，DP[5,1,2]，DP[5,2,2]) + 6,2格子中对应的数值                                （式二）
+</code></pre>
+  <p>
+   4、故，综合上述的（式一），（式二）最后的递推式就是
+  </p>
+  <p>
+   if(i != j)
+    DP[s, i ,j] = Max(DP[s - 1, i - 1, j - 1], DP[s - 1, i - 1, j], DP[s - 1, i, j - 1], DP[s - 1, i, j]) + W[s,i] + W[s,j]
+  else
+    DP[s, i ,j] = Max(DP[s - 1, i - 1, j - 1], DP[s - 1, i - 1, j], DP[s - 1, i, j]) + W[s,i]
+其中W[s,i]表示经过s步后，处于i位置，位置i对应的方格中的数字。下一节我们将根据上述DP方程编码实现。
+  </p>
+  <h4>
+   <a class="anchor" href="#22dp%E6%96%B9%E6%B3%95%E5%AE%9E%E7%8E%B0" name="user-content-22dp%E6%96%B9%E6%B3%95%E5%AE%9E%E7%8E%B0">
     <span class="octicon octicon-link">
     </span>
    </a>
-   参考与引用
-  </h2>
+   2.2、DP方法实现
+  </h4>
   <p>
-   <a href="http://www.cs.cmu.edu/%7Eckingsf/bioinfo-lectures/dynamicp.pdf">
-    CMU
-   </a>
+   为了便于实现，我们认为所有不能达到的状态的得分都是负无穷，参考代码如下：
   </p>
+  <div class="highlight highlight-c">
+   <pre><span class="c1">//copyright@caopengcs 2013</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">202</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">inf</span> <span class="o">=</span> <span class="mi">1000000000</span><span class="p">;</span>  <span class="c1">//无穷大</span>
+<span class="kt">int</span> <span class="n">dp</span><span class="p">[</span><span class="n">N</span> <span class="o">*</span> <span class="mi">2</span><span class="p">][</span><span class="n">N</span><span class="p">][</span><span class="n">N</span><span class="p">];</span>
+<span class="kt">bool</span> <span class="nf">isValid</span><span class="p">(</span><span class="kt">int</span> <span class="n">step</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x2</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="c1">//判断状态是否合法</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">step</span> <span class="o">-</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">step</span> <span class="o">-</span> <span class="n">x2</span><span class="p">;</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">x1</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">x1</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">x2</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">x2</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">y1</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">y1</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">y2</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">y2</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">getValue</span><span class="p">(</span><span class="kt">int</span> <span class="n">step</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x2</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>  <span class="c1">//处理越界 不存在的位置 给负无穷的值</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">isValid</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">?</span> <span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">x1</span><span class="p">][</span><span class="n">x2</span><span class="p">]</span> <span class="o">:</span> <span class="p">(</span><span class="o">-</span><span class="n">inf</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">//状态表示dp[step][i][j] 并且i &lt;= j, 第step步  两个人分别在第i行和第j行的最大得分 时间复杂度O(n^3) 空间复杂度O(n^3)</span>
+<span class="kt">int</span> <span class="nf">getAnswer</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="n">N</span><span class="p">][</span><span class="n">N</span><span class="p">],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">P</span> <span class="o">=</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="c1">//最终的步数</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">step</span><span class="p">;</span>
+
+    <span class="c1">//不能到达的位置 设置为负无穷大</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">inf</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">step</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">step</span> <span class="o">&lt;=</span> <span class="n">P</span><span class="p">;</span> <span class="o">++</span><span class="n">step</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">inf</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isValid</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>   <span class="c1">//非法位置</span>
+                <span class="p">{</span>
+                    <span class="k">continue</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="c1">//对于合法的位置进行dp</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">getValue</span><span class="p">(</span><span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">));</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">getValue</span><span class="p">(</span><span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span><span class="p">));</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">getValue</span><span class="p">(</span><span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">));</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">getValue</span><span class="p">(</span><span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span><span class="p">));</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">step</span> <span class="o">-</span> <span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">step</span> <span class="o">-</span> <span class="n">j</span><span class="p">];</span>  <span class="c1">//不在同一个格子，加两个数</span>
+                <span class="p">}</span>
+                <span class="k">else</span>
+                <span class="p">{</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">getValue</span><span class="p">(</span><span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">));</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">getValue</span><span class="p">(</span><span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span>  <span class="n">n</span><span class="p">));</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">getValue</span><span class="p">(</span><span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span>  <span class="n">n</span><span class="p">));</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">step</span> <span class="o">-</span> <span class="n">i</span><span class="p">];</span> <span class="c1">// 在同一个格子里，只能加一次</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">P</span><span class="p">][</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+<span class="p">}</span>
+</pre>
+  </div>
+  <p>
+   复杂度分析：状态转移最多需要统计4个变量的情况，看做是O(1)的，共有O(n^3)个状态，所以总的时间复杂度是O(n^3)的，且dp数组开了N^3大小，故其空间复杂度亦为O(n^3)。
+  </p>
+  <h4>
+   <a class="anchor" href="#23dp%E5%AE%9E%E7%8E%B0%E4%BC%98%E5%8C%96%E7%89%88" name="user-content-23dp%E5%AE%9E%E7%8E%B0%E4%BC%98%E5%8C%96%E7%89%88">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   2.3、DP实现优化版
+  </h4>
+  <p>
+   如上节末所说，2.2节实现的代码的复杂度空间复杂度是O(n^3)，事实上，空间上可以利用滚动数组优化，由于每一步的递推只跟上1步的情况有关，因此可以循环利用数组，将空间复杂度降为O(n^2)。
+  </p>
+  <p>
+   即我们在推算dp[step]的时候，只依靠它上一次的状态dp[step - 1]，所以dp数组的第一维，我们只开到2就可以了。即step为奇数时，我们用dp[1][i][j]表示状态，step为偶数我们用dp[0][i][j]表示状态，这样我们只需要O(n^2)的空间，这就是滚动数组的方法。滚动数组写起来并不复杂，只需要对上面的代码稍作修改即可，优化后的代码如下：
+  </p>
+  <div class="highlight highlight-c">
+   <pre><span class="c1">//copyright@caopengcs 8/24/2013</span>
+<span class="kt">int</span> <span class="n">dp</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">N</span><span class="p">][</span><span class="n">N</span><span class="p">];</span>
+
+<span class="kt">bool</span> <span class="nf">isValid</span><span class="p">(</span><span class="kt">int</span> <span class="n">step</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x2</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="c1">//判断状态是否合法</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">step</span> <span class="o">-</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">step</span> <span class="o">-</span> <span class="n">x2</span><span class="p">;</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">x1</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">x1</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">x2</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">x2</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">y1</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">y1</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">y2</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">y2</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">getValue</span><span class="p">(</span><span class="kt">int</span> <span class="n">step</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x2</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>  <span class="c1">//处理越界 不存在的位置 给负无穷的值</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">isValid</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">?</span> <span class="n">dp</span><span class="p">[</span><span class="n">step</span> <span class="o">%</span> <span class="mi">2</span><span class="p">][</span><span class="n">x1</span><span class="p">][</span><span class="n">x2</span><span class="p">]</span> <span class="o">:</span> <span class="p">(</span><span class="o">-</span><span class="n">inf</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">//状态表示dp[step][i][j] 并且i &lt;= j, 第step步  两个人分别在第i行和第j行的最大得分 时间复杂度O(n^3) 使用滚动数组 空间复杂度O(n^2)</span>
+<span class="kt">int</span> <span class="nf">getAnswer</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="n">N</span><span class="p">][</span><span class="n">N</span><span class="p">],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">P</span> <span class="o">=</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="c1">//最终的步数</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">s</span><span class="p">;</span>
+
+    <span class="c1">//不能到达的位置 设置为负无穷大</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">inf</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">step</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">step</span> <span class="o">&lt;=</span> <span class="n">P</span><span class="p">;</span> <span class="o">++</span><span class="n">step</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">inf</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isValid</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>   <span class="c1">//非法位置</span>
+                <span class="p">{</span>
+                    <span class="k">continue</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="n">step</span> <span class="o">%</span> <span class="mi">2</span><span class="p">;</span>  <span class="c1">//状态下表标</span>
+                <span class="c1">//对于合法的位置进行dp</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">getValue</span><span class="p">(</span><span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">));</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">getValue</span><span class="p">(</span><span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span><span class="p">));</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">getValue</span><span class="p">(</span><span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">));</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">getValue</span><span class="p">(</span><span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span><span class="p">));</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">step</span> <span class="o">-</span> <span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">step</span> <span class="o">-</span> <span class="n">j</span><span class="p">];</span>  <span class="c1">//不在同一个格子，加两个数</span>
+                <span class="p">}</span>
+                <span class="k">else</span>
+                <span class="p">{</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">getValue</span><span class="p">(</span><span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">));</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">getValue</span><span class="p">(</span><span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span>  <span class="n">n</span><span class="p">));</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">getValue</span><span class="p">(</span><span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span>  <span class="n">n</span><span class="p">));</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">step</span> <span class="o">-</span> <span class="n">i</span><span class="p">];</span> <span class="c1">// 在同一个格子里，只能加一次</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">P</span> <span class="o">%</span> <span class="mi">2</span><span class="p">][</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+<span class="p">}</span>
+</pre>
+  </div>
  </body>
 </html>
 		  </article>
@@ -317,7 +562,7 @@ $$v_j$$:第j个时间间隔的价值
 					|
 				
 				
-					<a href="06.01.html">next</a>
+					<a href="05.05.html">next</a>
 				
 				<span style="float: right"><a href="index.html">Back to home</a>
 			</div>

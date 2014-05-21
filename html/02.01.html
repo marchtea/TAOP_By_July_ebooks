@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-5da842ffec8a31b5975487ab1278c7ac16876671.css" />
-  <link rel="stylesheet" href="style_cache/github2-0a16120e50749ebd0a7bbb45d3c848b65919ec7e.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-dc3b5ef1bc6b1a7195c5411444124d626d072527.css" />
+  <link rel="stylesheet" href="style_cache/github2-7d1aff25db06f83ddd546f0c3a61c74a4a805d56.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -119,10 +119,7 @@
    题目描述
   </h2>
   <p>
-   题目：输入n个整数，输出其中最小的k个。
-  </p>
-  <p>
-   例如输入1，2，3，4，5，6，7和8这8个数字，则最小的4个数字为1，2，3和4。
+   输入n个整数，输出其中最小的k个。
   </p>
   <h2>
    <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
@@ -139,16 +136,16 @@
    解法一
   </h3>
   <p>
-   咱们先简单的理解，要求一个序列中最小的k个数，按照惯有的思维方式，很简单，先对这个序列从小到大排序，然后输出前面的最小的k个数即可。
+   要求一个序列中最小的k个数，按照惯有的思维方式，则是先对这个序列从小到大排序，然后输出前面的最小的k个数。
   </p>
   <p>
-   至于选取什么的排序方法，我想你可能会第一时间想到快速排序，我们知道，快速排序平均所费时间为
+   至于选取什么的排序方法，我想你可能会第一时间想到快速排序（我们知道，快速排序平均所费时间为
    <code>
     n*logn
    </code>
-   ，然后再遍历序列中前k个元素输出，即可，总的时间复杂度为
+   ），然后再遍历序列中前k个元素输出即可。因此，总的时间复杂度：
    <code>
-    O（n*logn+k）=O（n*logn）
+    O（n * log n)+O(k)=O（n * log n）
    </code>
    。
   </p>
@@ -160,10 +157,37 @@
    解法二
   </h3>
   <p>
-   咱们再进一步想想，题目并没有要求要查找的k个数，甚至后n-k个数是有序的，既然如此，咱们又何必对所有的n个数都进行排序列?
+   咱们再进一步想想，题目没有要求最小的k个数有序，也没要求最后n-k个数有序。既然如此，就没有必要对所有元素进行排序。这时，咱们想到了用选择或交换排序，即：
   </p>
   <p>
-   这时，咱们想到了用选择或交换排序，即遍历n个数，先把最先遍历到的k个数存入大小为k的数组之中，对这k个数，利用选择或交换排序，找到k个数中的最大数kmax（kmax设为k个元素的数组中最大元素），用时O（k）（你应该知道，插入或选择排序查找操作需要O（k）的时间），后再继续遍历后n-k个数，x与kmax比较：如果x &lt; kmax，则x代替kmax，并再次重新找出k个元素的数组中最大元素kmax‘；如果x &gt; kmax，则不更新数组。这样，每次更新或不更新数组的所用的时间为O（k）或O（0），整趟下来，总的时间复杂度平均下来为：
+   1、遍历n个数，把最先遍历到的k个数存入到大小为k的数组中，假设它们即是最小的k个数；
+   <br/>
+   2、对这k个数，利用选择或交换排序找到这k个元素中的最大值kmax（找最大值需要遍历这k个数，时间复杂度为
+   <code>
+    O（k）
+   </code>
+   ）；
+   <br/>
+   3、继续遍历剩余n-k个数。假设每一次遍历到的新的元素的值为x，把x与kmax比较：如果
+   <code>
+    x &lt; kmax
+   </code>
+   ，用x替换kmax，并回到第二步重新找出k个元素的数组中最大元素kmax‘；如果
+   <code>
+    x &gt;= kmax
+   </code>
+   ，则继续遍历不更新数组。
+  </p>
+  <p>
+   每次遍历，更新或不更新数组的所用的时间为
+   <code>
+    O（k）
+   </code>
+   或
+   <code>
+    O（0）
+   </code>
+   。故整趟下来，时间复杂度为
    <code>
     n*O（k）=O（n*k）
    </code>
@@ -177,13 +201,35 @@
    解法三
   </h3>
   <p>
-   当然，更好的办法是维护k个元素的最大堆，原理与上述第2个方案一致，即用容量为k的最大堆存储最先遍历到的k个数，并假设它们即是最小的k个数，建堆费时O(k*logk)后，有k1&lt;k2&lt;...&lt;kmax（kmax设为大顶堆中最大元素）。继续遍历数列，每次遍历一个元素x，与堆顶元素比较，x&lt;kmax，更新堆（用时logk），否则不更新堆。这样下来，总费时
+   更好的办法是维护容量为k的最大堆，原理跟解法二的方法相似：
+  </p>
+  <ul>
+   <li>
+    1、用容量为k的最大堆存储最先遍历到的k个数，同样假设它们即是最小的k个数；
+   </li>
+   <li>
+    2、堆中元素是有序的，令k1&lt;k2&lt;...&lt;kmax（kmax设为最大堆中的最大元素）
+   </li>
+   <li>
+    3、遍历剩余n-k个数。假设每一次遍历到的新的元素的值为x，把x与堆顶元素kmax比较：如果
+    <code>
+     x &lt; kmax
+    </code>
+    ，用x替换kmax，然后更新堆（用时logk）；否则不更新堆。
+   </li>
+  </ul>
+  <p>
+   这样下来，总的时间复杂度:
    <code>
     O（k+（n-k）*logk）=O（n*logk）
    </code>
-   。此方法得益于在堆中，查找等各项操作时间复杂度均为logk（不然，就如上述思路2所述：直接用数组也可以找出前k个小的元素，用时
+   。此方法得益于堆中进行查找和更新的时间复杂度均为：
    <code>
-    O（n*k））
+    O(logk)
+   </code>
+   （若使用解法二：在数组中找出最大元素，时间复杂度：
+   <code>
+    O（k））
    </code>
    。
   </p>
@@ -195,17 +241,17 @@
    解法四
   </h3>
   <p>
-   在mark allen weiss所著的《数据结构与算法分析--c语言描述》一书，第7章第7.7.6节中，阐述了一种在最坏情况下，为线性时间O（N）（是的，
-   <strong>
-    不含期望，是最坏情况下为O（N）
-   </strong>
-   ）的快速选择算法，如下述文字：
+   在《数据结构与算法分析--c语言描述》一书，第7章第7.7.6节中，阐述了一种在最坏情况下，时间复杂度为
+   <code>
+    O（N）
+   </code>
+   的快速选择算法。如下述文字：
   </p>
   <blockquote>
    <p>
     Since we can sort the file in O(nlog n) time, one might expect to obtain a better time bound for selection. The algorithm we present to find the kth smallest element in a set S is almost identical to quicksort. In fact, the first three steps are the same. We will call     this algorithm quickselect（叫做快速选择）. Let |Si| denote the number of elements in Si（令|Si|为Si中元素的个数）. The steps of quickselect are（
     <strong>
-     快速选择，即上述编程之美一书上的，思路4，步骤如下
+     步骤如下
     </strong>
     ）:
    </p>
@@ -214,11 +260,11 @@
      If |S| = 1, then k = 1 and return the elements in S as the answer. If a cutoff for small files is being used and |S| &lt;=CUTOFF, then sort S and return the kth smallest element.
     </li>
     <li>
-     Pick a pivot element, v (- S.（选取一个枢纽元v属于S）
+     Pick a pivot element, v (- S.（选取S中一个元素作为枢纽元v）
     </li>
     <li>
      Partition S - {v} into S1 and S2, as was done with quicksort.
-（将集合S-{v}分割成S1和S2，就像我们在快速排序中所作的那样）
+（将集合S-{v}分割成S1和S2，就像快速排序那样）
     </li>
     <li>
      If k &lt;= |S1|, then the kth smallest element must be in S1. In this case, return quickselect (S1, k). If k = 1 + |S1|, then the pivot is the kth smallest element and we can return it as the answer. Otherwise, the kth smallest element lies in S2, and it is the (k - |S1| - 1)st smallest element in S2. We make a recursive call and return quickselect (S2, k - |S1| - 1).
@@ -230,54 +276,55 @@
     <strong>
      不过，其平均运行时间为O（N）
     </strong>
-    。看到了没，就是平均复杂度为O（N）这句话）. The analysis is similar to quicksort's and is left as an exercise.
+    ）. The analysis is similar to quicksort's and is left as an exercise.
    </p>
   </blockquote>
   <p>
-   并给出了代码示例：
+   示例代码：
   </p>
   <div class="highlight highlight-cpp">
    <pre><span class="c1">//copyright@ mark allen weiss  </span>
 <span class="c1">//July、updated，2011.05.05凌晨.  </span>
 
-<span class="c1">//q_select places the kth smallest element in a[k]  </span>
-<span class="kt">void</span> <span class="nf">q_select</span><span class="p">(</span> <span class="n">input_type</span> <span class="n">a</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span> <span class="p">)</span>  
-<span class="p">{</span>  
+<span class="c1">//q_select 将第k小的元素放在 a[k-1]  </span>
+<span class="kt">void</span> <span class="nf">q_select</span><span class="p">(</span> <span class="kt">int</span> <span class="n">a</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span> <span class="p">)</span>
+<span class="p">{</span>
     <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
-    <span class="n">input_type</span> <span class="n">pivot</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">left</span> <span class="o">+</span> <span class="n">CUTOFF</span> <span class="o">&lt;=</span> <span class="n">right</span> <span class="p">)</span>  
-    <span class="p">{</span>
-        <span class="n">pivot</span> <span class="o">=</span> <span class="n">median3</span><span class="p">(</span> <span class="n">a</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="p">);</span>
-        <span class="c1">//取三数中值作为枢纽元，可以消除最坏情况而保证此算法是O（N）的。不过，这还只局限在理论意义上。  </span>
-        <span class="c1">//稍后，除了下文的第二节的随机选取枢纽元，在第四节末，您将看到另一种选取枢纽元的方法。  </span>
+    <span class="kt">int</span> <span class="n">Pivot</span><span class="p">;</span>
 
-        <span class="n">i</span><span class="o">=</span><span class="n">left</span><span class="p">;</span> <span class="n">j</span><span class="o">=</span><span class="n">right</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-        <span class="k">for</span><span class="p">(;;)</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">left</span> <span class="o">+</span> <span class="n">Cutoff</span> <span class="o">&lt;=</span> <span class="n">right</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Pivot</span> <span class="o">=</span> <span class="n">median3</span><span class="p">(</span> <span class="n">a</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="p">);</span>
+        <span class="c1">//取三数中值作为枢纽元，可以消除最坏情况而保证此算法是O（N）</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span> <span class="n">j</span> <span class="o">=</span> <span class="n">right</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span> <span class="p">;</span> <span class="p">;</span> <span class="p">)</span>
         <span class="p">{</span>
-            <span class="k">while</span><span class="p">(</span> <span class="n">a</span><span class="p">[</span><span class="o">++</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">pivot</span> <span class="p">);</span>
-            <span class="k">while</span><span class="p">(</span> <span class="n">a</span><span class="p">[</span><span class="o">--</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">pivot</span> <span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span> <span class="p">)</span>
-                <span class="n">swap</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">);</span>
+            <span class="k">while</span><span class="p">(</span> <span class="n">a</span><span class="p">[</span> <span class="o">++</span><span class="n">i</span> <span class="p">]</span> <span class="o">&lt;</span> <span class="n">Pivot</span> <span class="p">){</span> <span class="p">}</span>
+            <span class="k">while</span><span class="p">(</span> <span class="n">a</span><span class="p">[</span> <span class="o">--</span><span class="n">j</span> <span class="p">]</span> <span class="o">&gt;</span> <span class="n">Pivot</span> <span class="p">){</span> <span class="p">}</span>
+            <span class="k">if</span><span class="p">(</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span> <span class="p">)</span>
+                <span class="n">swap</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span> <span class="n">i</span> <span class="p">],</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span> <span class="n">j</span> <span class="p">]</span> <span class="p">);</span>
             <span class="k">else</span>
                 <span class="k">break</span><span class="p">;</span>
         <span class="p">}</span>
-        <span class="n">swap</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">right</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span> <span class="cm">/* restore pivot */</span>
-        <span class="k">if</span><span class="p">(</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">)</span>
-            <span class="n">q_select</span><span class="p">(</span> <span class="n">a</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">i</span><span class="o">-</span><span class="mi">1</span> <span class="p">);</span>
-        <span class="k">else</span>
-            <span class="k">if</span><span class="p">(</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="p">)</span>
-                <span class="n">q</span><span class="o">-</span><span class="n">select</span><span class="p">(</span> <span class="n">a</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">right</span> <span class="p">);</span>
-    <span class="p">}</span>  
-    <span class="k">else</span>
-        <span class="n">insert_sort</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="p">);</span>
+        <span class="n">swap</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span> <span class="n">i</span> <span class="p">],</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span> <span class="n">right</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">]</span> <span class="p">);</span>  <span class="cm">/* 重置枢纽元 */</span>
+
+        <span class="k">if</span><span class="p">(</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="p">)</span>
+            <span class="n">q_select</span><span class="p">(</span> <span class="n">a</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">);</span>
+        <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">)</span>
+            <span class="n">q_select</span><span class="p">(</span> <span class="n">a</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">right</span> <span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span>  
+        <span class="n">insert_sort</span><span class="p">(</span> <span class="n">a</span> <span class="o">+</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">);</span>
 <span class="p">}</span>
+
 </pre>
   </div>
   <p>
-   这个快速选择SELECT算法，类似快速排序的划分方法，N个数存储在数组S中，再从数组中选取“中位数的中位数”作为枢纽元X，把数组划分为Sa和Sb俩部分，Sa&lt;=X&lt;=Sb，如果要查找的k个元素小于Sa的元素个数，则返回Sa中较小的k个元素，否则返回Sa中所有元素+Sb中小的k-|Sa|个元素，这种解法在最坏情况下亦能做到O（N）的复杂度。
-  </p>
-  <p>
-   取三数中值作为枢纽元，可以消除最坏情况而保证此算法是O（N）的。不过，这还只局限在理论意义上。
+   这个快速选择SELECT算法，类似快速排序的划分方法。N个数存储在数组S中，再从数组中选取“中位数的中位数”作为枢纽元X，把数组划分为Sa和Sb俩部分，Sa&lt;=X&lt;=Sb，如果要查找的k个元素小于Sa的元素个数，则返回Sa中较小的k个元素，否则返回Sa中所有元素+Sb中小的k-|Sa|个元素，这种解法在最坏情况下亦能做到
+   <code>
+    O（N）
+   </code>
+   的复杂度。
   </p>
   <h3>
    <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%94" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%94">
@@ -287,7 +334,11 @@
    解法五
   </h3>
   <p>
-   此外，算法导论上介绍了一个随机选取主元的选择算法RANDOMIZED-SELECT，它每次都是随机选取数列中的一个元素作为主元，在0（n）的时间内找到第k小的元素，然后遍历输出前面的k个小的元素。 如果能的话，那么总的时间复杂度为线性期望时间：
+   《算法导论》介绍了一个随机选取主元的选择算法RANDOMIZED-SELECT。它每次都是随机选取数列中的一个元素作为主元，在
+   <code>
+    O（n）
+   </code>
+   的时间内找到第k小的元素，然后遍历输出前面的k个小的元素。平均时间复杂度：
    <code>
     O（n+k）=O（n）
    </code>
@@ -298,7 +349,7 @@
    <code>
     O（n*logn）
    </code>
-   ,而RANDOMIZED-SELECT与普通的快速排序不同的是，每次递归都是随机选择序列从第一个到最后一个元素中任一一个作为主元。
+   。而RANDOMIZED-SELECT与普通的快速排序不同，它每次递归都是随机选择序列，从第一个到最后一个元素中任一一个作为主元。
   </p>
   <p>
    下面是RANDOMIZED-SELECT(A, p, r)完整伪码：
@@ -334,7 +385,11 @@
 </pre>
   </div>
   <p>
-   下面则是算法导论原英文版有关于RANDOMIZED-SELECT(A, p, r)为O（n）的证明，阐述如下：
+   下面则是《算法导论》原版关于RANDOMIZED-SELECT(A, p, r)为
+   <code>
+    O（n）
+   </code>
+   的证明，阐述如下：
   </p>
   <blockquote>
    <p>
@@ -451,7 +506,15 @@
    </p>
   </blockquote>
   <p>
-   结论： 如你所见，RANDOMIZED-SELECT有线性期望时间O（N）的复杂度，但此RANDOMIZED-SELECT算法在最坏情况下有O（N^2）的复杂度。所以，我们得找出一种在最坏情况下也为线性时间的算法。
+   结论：RANDOMIZED-SELECT的时间复杂度为
+   <code>
+    O（N）
+   </code>
+   ，但它在最坏情况下时间的复杂度为
+   <code>
+    O（N^2）
+   </code>
+   。
   </p>
   <h3>
    <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%94-1" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%94-1">
@@ -461,7 +524,7 @@
    解法五
   </h3>
   <p>
-   算法导论第九章第9.3节介绍了一个最坏情况线性时间的选择算法，如下（我酌情对之参考原中文版做了翻译，下文中括号内的中文解释，为我个人添加）：
+   《算法导论》第九章第9.3节介绍了一个最坏情况线性时间的选择算法，如下：
   </p>
   <blockquote>
    <p>
@@ -591,7 +654,7 @@
    1、谷歌面试题：输入是两个整数数组，他们任意两个数的和又可以组成一个数组，求这个和中前k个数怎么做？
   </p>
   <p>
-   分析：Ben
+   分析：
   </p>
   <pre><code> “假设两个整数数组为A和B，各有N个元素，任意两个数的和组成的数组C有N^2个元素。
    那么可以把这些和看成N个有序数列：
@@ -599,13 +662,13 @@
           A[2]+B[1] &lt;= A[2]+B[2] &lt;= A[2]+B[3] &lt;=…
           …
          A[N]+B[1] &lt;= A[N]+B[2] &lt;= A[N]+B[3] &lt;=…
-    问题转变成，在这N个有序数列里，找到前k小的元素”
+    问题转变成，在这N^2个有序数列里，找到前k小的元素”
 </code></pre>
   <p>
-   2、有两个序列A和B,A=(a1,a2,...,ak),B=(b1,b2,...,bk),A和B都按升序排列，对于1&lt;=i,j&lt;=k，求k个最小的（ai+bj），要求算法尽量高效。
+   2、有两个序列A和B,A=(a1,a2,...,ak),B=(b1,b2,...,bk)，A和B都按升序排列。对于1&lt;=i,j&lt;=k，求k个最小的（ai+bj）。要求算法尽量高效。
   </p>
   <p>
-   3、给定一个数列a1、a2、a3、...、an和m个三元组表示的查询，对于每个查询(i，j，k)，输出ai，ai+1，...，aj的升序排列中第k个数。
+   3、给定一个数列a1,a2,a3,...,an和m个三元组表示的查询，对于每个查询(i，j，k)，输出ai，ai+1，...，aj的升序排列中第k个数。
   </p>
  </body>
 </html>

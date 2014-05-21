@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-5da842ffec8a31b5975487ab1278c7ac16876671.css" />
-  <link rel="stylesheet" href="style_cache/github2-0a16120e50749ebd0a7bbb45d3c848b65919ec7e.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-dc3b5ef1bc6b1a7195c5411444124d626d072527.css" />
+  <link rel="stylesheet" href="style_cache/github2-7d1aff25db06f83ddd546f0c3a61c74a4a805d56.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,11 +105,11 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#%E7%AC%AC%E4%B8%80%E7%AB%A0%E5%B7%A6%E6%97%8B%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2" name="user-content-%E7%AC%AC%E4%B8%80%E7%AB%A0%E5%B7%A6%E6%97%8B%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2">
+   <a class="anchor" href="#%E5%AD%97%E7%AC%A6%E7%9A%84%E7%A7%BB%E5%8A%A8" name="user-content-%E5%AD%97%E7%AC%A6%E7%9A%84%E7%A7%BB%E5%8A%A8">
     <span class="octicon octicon-link">
     </span>
    </a>
-   第一章：左旋转字符串
+   字符的移动
   </h1>
   <h2>
    <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
@@ -119,7 +119,7 @@
    题目描述
   </h2>
   <p>
-   定义字符串左旋转操作：把字符串前面的若干个字符移动到字符串尾部，如把字符串 abcdef 左旋转 2 位得到字符串 cdefab。请实现字符串左旋转的函数，要求对长度为 n 的字符串操作的时间复杂度为 O(n)，空间复杂度为 O(1)。
+   给定一个字符串，要求把字符串前面的若干个字符移动到字符串的尾部，如把字符串“abcdef”前面的2个字符“ab” 移动到字符串的尾部，即变成“cdefab”。请写一个函数完成此功能，要求对长度为n的字符串操作的时间复杂度为 O(n)，空间复杂度为 O(1)。
   </p>
   <h2>
    <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
@@ -136,14 +136,14 @@
    解法一、暴力移位法
   </h3>
   <p>
-   初看此题,最先想到的方法可能就是一位一位移动，我们可以实现一个函数
+   初看此题，可能最先想到的方法是按照题目所要求的，把需要移动的字符一个一个的移动到字符串的尾部，如此我们可以实现一个函数
    <code>
-    left_shift_one(char *s, int n)
+    LeftShiftOne(char *s, int n)
    </code>
-   ，以完成左移动一位的功能
+   ，以完成移动一个字符到字符串尾部的功能，代码如下所示：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="kt">void</span> <span class="nf">left_shift_one</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+   <pre><span class="kt">void</span> <span class="nf">LeftShiftOne</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="n">assert</span><span class="p">(</span><span class="n">s</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">);</span>
     <span class="kt">char</span> <span class="n">t</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>  <span class="c1">//保存第一个字符</span>
@@ -156,18 +156,24 @@
 </pre>
   </div>
   <p>
-   若要向左移 m 位,方法如下:
+   因此，若要把字符串开头的m个字符移动到字符串的尾部，则可以如下操作：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="kt">void</span> <span class="nf">left_shift_m</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">m</span><span class="p">)</span>
+   <pre><span class="kt">void</span> <span class="nf">LeftShiftString</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">m</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="k">while</span> <span class="p">(</span><span class="n">m</span><span class="o">--</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="n">left_shift_one</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+        <span class="n">LeftShiftOne</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </pre>
   </div>
+  <p>
+   下面，我们来分析下这个方法的时间复杂度和空间复杂度。
+  </p>
+  <p>
+   针对长度为n的字符串来说，假设需要移动m个字符到字符串的尾部，那么总共需要 m*n 次操作，同时设立一个变量保存第一个字符，如此，时间复杂度为O（m * n），空间复杂度为O（1），空间复杂度符合题目要求，但时间复杂度不符合，所以，我们得需要寻找其它更好的办法来降低时间复杂度。
+  </p>
   <h3>
    <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C%E4%B8%89%E6%AD%A5%E5%8F%8D%E8%BD%AC%E6%B3%95" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C%E4%B8%89%E6%AD%A5%E5%8F%8D%E8%BD%AC%E6%B3%95">
     <span class="octicon octicon-link">
@@ -222,7 +228,7 @@
     <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="kt">void</span> <span class="nf">leftshift</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span><span class="kt">int</span> <span class="n">m</span><span class="p">)</span>
+<span class="kt">void</span> <span class="nf">LeftRotateString</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span><span class="kt">int</span> <span class="n">m</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="n">m</span> <span class="o">%=</span> <span class="n">n</span><span class="p">;</span>               <span class="c1">//若要左移动大于n位，那么和%n 是等价的</span>
     <span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">//反转[0..m - 1]，套用到上面举的例子中，就是X-&gt;X^T，即 abc-&gt;cba</span>
@@ -232,18 +238,21 @@
 </pre>
   </div>
   <h2>
-   <a class="anchor" href="#%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98" name="user-content-%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98">
+   <a class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
     <span class="octicon octicon-link">
     </span>
    </a>
-   类似问题
+   举一反三
   </h2>
   <p>
-   1、链表翻转。给出一个链表和一个数k，比如链表1→2→3→4→5→6，k=2，则翻转后2→1→4→3→6→5，若k=3,翻转后3→2→1→6→5→4，若k=4，翻转后4→3→2→1→5→6，用程序实现。
+   1、链表翻转。给出一个链表和一个数k，比如链表1→2→3→4→5→6，k=2，则翻转后2→1→6→5→4→3，若k=3,翻转后3→2→1→6→5→4，若k=4，翻转后4→3→2→1→6→5，用程序实现。
   </p>
   <p>
    2、编写程序，在原字符串中把尾部m个字符移动到字符串的头部，要求：长度为n字符串操作时间复杂度为O(n),空间复杂度为O(1)。
 如：原字符串为”Ilovebaofeng”，m=7，输出结果：”baofengIlove”。
+  </p>
+  <p>
+   3、单词翻转。输入一个英文句子，翻转句子中单词的顺序，但单词内字符的顺序不变，句子中单词以空格符隔开。为简单起见，标点符号和普通字母一样处理。例如输入“I am a student.”，则输出“student. a am I”。
   </p>
  </body>
 </html>

@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-5da842ffec8a31b5975487ab1278c7ac16876671.css" />
-  <link rel="stylesheet" href="style_cache/github2-0a16120e50749ebd0a7bbb45d3c848b65919ec7e.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-dc3b5ef1bc6b1a7195c5411444124d626d072527.css" />
+  <link rel="stylesheet" href="style_cache/github2-7d1aff25db06f83ddd546f0c3a61c74a4a805d56.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,11 +105,11 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%B8%80%E7%AB%A0%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E8%B6%85%E8%BF%87%E4%B8%80%E5%8D%8A%E7%9A%84%E6%95%B0%E5%AD%97" name="user-content-%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%B8%80%E7%AB%A0%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E8%B6%85%E8%BF%87%E4%B8%80%E5%8D%8A%E7%9A%84%E6%95%B0%E5%AD%97">
+   <a class="anchor" href="#%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E8%B6%85%E8%BF%87%E4%B8%80%E5%8D%8A%E7%9A%84%E6%95%B0%E5%AD%97" name="user-content-%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E8%B6%85%E8%BF%87%E4%B8%80%E5%8D%8A%E7%9A%84%E6%95%B0%E5%AD%97">
     <span class="octicon octicon-link">
     </span>
    </a>
-   第二十一章：出现次数超过一半的数字
+   出现次数超过一半的数字
   </h1>
   <h2>
    <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
@@ -135,16 +135,23 @@
   <p>
    图1  Tango
   </p>
+  <h2>
+   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   分析与解法
+  </h2>
   <p>
    一个数组中有很多数，现在我们要找出其中那个出现次数超过总数一半的数字，怎么找呢?大凡当我们碰到某一个杂乱无序的东西时，我们人的内心本质期望是希望把它梳理成有序的。所以，我们得分两种情况来讨论，无序和有序。
   </p>
-  <h2>
+  <h3>
    <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
     <span class="octicon octicon-link">
     </span>
    </a>
    解法一
-  </h2>
+  </h3>
   <p>
    如果
    <strong>
@@ -156,13 +163,13 @@
    </strong>
    ，至于选取什么排序方法则不在话下，最常用的快速排序O（N*logN）即可。排完序呢，直接遍历。在遍历整个数组的同时统计每个数字的出现次数，然后把那个出现次数超过一半的数字直接输出，题目便解答完成了。总的时间复杂度为O（N*logN+N）。
   </p>
-  <h2>
+  <h3>
    <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C">
     <span class="octicon octicon-link">
     </span>
    </a>
    解法二
-  </h2>
+  </h3>
   <p>
    但各位再想想，
    <strong>
@@ -170,31 +177,31 @@
    </strong>
    或者经过上述由无序的数组变成有序后的数组呢？是否在排完序O（N*logN）后，真的还需要再遍历一次整个数组么?我们知道，既然是数组的话，那么我们可以根据数组索引支持直接定向到某一个数。我们发现，一个数字在数组中的出现次数超过了一半，那么在已排好序的数组索引的N/2处（从零开始编号），就一定是这个数字。自此，我们只需要对整个数组排完序之后，然后直接输出数组中的第N/2处的数字即可，这个数字即是整个数组中出现次数超过一半的数字，总的时间复杂度由于少了最后一次整个数组的遍历，缩小到O（N*logN）。
   </p>
-  <h2>
+  <h3>
    <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%89" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%89">
     <span class="octicon octicon-link">
     </span>
    </a>
    解法三
-  </h2>
+  </h3>
   <p>
-   然不论是上述思路一的O（N*logN+N），还是思路二的O（N*logN），时间复杂度并无本质性的改变。我们需要找到一种更为有效的思路或方法。既要缩小总的时间复杂度，那么就用查找时间复杂度为O（1），事先预处理时间复杂度为O（N）的
+   然不论是上述思路一的O（N*logN+N），还是思路二的O（N*logN），时间复杂度并无本质性的改变。我们需要找到一种更为有效的思路或方法。既要缩小总的时间复杂度，那么可以用查找时间复杂度为O（1）的
    <strong>
     hash表
    </strong>
-   。哈希表的键值（Key）为数组中的数字，值（Value）为该数字对应的次数。然后直接遍历整个
+   ，即以空间换时间。哈希表的键值（Key）为数组中的数字，值（Value）为该数字对应的次数。然后直接遍历整个
    <strong>
     hash表
    </strong>
    ，找出每一个数字在对应的位置处出现的次数，输出那个出现次数超过一半的数字即可。
   </p>
-  <h2>
+  <h3>
    <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%9B%9B" name="user-content-%E8%A7%A3%E6%B3%95%E5%9B%9B">
     <span class="octicon octicon-link">
     </span>
    </a>
    解法四
-  </h2>
+  </h3>
   <p>
    Hash表需要O（N）的空间开销，且要设计hash函数，还有没有更好的办法呢?我们可以试着这么考虑，如果
    <strong>
@@ -213,13 +220,13 @@
   <p>
    但是如果是5，5，5，5，1，还能运用上述思路么？额，别急，请看下文思路5。
   </p>
-  <h2>
+  <h3>
    <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%94" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%94">
     <span class="octicon octicon-link">
     </span>
    </a>
    解法五
-  </h2>
+  </h3>
   <p>
    咱们根据数组的特性进一步考虑@zhedahht： 数组中有个数字出现的次数超过了数组长度的一半。也就是说，有个数字出现的次数比其他所有数字出现次数的和还要多。因此我们可以考虑在遍历数组的时候保存两个值：一个是数组中的一个数字，一个是次数。当我们遍历到下一个数字的时候，如果下一个数字和我们之前保存的数字相同，则次数加1。如果下一个数字和我们之前保存的数字不同，则次数减1。如果次数为零，我们需要保存下一个数字，并把次数重新设为1。
   </p>
@@ -291,8 +298,7 @@ i=4，candidate=1，nTimes=1；
   </p>
   <div class="highlight highlight-cpp">
    <pre><span class="c1">//copyright@zhedahht  </span>
-<span class="c1">//July,updated,  </span>
-<span class="c1">//2011.04.16。  </span>
+<span class="c1">//updated@July</span>
 <span class="cp">#include &lt;iostream&gt;  </span>
 <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>  
 
@@ -363,17 +369,17 @@ i=4，candidate=1，nTimes=1；
    最后，上述代码加了一个判断，如果数组中并不包含这么一个数字，那么输入也是无效的。因此在函数结束前还加了一段代码来验证输入是不是有效的。
   </p>
   <h2>
-   <a class="anchor" href="#%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95" name="user-content-%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95">
+   <a class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
     <span class="octicon octicon-link">
     </span>
    </a>
-   问题扩展
+   举一反三
   </h2>
   <p>
-   加强版水王.找出出现次数刚好是一半的数字
+   加强版水王：找出出现次数刚好是一半的数字
   </p>
   <p>
-   我们知道，水王问题：有N个数，其中有一个数出现超过一半，要求在线性时间求出这个数。那么，我的问题是，加强版水王：有N个数，其中有一个数刚好出现一半次数，要求在线性时间内求出这个数。
+   分析：我们知道，水王问题：有N个数，其中有一个数出现超过一半，要求在线性时间求出这个数。那么，我的问题是，加强版水王：有N个数，其中有一个数刚好出现一半次数，要求在线性时间内求出这个数。
   </p>
   <p>
    因为，很明显，如果是刚好出现一半的话，如此例： 0，1，2，1 ：
@@ -383,126 +389,21 @@ i=4，candidate=1，nTimes=1；
 遍历到2时，times为0，则candidate更新为2，times加1
 遍历到1时，与candidate不同，则times减为0；我们需要返回所保存candidate（数字2）的下一个数字，即数字1。
 </code></pre>
-  <p>
-   所以，如果还运用上面的程序的话，那么只能返回我们要找的数字1的前一个数字，即遍历到1之前所保存的candidate=2，试问如何让程序能返回我们需要的数字1呢？望读者思考之。
-  </p>
-  <p>
-   赤血红狐&amp;&amp;pointersky用了两个变量来记录水王，最终完整代码如下（测试正确）：
-  </p>
-  <div class="highlight highlight-cpp">
-   <pre><span class="cp">#include&lt;iostream&gt;  </span>
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>  
-
-<span class="kt">int</span> <span class="nf">Find</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">N</span><span class="p">)</span>  
-<span class="p">{</span>  
-    <span class="kt">int</span> <span class="n">candidate1</span><span class="p">,</span> <span class="n">candidate2</span><span class="p">;</span>  
-    <span class="kt">int</span> <span class="n">nTimes1</span><span class="p">,</span> <span class="n">nTimes2</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span>  
-
-    <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">nTimes1</span> <span class="o">=</span> <span class="n">nTimes2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>  
-    <span class="p">{</span>  
-        <span class="k">if</span><span class="p">(</span><span class="n">nTimes1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>  
-        <span class="p">{</span>  
-            <span class="n">candidate1</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">nTimes1</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>  
-        <span class="p">}</span>  
-        <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">nTimes2</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">candidate1</span> <span class="o">!=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>  
-        <span class="c1">//注意：这里的判断条件加上第二个变量是否等于第一个变量的判断  </span>
-        <span class="p">{</span>  
-
-            <span class="n">candidate2</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">nTimes2</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>  
-        <span class="p">}</span>  
-        <span class="k">else</span>  
-        <span class="p">{</span>  
-            <span class="k">if</span><span class="p">(</span><span class="n">candidate1</span> <span class="o">==</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>  
-                <span class="n">nTimes1</span><span class="o">++</span><span class="p">;</span>  
-            <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">candidate2</span> <span class="o">==</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>  
-                <span class="n">nTimes2</span><span class="o">++</span><span class="p">;</span>  
-            <span class="k">else</span>  
-            <span class="p">{</span>  
-                <span class="n">nTimes1</span><span class="o">--</span><span class="p">;</span>  
-                <span class="n">nTimes2</span><span class="o">--</span><span class="p">;</span>  
-            <span class="p">}</span>  
-        <span class="p">}</span>  
-    <span class="p">}</span>  
-    <span class="k">return</span> <span class="n">nTimes1</span><span class="o">&gt;</span><span class="n">nTimes2</span><span class="o">?</span><span class="n">candidate1</span><span class="o">:</span><span class="n">candidate2</span><span class="p">;</span>  
-<span class="p">}</span>  
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>  
-<span class="p">{</span>  
-    <span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">};</span>  
-    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">Find</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>  
-<span class="c1">//  int a[6]={1,0,2,1,2,1};  </span>
-<span class="c1">//  cout&lt;&lt;Find(a,6)&lt;&lt;endl;  </span>
-<span class="p">}</span>
-</pre>
-  </div>
-  <p>
-   当然也可以如
-   <a href="http://blog.csdn.net/v_july_v/article/details/6890054">
-    本文
-   </a>
-   评论下第16楼dalong7所述：
-  </p>
-  <pre><code>易知总数必定是偶数，同时删除不同数字，最后剩余的两个数字必有其一为水王，只需简单判断一下即可
-</code></pre>
-  <p>
-   代码如下（测试正确）：
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="kt">int</span> <span class="nf">Find</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">N</span><span class="p">)</span>  <span class="c1">//a代表数组，N代表数组长度      </span>
-<span class="p">{</span>      
-    <span class="kt">int</span> <span class="n">candidate</span><span class="p">;</span>      
-    <span class="kt">int</span> <span class="n">nTimes</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span>      
-    <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">nTimes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>      
-    <span class="p">{</span>      
-        <span class="k">if</span><span class="p">(</span><span class="n">nTimes</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>      
-        <span class="p">{</span>      
-            <span class="n">candidate</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">nTimes</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>      
-        <span class="p">}</span>      
-        <span class="k">else</span>      
-        <span class="p">{</span>      
-            <span class="k">if</span><span class="p">(</span><span class="n">candidate</span> <span class="o">==</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>      
-                <span class="n">nTimes</span><span class="o">++</span><span class="p">;</span>      
-            <span class="k">else</span>      
-                <span class="n">nTimes</span><span class="o">--</span><span class="p">;</span>      
-        <span class="p">}</span>      
-    <span class="p">}</span>      
-
-    <span class="kt">int</span> <span class="n">cTimes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>    
-    <span class="kt">int</span> <span class="n">candidate2</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>    
-    <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span> <span class="o">++</span><span class="p">)</span>    
-    <span class="p">{</span>    
-        <span class="k">if</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">candidate</span><span class="p">)</span>    
-        <span class="p">{</span>    
-            <span class="n">cTimes</span><span class="o">++</span><span class="p">;</span>    
-        <span class="p">}</span>    
-    <span class="p">}</span>    
-
-    <span class="k">return</span> <span class="n">cTimes</span> <span class="o">==</span> <span class="n">N</span><span class="o">/</span><span class="mi">2</span> <span class="o">?</span> <span class="n">candidate</span> <span class="o">:</span> <span class="n">candidate2</span><span class="p">;</span>       
-<span class="p">}</span>
-</pre>
-  </div>
   <h2>
-   <a class="anchor" href="#%E7%BB%A7%E7%BB%AD%E6%B7%B1%E5%85%A5" name="user-content-%E7%BB%A7%E7%BB%AD%E6%B7%B1%E5%85%A5">
+   <a class="anchor" href="#%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95" name="user-content-%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95">
     <span class="octicon octicon-link">
     </span>
    </a>
-   继续深入
+   问题扩展
   </h2>
   <p>
-   <strong>
-    1. 谁是选举中得票超半数的人？
-   </strong>
+   谁是选举中得票超半数的人？
   </p>
   <p>
    美国选举一般要求找到票数超过一半的人。于是有人就开始研究如何用线性时间找到这个人或者证明这个人不存在。Robert S. Boyer 和 J Strother Moore 发表了一片关于这个算法的论文。内容和上文提到的算法是一致的，只是多了理论分析和FORTRAN实现部分。
   </p>
   <p>
    MJRTY - A Fast Majority Vote Algorithm, with R.S. Boyer. In R.S. Boyer (ed.), Automated Reasoning: Essays in Honor of Woody Bledsoe, Automated Reasoning Series, Kluwer Academic Publishers, Dordrecht, The Netherlands, 1981, pp. 105-117.
-  </p>
-  <p>
-   <strong>
-    2. 链接
-   </strong>
   </p>
   <p>
    论文链接：

@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-5da842ffec8a31b5975487ab1278c7ac16876671.css" />
-  <link rel="stylesheet" href="style_cache/github2-0a16120e50749ebd0a7bbb45d3c848b65919ec7e.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-dc3b5ef1bc6b1a7195c5411444124d626d072527.css" />
+  <link rel="stylesheet" href="style_cache/github2-7d1aff25db06f83ddd546f0c3a61c74a4a805d56.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -111,8 +111,15 @@
    </a>
    带通配符的字符串匹配问题
   </h1>
+  <h2>
+   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   题目描述
+  </h2>
   <p>
-   字符串匹配问题，给定一串字符串，按照指定规则对其进行匹配，并将匹配的结果保存至output数组中，多个匹配项用空格间隔，最后一个不需要空格。
+   字符串匹配问题：给定一个字符串，按照指定规则对其进行匹配，并将匹配的结果保存至output数组中。多个匹配项用空格间隔，最后一个不需要空格。
   </p>
   <p>
    要求：
@@ -156,14 +163,22 @@
    3. input=aaa，rule=aa时，返回一个结果aa，即可。
   </p>
   <h2>
+   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   分析与解法
+  </h2>
+  <h3>
    <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80%E7%9B%B4%E6%8E%A5%E5%8C%B9%E9%85%8D" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80%E7%9B%B4%E6%8E%A5%E5%8C%B9%E9%85%8D">
     <span class="octicon octicon-link">
     </span>
    </a>
    解法一、直接匹配
-  </h2>
+  </h3>
   <p>
-   本题与上述第三十章的题不同，上题字符串转换成整数更多考察对思维的全面性和对细节的处理，本题则更多的是编程技巧。闲不多说，直接上代码：
+   本题与“字符串转换成整数”的题目不同，那题偏向于考察思维的全面性和细节的处理。而本题则偏向于编程技巧。
+闲不多说，直接上代码：
   </p>
   <div class="highlight highlight-c">
    <pre><span class="c1">//copyright@cao_peng 2013/4/23</span>
@@ -289,15 +304,15 @@
 <span class="p">}</span>
 </pre>
   </div>
-  <h2>
+  <h3>
    <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92">
     <span class="octicon octicon-link">
     </span>
    </a>
    解法二、动态规划
-  </h2>
+  </h3>
   <p>
-   本题也可以直接写出DP(Dynamic Programming, 动态规划)方程，如下代码所示：
+   本题也可以直接写出DP(Dynamic Programming, 动态规划)方程。如下所示：
   </p>
   <div class="highlight highlight-c">
    <pre><span class="c1">//copyright@chpeih 2013/4/23</span>
@@ -331,6 +346,11 @@
         <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">rule</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'*'</span><span class="p">)</span>
             <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="n">rule</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'*'</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+                    <span class="k">continue</span><span class="p">;</span>
+                <span class="p">}</span>
                 <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
                 <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
                 <span class="p">{</span>
@@ -353,11 +373,27 @@
             <span class="p">}</span>
             <span class="k">else</span>
             <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">input</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">rule</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+                <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">input</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">rule</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> 
                 <span class="p">{</span>
-                    <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="n">rule</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'*'</span><span class="p">)</span> 
+                    <span class="p">{</span>
+                        <span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span>
+                        <span class="k">while</span> <span class="p">(</span><span class="n">tmp</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">rule</span><span class="p">[</span><span class="n">tmp</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'*'</span><span class="p">)</span> 
+                        <span class="p">{</span>
+                            <span class="n">tmp</span><span class="o">--</span><span class="p">;</span>
+                        <span class="p">}</span>
+                        <span class="n">tmp</span><span class="o">++</span><span class="p">;</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">tmp</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> 
+                        <span class="p">{</span>
+                            <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">tmp</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
                 <span class="p">}</span>
-                <span class="k">else</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">}</span>
@@ -374,7 +410,7 @@
             <span class="n">count_ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
             <span class="n">ans</span><span class="p">[</span><span class="n">count_ans</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">m</span><span class="p">;</span>
         <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">len2</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">len2</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span><span class="p">)</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">len2</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">len2</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">ans</span><span class="p">[</span><span class="n">count_ans</span><span class="p">]</span> <span class="o">+</span> <span class="n">m</span>  <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">m</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">ans</span><span class="p">[</span><span class="n">count_ans</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">m</span><span class="p">;</span>
         <span class="p">}</span>
@@ -503,6 +539,18 @@
 
 </pre>
   </div>
+  <h2>
+   <a class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   举一反三
+  </h2>
+  <p>
+   1、给定一个带通配符问号的数W，问号可以代表任意数字。
+再给定一个整数X，和W具有同样的长度。
+问有多少个整数符合W的形式并且比X大？
+  </p>
  </body>
 </html>
 		  </article>

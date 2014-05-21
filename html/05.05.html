@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title><link rel="stylesheet" href="style_cache/github-dc3b5ef1bc6b1a7195c5411444124d626d072527.css" />
+  <link rel="stylesheet" href="style_cache/github2-7d1aff25db06f83ddd546f0c3a61c74a4a805d56.css" />
+  <style>
+    .file-box {
+      margin: 64px auto;
+      width: 920px;
+    }
+	body {
+		font-size: 14px;
+		line-height: 22px;
+		<!--font-family: "adelle",Georgia,"Times New Roman",serif;-->
+		color: #4e443c;
+		background: #f0efe7;
+	}
+
+	.book-toc {
+
+	}
+	a {
+		color: #0388a6;
+		text-decoration: none;
+	}
+	a:hover {
+		color: #04b1d8;
+		text-decoration: none;
+	}
+	ol.book-toc li.chapter{
+		margin-bottom:0.6em
+	}
+	ol.book-toc, ol{
+		list-style-type: disc
+	}
+	ol.book-toc{
+		margin:30px 36px
+	}
+	ol.book-toc a{
+		padding-left:4px
+	}
+	li {
+		line-height: 22px;
+	}
+	h1, h2, h3, h4, h5, h6, li, p, a, ol, div{
+		margin: 0;
+		padding: 0;
+		border: 0;
+		vertical-align: baseline;
+	}
+	ul, ol {
+		padding: 0;
+		margin: 0 0 11px 25px;
+	}
+	h1 {
+		font-size: 36px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	h2 {
+		font-size: 18px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h1{
+		font-size: 22px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	ol.book-toc h2 {
+		font-size: 16px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	p {
+		margin: 0 0 11px;
+		font-size: 14px;
+		line-height: 22px;
+	}
+	div {
+		display: block;
+	}
+	div#nav{
+		padding: 30px
+	}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="file-box">
+	<div class="file">
+		<div id="readme" class="blob instapaper_body announce md">
+		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
+			<html>
+ <body>
+  <h1>
+   <a class="anchor" href="#%E6%9C%AC%E7%AB%A0%E4%B9%A0%E9%A2%98" name="user-content-%E6%9C%AC%E7%AB%A0%E4%B9%A0%E9%A2%98">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   本章习题
+  </h1>
+  <p>
+   本书中我们详细讲了0-1背包问题（第二章的2.5节：“寻找和为定值的多个数），最大连续子数组和（2.6节：求连续子数组的最大和），最长公共子序列LCS（5.1节），最大连续乘积子串（5.2节），字符串编辑距离（5.3节），下面我们看看其它的问题。同时，这些问题中大部分只会做个简单的思路分析，留给大家课后深入思考。
+  </p>
+  <p>
+   <strong>
+    1、交替字符串
+   </strong>
+  </p>
+  <p>
+   输入三个字符串s1、s2和s3，判断第三个字符串s3是否由前两个字符串s1和s2交错而成，即不改变s1和s2中各个字符原有的相对顺序，例如当s1 = “aabcc”，s2 = “dbbca”，s3 = “aadbbcbcac”时，则输出true，但如果s3=“accabdbbca”，则输出false。
+  </p>
+  <p>
+   分析：此题不能简单的排序，因为一旦排序，便改变了s1或s2中各个字符原始的相对顺序，既然不能排序，咱们可以考虑下用动态规划的方法，令dp[i][j]代表s3[0...i+j-1]是否由s1[0...i-1]和s2[0...j-1]的字符组成
+  </p>
+  <ul>
+   <li>
+    如果s1当前字符（即s1[i-1]）等于s3当前字符（即s3[i+j-1]），而且dp[i-1][j]为真，那么可以取s1当前字符而忽略s2的情况，dp[i][j]返回真；
+   </li>
+   <li>
+    如果s2当前字符等于s3当前字符，并且dp[i][j-1]为真，那么可以取s2而忽略s1的情况，dp[i][j]返回真，其它情况，dp[i][j]放回假
+   </li>
+  </ul>
+  <p>
+   参考代码如下：
+  </p>
+  <div class="highlight highlight-java">
+   <pre><span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isInterleave</span><span class="o">(</span><span class="n">String</span> <span class="n">s1</span><span class="o">,</span> <span class="n">String</span> <span class="mi">2</span><span class="o">,</span> <span class="n">String</span> <span class="mi">3</span><span class="o">){</span>
+    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s1</span><span class="o">.</span><span class="na">length</span><span class="o">(),</span> <span class="n">m</span> <span class="o">=</span> <span class="n">s2</span><span class="o">.</span><span class="na">length</span><span class="o">(),</span> <span class="n">s</span> <span class="o">=</span> <span class="n">s3</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+
+    <span class="c1">//如果长度不一致，则s3不可能由s1和s2交错组成</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">+</span> <span class="n">m</span> <span class="o">!=</span> <span class="n">s</span><span class="o">)</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+
+    <span class="kt">boolean</span><span class="o">[][]</span><span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+
+    <span class="c1">//在初始化边界时，我们认为空串可以由空串组成，因此dp[0][0]赋值为true。</span>
+    <span class="n">dp</span><span class="o">[</span><span class="mi">0</span><span class="o">][</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span><span class="o">++){</span>
+            <span class="k">if</span> <span class="o">(</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">||</span> <span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">==</span> <span class="kc">true</span> <span class="o">&amp;&amp;</span>
+                <span class="c1">//取s1字符</span>
+                <span class="n">s1</span><span class="o">.</span><span class="na">charAT</span><span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">==</span> <span class="n">s3</span><span class="o">.</span><span class="na">charAT</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">))</span> <span class="o">||</span>
+
+                <span class="o">(</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">==</span> <span class="kc">true</span> <span class="o">&amp;&amp;</span>
+                <span class="c1">//取s2字符</span>
+                <span class="n">s2</span><span class="o">.</span><span class="na">charAT</span><span class="o">(</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">==</span> <span class="n">s3</span><span class="o">.</span><span class="na">charAT</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">))</span> <span class="o">)</span>
+
+                <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="k">else</span>
+                <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">dp</span><span class="o">[</span><span class="n">n</span><span class="o">][</span><span class="n">m</span><span class="o">]</span>
+<span class="o">}</span>
+</pre>
+  </div>
+  <p>
+   理解本题及上段代码，对真正理解动态规划有一定帮助。
+  </p>
+  <p>
+   <strong>
+    2、最长递增子序列
+   </strong>
+  </p>
+  <p>
+   给定一个长度为N的数组，找出一个最长的单调递增子序列（注：子序列不要求连续，顺序不乱即可）。例如：给定一个长度为6的数组A{5， 6， 7， 1， 2， 8}，则其最长的单调递增子序列为{5，6，7，8}，长度为4。
+  </p>
+  <p>
+   分析：
+  </p>
+  <p>
+   解法一：转换为最长公共子序列问题。比如原数组为A{5， 6， 7， 1， 2， 8}，当我们对这个数组进行排序后，排序后的数组为A‘{1， 2， 5， 6， 7， 8}。然后想求数组A的最长递增子序列，其实就是求数组A与它的排序数组A‘的最长公共子序列，原因是原数组A的子序列顺序保持不变，而且排序后A‘本身就是递增的，这样，就保证了两序列的最长公共子序列的递增特性。如此，若想求数组A的最长递增子序列，其实就是求数组A与它的排序数组A‘的最长公共子序列。
+  </p>
+  <p>
+   解法二：动态规划。
+  </p>
+  <p>
+   子序列个数，
+  </p>
+  <p>
+   TSP（旅行商），
+  </p>
+  <p>
+   爬楼梯，
+  </p>
+  <p>
+   格子取数，
+  </p>
+  <p>
+   矩阵链乘法，
+  </p>
+  <p>
+   流水装配线，
+  </p>
+  <p>
+   最优二叉搜索树，
+  </p>
+  <p>
+   数塔，
+  </p>
+  <p>
+   导弹拦截，
+  </p>
+  <p>
+   铺砖问题，
+  </p>
+  <p>
+   木块砌墙。
+  </p>
+ </body>
+</html>
+		  </article>
+		  
+			<div id="nav">
+				
+					<a href="05.04.html">prev</a>
+					|
+				
+				
+					<a href="06.01.html">next</a>
+				
+				<span style="float: right"><a href="index.html">Back to home</a>
+			</div>
+		  
+		</div>
+	</div>
+  </div>
+  
+  <div>&nbsp;</div>
+  </div>
+  <div style="text-align:center; margin-bottom: 30px">
+	  Generated by <a href="https://github.com/marchtea/md_to_github_html">mdtogh</a>
+  </div>
+</body>
+</html>

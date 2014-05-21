@@ -24,9 +24,11 @@ To download, you need install git first.Then open terminal & clone it.
 
 For windows users, instead of using git, you can download [github for windows](http://windows.github.com/), click `clone in desktop` button besides.
 
+Or, You can click `Download ZIP` button besides.
+
 ##Current Version
 
-updated 2014/05/09
+updated 2014/05/22
 
 ##TODO
 Add Pdf format.
