@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-dc3b5ef1bc6b1a7195c5411444124d626d072527.css" />
-  <link rel="stylesheet" href="style_cache/github2-7d1aff25db06f83ddd546f0c3a61c74a4a805d56.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-0282bede6135e06ec35e92d06a80225f92812b0e.css" />
+  <link rel="stylesheet" href="style_cache/github2-dcf6ca6edf1a82a2dcaebf74f6b2d9eface5db5d.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -181,22 +181,26 @@ f(n)=     2                                      n = 2
    解法二
   </h4>
   <p>
-   行文至此，你可能会认为问题已经解决了，但事实上没有。
+   一维数组dp记录每个台阶的方法数，且令dp[i] = dp[i-1] + dp[i-2]，初始化时，dp[0]=dp[1]=1，然后递推计算即可dp[n] = dp[n-1] + dp[n-2];
   </p>
   <p>
-   用递归方法计算的时间复杂度是以n的指数的方式递增的，我们可以尝试用递推方法解决。具体如何操作，读者自行思考。
+   参考代码如下：
   </p>
-  <p>
-   有一种方法，能在O(logn)的时间复杂度内求解Fibonacci数列问题，你能想到么?
-  </p>
-  <p>
-   同时，有朋友指出对于这个台阶问题只需求幂就可以了（求复数幂C++库里有），不用任何循环且复杂度为O（1），如下图所示，是否真如此?:
-  </p>
-  <p>
-   <a href="../images/16%7E20/17.1.gif" target="_blank">
-    <img alt="" src="../images/16%7E20/17.1.gif" style="max-width:100%;"/>
-   </a>
-  </p>
+  <div class="highlight highlight-java">
+   <pre><span class="kt">int</span> <span class="nf">ClimbStairs</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="kt">int</span><span class="o">[]</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+    <span class="n">dp</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="n">dp</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+        <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">+</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">2</span><span class="o">];</span> <span class="cm">/* 从其他地方可达路径*/</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">dp</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+<span class="o">}</span>
+</pre>
+  </div>
   <h4>
    <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%89" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%89">
     <span class="octicon octicon-link">
@@ -205,10 +209,13 @@ f(n)=     2                                      n = 2
    解法三
   </h4>
   <p>
-   可以使用动态规划求解，开辟一个足够长度的数组Arr[n]，递推计算即可。
+   其实这个台阶问题只需求幂就可以了（求复数幂C++库里有），不用任何循环且复杂度为O（1），如下图所示，是否真如此?:
   </p>
-  <pre><code>Arr[n] = Arr[n-1] + Arr[n-2]; /* 从其他地方可达路径*/
-</code></pre>
+  <p>
+   <a href="../images/16%7E20/17.1.gif" target="_blank">
+    <img alt="" src="../images/16%7E20/17.1.gif" style="max-width:100%;"/>
+   </a>
+  </p>
   <h3>
    <a class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
     <span class="octicon octicon-link">

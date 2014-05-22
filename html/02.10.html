@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-dc3b5ef1bc6b1a7195c5411444124d626d072527.css" />
-  <link rel="stylesheet" href="style_cache/github2-7d1aff25db06f83ddd546f0c3a61c74a4a805d56.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-0282bede6135e06ec35e92d06a80225f92812b0e.css" />
+  <link rel="stylesheet" href="style_cache/github2-dcf6ca6edf1a82a2dcaebf74f6b2d9eface5db5d.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -104,28 +104,31 @@
 		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
 			<html>
  <body>
-  <h1>
-   <a class="anchor" href="#%E6%95%B0%E7%BB%84%E5%85%B6%E5%AE%83%E9%97%AE%E9%A2%98" name="user-content-%E6%95%B0%E7%BB%84%E5%85%B6%E5%AE%83%E9%97%AE%E9%A2%98">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   数组其它问题
-  </h1>
   <h2>
-   <a class="anchor" href="#1%E4%B8%8D%E7%94%A8%E9%99%A4%E6%B3%95%E8%BF%90%E7%AE%97" name="user-content-1%E4%B8%8D%E7%94%A8%E9%99%A4%E6%B3%95%E8%BF%90%E7%AE%97">
+   <a class="anchor" href="#%E6%9C%AC%E7%AB%A0%E4%B9%A0%E9%A2%98" name="user-content-%E6%9C%AC%E7%AB%A0%E4%B9%A0%E9%A2%98">
     <span class="octicon octicon-link">
     </span>
    </a>
-   1、不用除法运算。
+   本章习题
   </h2>
   <p>
-   a）一个长度为n的数组a[0],a[1],...,a[n-1]。现在更新数组的名个元素，即a[0]变为a[1]到a[n-1]的积，a[1]变为a[0]和a[2]到a[n-1]的积，...，a[n-1]为a[0]到a[n-2]的积（就是除掉当前元素，其他所有元素的积）。程序要求：具有线性复杂度，且不能使用除法运算符。
+   <strong>
+    1、不用除法运算
+   </strong>
+  </p>
+  <p>
+   一个长度为n的数组a[0],a[1],...,a[n-1]。现在更新数组的名个元素，即a[0]变为a[1]到a[n-1]的积，a[1]变为a[0]和a[2]到a[n-1]的积，...，a[n-1]为a[0]到a[n-2]的积（就是除掉当前元素，其他所有元素的积）。程序要求：具有线性复杂度，且不能使用除法运算符。
   </p>
   <p>
    分析：left[i]标示着a[i]之前的乘积，right[i]标示着a[i]之后的乘积，但不申请空间，那么a[i]=left[i]*right[i] 。不过，left的计算从左往右扫的时候得出，right是从右往左扫得出。因为就是当中某个元素a[i]的左边所有元素与右边所有元素的乘积，就这么简单。所以计算a[i]=left[i]*right[i]时，直接出结果。
   </p>
   <p>
-   b）两个数组a[N]，b[N]，其中A[N]的各个元素值已知，现给b[i]赋值，b[i] = a[0]*a[1]*a[2]...*a[N-1]/a[i]；
+   <strong>
+    2
+   </strong>
+  </p>
+  <p>
+   两个数组a[N]，b[N]，其中A[N]的各个元素值已知，现给b[i]赋值，b[i] = a[0]*a[1]*a[2]...*a[N-1]/a[i]；
 要求：
   </p>
   <ul>
@@ -149,6 +152,98 @@
     a*a[i+1]..*a[N-1]/a ，就是求：a[0]*a[1]
    </em>
    ...a[i-1]*a[i+1]..*a[N-1]。只是我把a[i]左边部分标示为left[i]，b[i]右边部分标示为right[i]，而实际上完全不申请left[i]，与right[i]变量，之所以那样标示，无非就是为了说明：除掉当前元素a[i]，其他所有元素(a[i]左边部分，和a[i]右边部分)的积。
+  </p>
+  <p>
+   <strong>
+    3、找出数组中唯一的重复元素
+   </strong>
+  </p>
+  <p>
+   1-1000放在含有1001个元素的数组中，只有唯一的一个元素值重复，其它均只出现一次。
+每个数组元素只能访问一次，设计一个算法，将它找出来；不用辅助存储空间，能否设计一个算法实现？
+  </p>
+  <p>
+   <strong>
+    4、找出唯一出现的数
+   </strong>
+  </p>
+  <p>
+   一个数组里，数都是两两出现的，但是有三个数是唯一出现的，找出这三个数。
+  </p>
+  <p>
+   <strong>
+    5、找出反序的个数
+   </strong>
+   给定一整型数组，若数组中某个下标值大的元素值小于某个下标值比它小的元素值，称这是一个反序。
+即：数组a[]; 对于i &lt; j 且 a[i] &gt; a[j],则称这是一个反序。
+给定一个数组，要求写一个函数，计算出这个数组里所有反序的个数。
+  </p>
+  <p>
+   <strong>
+    6、
+   </strong>
+  </p>
+  <p>
+   有两个序列A和B,A=(a1,a2,...,ak),B=(b1,b2,...,bk),A和B都按升序排列，对于1&lt;=i,j&lt;=k，求k个最小的（ai+bj），要求算法尽量高效。
+  </p>
+  <p>
+   <strong>
+    7、三数取中
+   </strong>
+  </p>
+  <p>
+   给定3个整数a、b、c，找出这3个数的中位数。
+  </p>
+  <p>
+   分析：
+  </p>
+  <div class="highlight highlight-c">
+   <pre><span class="c1">// 采用两两比较的思路    </span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;=</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>    
+        <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">&lt;=</span> <span class="n">c</span><span class="p">)</span>    
+            <span class="k">return</span> <span class="n">b</span><span class="p">;</span>    
+        <span class="k">else</span> <span class="p">{</span>    
+            <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;=</span><span class="n">c</span><span class="p">)</span>    
+                <span class="k">return</span> <span class="n">c</span><span class="p">;</span>    
+            <span class="k">else</span>    
+                <span class="k">return</span> <span class="n">a</span><span class="p">;</span>    
+            <span class="p">}</span>    
+    <span class="p">}</span>    
+    <span class="k">else</span> <span class="p">{</span>    
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;=</span> <span class="n">c</span><span class="p">)</span>    
+            <span class="k">return</span> <span class="n">a</span><span class="p">;</span>    
+        <span class="k">else</span> <span class="p">{</span>    
+            <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">&lt;=</span> <span class="n">c</span><span class="p">)</span>    
+                <span class="k">return</span> <span class="n">c</span><span class="p">;</span>    
+            <span class="k">else</span>    
+                <span class="k">return</span> <span class="n">b</span><span class="p">;</span>    
+            <span class="p">}</span>    
+    <span class="p">}</span>  
+</pre>
+  </div>
+  <p>
+   <strong>
+    8
+   </strong>
+  </p>
+  <p>
+   假设一个大小为100亿个数据的数组，该数组是从小到大排好序的，现在该数组分成若干段，每个段的数据长度小于20「也就是说：题目并没有说每段数据的size 相同，只是说每个段的 size &lt; 20 而已」，然后将每段的数据进行乱序（即：段内数据乱序），形成一个新数组。请写一个算法，将所有数据从小到大进行排序，并说明时间复杂度。
+  </p>
+  <p>
+   <strong>
+    9
+   </strong>
+  </p>
+  <p>
+   20个排序好的数组，每个数组500个数，按照降序排序好的，让找出500个最大的数。
+  </p>
+  <p>
+   <strong>
+    10
+   </strong>
+  </p>
+  <p>
+   O(1)时间实现矩阵转置。
   </p>
  </body>
 </html>

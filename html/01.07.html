@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-dc3b5ef1bc6b1a7195c5411444124d626d072527.css" />
-  <link rel="stylesheet" href="style_cache/github2-7d1aff25db06f83ddd546f0c3a61c74a4a805d56.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-0282bede6135e06ec35e92d06a80225f92812b0e.css" />
+  <link rel="stylesheet" href="style_cache/github2-dcf6ca6edf1a82a2dcaebf74f6b2d9eface5db5d.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -104,37 +104,21 @@
 		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
 			<html>
  <body>
-  <h1>
+  <h2>
    <a class="anchor" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%85%B6%E5%AE%83%E9%97%AE%E9%A2%98" name="user-content-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%85%B6%E5%AE%83%E9%97%AE%E9%A2%98">
     <span class="octicon octicon-link">
     </span>
    </a>
    字符串其它问题
-  </h1>
-  <h2>
-   <a class="anchor" href="#1%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E5%AD%97%E7%AC%A6" name="user-content-1%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E5%AD%97%E7%AC%A6">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   1、第一个只出现一次的字符
   </h2>
-  <h3>
-   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   题目描述
-  </h3>
+  <p>
+   <strong>
+    1、第一个只出现一次的字符
+   </strong>
+  </p>
   <p>
    在一个字符串中找到第一个只出现一次的字符。如输入abaccdeff，则输出b。
   </p>
-  <h3>
-   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   分析与解法
-  </h3>
   <p>
    分析：这道题是2006年google 的一道笔试题。它在今年又出现了，不过换了一种形式。即最近的搜狐笔试大题：数组非常长，如何找到第一个只出现一次的数字，说明算法复杂度。此问题已经在程序员编程艺术系列第二章中有所阐述，在此不再作过多讲解。
   </p>
@@ -168,13 +152,11 @@
 <span class="p">}</span>
 </pre>
   </div>
-  <h2>
-   <a class="anchor" href="#2%E5%B8%A6%E9%80%9A%E9%85%8D%E7%AC%A6%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E9%97%AE%E9%A2%98" name="user-content-2%E5%B8%A6%E9%80%9A%E9%85%8D%E7%AC%A6%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E9%97%AE%E9%A2%98">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   2、带通配符的字符串匹配问题
-  </h2>
+  <p>
+   <strong>
+    2、带通配符的字符串匹配问题
+   </strong>
+  </p>
   <p>
    字符串匹配问题：给定一个字符串，按照指定规则对其进行匹配，并将匹配的结果保存至output数组中。多个匹配项用空格间隔，最后一个不需要空格。
   </p>
@@ -219,6 +201,100 @@
    <br/>
    3. input=aaa，rule=aa时，返回一个结果aa，即可。
   </p>
+  <p>
+   <strong>
+    3、对称子字符串的最大长度
+   </strong>
+  </p>
+  <p>
+   题目：输入一个字符串，输出该字符串中对称的子字符串的最大长度。
+比如输入字符串“google”，由于该字符串里最长的对称子字符串是“goog”，因此输出4。
+  </p>
+  <p>
+   分析：可能很多人都写过判断一个字符串是不是对称的函数，这个题目可以看成是该函数的加强版。
+  </p>
+  <p>
+   <strong>
+    4、实现memcpy函数
+   </strong>
+  </p>
+  <p>
+   已知memcpy的函数为： void* memcpy(void
+   <em>
+    dest , const void
+   </em>
+   src , size_t count)其中dest是目的指针，src是源指针。不调用c++/c的memcpy库函数，请编写memcpy。
+  </p>
+  <p>
+   分析：参考代码如下：
+  </p>
+  <div class="highlight highlight-cpp">
+   <pre><span class="c1">//copyright@July 2013/9/24  </span>
+<span class="kt">void</span><span class="o">*</span> <span class="nf">memcpy</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">dst</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">src</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">count</span><span class="p">)</span>      
+<span class="p">{</span>      
+    <span class="c1">//安全检查  </span>
+    <span class="n">assert</span><span class="p">(</span> <span class="p">(</span><span class="n">dst</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">src</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">);</span>      
+
+    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pdst</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">dst</span><span class="p">;</span>      
+    <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">psrc</span> <span class="o">=</span> <span class="p">(</span><span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">src</span><span class="p">;</span>      
+
+    <span class="c1">//防止内存重复  </span>
+    <span class="n">assert</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">psrc</span><span class="o">&lt;=</span><span class="n">pdst</span> <span class="o">&amp;&amp;</span> <span class="n">pdst</span><span class="o">&lt;</span><span class="n">psrc</span><span class="o">+</span><span class="n">count</span><span class="p">));</span>      
+    <span class="n">assert</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">pdst</span><span class="o">&lt;=</span><span class="n">psrc</span> <span class="o">&amp;&amp;</span> <span class="n">psrc</span><span class="o">&lt;</span><span class="n">pdst</span><span class="o">+</span><span class="n">count</span><span class="p">));</span>      
+
+    <span class="k">while</span><span class="p">(</span><span class="n">count</span><span class="o">--</span><span class="p">)</span>      
+    <span class="p">{</span>      
+        <span class="o">*</span><span class="n">pdst</span> <span class="o">=</span> <span class="o">*</span><span class="n">psrc</span><span class="p">;</span>      
+        <span class="n">pdst</span><span class="o">++</span><span class="p">;</span>      
+        <span class="n">psrc</span><span class="o">++</span><span class="p">;</span>      
+    <span class="p">}</span>      
+    <span class="k">return</span> <span class="n">dst</span><span class="p">;</span>      
+<span class="p">}</span>    
+</pre>
+  </div>
+  <p>
+   <strong>
+    5、实现memmove函数
+   </strong>
+  </p>
+  <p>
+   分析：memmove函数是的标准函数，其作用是把从source开始的num个字符拷贝到destination。
+   <br/>
+   最简单的方法是直接复制，但是由于它们可能存在内存的重叠区，因此可能覆盖了原有数据。  比如当source+count&gt;=dest&amp;&amp;source&lt;dest时，dest可能覆盖了原有source的数据。
+   <br/>
+   解决办法是从后往前拷贝，对于其它情况，则从前往后拷贝。
+  </p>
+  <p>
+   参考代码如下：
+  </p>
+  <div class="highlight highlight-cpp">
+   <pre><span class="c1">//void * memmove ( void * destination, const void * source, size_t num );)  </span>
+ <span class="kt">void</span><span class="o">*</span> <span class="nf">memmove</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">dest</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">source</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">count</span><span class="p">)</span>  
+   <span class="p">{</span>  
+
+      <span class="kt">void</span><span class="o">*</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">dest</span><span class="p">;</span>  
+
+      <span class="k">if</span> <span class="p">(</span><span class="n">dest</span> <span class="o">&lt;=</span> <span class="n">source</span> <span class="o">||</span> <span class="n">dest</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="n">source</span> <span class="o">+</span> <span class="n">count</span><span class="p">))</span>  
+       <span class="p">{</span>  
+          <span class="c1">//正向拷贝  </span>
+         <span class="c1">//copy from lower addresses to higher addresses  </span>
+         <span class="k">while</span> <span class="p">(</span><span class="n">count</span> <span class="o">--</span><span class="p">)</span>  
+             <span class="o">*</span><span class="n">dest</span><span class="o">++</span> <span class="o">=</span> <span class="o">*</span><span class="n">source</span><span class="o">++</span><span class="p">;</span>  
+     <span class="p">}</span>  
+     <span class="k">else</span>  
+     <span class="p">{</span>  
+         <span class="c1">//反向拷贝  </span>
+         <span class="c1">//copy from higher addresses to lower addresses  </span>
+         <span class="n">dest</span> <span class="o">+=</span> <span class="n">count</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>  
+         <span class="n">source</span> <span class="o">+=</span> <span class="n">count</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>  
+
+         <span class="k">while</span> <span class="p">(</span><span class="n">count</span><span class="o">--</span><span class="p">)</span>  
+             <span class="o">*</span><span class="n">dest</span><span class="o">--</span> <span class="o">=</span> <span class="o">*</span><span class="n">source</span><span class="o">--</span><span class="p">;</span>  
+     <span class="p">}</span>  
+     <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>  
+ <span class="p">}</span>  
+</pre>
+  </div>
  </body>
 </html>
 		  </article>

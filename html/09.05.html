@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-dc3b5ef1bc6b1a7195c5411444124d626d072527.css" />
-  <link rel="stylesheet" href="style_cache/github2-7d1aff25db06f83ddd546f0c3a61c74a4a805d56.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-0282bede6135e06ec35e92d06a80225f92812b0e.css" />
+  <link rel="stylesheet" href="style_cache/github2-dcf6ca6edf1a82a2dcaebf74f6b2d9eface5db5d.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -132,24 +132,24 @@
    来看一个具体的例子，假设我们要对0-7内的5个元素(4,7,2,5,3)排序（这里假设这些元素没有重复）。那么我们就可以采用Bit-map的方法来达到排序的目的。要表示8个数，我们就只需要8个Bit（1Bytes），首先我们开辟1Byte的空间，将这些空间的所有Bit位都置为0(如下图：)
   </p>
   <p>
-   <a href="/ebook/images/9/9.2/9.2.1.gif" target="_blank">
-    <img alt="" src="/ebook/images/9/9.2/9.2.1.gif" style="max-width:100%;"/>
+   <a href="../images/9/9.2/9.2.1.gif" target="_blank">
+    <img alt="" src="../images/9/9.2/9.2.1.gif" style="max-width:100%;"/>
    </a>
   </p>
   <p>
    然后遍历这5个元素，首先第一个元素是4，那么就把4对应的位置为1（可以这样操作 p+(i/8)|(0×01&lt;&lt;(i%8)) 当然了这里的操作涉及到Big-ending和Little-ending的情况，这里默认为Big-ending）,因为是从零开始的，所以要把第五位置为一（如下图）：
   </p>
   <p>
-   <a href="/ebook/images/9/9.2/9.2.2.gif" target="_blank">
-    <img alt="" src="/ebook/images/9/9.2/9.2.2.gif" style="max-width:100%;"/>
+   <a href="../images/9/9.2/9.2.2.gif" target="_blank">
+    <img alt="" src="../images/9/9.2/9.2.2.gif" style="max-width:100%;"/>
    </a>
   </p>
   <p>
    然后再处理第二个元素7，将第八位置为1,，接着再处理第三个元素，一直到最后处理完所有的元素，将相应的位置为1，这时候的内存的Bit位的状态如下：
   </p>
   <p>
-   <a href="/ebook/images/9/9.2/9.2.3.gif" target="_blank">
-    <img alt="" src="/ebook/images/9/9.2/9.2.3.gif" style="max-width:100%;"/>
+   <a href="../images/9/9.2/9.2.3.gif" target="_blank">
+    <img alt="" src="../images/9/9.2/9.2.3.gif" style="max-width:100%;"/>
    </a>
   </p>
   <p>
