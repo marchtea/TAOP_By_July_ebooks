@@ -11,6 +11,7 @@ Build script havn't support **pdf** format. I'll try to fix it lately.
 *	epub
 *	mobi
 *	html
+*   pdf(only first chapter)
 
 ##Html version
 
