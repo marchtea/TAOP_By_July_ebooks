@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0282bede6135e06ec35e92d06a80225f92812b0e.css" />
-  <link rel="stylesheet" href="style_cache/github2-dcf6ca6edf1a82a2dcaebf74f6b2d9eface5db5d.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
+  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,317 +105,679 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E8%B6%85%E8%BF%87%E4%B8%80%E5%8D%8A%E7%9A%84%E6%95%B0%E5%AD%97" name="user-content-%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E8%B6%85%E8%BF%87%E4%B8%80%E5%8D%8A%E7%9A%84%E6%95%B0%E5%AD%97">
+   <a class="anchor" href="#%E6%95%99%E4%BD%A0%E9%80%8F%E5%BD%BB%E4%BA%86%E8%A7%A3%E7%BA%A2%E9%BB%91%E6%A0%91" name="user-content-%E6%95%99%E4%BD%A0%E9%80%8F%E5%BD%BB%E4%BA%86%E8%A7%A3%E7%BA%A2%E9%BB%91%E6%A0%91">
     <span class="octicon octicon-link">
     </span>
    </a>
-   出现次数超过一半的数字
+   教你透彻了解红黑树
   </h1>
-  <h2>
-   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
-    <span class="octicon octicon-link">
-    </span>
+  <p>
+   作者：July、saturnman   2010年12月29日
+  </p>
+  <p>
+   本文参考：Google、算法导论、STL源码剖析、计算机程序设计艺术
+  </p>
+  <p>
+   推荐阅读：Left-Leaning Red-Black Trees, Dagstuhl Workshop on Data Structures, Wadern, Germany, February, 2008.
+   <br/>
+   直接下载：
+   <a href="http://www.cs.princeton.edu/%7Ers/talks/LLRB/RedBlack.pdf">
+    http://www.cs.princeton.edu/~rs/talks/LLRB/RedBlack.pdf
    </a>
-   题目描述
-  </h2>
-  <p>
-   题目：数组中有一个数字出现的次数超过了数组长度的一半，找出这个数字。
-  </p>
-  <p>
-   分析：编程之美上也有这道题，不过它变换了题目的表述形式，如下：
-  </p>
-  <p>
-   Tango是微软亚洲研究院的一个试验项目，如图1所示。研究院的员工和实习生们都很喜欢在Tango上面交流灌水。传说，Tango有一大“水王”，他不但喜欢发帖，还会回复其他ID发的每个帖子。坊间风闻该“水王”发帖数目超过了帖子总数的一半。如果你有一个当前论坛上所有帖子（包括回帖）的列表，其中帖子作者的ID也在表中，你能快速找出这个传说中的Tango水王吗？
-  </p>
-  <p>
-   <a href="../images/21%7E22/21.1.gif" target="_blank">
-    <img alt="" src="../images/21%7E22/21.1.gif" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   图1  Tango
+   。
   </p>
   <h2>
-   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+   <a class="anchor" href="#%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91" name="user-content-%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91">
     <span class="octicon octicon-link">
     </span>
    </a>
-   分析与解法
+   二叉查找树
   </h2>
   <p>
-   一个数组中有很多数，现在我们要找出其中那个出现次数超过总数一半的数字，怎么找呢?大凡当我们碰到某一个杂乱无序的东西时，我们人的内心本质期望是希望把它梳理成有序的。所以，我们得分两种情况来讨论，无序和有序。
-  </p>
-  <h3>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   解法一
-  </h3>
-  <p>
-   如果
-   <strong>
-    无序
-   </strong>
-   ，那么我们是不是可以先把数组中所有这些数字
-   <strong>
-    先进行排序
-   </strong>
-   ，至于选取什么排序方法则不在话下，最常用的快速排序O（N*logN）即可。排完序呢，直接遍历。在遍历整个数组的同时统计每个数字的出现次数，然后把那个出现次数超过一半的数字直接输出，题目便解答完成了。总的时间复杂度为O（N*logN+N）。
-  </p>
-  <h3>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   解法二
-  </h3>
-  <p>
-   但各位再想想，
-   <strong>
-    如果是有序的数组呢
-   </strong>
-   或者经过上述由无序的数组变成有序后的数组呢？是否在排完序O（N*logN）后，真的还需要再遍历一次整个数组么?我们知道，既然是数组的话，那么我们可以根据数组索引支持直接定向到某一个数。我们发现，一个数字在数组中的出现次数超过了一半，那么在已排好序的数组索引的N/2处（从零开始编号），就一定是这个数字。自此，我们只需要对整个数组排完序之后，然后直接输出数组中的第N/2处的数字即可，这个数字即是整个数组中出现次数超过一半的数字，总的时间复杂度由于少了最后一次整个数组的遍历，缩小到O（N*logN）。
-  </p>
-  <h3>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%89" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%89">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   解法三
-  </h3>
-  <p>
-   然不论是上述思路一的O（N*logN+N），还是思路二的O（N*logN），时间复杂度并无本质性的改变。我们需要找到一种更为有效的思路或方法。既要缩小总的时间复杂度，那么可以用查找时间复杂度为O（1）的
-   <strong>
-    hash表
-   </strong>
-   ，即以空间换时间。哈希表的键值（Key）为数组中的数字，值（Value）为该数字对应的次数。然后直接遍历整个
-   <strong>
-    hash表
-   </strong>
-   ，找出每一个数字在对应的位置处出现的次数，输出那个出现次数超过一半的数字即可。
-  </p>
-  <h3>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%9B%9B" name="user-content-%E8%A7%A3%E6%B3%95%E5%9B%9B">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   解法四
-  </h3>
-  <p>
-   Hash表需要O（N）的空间开销，且要设计hash函数，还有没有更好的办法呢?我们可以试着这么考虑，如果
-   <strong>
-    每次删除两个不同的数
-   </strong>
-   （不管是不是我们要查找的那个出现次数超过一半的数字），那么，在剩下的数中，我们要查找的数（出现次数超过一半）出现的次数仍然超过总数的一半。通过不断重复这个过程，不断排除掉其它的数，最终找到那个出现次数超过一半的数字。这个方法，免去了上述思路一、二的排序，也避免了思路三空间O（N）的开销，总得说来，时间复杂度只有O（N），空间复杂度为O（1），不失为最佳方法。
+   由于红黑树本质上就是一棵二叉查找树，所以在了解红黑树之前，咱们先来看下二叉查找树。
   </p>
   <p>
-   或许，你还没有明白上述思路4的意思，举个简单的例子吧，如数组a[5]={0,1,2,1,1};
-  </p>
-  <p>
-   很显然，若我们要找出数组a中出现次数超过一半的数字，这个数字便是1，若根据上述思路4所述的方法来查找，我们应该怎么做呢?通过一次性遍历整个数组，然后每次删除不相同的两个数字，过程如下简单表示：
-  </p>
-  <pre><code>0 1 2 1 1 =&gt;2 1 1=&gt;1,最终，1即为所找。
-</code></pre>
-  <p>
-   但是如果是5，5，5，5，1，还能运用上述思路么？额，别急，请看下文思路5。
-  </p>
-  <h3>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%94" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%94">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   解法五
-  </h3>
-  <p>
-   咱们根据数组的特性进一步考虑@zhedahht： 数组中有个数字出现的次数超过了数组长度的一半。也就是说，有个数字出现的次数比其他所有数字出现次数的和还要多。因此我们可以考虑在遍历数组的时候保存两个值：一个是数组中的一个数字，一个是次数。当我们遍历到下一个数字的时候，如果下一个数字和我们之前保存的数字相同，则次数加1。如果下一个数字和我们之前保存的数字不同，则次数减1。如果次数为零，我们需要保存下一个数字，并把次数重新设为1。
-  </p>
-  <p>
-   下面，举二个例子：
+   二叉查找树（Binary Search Tree），也称有序二叉树（ordered binary tree）,排序二叉树（sorted binary tree），是指一棵空树或者具有下列性质的二叉树：
   </p>
   <ul>
    <li>
-    <p>
-     第一个例子，5，5，5，5，1 ：
-    </p>
-    <p>
-     不同的相消，相同的累积。遍历到第四个数字时，candidate 是5, nTimes 是4;    遍历到第五个数字时，candidate 是5, nTimes 是3;  nTimes不为0，那么candidate就是超过半数的。
-    </p>
+    若任意节点的左子树不空，则左子树上所有结点的值均小于它的根结点的值；
    </li>
    <li>
-    <p>
-     第二个例子，0，1，2，1，1 :
-    </p>
-    <p>
-     开始时，保存candidate是数字0，nTimes为1；遍历到数字1后，与数字0不同，则nTimes减1变为零；接下来，遍历到数字2，2与1不同，candidate保存数字2，且nTimes重新设为1；继续遍历到第4个数字1时，与2不同，nTimes减1为零，同时candidate保存为1；最终遍历到最后一个数字还是1，与我们之前candidate保存的数字1相同，nTimes加1为1。最后返回的是之前保存的candidate为1。
-    </p>
+    任意节点的右子树不空，则右子树上所有结点的值均大于它的根结点的值；
+   </li>
+   <li>
+    任意节点的左、右子树也分别为二叉查找树。
+   </li>
+   <li>
+    没有键值相等的节点（no duplicate nodes）。
    </li>
   </ul>
   <p>
-   <a href="../images/21%7E22/21.2.gif" target="_blank">
-    <img alt="" src="../images/21%7E22/21.2.gif" style="max-width:100%;"/>
-   </a>
+   因为，一棵由n个结点，随机构造的二叉查找树的高度为lgn，所以顺理成章，一般操作的执行时间为O（lgn）.（至于n个结点的二叉树高度为lgn的证明，可参考算法导论 第12章 二叉查找树 第12.4节）。
   </p>
   <p>
-   针对上述程序，我再说详细点，0，1，2，1，1 ：
-  </p>
-  <pre><code>i=0，candidate=0，nTimes=1；
-i=1，a[1] != candidate，nTimes--，=0；
-i=2，candidate=2，nTimes=1；
-i=3，a[3] != candidate，nTimes--，=0；
-i=4，candidate=1，nTimes=1；
-如果是0，1，2，1，1，1的话，那么i=5，a[5] == candidate，nTimes++，=2；......
-</code></pre>
-  <p>
-   ok，思路清楚了，完整的代码如下：
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="c1">//改自编程之美 2010  </span>
-<span class="n">Type</span> <span class="nf">Find</span><span class="p">(</span><span class="n">Type</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">N</span><span class="p">)</span>  <span class="c1">//a代表数组，N代表数组长度  </span>
-<span class="p">{</span>  
-    <span class="n">Type</span> <span class="n">candidate</span><span class="p">;</span>  
-    <span class="kt">int</span> <span class="n">nTimes</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span>  
-    <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">nTimes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>  
-    <span class="p">{</span>  
-        <span class="k">if</span><span class="p">(</span><span class="n">nTimes</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>  
-        <span class="p">{</span>  
-            <span class="n">candidate</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">nTimes</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>  
-        <span class="p">}</span>  
-        <span class="k">else</span>  
-        <span class="p">{</span>  
-            <span class="k">if</span><span class="p">(</span><span class="n">candidate</span> <span class="o">==</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>  
-                <span class="n">nTimes</span><span class="o">++</span><span class="p">;</span>  
-            <span class="k">else</span>  
-                <span class="n">nTimes</span><span class="o">--</span><span class="p">;</span>  
-        <span class="p">}</span>  
-    <span class="p">}</span>  
-    <span class="k">return</span> <span class="n">candidate</span><span class="p">;</span>   
-<span class="p">}</span>
-</pre>
-  </div>
-  <p>
-   或者：
-  </p>
-  <div class="highlight highlight-cpp">
-   <pre><span class="c1">//copyright@zhedahht  </span>
-<span class="c1">//updated@July</span>
-<span class="cp">#include &lt;iostream&gt;  </span>
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>  
-
-<span class="kt">bool</span> <span class="n">g_Input</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>  
-
-<span class="kt">int</span> <span class="nf">Num</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">numbers</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">length</span><span class="p">)</span>  
-<span class="p">{</span>  
-    <span class="k">if</span><span class="p">(</span><span class="n">numbers</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>  
-    <span class="p">{</span>  
-        <span class="n">g_Input</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>  
-        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>  
-    <span class="p">}</span>  
-    <span class="n">g_Input</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>  
-
-    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">numbers</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>  
-    <span class="kt">int</span> <span class="n">times</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>  
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>  
-    <span class="p">{</span>  
-        <span class="k">if</span><span class="p">(</span><span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">result</span><span class="p">)</span>  
-            <span class="n">times</span><span class="o">++</span><span class="p">;</span>  
-        <span class="k">else</span>  
-            <span class="n">times</span><span class="o">--</span><span class="p">;</span>  
-        <span class="k">if</span><span class="p">(</span><span class="n">times</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>  
-        <span class="p">{</span>  
-            <span class="n">result</span> <span class="o">=</span> <span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>  
-            <span class="n">times</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>  
-        <span class="p">}</span>  
-    <span class="p">}</span>  
-
-    <span class="c1">//检测输入是否有效。  </span>
-    <span class="n">times</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>  
-    <span class="p">{</span>  
-        <span class="k">if</span><span class="p">(</span><span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">result</span><span class="p">)</span>  
-            <span class="n">times</span><span class="o">++</span><span class="p">;</span>  
-    <span class="p">}</span>  
-    <span class="k">if</span><span class="p">(</span><span class="n">times</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">length</span><span class="p">)</span>  
-        <span class="c1">//检测的标准是：如果数组中并不包含这么一个数字，那么输入将是无效的。  </span>
-    <span class="p">{</span>  
-        <span class="n">g_Input</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>  
-        <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  
-    <span class="p">}</span>      
-    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>  
-<span class="p">}</span>  
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>  
-<span class="p">{</span>  
-    <span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">};</span>  
-    <span class="kt">int</span><span class="o">*</span> <span class="n">n</span><span class="o">=</span><span class="n">a</span><span class="p">;</span>  
-    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">Num</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="mi">9</span><span class="p">)</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>  
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>  
-<span class="p">}</span>
-</pre>
-  </div>
-  <p>
-   这段代码与上段代码本质上并无二致，不过有几个问题，还是需要我们注意：
-  </p>
-  <p>
-   <strong>
-    1.
-   </strong>
-   当输入无效性时，要处理。比如数组长度为0。
-  </p>
-  <p>
-   <strong>
-    2.
-   </strong>
-   最后，上述代码加了一个判断，如果数组中并不包含这么一个数字，那么输入也是无效的。因此在函数结束前还加了一段代码来验证输入是不是有效的。
+   但二叉树若退化成了一棵具有n个结点的线性链后，则此些操作最坏情况运行时间为O（n）。后面我们会看到一种基于二叉查找树-红黑树，它通过一些性质使得树相对平衡，使得最终查找、插入、删除的时间复杂度最坏情况下依然为O（lgn）。
   </p>
   <h2>
-   <a class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
+   <a class="anchor" href="#%E7%BA%A2%E9%BB%91%E6%A0%91" name="user-content-%E7%BA%A2%E9%BB%91%E6%A0%91">
     <span class="octicon octicon-link">
     </span>
    </a>
-   举一反三
+   红黑树
   </h2>
   <p>
-   加强版水王：找出出现次数刚好是一半的数字
+   前面我们已经说过，红黑树，本质上来说就是一棵二叉查找树，但它在二叉查找树的基础上增加了着色和相关的性质使得红黑树相对平衡，从而保证了红黑树的查找、插入、删除的时间复杂度最坏为O(log n)。
   </p>
   <p>
-   分析：我们知道，水王问题：有N个数，其中有一个数出现超过一半，要求在线性时间求出这个数。那么，我的问题是，加强版水王：有N个数，其中有一个数刚好出现一半次数，要求在线性时间内求出这个数。
+   下面，咱们便来具体看看红黑树的5条性质：
   </p>
-  <p>
-   因为，很明显，如果是刚好出现一半的话，如此例： 0，1，2，1 ：
-  </p>
-  <pre><code>遍历到0时，candidate为0，times为1
-遍历到1时，与candidate不同，times减为0
-遍历到2时，times为0，则candidate更新为2，times加1
-遍历到1时，与candidate不同，则times减为0；我们需要返回所保存candidate（数字2）的下一个数字，即数字1。
+  <pre><code>1）每个结点要么是红的，要么是黑的。  
+2）根结点是黑的。  
+3）每个叶结点（叶结点即指树尾端NIL指针或NULL结点）是黑的。  
+4）如果一个结点是红的，那么它的俩个儿子都是黑的。  
+5）对于任一结点而言，其到叶结点树尾端NIL指针的每一条路径都包含相同数目的黑结点。  
 </code></pre>
-  <h2>
-   <a class="anchor" href="#%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95" name="user-content-%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95">
+  <p>
+   注：上述第3、5点性质中所说的NULL结点（包括wikipedia.算法导论上所认为的叶子结点），即为树尾端的NIL指针，或者说NULL结点。然百度百科以及网上一些其它博文直接说的叶结点，则易引起误会，因，此叶结点非子结点。
+  </p>
+  <p>
+   如下图所示，即是一颗红黑树(下图引自wikipedia：
+   <a href="http://t.cn/hgvH1l">
+    http://t.cn/hgvH1l
+   </a>
+   )：
+  </p>
+  <p>
+   <a href="../images/rbtree/1.png" target="_blank">
+    <img alt="" src="../images/rbtree/1.png" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   上文中我们所说的 "叶结点" 或"NULL结点"，它不包含数据而只充当树在此结束的指示，这些节点以及它们的父结点，在绘图中都会经常被省略。
+  </p>
+  <h3>
+   <a class="anchor" href="#%E6%A0%91%E7%9A%84%E6%97%8B%E8%BD%AC%E7%9F%A5%E8%AF%86" name="user-content-%E6%A0%91%E7%9A%84%E6%97%8B%E8%BD%AC%E7%9F%A5%E8%AF%86">
     <span class="octicon octicon-link">
     </span>
    </a>
-   问题扩展
-  </h2>
+   树的旋转知识
+  </h3>
   <p>
-   谁是选举中得票超半数的人？
+   当我们在对红黑树进行插入和删除等操作时，对树做了修改，那么可能会违背红黑树的性质。
   </p>
   <p>
-   美国选举一般要求找到票数超过一半的人。于是有人就开始研究如何用线性时间找到这个人或者证明这个人不存在。Robert S. Boyer 和 J Strother Moore 发表了一片关于这个算法的论文。内容和上文提到的算法是一致的，只是多了理论分析和FORTRAN实现部分。
+   为了继续保持红黑树的性质，我们可以通过对结点进行重新着色，以及对树进行相关的旋转操作，即修改树中某些结点的颜色及指针结构，来达到对红黑树进行插入或删除结点等操作后，继续保持它的性质或平衡。
   </p>
   <p>
-   MJRTY - A Fast Majority Vote Algorithm, with R.S. Boyer. In R.S. Boyer (ed.), Automated Reasoning: Essays in Honor of Woody Bledsoe, Automated Reasoning Series, Kluwer Academic Publishers, Dordrecht, The Netherlands, 1981, pp. 105-117.
+   树的旋转，分为左旋和右旋，以下借助图来做形象的解释和介绍：
   </p>
   <p>
-   论文链接：
-   <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.56.3439&amp;rep=rep1&amp;type=pdf">
-    http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.56.3439&amp;rep=rep1&amp;type=pdf
+   1.左旋
+  </p>
+  <p>
+   <a href="../images/rbtree/2.jpg" target="_blank">
+    <img alt="" src="../images/rbtree/2.jpg" style="max-width:100%;"/>
    </a>
   </p>
   <p>
-   作者J Strother Moore关于这个算法的网址（英文）：
-   <a href="http://www.cs.utexas.edu/%7Emoore/best-ideas/mjrty/index.html">
-    http://www.cs.utexas.edu/~moore/best-ideas/mjrty/index.html
+   如上图所示：
+  </p>
+  <p>
+   当在某个结点pivot上，做左旋操作时，我们假设它的右孩子y不是NIL[T]，pivot可以为树内任意左孩子而不是NIL[T]的结点。
+  </p>
+  <p>
+   左旋以pivot到y之间的链为“支轴”进行，它使y成为该孩子树新的根，而y的左孩子b则成为pivot的右孩子。
+  </p>
+  <p>
+   左旋操作的参考代码如下所示（以x代替上述的pivot）：
+  </p>
+  <pre><code> LEFT-ROTATE(T, x)  
+1  y ← right[x] ▹ Set y.  
+2  right[x] ← left[y]      ▹ Turn y's left subtree into x's right subtree.  
+3  p[left[y]] ← x  
+4  p[y] ← p[x]             ▹ Link x's parent to y.  
+5  if p[x] = nil[T]  
+6     then root[T] ← y  
+7     else if x = left[p[x]]  
+8             then left[p[x]] ← y  
+9             else right[p[x]] ← y  
+10  left[y] ← x             ▹ Put x on y's left.  
+11  p[x] ← y  
+</code></pre>
+  <p>
+   2.右旋
+  </p>
+  <p>
+   右旋与左旋差不多，再此不做详细介绍。
+  </p>
+  <p>
+   <a href="../images/rbtree/3.jpg" target="_blank">
+    <img alt="" src="../images/rbtree/3.jpg" style="max-width:100%;"/>
    </a>
+  </p>
+  <p>
+   对于树的旋转，能保持不变的只有原树的搜索性质，而原树的红黑性质则不能保持，在红黑树的数据插入和删除后可利用旋转和颜色重涂来恢复树的红黑性质。
+  </p>
+  <h3>
+   <a class="anchor" href="#%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E6%8F%92%E5%85%A5" name="user-content-%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E6%8F%92%E5%85%A5">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   红黑树的插入
+  </h3>
+  <p>
+   要真正理解红黑树的插入和删除，还得先理解二叉查找树的插入和删除。磨刀不误砍柴工，咱们再来分别了解下二叉查找树的插入和删除。
+  </p>
+  <h4>
+   <a class="anchor" href="#%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%9A%84%E6%8F%92%E5%85%A5" name="user-content-%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%9A%84%E6%8F%92%E5%85%A5">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   二叉查找树的插入
+  </h4>
+  <p>
+   如果要在二叉查找树中插入一个结点，首先要查找到结点插入的位置，然后进行插入，假设插入的结点为z的话，插入的伪代码如下：
+  </p>
+  <pre><code>TREE-INSERT(T, z)
+ 1  y ← NIL
+ 2  x ← root[T]
+ 3  while x ≠ NIL
+ 4      do y ←  x
+ 5         if key[z] &lt; key[x]
+ 6            then x ← left[x]
+ 7            else x ← right[x]
+ 8  p[z] ← y
+ 9  if y = NIL
+10     then root[T] ← z              ⊹ Tree T was empty
+11     else if key[z] &lt; key[y]
+12             then left[y] ← z
+13             else right[y] ← z
+</code></pre>
+  <p>
+   可以看到，上述第3-7行代码即是在二叉查找树中查找z待插入的位置，如果插入结点z小于当前遍历到的结点，则到当前结点的左子树中继续查找，如果z大于当前结点，则到当前结点的右子树中继续查找，第9-13行代码找到待插入的位置，如果z依然比此刻遍历到的新的当前结点小，则z作为当前结点的左孩子，否则作为当前结点的右孩子。
+  </p>
+  <h4>
+   <a class="anchor" href="#%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E6%8F%92%E5%85%A5%E5%92%8C%E6%8F%92%E5%85%A5%E4%BF%AE%E5%A4%8D" name="user-content-%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E6%8F%92%E5%85%A5%E5%92%8C%E6%8F%92%E5%85%A5%E4%BF%AE%E5%A4%8D">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   红黑树的插入和插入修复
+  </h4>
+  <p>
+   现在我们了解了二叉查找树的插入，接下来，咱们便来具体了解红黑树的插入操作。红黑树的插入相当于在二叉查找树插入的基础上，为了重新恢复平衡，继续做了插入修复操作。
+  </p>
+  <p>
+   假设插入的结点为z，红黑树的插入伪代码具体如下所示：
+  </p>
+  <pre><code>RB-INSERT(T, z)  
+ 1  y ← nil[T]  
+ 2  x ← root[T]  
+ 3  while x ≠ nil[T]  
+ 4      do y ← x  
+ 5         if key[z] &lt; key[x]  
+ 6            then x ← left[x]  
+ 7            else x ← right[x]  
+ 8  p[z] ← y  
+ 9  if y = nil[T]  
+10     then root[T] ← z  
+11     else if key[z] &lt; key[y]  
+12             then left[y] ← z  
+13             else right[y] ← z  
+14  left[z] ← nil[T]  
+15  right[z] ← nil[T]  
+16  color[z] ← RED  
+17  RB-INSERT-FIXUP(T, z)  
+</code></pre>
+  <p>
+   我们把上面这段红黑树的插入代码，跟我们之前看到的二叉查找树的插入代码，可以看出，RB-INSERT(T, z)前面的第1-13行代码基本就是二叉查找树的插入代码，然后第14-16行代码把z的左孩子、右孩子都赋为叶结点nil，再把z结点着为红色，最后为保证红黑性质在插入操作后依然保持，调用一个辅助程序RB-INSERT-FIXUP来对结点进行重新着色，并旋转。
+  </p>
+  <p>
+   换言之
+  </p>
+  <ul>
+   <li>
+    如果插入的是根结点，因为原树是空树，此情况只会违反性质2，所以直接把此结点涂为黑色。
+    <br/>
+   </li>
+   <li>
+    如果插入的结点的父结点是黑色，由于此不会违反性质2和性质4，红黑树没有被破坏，所以此时也是什么也不做。
+    <br/>
+   </li>
+  </ul>
+  <p>
+   但当遇到下述3种情况时：
+  </p>
+  <ul>
+   <li>
+    插入修复情况1：如果当前结点的父结点是红色且祖父结点的另一个子结点（叔叔结点）是红色
+   </li>
+   <li>
+    插入修复情况2：当前节点的父节点是红色,叔叔节点是黑色，当前节点是其父节点的右子
+   </li>
+   <li>
+    插入修复情况3：当前节点的父节点是红色,叔叔节点是黑色，当前节点是其父节点的左子
+   </li>
+  </ul>
+  <p>
+   又该如何调整呢？答案就是根据红黑树插入代码RB-INSERT(T, z)最后一行调用的RB-INSERT-FIXUP（T,z）所示操作进行，具体如下所示：
+  </p>
+  <pre><code>RB-INSERT-FIXUP（T,z）
+ 1 while color[p[z]] = RED  
+ 2     do if p[z] = left[p[p[z]]]  
+ 3           then y ← right[p[p[z]]]  
+ 4                if color[y] = RED  
+ 5                   then color[p[z]] ← BLACK                    ▹ Case 1  
+ 6                        color[y] ← BLACK                       ▹ Case 1  
+ 7                        color[p[p[z]]] ← RED                   ▹ Case 1  
+ 8                        z ← p[p[z]]                            ▹ Case 1  
+ 9                   else if z = right[p[z]]  
+10                           then z ← p[z]                       ▹ Case 2  
+11                                LEFT-ROTATE(T, z)              ▹ Case 2  
+12                           color[p[z]] ← BLACK                 ▹ Case 3  
+13                           color[p[p[z]]] ← RED                ▹ Case 3  
+14                           RIGHT-ROTATE(T, p[p[z]])            ▹ Case 3  
+15           else (same as then clause  
+                         with "right" and "left" exchanged)  
+16 color[root[T]] ← BLACK  
+</code></pre>
+  <p>
+   下面，咱们来分别处理上述3种插入修复情况。
+  </p>
+  <p>
+   <strong>
+    插入修复情况1：当前结点的父结点是红色且祖父结点的另一个子结点（叔叔结点）是红色。
+   </strong>
+  </p>
+  <p>
+   即如下代码所示：
+  </p>
+  <pre><code> 1 while color[p[z]] = RED  
+ 2     do if p[z] = left[p[p[z]]]  
+ 3           then y ← right[p[p[z]]]  
+ 4                if color[y] = RED  
+</code></pre>
+  <p>
+   此时父结点的父结点一定存在，否则插入前就已不是红黑树。
+   <br/>
+   与此同时，又分为父结点是祖父结点的左子还是右子，对于对称性，我们只要解开一个方向就可以了。
+  </p>
+  <p>
+   在此，我们只考虑父结点为祖父左子的情况。
+   <br/>
+   同时，还可以分为当前结点是其父结点的左子还是右子，但是处理方式是一样的。我们将此归为同一类。
+  </p>
+  <p>
+   对策：将当前节点的父节点和叔叔节点涂黑，祖父结点涂红，把当前结点指向祖父节点，从新的当前节点重新开始算法。即如下代码所示：
+  </p>
+  <pre><code> 5                   then color[p[z]] ← BLACK                    ▹ Case 1  
+ 6                        color[y] ← BLACK                       ▹ Case 1  
+ 7                        color[p[p[z]]] ← RED                   ▹ Case 1  
+ 8                        z ← p[p[z]]                            ▹ Case 1  
+</code></pre>
+  <p>
+   针对情况1，变化前（图片来源：saturnman）[当前节点为4节点]：
+  </p>
+  <p>
+   <a href="../images/rbtree/4.png" target="_blank">
+    <img alt="" src="../images/rbtree/4.png" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   变化后：
+  </p>
+  <p>
+   <a href="../images/rbtree/5.png" target="_blank">
+    <img alt="" src="../images/rbtree/5.png" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   <strong>
+    插入修复情况2：当前节点的父节点是红色,叔叔节点是黑色，当前节点是其父节点的右子
+   </strong>
+   <br/>
+   对策：当前节点的父节点做为新的当前节点，以新当前节点为支点左旋。即如下代码所示：
+  </p>
+  <pre><code> 9                   else if z = right[p[z]]
+10                           then z ← p[z]                       ▹ Case 2
+11                                LEFT-ROTATE(T, z)              ▹ Case 2
+</code></pre>
+  <p>
+   如下图所示，变化前[当前节点为7节点]：
+  </p>
+  <p>
+   <a href="../images/rbtree/6.png" target="_blank">
+    <img alt="" src="../images/rbtree/6.png" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   变化后：
+  </p>
+  <p>
+   <a href="../images/rbtree/7.png" target="_blank">
+    <img alt="" src="../images/rbtree/7.png" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   <strong>
+    插入修复情况3：当前节点的父节点是红色,叔叔节点是黑色，当前节点是其父节点的左子
+   </strong>
+   <br/>
+   解法：父节点变为黑色，祖父节点变为红色，在祖父节点为支点右旋，操作代码为：
+  </p>
+  <pre><code>12                           color[p[z]] ← BLACK                 ▹ Case 3
+13                           color[p[p[z]]] ← RED                ▹ Case 3
+14                           RIGHT-ROTATE(T, p[p[z]])            ▹ Case 3
+</code></pre>
+  <p>
+   最后，把根结点涂为红色，整棵红黑树便重新恢复了平衡。
+  </p>
+  <p>
+   如下图所示[当前节点为2节点]
+  </p>
+  <p>
+   <a href="../images/rbtree/8.png" target="_blank">
+    <img alt="" src="../images/rbtree/8.png" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   变化后：
+  </p>
+  <p>
+   <a href="../images/rbtree/9.png" target="_blank">
+    <img alt="" src="../images/rbtree/9.png" style="max-width:100%;"/>
+   </a>
+  </p>
+  <h3>
+   <a class="anchor" href="#%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E5%88%A0%E9%99%A4" name="user-content-%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E5%88%A0%E9%99%A4">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   红黑树的删除
+  </h3>
+  <p>
+   ok，接下来，咱们最后来了解，红黑树的删除操作。
+  </p>
+  <p>
+   "我们删除的节点的方法与常规二叉搜索树中删除节点的方法是一样的，如果被删除的节点不是有双非空子女，则直接删除这个节点，用它的唯一子节点顶替它的位置，如果它的子节点分是空节点，那就用空节点顶替它的位置，如果它的双子全为非空，我们就把它的直接后继节点内容复制到它的位置，之后以同样的方式删除它的后继节点，它的后继节点不可能是双子非空，因此此传递过程最多只进行一次。”
+  </p>
+  <h4>
+   <a class="anchor" href="#%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%9A%84%E5%88%A0%E9%99%A4" name="user-content-%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%9A%84%E5%88%A0%E9%99%A4">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   二叉查找树的删除
+  </h4>
+  <p>
+   继续讲解之前，补充说明下二叉树结点删除的几种情况，待删除的节点按照儿子的个数可以分为三种：
+  </p>
+  <ol>
+   <li>
+    没有儿子，即为叶结点。直接把父结点的对应儿子指针设为NULL，删除儿子结点就OK了。
+   </li>
+   <li>
+    只有一个儿子。那么把父结点的相应儿子指针指向儿子的独生子，删除儿子结点也OK了。
+   </li>
+   <li>
+    有两个儿子。这是最麻烦的情况，因为你删除节点之后，还要保证满足搜索二叉树的结构。其实也比较容易，我们可以选择左儿子中的最大元素或者右儿子中的最小元素放到待删除节点的位置，就可以保证结构的不变。当然，你要记得调整子树，毕竟又出现了节点删除。习惯上大家选择左儿子中的最大元素，其实选择右儿子的最小元素也一样，没有任何差别，只是人们习惯从左向右。这里咱们也选择左儿子的最大元素，将它放到待删结点的位置。左儿子的最大元素其实很好找，只要顺着左儿子不断的去搜索右子树就可以了，直到找到一个没有右子树的结点。那就是最大的了。
+   </li>
+  </ol>
+  <p>
+   二叉查找树的删除代码如下所示：
+  </p>
+  <pre><code>TREE-DELETE(T, z)
+ 1  if left[z] = NIL or right[z] = NIL
+ 2      then y ← z
+ 3      else y ← TREE-SUCCESSOR(z)
+ 4  if left[y] ≠ NIL
+ 5      then x ← left[y]
+ 6      else x ← right[y]
+ 7  if x ≠ NIL
+ 8      then p[x] ← p[y]
+ 9  if p[y] = NIL
+10      then root[T] ← x
+11      else if y = left[p[y]]
+12              then left[p[y]] ← x
+13              else right[p[y]] ← x
+14  if y ≠ z
+15      then key[z] ← key[y]
+16           copy y's satellite data into z
+17  return y
+</code></pre>
+  <h4>
+   <a class="anchor" href="#%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E5%88%A0%E9%99%A4%E5%92%8C%E5%88%A0%E9%99%A4%E4%BF%AE%E5%A4%8D" name="user-content-%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E5%88%A0%E9%99%A4%E5%92%8C%E5%88%A0%E9%99%A4%E4%BF%AE%E5%A4%8D">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   红黑树的删除和删除修复
+  </h4>
+  <p>
+   OK，回到红黑树上来，红黑树结点删除的算法实现是：
+  </p>
+  <p>
+   RB-DELETE(T, z)   单纯删除结点的总操作
+  </p>
+  <pre><code> 1 if left[z] = nil[T] or right[z] = nil[T]  
+ 2    then y ← z  
+ 3    else y ← TREE-SUCCESSOR(z)  
+ 4 if left[y] ≠ nil[T]  
+ 5    then x ← left[y]  
+ 6    else x ← right[y]  
+ 7 p[x] ← p[y]  
+ 8 if p[y] = nil[T]  
+ 9    then root[T] ← x  
+10    else if y = left[p[y]]  
+11            then left[p[y]] ← x  
+12            else right[p[y]] ← x  
+13 if y ≠ z  
+14    then key[z] ← key[y]  
+15         copy y's satellite data into z  
+16 if color[y] = BLACK  
+17    then RB-DELETE-FIXUP(T, x)  
+18 return y  
+</code></pre>
+  <p>
+   “在删除节点后，原红黑树的性质可能被改变，如果删除的是红色节点，那么原红黑树的性质依旧保持，此时不用做修正操作，如果删除的节点是黑色节点，原红黑树的性质可能会被改变，我们要对其做修正操作。那么哪些树的性质会发生变化呢，如果删除节点不是树唯一节点，那么删除节点的那一个支的到各叶节点的黑色节点数会发生变化，此时性质5被破坏。如果被删节点的唯一非空子节点是红色，而被删节点的父节点也是红色，那么性质4被破坏。如果被删节点是根节点，而它的唯一非空子节点是红色，则删除后新根节点将变成红色，违背性质2。”
+  </p>
+  <p>
+   RB-DELETE-FIXUP(T, x)   恢复与保持红黑性质的工作
+  </p>
+  <pre><code> 1 while x ≠ root[T] and color[x] = BLACK  
+ 2     do if x = left[p[x]]  
+ 3           then w ← right[p[x]]  
+ 4                if color[w] = RED  
+ 5                   then color[w] ← BLACK                        ▹  Case 1  
+ 6                        color[p[x]] ← RED                       ▹  Case 1  
+ 7                        LEFT-ROTATE(T, p[x])                    ▹  Case 1  
+ 8                        w ← right[p[x]]                         ▹  Case 1  
+ 9                if color[left[w]] = BLACK and color[right[w]] = BLACK  
+10                   then color[w] ← RED                          ▹  Case 2  
+11                        x ← p[x]                                ▹  Case 2  
+12                   else if color[right[w]] = BLACK  
+13                           then color[left[w]] ← BLACK          ▹  Case 3  
+14                                color[w] ← RED                  ▹  Case 3  
+15                                RIGHT-ROTATE(T, w)              ▹  Case 3  
+16                                w ← right[p[x]]                 ▹  Case 3  
+17                         color[w] ← color[p[x]]                 ▹  Case 4  
+18                         color[p[x]] ← BLACK                    ▹  Case 4  
+19                         color[right[w]] ← BLACK                ▹  Case 4  
+20                         LEFT-ROTATE(T, p[x])                   ▹  Case 4  
+21                         x ← root[T]                            ▹  Case 4  
+22        else (same as then clause with "right" and "left" exchanged)  
+23 color[x] ← BLACK  
+</code></pre>
+  <p>
+   “上面的修复情况看起来有些复杂，下面我们用一个分析技巧：我们从被删节点后来顶替它的那个节点开始调整，并认为它有额外的一重黑色。这里额外一重黑色是什么意思呢，我们不是把红黑树的节点加上除红与黑的另一种颜色，这里只是一种假设，我们认为我们当前指向它，因此空有额外一种黑色，可以认为它的黑色是从它的父节点被删除后继承给它的，它现在可以容纳两种颜色，如果它原来是红色，那么现在是红+黑，如果原来是黑色，那么它现在的颜色是黑+黑。有了这重额外的黑色，原红黑树性质5就能保持不变。现在只要恢复其它性质就可以了，做法还是尽量向根移动和穷举所有可能性。"--saturnman。
+  </p>
+  <p>
+   如果是以下情况，恢复比较简单：
+  </p>
+  <ul>
+   <li>
+    a)当前节点是红+黑色
+    <br/>
+    解法，直接把当前节点染成黑色，结束此时红黑树性质全部恢复。
+    <br/>
+   </li>
+   <li>
+    b)当前节点是黑+黑且是根节点，
+解法：什么都不做，结束。
+   </li>
+  </ul>
+  <p>
+   但如果是以下情况呢？：
+  </p>
+  <ul>
+   <li>
+    删除修复情况1：当前节点是黑+黑且兄弟节点为红色(此时父节点和兄弟节点的子节点分为黑)
+   </li>
+   <li>
+    删除修复情况2：当前节点是黑加黑且兄弟是黑色且兄弟节点的两个子节点全为黑色
+   </li>
+   <li>
+    删除修复情况3：当前节点颜色是黑+黑，兄弟节点是黑色，兄弟的左子是红色，右子是黑色
+   </li>
+   <li>
+    删除修复情况4：当前节点颜色是黑-黑色，它的兄弟节点是黑色，但是兄弟节点的右子是红色，兄弟节点左子的颜色任意
+   </li>
+  </ul>
+  <p>
+   此时，我们需要调用RB-DELETE-FIXUP(T, x)，来恢复与保持红黑性质的工作。
+  </p>
+  <p>
+   下面，咱们便来分别处理这4种删除修复情况。
+  </p>
+  <p>
+   <strong>
+    删除修复情况1：当前节点是黑+黑且兄弟节点为红色(此时父节点和兄弟节点的子节点分为黑)。
+   </strong>
+  </p>
+  <p>
+   解法：把父节点染成红色，把兄弟结点染成黑色，之后重新进入算法（我们只讨论当前节点是其父节点左孩子时的情况）。此变换后原红黑树性质5不变，而把问题转化为兄弟节点为黑色的情况(注：变化前，原本就未违反性质5，只是为了
+   <strong>
+    把问题转化为兄弟节点为黑色的情况
+   </strong>
+   )。  即如下代码操作：
+  </p>
+  <pre><code>//调用RB-DELETE-FIXUP(T, x) 的1-8行代码
+ 1 while x ≠ root[T] and color[x] = BLACK
+ 2     do if x = left[p[x]]
+ 3           then w ← right[p[x]]
+ 4                if color[w] = RED
+ 5                   then color[w] ← BLACK                        ▹  Case 1
+ 6                        color[p[x]] ← RED                       ▹  Case 1
+ 7                        LEFT-ROTATE(T, p[x])                    ▹  Case 1
+ 8                        w ← right[p[x]]                         ▹  Case 1
+</code></pre>
+  <p>
+   变化前：
+  </p>
+  <p>
+   <a href="../images/rbtree/10.jpg" target="_blank">
+    <img alt="" src="../images/rbtree/10.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   变化后：
+  </p>
+  <p>
+   <a href="../images/rbtree/11.jpg" target="_blank">
+    <img alt="" src="../images/rbtree/11.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   <strong>
+    删除修复情况2：当前节点是黑加黑且兄弟是黑色且兄弟节点的两个子节点全为黑色。
+   </strong>
+  </p>
+  <p>
+   解法：把当前节点和兄弟节点中抽取一重黑色追加到父节点上，把父节点当成新的当前节点，重新进入算法。（此变换后性质5不变），即调用RB-INSERT-FIXUP(T, z) 的第9-10行代码操作，如下：
+  </p>
+  <pre><code>//调用RB-DELETE-FIXUP(T, x) 的9-11行代码
+9                if color[left[w]] = BLACK and color[right[w]] = BLACK
+10                   then color[w] ← RED                          ▹  Case 2
+11                        x p[x]                                  ▹  Case 2
+</code></pre>
+  <p>
+   变化前：
+  </p>
+  <p>
+   <a href="../images/rbtree/12.jpg" target="_blank">
+    <img alt="" src="../images/rbtree/12.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   变化后：
+  </p>
+  <p>
+   <a href="../images/rbtree/13.jpg" target="_blank">
+    <img alt="" src="../images/rbtree/13.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   <strong>
+    删除修复情况3：当前节点颜色是黑+黑，兄弟节点是黑色，兄弟的左子是红色，右子是黑色。
+   </strong>
+  </p>
+  <p>
+   解法：把兄弟结点染红，兄弟左子节点染黑，之后再在兄弟节点为支点解右旋，之后重新进入算法。此是把当前的情况转化为情况4，而性质5得以保持，即调用RB-INSERT-FIXUP(T, z) 的第12-16行代码，如下所示：
+  </p>
+  <pre><code>//调用RB-DELETE-FIXUP(T, x) 的第12-16行代码
+12                   else if color[right[w]] = BLACK
+13                           then color[left[w]] ← BLACK          ▹  Case 3
+14                                color[w] ← RED                  ▹  Case 3
+15                                RIGHT-ROTATE(T, w)              ▹  Case 3
+16                                w ← right[p[x]]                 ▹  Case 3
+</code></pre>
+  <p>
+   变化前：
+  </p>
+  <p>
+   <a href="../images/rbtree/14.jpg" target="_blank">
+    <img alt="" src="../images/rbtree/14.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   变化后：
+  </p>
+  <p>
+   <a href="../images/rbtree/15.jpg" target="_blank">
+    <img alt="" src="../images/rbtree/15.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   <strong>
+    删除修复情况4：当前节点颜色是黑-黑色，它的兄弟节点是黑色，但是兄弟节点的右子是红色，兄弟节点左子的颜色任意。
+   </strong>
+  </p>
+  <p>
+   解法：把兄弟节点染成当前节点父节点的颜色，把当前节点父节点染成黑色，兄弟节点右子染成黑色，之后以当前节点的父节点为支点进行左旋，此时算法结束，红黑树所有性质调整正确，即调用RB-INSERT-FIXUP(T, z)的第17-21行代码，如下所示：
+  </p>
+  <pre><code>//调用RB-DELETE-FIXUP(T, x) 的第17-21行代码
+17                         color[w] ← color[p[x]]                 ▹  Case 4
+18                         color[p[x]] ← BLACK                    ▹  Case 4
+19                         color[right[w]] ← BLACK                ▹  Case 4
+20                         LEFT-ROTATE(T, p[x])                   ▹  Case 4
+21                         x ← root[T]                            ▹  Case 4
+</code></pre>
+  <p>
+   变化前：
+  </p>
+  <p>
+   <a href="../images/rbtree/16.jpg" target="_blank">
+    <img alt="" src="../images/rbtree/16.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   变化后：
+  </p>
+  <p>
+   <a href="../images/rbtree/17.jpg" target="_blank">
+    <img alt="" src="../images/rbtree/17.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   July、二零一四年五月六日、再次更新。
   </p>
  </body>
 </html>
@@ -427,7 +789,7 @@ i=4，candidate=1，nTimes=1；
 					|
 				
 				
-					<a href="04.01.html">next</a>
+					<a href="03.04.html">next</a>
 				
 				<span style="float: right"><a href="index.html">Back to home</a>
 			</div>

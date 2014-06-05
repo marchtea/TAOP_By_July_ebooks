@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0282bede6135e06ec35e92d06a80225f92812b0e.css" />
-  <link rel="stylesheet" href="style_cache/github2-dcf6ca6edf1a82a2dcaebf74f6b2d9eface5db5d.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
+  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,212 +105,199 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#k%E4%B8%AA%E6%9C%80%E5%B0%8F%E5%92%8C-uva-11997-k-smallest-sums" name="user-content-k%E4%B8%AA%E6%9C%80%E5%B0%8F%E5%92%8C-uva-11997-k-smallest-sums">
+   <a class="anchor" href="#%E7%9F%A9%E9%98%B5%E7%9B%B8%E4%B9%98%E4%B9%8Bstrassen%E7%AE%97%E6%B3%95" name="user-content-%E7%9F%A9%E9%98%B5%E7%9B%B8%E4%B9%98%E4%B9%8Bstrassen%E7%AE%97%E6%B3%95">
     <span class="octicon octicon-link">
     </span>
    </a>
-   K个最小和 (UVA 11997 K Smallest Sums)
+   矩阵相乘之Strassen算法
   </h1>
-  <h3>
-   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F" name="user-content-%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F">
+  <h2>
+   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
     <span class="octicon octicon-link">
     </span>
    </a>
-   题目大意：
-  </h3>
+   题目描述
+  </h2>
   <p>
-   You're given k arrays, each array has k integers. There are kk ways to pick exactly one element in each array and calculate the sum of the integers. Your task is to find the k smallest sums among them.
+   请编程实现矩阵乘法，并考虑当矩阵规模较大时的优化方法。
   </p>
-  <h4>
-   <a class="anchor" href="#input" name="user-content-input">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   Input
-  </h4>
-  <p>
-   There will be several test cases. The first line of each case contains an integer k (2&lt;=k&lt;=750). Each of the following k lines contains k positive integers in each array. Each of these integers does not exceed 1,000,000. The input is terminated by end-of-file (EOF). The size of input file does not exceed 5MB.
-  </p>
-  <h4>
-   <a class="anchor" href="#output" name="user-content-output">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   Output
-  </h4>
-  <p>
-   For each test case, print the k smallest sums, in ascending order.
-  </p>
-  <h4>
-   <a class="anchor" href="#sample-input" name="user-content-sample-input">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   Sample Input
-  </h4>
-  <p>
-   3
-1 8 5
-9 2 5
-10 7 6
-2
-1 1
-1 2
-  </p>
-  <h4>
-   <a class="anchor" href="#output-for-the-sample-input" name="user-content-output-for-the-sample-input">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   Output for the Sample Input
-  </h4>
-  <p>
-   9 10 12
-2 2
-  </p>
-  <p>
-   给定一个k*k的一个矩阵，如果让你在每一行取出一个数，再将每一行取出的数相加，那么总共可以得到k^k种相加方法，现在让你求出这k^k个结果中最小的k个结果。
-  </p>
-  <h3>
+  <h2>
    <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
     <span class="octicon octicon-link">
     </span>
    </a>
    分析与解法
-  </h3>
+  </h2>
   <p>
-   仔细分析这个题目我们会发现其实这个问题是满足最优子结构的，比如：
+   根据wikipedia上的介绍：两个矩阵的乘法仅当第一个矩阵A的行数和另一个矩阵B的列数相等时才能定义。如A是m×n矩阵，B是n×p矩阵，它们的乘积AB是一个m×p矩阵，它的一个元素其中 1 ≤ i ≤ m, 1 ≤ j ≤ p。
   </p>
   <p>
-   如果我们已经计算出了前m行，每行取出一个数相加的最小的k个结果，分别是DP[1],DP[2]...DP
-   <a href="%E6%B3%A8%E6%84%8F%E8%BF%99%E9%87%8C%E7%9A%84DP%E8%A1%A8%E7%A4%BA%E7%9A%84%E6%98%AF%E5%89%8Dm%E8%A1%8C%E6%AF%8F%E8%A1%8C%E4%B8%80%E4%B8%AA%E7%9B%B8%E5%8A%A0%E7%9A%84%E6%9C%80%E5%B0%8F%E7%9A%84%E5%89%8Dk%E4%B8%AA%E5%80%BC">
-    k
+   <a href="../images/41%7E42/42.1.png" target="_blank">
+    <img alt="" src="../images/41%7E42/42.1.png" style="max-width:100%;"/>
    </a>
   </p>
   <p>
-   假设第m+1行的值是A[1],A[2]...A
-   <a href="%E6%B3%A8%E6%84%8F%E8%BF%99%E9%87%8C%E7%9A%84A%5Bi%5D%E8%A1%A8%E7%A4%BA%E7%9A%84%E6%98%AF%E7%AC%ACm+1%E8%A1%8C%E7%9A%84%E7%AC%ACi%E4%B8%AA%E6%95%B0">
-    k
+   值得一提的是，矩阵乘法满足结合律和分配率，但并不满足交换律，如下图所示的这个例子，两个矩阵交换相乘后，结果变了：
+  </p>
+  <p>
+   <a href="../images/41%7E42/42.1-2.png" target="_blank">
+    <img alt="" src="../images/41%7E42/42.1-2.png" style="max-width:100%;"/>
    </a>
-   当我们推倒到第m+1行时，由于我们只计算了前m行的前k个最小值，那我们是不是有必要多计算一些来推导出第m+1行的前k个最小值呢？
   </p>
   <p>
-   答案是不必要的，我们可以通过以下数学公式严格证明：
-设DP[x]是前m行通过计算得出的第x(x&gt;k)小的和，如果上述的假设成立，那么我们可以列出不等式：
-  </p>
-  <pre><code>DP[x] + A[y] &lt; DP[m] + A[n] (1)
-(DP[m]+A[n]表示只通过DP[1,2...k]计算出的前m+1行第k小的和)
-</code></pre>
-  <p>
-   上述不等式的含义是指在第m+1行存在一个数A[y],使得DP[x]+A[y]是前m+1行中前k小的结果。
-同时，我们注意到:
-  </p>
-  <pre><code>x&gt;k ==&gt; DP[x] &gt; DP[k]  (2)
-A[y] &gt;= A[1]           (3)
-</code></pre>
-  <p>
-   由上面三个不等式(1),(2),(3)我们可以得到：
-  </p>
-  <pre><code>DP[k]+A[1] &lt;= DP[x]+A[y] &lt; DP[m]+A[n]
-DP[k]+A[1] &lt; DP[m]+A[n]
-</code></pre>
-  <p>
-   之前我们说过DP[m] + A[n] 是前m行第k大的和，然而：比DP[k]+A[1]小的数已经有
-  </p>
-  <pre><code>（DP[1]+A[1]）,(DP[2]+A[1])...(DP[k-1]+A[1])共计k-1个，
-</code></pre>
-  <p>
-   所以DP[k]+A[1]是第k个最小的和，与假设的DP[m]+A[n]是第k个最小的和相矛盾，所以假设不成立。得证。
-  </p>
-  <p>
-   通过以上的证明我们可以得出结论要计算第m+1行的前k个最小和是只需要计算出前m行的前k个最小的和即可。这时，我们的目标就转化为了计算一个2*k的数组，在第一行取一个数，在第二行取一个数，得到k^2个和，求他们当中的最小的k个和。
-  </p>
-  <p>
-   为了计算它，我们把这n^2个数组织成如下n个有序表：
-  </p>
-  <pre><code>表1： A1+B1 &lt;= A1+B2&lt;=A1+B3&lt;=......
-表2： A2+B1 &lt;= A2+B2&lt;=A2+B3&lt;=......
-.
-表n： An+B1 &lt;= An+B2&lt;=An+B3&lt;=......
-</code></pre>
-  <p>
-   这时我们用一个二元组（sum， b）来保存以上的每一个元素，其中sum=A[a] + B[b].
-  </p>
-  <p>
-   为什么不保存A的下标a呢？因为我们用不到a的值。如果我们需要在表(sum, b)中赵到下一个元素(sum', b+1)，只要计算sum' = s - B[b] + B[b+1],不需要知道a是多少。
+   下面咱们来具体解决这个矩阵相乘的问题。
   </p>
   <h3>
-   <a class="anchor" href="#%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81" name="user-content-%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81">
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80%E6%9A%B4%E5%8A%9B%E8%A7%A3%E6%B3%95" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80%E6%9A%B4%E5%8A%9B%E8%A7%A3%E6%B3%95">
     <span class="octicon octicon-link">
     </span>
    </a>
-   实现代码
+   解法一、暴力解法
   </h3>
-  <div class="highlight highlight-c">
-   <pre><span class="cp">#include &lt;cstdio&gt;</span>
-<span class="cp">#include &lt;algorithm&gt;</span>
-<span class="cp">#include &lt;queue&gt;</span>
-
-<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
-
-<span class="kt">int</span>  <span class="n">a</span><span class="p">[</span><span class="mi">800</span><span class="p">][</span><span class="mi">800</span><span class="p">],</span><span class="n">k</span><span class="p">;</span>
-
-<span class="k">struct</span> <span class="n">node</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">s</span><span class="p">,</span><span class="n">b</span><span class="p">;</span>
-    <span class="kt">bool</span> <span class="n">operator</span><span class="o">&lt;</span><span class="p">(</span><span class="k">const</span> <span class="n">node</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">)</span> <span class="k">const</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="n">s</span><span class="o">&gt;</span><span class="n">a</span><span class="p">.</span><span class="n">s</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-
-<span class="kt">void</span> <span class="nf">merge</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">A</span><span class="p">,</span><span class="kt">int</span> <span class="o">*</span><span class="n">B</span><span class="p">,</span><span class="kt">int</span> <span class="o">*</span><span class="n">C</span><span class="p">,</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">node</span> <span class="n">tmp</span><span class="p">;</span>
-    <span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">node</span><span class="o">&gt;</span> <span class="n">q</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">tmp</span><span class="p">.</span><span class="n">s</span><span class="o">=</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">B</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">tmp</span><span class="p">.</span><span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
-        <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">tmp</span><span class="o">=</span><span class="n">q</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
-        <span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
-        <span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">tmp</span><span class="p">.</span><span class="n">s</span><span class="p">;</span>
-        <span class="k">if</span><span class="p">(</span><span class="n">tmp</span><span class="p">.</span><span class="n">b</span><span class="o">+</span><span class="mi">1</span><span class="o">&lt;</span><span class="n">n</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">tmp</span><span class="p">.</span><span class="n">s</span><span class="o">=</span><span class="n">tmp</span><span class="p">.</span><span class="n">s</span><span class="o">-</span><span class="n">B</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">b</span><span class="p">]</span><span class="o">+</span><span class="n">B</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">b</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
-            <span class="n">tmp</span><span class="p">.</span><span class="n">b</span><span class="o">++</span><span class="p">;</span>
-            <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="k">while</span><span class="p">(</span><span class="o">~</span><span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span><span class="o">&amp;</span><span class="n">k</span><span class="p">))</span>
-    <span class="p">{</span>
-        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">k</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">k</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
-                <span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span><span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]);</span>
-            <span class="n">sort</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">k</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">k</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-            <span class="n">merge</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">k</span><span class="p">);</span>
-        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">k</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-            <span class="n">printf</span><span class="p">(</span><span class="s">"%d%s"</span><span class="p">,</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">],</span><span class="n">i</span><span class="o">!=</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="o">?</span><span class="s">" "</span><span class="o">:</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+  <p>
+   其实，通过前面的分析，我们已经很明显的看出，两个具有相同维数的矩阵相乘，其复杂度为O(n^3)，参考代码如下：
+  </p>
+  <div class="highlight highlight-cpp">
+   <pre><span class="c1">//矩阵乘法，3个for循环搞定    </span>
+<span class="kt">void</span> <span class="nf">mulMatrix</span><span class="p">(</span><span class="kt">int</span><span class="o">**</span> <span class="n">matrixA</span><span class="p">,</span> <span class="kt">int</span><span class="o">**</span> <span class="n">matrixB</span><span class="p">,</span> <span class="kt">int</span><span class="o">**</span> <span class="n">matrixC</span><span class="p">)</span>    
+<span class="p">{</span>    
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>     
+    <span class="p">{</span>    
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>     
+        <span class="p">{</span>    
+            <span class="n">matrixC</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>    
+            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="o">++</span><span class="n">k</span><span class="p">)</span>     
+            <span class="p">{</span>    
+                <span class="n">matrixC</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">matrixA</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">matrixB</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>    
+            <span class="p">}</span>    
+        <span class="p">}</span>    
+    <span class="p">}</span>    
+<span class="p">}</span>  
 </pre>
   </div>
-  <p>
-   参考
-   <a href="http://www.cnblogs.com/gj-Acit/p/3583480.html">
-    http://www.cnblogs.com/gj-Acit/p/3583480.html
+  <h3>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8Cstrassen%E7%AE%97%E6%B3%95" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8Cstrassen%E7%AE%97%E6%B3%95">
+    <span class="octicon octicon-link">
+    </span>
    </a>
+   解法二、Strassen算法
+  </h3>
+  <p>
+   在解法一中，我们用了3个for循环搞定矩阵乘法，但当两个矩阵的维度变得很大时，O（n^3）的时间复杂度将会变得很大，于是，我们需要找到一种更优的解法。
+  </p>
+  <p>
+   一般说来，当数据量一大时，我们往往会把大的数据分割成小的数据，各个分别处理。遵此思路，如果丢给我们一个很大的两个矩阵呢，是否可以考虑分治的方法循序渐进处理各个小矩阵的相乘，因为我们知道一个矩阵是可以分成更多小的矩阵的。
+  </p>
+  <p>
+   如下图，当给定一个两个二维矩阵A B时：
+  </p>
+  <p>
+   <a href="../images/41%7E42/42.2.png" target="_blank">
+    <img alt="" src="../images/41%7E42/42.2.png" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   这两个矩阵A B相乘时，我们发现在相乘的过程中，有8次乘法运算，4次加法运算：
+  </p>
+  <p>
+   <a href="../images/41%7E42/42.3.png" target="_blank">
+    <img alt="" src="../images/41%7E42/42.3.png" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   矩阵乘法的复杂度主要就是体现在相乘上，而多一两次的加法并不会让复杂度上升太多。故此，我们思考，是否可以让矩阵乘法的运算过程中乘法的运算次数减少，从而达到降低矩阵乘法的复杂度呢？答案是肯定的。
+  </p>
+  <p>
+   1969年，德国的一位数学家Strassen证明O(N^3)的解法并不是矩阵乘法的最优算法，他做了一系列工作使得最终的时间复杂度降低到了O(n^2.80)。
+  </p>
+  <p>
+   他是怎么做到的呢？还是用上文A B两个矩阵相乘的例子，他定义了7个变量：
+  </p>
+  <p>
+   <a href="../images/41%7E42/42.4.png" target="_blank">
+    <img alt="" src="../images/41%7E42/42.4.png" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   如此，Strassen算法的流程如下：
+  </p>
+  <ul>
+   <li>
+    两个矩阵A B相乘时，将A, B, C分成相等大小的方块矩阵：
+   </li>
+  </ul>
+  <p>
+   <a href="../images/41%7E42/42.5.png" target="_blank">
+    <img alt="" src="../images/41%7E42/42.5.png" style="max-width:100%;"/>
+   </a>
+  </p>
+  <ul>
+   <li>
+    可以看出C是这么得来的：
+   </li>
+  </ul>
+  <p>
+   <a href="../images/41%7E42/42.6.jpeg" target="_blank">
+    <img alt="" src="../images/41%7E42/42.6.jpeg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <ul>
+   <li>
+    现在定义7个新矩阵（
+    <em>
+     读者可以思考下，这7个新矩阵是如何想到的
+    </em>
+    ）：
+   </li>
+  </ul>
+  <p>
+   <a href="../images/41%7E42/42.7.jpeg" target="_blank">
+    <img alt="" src="../images/41%7E42/42.7.jpeg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <ul>
+   <li>
+    而最后的结果矩阵C 可以通过组合上述7个新矩阵得到：
+   </li>
+  </ul>
+  <p>
+   <a href="../images/41%7E42/42.8.jpeg" target="_blank">
+    <img alt="" src="../images/41%7E42/42.8.jpeg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   表面上看，Strassen算法仅仅比通用矩阵相乘算法好一点，因为通用矩阵相乘算法时间复杂度是
+   <a href="https://camo.githubusercontent.com/aeef0df9107adbd6463c9e4fe6748f7815dec922/687474703a2f2f6c617465782e636f6465636f67732e636f6d2f6769662e6c617465783f2537426e253545333d6e2535452537426c6f675f3238253744253744" target="_blank">
+    <img alt="equation" data-canonical-src="http://latex.codecogs.com/gif.latex?%7Bn%5E3=n%5E%7Blog_28%7D%7D" src="https://camo.githubusercontent.com/aeef0df9107adbd6463c9e4fe6748f7815dec922/687474703a2f2f6c617465782e636f6465636f67732e636f6d2f6769662e6c617465783f2537426e253545333d6e2535452537426c6f675f3238253744253744" style="max-width:100%;"/>
+   </a>
+   ，而Strassen算法复杂度只是
+   <a href="https://camo.githubusercontent.com/f7e265e7402a954d8853d9724b203e0f648a12bf/687474703a2f2f6c617465782e636f6465636f67732e636f6d2f6769662e6c617465783f2537424f286e2535452537426c6f675f3237253744293d4f286e253545253742322e38303725374429253744" target="_blank">
+    <img alt="equation" data-canonical-src="http://latex.codecogs.com/gif.latex?%7BO(n%5E%7Blog_27%7D)=O(n%5E%7B2.807%7D)%7D" src="https://camo.githubusercontent.com/f7e265e7402a954d8853d9724b203e0f648a12bf/687474703a2f2f6c617465782e636f6465636f67732e636f6d2f6769662e6c617465783f2537424f286e2535452537426c6f675f3237253744293d4f286e253545253742322e38303725374429253744" style="max-width:100%;"/>
+   </a>
+   。但随着n的变大，比如当n &gt;&gt; 100时，Strassen算法是比通用矩阵相乘算法变得更有效率。
+  </p>
+  <p>
+   如下图所示：
+  </p>
+  <p>
+   <a href="../images/41%7E42/42.9.png" target="_blank">
+    <img alt="" src="../images/41%7E42/42.9.png" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   根据wikipedia上的介绍，后来，Coppersmith–Winograd 算法把 N* N大小的矩阵乘法的时间复杂度降低到了：
+   <a href="https://camo.githubusercontent.com/3828207037dbef5a343930907319c428337e9443/687474703a2f2f6c617465782e636f6465636f67732e636f6d2f6769662e6c617465783f2537424f286e253545253742322e33373534373725374429253744" target="_blank">
+    <img alt="equation" data-canonical-src="http://latex.codecogs.com/gif.latex?%7BO(n%5E%7B2.375477%7D)%7D" src="https://camo.githubusercontent.com/3828207037dbef5a343930907319c428337e9443/687474703a2f2f6c617465782e636f6465636f67732e636f6d2f6769662e6c617465783f2537424f286e253545253742322e33373534373725374429253744" style="max-width:100%;"/>
+   </a>
+   ，而2010年，Andrew Stothers再度把复杂度降低到了
+   <a href="https://camo.githubusercontent.com/b4ca1c880f8008d0063ab91cd95d8271dd5846e1/687474703a2f2f6c617465782e636f6465636f67732e636f6d2f6769662e6c617465783f2537424f286e253545253742322e3337333625374429253744" target="_blank">
+    <img alt="equation" data-canonical-src="http://latex.codecogs.com/gif.latex?%7BO(n%5E%7B2.3736%7D)%7D" src="https://camo.githubusercontent.com/b4ca1c880f8008d0063ab91cd95d8271dd5846e1/687474703a2f2f6c617465782e636f6465636f67732e636f6d2f6769662e6c617465783f2537424f286e253545253742322e3337333625374429253744" style="max-width:100%;"/>
+   </a>
+   ，一年后的2011年，Virginia Williams把复杂度最终定格为：
+   <a href="https://camo.githubusercontent.com/9e7e3d9b8139728ee592e2b6dc0f3ed69605b6d0/687474703a2f2f6c617465782e636f6465636f67732e636f6d2f6769662e6c617465783f2537424f286e253545253742322e3337323725374429253744" target="_blank">
+    <img alt="equation" data-canonical-src="http://latex.codecogs.com/gif.latex?%7BO(n%5E%7B2.3727%7D)%7D" src="https://camo.githubusercontent.com/9e7e3d9b8139728ee592e2b6dc0f3ed69605b6d0/687474703a2f2f6c617465782e636f6465636f67732e636f6d2f6769662e6c617465783f2537424f286e253545253742322e3337323725374429253744" style="max-width:100%;"/>
+   </a>
+   。
   </p>
  </body>
 </html>

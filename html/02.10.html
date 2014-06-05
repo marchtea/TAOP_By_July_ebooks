@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0282bede6135e06ec35e92d06a80225f92812b0e.css" />
-  <link rel="stylesheet" href="style_cache/github2-dcf6ca6edf1a82a2dcaebf74f6b2d9eface5db5d.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
+  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -104,146 +104,213 @@
 		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
 			<html>
  <body>
-  <h2>
-   <a class="anchor" href="#%E6%9C%AC%E7%AB%A0%E4%B9%A0%E9%A2%98" name="user-content-%E6%9C%AC%E7%AB%A0%E4%B9%A0%E9%A2%98">
+  <h1>
+   <a class="anchor" href="#k%E4%B8%AA%E6%9C%80%E5%B0%8F%E5%92%8C-uva-11997-k-smallest-sums" name="user-content-k%E4%B8%AA%E6%9C%80%E5%B0%8F%E5%92%8C-uva-11997-k-smallest-sums">
     <span class="octicon octicon-link">
     </span>
    </a>
-   本章习题
-  </h2>
+   K个最小和 (UVA 11997 K Smallest Sums)
+  </h1>
+  <h3>
+   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F" name="user-content-%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   题目大意：
+  </h3>
   <p>
-   <strong>
-    1、不用除法运算
-   </strong>
+   You're given k arrays, each array has k integers. There are kk ways to pick exactly one element in each array and calculate the sum of the integers. Your task is to find the k smallest sums among them.
+  </p>
+  <h4>
+   <a class="anchor" href="#input" name="user-content-input">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   Input
+  </h4>
+  <p>
+   There will be several test cases. The first line of each case contains an integer k (2&lt;=k&lt;=750). Each of the following k lines contains k positive integers in each array. Each of these integers does not exceed 1,000,000. The input is terminated by end-of-file (EOF). The size of input file does not exceed 5MB.
+  </p>
+  <h4>
+   <a class="anchor" href="#output" name="user-content-output">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   Output
+  </h4>
+  <p>
+   For each test case, print the k smallest sums, in ascending order.
+  </p>
+  <h4>
+   <a class="anchor" href="#sample-input" name="user-content-sample-input">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   Sample Input
+  </h4>
+  <p>
+   3
+1 8 5
+9 2 5
+10 7 6
+2
+1 1
+1 2
+  </p>
+  <h4>
+   <a class="anchor" href="#output-for-the-sample-input" name="user-content-output-for-the-sample-input">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   Output for the Sample Input
+  </h4>
+  <p>
+   9 10 12
+2 2
   </p>
   <p>
-   一个长度为n的数组a[0],a[1],...,a[n-1]。现在更新数组的名个元素，即a[0]变为a[1]到a[n-1]的积，a[1]变为a[0]和a[2]到a[n-1]的积，...，a[n-1]为a[0]到a[n-2]的积（就是除掉当前元素，其他所有元素的积）。程序要求：具有线性复杂度，且不能使用除法运算符。
+   给定一个k*k的一个矩阵，如果让你在每一行取出一个数，再将每一行取出的数相加，那么总共可以得到k^k种相加方法，现在让你求出这k^k个结果中最小的k个结果。
+  </p>
+  <h3>
+   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   分析与解法
+  </h3>
+  <p>
+   仔细分析这个题目我们会发现其实这个问题是满足最优子结构的，比如：
   </p>
   <p>
-   分析：left[i]标示着a[i]之前的乘积，right[i]标示着a[i]之后的乘积，但不申请空间，那么a[i]=left[i]*right[i] 。不过，left的计算从左往右扫的时候得出，right是从右往左扫得出。因为就是当中某个元素a[i]的左边所有元素与右边所有元素的乘积，就这么简单。所以计算a[i]=left[i]*right[i]时，直接出结果。
+   如果我们已经计算出了前m行，每行取出一个数相加的最小的k个结果，分别是DP[1],DP[2]...DP
+   <a href="%E6%B3%A8%E6%84%8F%E8%BF%99%E9%87%8C%E7%9A%84DP%E8%A1%A8%E7%A4%BA%E7%9A%84%E6%98%AF%E5%89%8Dm%E8%A1%8C%E6%AF%8F%E8%A1%8C%E4%B8%80%E4%B8%AA%E7%9B%B8%E5%8A%A0%E7%9A%84%E6%9C%80%E5%B0%8F%E7%9A%84%E5%89%8Dk%E4%B8%AA%E5%80%BC">
+    k
+   </a>
   </p>
   <p>
-   <strong>
-    2
-   </strong>
+   假设第m+1行的值是A[1],A[2]...A
+   <a href="%E6%B3%A8%E6%84%8F%E8%BF%99%E9%87%8C%E7%9A%84A%5Bi%5D%E8%A1%A8%E7%A4%BA%E7%9A%84%E6%98%AF%E7%AC%ACm+1%E8%A1%8C%E7%9A%84%E7%AC%ACi%E4%B8%AA%E6%95%B0">
+    k
+   </a>
+   当我们推倒到第m+1行时，由于我们只计算了前m行的前k个最小值，那我们是不是有必要多计算一些来推导出第m+1行的前k个最小值呢？
   </p>
   <p>
-   两个数组a[N]，b[N]，其中A[N]的各个元素值已知，现给b[i]赋值，b[i] = a[0]*a[1]*a[2]...*a[N-1]/a[i]；
-要求：
+   答案是不必要的，我们可以通过以下数学公式严格证明：
+设DP[x]是前m行通过计算得出的第x(x&gt;k)小的和，如果上述的假设成立，那么我们可以列出不等式：
   </p>
-  <ul>
-   <li>
-    1.不准用除法运算
-   </li>
-   <li>
-    2.除了循环计数值，a[N],b[N]外，不准再用其他任何变量（包括局部变量，全局变量等）
-   </li>
-   <li>
-    3.满足时间复杂度O（n），空间复杂度O（1）。
-   </li>
-  </ul>
+  <pre><code>DP[x] + A[y] &lt; DP[m] + A[n] (1)
+(DP[m]+A[n]表示只通过DP[1,2...k]计算出的前m+1行第k小的和)
+</code></pre>
   <p>
-   分析：你要我求b=a[0]
-   <em>
-    a
-   </em>
-   ...a[i-1]
-   <em>
-    a*a[i+1]..*a[N-1]/a ，就是求：a[0]*a[1]
-   </em>
-   ...a[i-1]*a[i+1]..*a[N-1]。只是我把a[i]左边部分标示为left[i]，b[i]右边部分标示为right[i]，而实际上完全不申请left[i]，与right[i]变量，之所以那样标示，无非就是为了说明：除掉当前元素a[i]，其他所有元素(a[i]左边部分，和a[i]右边部分)的积。
+   上述不等式的含义是指在第m+1行存在一个数A[y],使得DP[x]+A[y]是前m+1行中前k小的结果。
+同时，我们注意到:
   </p>
+  <pre><code>x&gt;k ==&gt; DP[x] &gt; DP[k]  (2)
+A[y] &gt;= A[1]           (3)
+</code></pre>
   <p>
-   <strong>
-    3、找出数组中唯一的重复元素
-   </strong>
+   由上面三个不等式(1),(2),(3)我们可以得到：
+  </p>
+  <pre><code>DP[k]+A[1] &lt;= DP[x]+A[y] &lt; DP[m]+A[n]
+DP[k]+A[1] &lt; DP[m]+A[n]
+</code></pre>
+  <p>
+   之前我们说过DP[m] + A[n] 是前m行第k大的和，然而：比DP[k]+A[1]小的数已经有
+  </p>
+  <pre><code>（DP[1]+A[1]）,(DP[2]+A[1])...(DP[k-1]+A[1])共计k-1个，
+</code></pre>
+  <p>
+   所以DP[k]+A[1]是第k个最小的和，与假设的DP[m]+A[n]是第k个最小的和相矛盾，所以假设不成立。得证。
   </p>
   <p>
-   1-1000放在含有1001个元素的数组中，只有唯一的一个元素值重复，其它均只出现一次。
-每个数组元素只能访问一次，设计一个算法，将它找出来；不用辅助存储空间，能否设计一个算法实现？
+   通过以上的证明我们可以得出结论要计算第m+1行的前k个最小和是只需要计算出前m行的前k个最小的和即可。这时，我们的目标就转化为了计算一个2*k的数组，在第一行取一个数，在第二行取一个数，得到k^2个和，求他们当中的最小的k个和。
   </p>
   <p>
-   <strong>
-    4、找出唯一出现的数
-   </strong>
+   为了计算它，我们把这n^2个数组织成如下n个有序表：
+  </p>
+  <pre><code>表1： A1+B1 &lt;= A1+B2&lt;=A1+B3&lt;=......
+表2： A2+B1 &lt;= A2+B2&lt;=A2+B3&lt;=......
+.
+表n： An+B1 &lt;= An+B2&lt;=An+B3&lt;=......
+</code></pre>
+  <p>
+   这时我们用一个二元组（sum， b）来保存以上的每一个元素，其中sum=A[a] + B[b].
   </p>
   <p>
-   一个数组里，数都是两两出现的，但是有三个数是唯一出现的，找出这三个数。
+   为什么不保存A的下标a呢？因为我们用不到a的值。如果我们需要在表(sum, b)中赵到下一个元素(sum', b+1)，只要计算sum' = s - B[b] + B[b+1],不需要知道a是多少。
   </p>
-  <p>
-   <strong>
-    5、找出反序的个数
-   </strong>
-   给定一整型数组，若数组中某个下标值大的元素值小于某个下标值比它小的元素值，称这是一个反序。
-即：数组a[]; 对于i &lt; j 且 a[i] &gt; a[j],则称这是一个反序。
-给定一个数组，要求写一个函数，计算出这个数组里所有反序的个数。
-  </p>
-  <p>
-   <strong>
-    6、
-   </strong>
-  </p>
-  <p>
-   有两个序列A和B,A=(a1,a2,...,ak),B=(b1,b2,...,bk),A和B都按升序排列，对于1&lt;=i,j&lt;=k，求k个最小的（ai+bj），要求算法尽量高效。
-  </p>
-  <p>
-   <strong>
-    7、三数取中
-   </strong>
-  </p>
-  <p>
-   给定3个整数a、b、c，找出这3个数的中位数。
-  </p>
-  <p>
-   分析：
-  </p>
+  <h3>
+   <a class="anchor" href="#%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81" name="user-content-%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   实现代码
+  </h3>
   <div class="highlight highlight-c">
-   <pre><span class="c1">// 采用两两比较的思路    </span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;=</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>    
-        <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">&lt;=</span> <span class="n">c</span><span class="p">)</span>    
-            <span class="k">return</span> <span class="n">b</span><span class="p">;</span>    
-        <span class="k">else</span> <span class="p">{</span>    
-            <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;=</span><span class="n">c</span><span class="p">)</span>    
-                <span class="k">return</span> <span class="n">c</span><span class="p">;</span>    
-            <span class="k">else</span>    
-                <span class="k">return</span> <span class="n">a</span><span class="p">;</span>    
-            <span class="p">}</span>    
-    <span class="p">}</span>    
-    <span class="k">else</span> <span class="p">{</span>    
-        <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;=</span> <span class="n">c</span><span class="p">)</span>    
-            <span class="k">return</span> <span class="n">a</span><span class="p">;</span>    
-        <span class="k">else</span> <span class="p">{</span>    
-            <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">&lt;=</span> <span class="n">c</span><span class="p">)</span>    
-                <span class="k">return</span> <span class="n">c</span><span class="p">;</span>    
-            <span class="k">else</span>    
-                <span class="k">return</span> <span class="n">b</span><span class="p">;</span>    
-            <span class="p">}</span>    
-    <span class="p">}</span>  
+   <pre><span class="cp">#include &lt;cstdio&gt;</span>
+<span class="cp">#include &lt;algorithm&gt;</span>
+<span class="cp">#include &lt;queue&gt;</span>
+
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span>  <span class="n">a</span><span class="p">[</span><span class="mi">800</span><span class="p">][</span><span class="mi">800</span><span class="p">],</span><span class="n">k</span><span class="p">;</span>
+
+<span class="k">struct</span> <span class="n">node</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">s</span><span class="p">,</span><span class="n">b</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">operator</span><span class="o">&lt;</span><span class="p">(</span><span class="k">const</span> <span class="n">node</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">s</span><span class="o">&gt;</span><span class="n">a</span><span class="p">.</span><span class="n">s</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">void</span> <span class="nf">merge</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">A</span><span class="p">,</span><span class="kt">int</span> <span class="o">*</span><span class="n">B</span><span class="p">,</span><span class="kt">int</span> <span class="o">*</span><span class="n">C</span><span class="p">,</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">node</span> <span class="n">tmp</span><span class="p">;</span>
+    <span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">node</span><span class="o">&gt;</span> <span class="n">q</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">tmp</span><span class="p">.</span><span class="n">s</span><span class="o">=</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">B</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">tmp</span><span class="p">.</span><span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+        <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">tmp</span><span class="o">=</span><span class="n">q</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+        <span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        <span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">tmp</span><span class="p">.</span><span class="n">s</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">tmp</span><span class="p">.</span><span class="n">b</span><span class="o">+</span><span class="mi">1</span><span class="o">&lt;</span><span class="n">n</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">tmp</span><span class="p">.</span><span class="n">s</span><span class="o">=</span><span class="n">tmp</span><span class="p">.</span><span class="n">s</span><span class="o">-</span><span class="n">B</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">b</span><span class="p">]</span><span class="o">+</span><span class="n">B</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">b</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+            <span class="n">tmp</span><span class="p">.</span><span class="n">b</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">while</span><span class="p">(</span><span class="o">~</span><span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span><span class="o">&amp;</span><span class="n">k</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">k</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">k</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
+                <span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span><span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]);</span>
+            <span class="n">sort</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">k</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">k</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">merge</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">k</span><span class="p">);</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">k</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">"%d%s"</span><span class="p">,</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">],</span><span class="n">i</span><span class="o">!=</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="o">?</span><span class="s">" "</span><span class="o">:</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
 </pre>
   </div>
   <p>
-   <strong>
-    8
-   </strong>
-  </p>
-  <p>
-   假设一个大小为100亿个数据的数组，该数组是从小到大排好序的，现在该数组分成若干段，每个段的数据长度小于20「也就是说：题目并没有说每段数据的size 相同，只是说每个段的 size &lt; 20 而已」，然后将每段的数据进行乱序（即：段内数据乱序），形成一个新数组。请写一个算法，将所有数据从小到大进行排序，并说明时间复杂度。
-  </p>
-  <p>
-   <strong>
-    9
-   </strong>
-  </p>
-  <p>
-   20个排序好的数组，每个数组500个数，按照降序排序好的，让找出500个最大的数。
-  </p>
-  <p>
-   <strong>
-    10
-   </strong>
-  </p>
-  <p>
-   O(1)时间实现矩阵转置。
+   参考
+   <a href="http://www.cnblogs.com/gj-Acit/p/3583480.html">
+    http://www.cnblogs.com/gj-Acit/p/3583480.html
+   </a>
   </p>
  </body>
 </html>
@@ -255,7 +322,7 @@
 					|
 				
 				
-					<a href="03.01.html">next</a>
+					<a href="02.11.html">next</a>
 				
 				<span style="float: right"><a href="index.html">Back to home</a>
 			</div>

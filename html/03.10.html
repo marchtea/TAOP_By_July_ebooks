@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
+  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
+  <style>
+    .file-box {
+      margin: 64px auto;
+      width: 920px;
+    }
+	body {
+		font-size: 14px;
+		line-height: 22px;
+		<!--font-family: "adelle",Georgia,"Times New Roman",serif;-->
+		color: #4e443c;
+		background: #f0efe7;
+	}
+
+	.book-toc {
+
+	}
+	a {
+		color: #0388a6;
+		text-decoration: none;
+	}
+	a:hover {
+		color: #04b1d8;
+		text-decoration: none;
+	}
+	ol.book-toc li.chapter{
+		margin-bottom:0.6em
+	}
+	ol.book-toc, ol{
+		list-style-type: disc
+	}
+	ol.book-toc{
+		margin:30px 36px
+	}
+	ol.book-toc a{
+		padding-left:4px
+	}
+	li {
+		line-height: 22px;
+	}
+	h1, h2, h3, h4, h5, h6, li, p, a, ol, div{
+		margin: 0;
+		padding: 0;
+		border: 0;
+		vertical-align: baseline;
+	}
+	ul, ol {
+		padding: 0;
+		margin: 0 0 11px 25px;
+	}
+	h1 {
+		font-size: 36px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	h2 {
+		font-size: 18px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h1{
+		font-size: 22px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	ol.book-toc h2 {
+		font-size: 16px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	p {
+		margin: 0 0 11px;
+		font-size: 14px;
+		line-height: 22px;
+	}
+	div {
+		display: block;
+	}
+	div#nav{
+		padding: 30px
+	}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="file-box">
+	<div class="file">
+		<div id="readme" class="blob instapaper_body announce md">
+		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
+			<html>
+ <body>
+  <h1>
+   <a class="anchor" href="#%E6%9C%AC%E7%AB%A0%E4%B9%A0%E9%A2%98" name="user-content-%E6%9C%AC%E7%AB%A0%E4%B9%A0%E9%A2%98">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   本章习题
+  </h1>
+  <p>
+   <strong>
+    1、附近地点搜索
+   </strong>
+  </p>
+  <p>
+   找一个点集中与给定点距离最近的点，同时，给定的二维点集都是固定的，查询可能有很多次，例如，坐标(39.91, 116.37)附近500米内有什么餐馆，那么让你来设计，该怎么做？
+  </p>
+  <p>
+   <a href="../images/36%7E37/37.1.jpg" target="_blank">
+    <img alt="" src="../images/36%7E37/37.1.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   提示：可以建立R树进行二维搜索，或使用GeoHash算法解决。
+  </p>
+  <p>
+   <strong>
+    2、最小操作数
+   </strong>
+  </p>
+  <p>
+   给定一个单词集合Dict，其中每个单词的长度都相同。现从此单词集合Dict中抽取两个单词A、B，我们希望通过若干次操作把单词A变成单词B，每次操作可以改变单词的一个字母，同时，新产生的单词必须是在给定的单词集合Dict中。求所有行得通步数最少的修改方法。
+  </p>
+  <p>
+   举个例子如下：
+  </p>
+  <p>
+   Given:
+     A = "hit"
+     B = "cog"
+     Dict = ["hot","dot","dog","lot","log"]
+  Return
+   [
+     ["hit","hot","dot","dog","cog"],
+     ["hit","hot","lot","log","cog"]
+   ]
+  </p>
+  <p>
+   即把字符串A = "hit"转变成字符串B = "cog"，有以下两种可能：
+  </p>
+  <p>
+   "hit" -&gt; "hot" -&gt;  "dot" -&gt;  "dog" -&gt; "cog"；
+  </p>
+  <p>
+   "hit" -&gt;  "hot" -&gt;  "lot" -&gt;  "log"  -&gt;"cog"。
+  </p>
+  <p>
+   提示：建图然后搜索。
+  </p>
+  <p>
+   <strong>
+    3、把二元查找树转变成排序的双向链表
+   </strong>
+  </p>
+  <p>
+   输入一棵二元查找树，将该二元查找树转换成一个排序的双向链表。
+要求不能创建任何新的结点，只调整指针的指向。
+  </p>
+  <p>
+   10
+  </p>
+  <p>
+   / /
+  </p>
+  <p>
+   6  14
+  </p>
+  <p>
+   / / / /
+  </p>
+  <p>
+   4  8 12
+  </p>
+  <p>
+   转换成双向链表
+  </p>
+  <p>
+   4=6=8=10=12=14=16。
+  </p>
+  <p>
+   <strong>
+    4、在二元树中找出和为某一值的所有路径
+   </strong>
+  </p>
+  <p>
+   输入一个整数和一棵二元树。
+从树的根结点开始往下访问一直到叶结点所经过的所有结点形成一条路径。
+打印出和与输入整数相等的所有路径。
+例如 输入整数22和如下二元树
+  </p>
+  <pre><code>10  
+</code></pre>
+  <p>
+   /   /
+   <br/>
+   5    12
+   <br/>
+   / \
+   <br/>
+   4  7
+  </p>
+  <p>
+   <strong>
+    5、判断整数序列是不是二元查找树的后序遍历结果
+   </strong>
+  </p>
+  <p>
+   题目：输入一个整数数组，判断该数组是不是某二元查找树的后序遍历的结果，如果是返回true，否则返回false。
+  </p>
+  <p>
+   例如输入5、7、6、9、11、10、8，由于这一整数序列是如下树的后序遍历结果：
+  </p>
+  <pre><code>     8
+  /  /
+ 6    10
+/ /  / /
+</code></pre>
+  <p>
+   5  7 9  11
+因此返回true。
+  </p>
+  <p>
+   如果输入7、4、6、5，没有哪棵树的后序遍历的结果是这个序列，因此返回false。
+  </p>
+  <p>
+   <strong>
+    6、设计包含min函数的栈
+   </strong>
+  </p>
+  <p>
+   定义栈的数据结构，要求添加一个min函数，能够得到栈的最小元素。要求函数min、push以及pop的时间复杂度都是O(1)。
+  </p>
+  <p>
+   <strong>
+    7、求二叉树中节点的最大距离
+   </strong>
+  </p>
+  <p>
+   如果我们把二叉树看成一个图，父子节点之间的连线看成是双向的，我们姑且定义"距离"为两节点之间边的个数。
+  </p>
+  <p>
+   请写一个程序，求一棵二叉树中相距最远的两个节点之间的距离。
+  </p>
+  <p>
+   <strong>
+    8
+   </strong>
+  </p>
+  <p>
+   输入一颗二元树，从上往下按层打印树的每个结点，同一层中按照从左往右的顺序打印。
+  </p>
+  <p>
+   例如输入
+  </p>
+  <p>
+   8
+  </p>
+  <p>
+   / /
+  </p>
+  <p>
+   6 10
+  </p>
+  <p>
+   / / / /
+  </p>
+  <p>
+   5 7 9 11
+  </p>
+  <p>
+   输出8 6 10 5 7 9 11。
+  </p>
+  <p>
+   <strong>
+    9
+   </strong>
+  </p>
+  <p>
+   请用递归和非递归俩种方法实现二叉树的前序遍历。
+  </p>
+  <p>
+   <strong>
+    10、求树的深度
+   </strong>
+  </p>
+  <p>
+   输入一棵二元树的根结点，求该树的深度。
+  </p>
+  <p>
+   从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。
+  </p>
+  <p>
+   例如：输入二元树：
+                                            10
+  </p>
+  <pre><code>                                      /     /
+
+                                    6        14
+
+                                  /         /   /
+
+                                4         12     16
+</code></pre>
+  <p>
+   输出该树的深度3。
+  </p>
+  <p>
+   实现简单的一个查找二叉树的深度的函数。
+  </p>
+  <p>
+   <strong>
+    11、用俩个栈实现队列
+   </strong>
+  </p>
+  <p>
+   某队列的声明如下：
+  </p>
+  <div class="highlight highlight-cpp">
+   <pre><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span> <span class="k">class</span> <span class="nc">CQueue</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+      <span class="n">CQueue</span><span class="p">()</span> <span class="p">{}</span>
+      <span class="o">~</span><span class="n">CQueue</span><span class="p">()</span> <span class="p">{}</span>
+      <span class="kt">void</span> <span class="n">appendTail</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">node</span><span class="p">);</span>  <span class="c1">// append a element to tail</span>
+      <span class="kt">void</span> <span class="nf">deleteHead</span><span class="p">();</span>               <span class="c1">// remove a element from head</span>
+<span class="nl">private:</span>
+     <span class="n">T</span><span class="o">&gt;</span> <span class="n">m_stack1</span><span class="p">;</span>
+     <span class="n">T</span><span class="o">&gt;</span> <span class="n">m_stack2</span><span class="p">;</span>
+<span class="p">};</span>
+</pre>
+  </div>
+  <p>
+   提示：这道题实质上是要求我们用两个栈来实现一个队列。栈是一种后入先出的数据容器，因此对队列进行的插入和删除操作都是在栈顶上进行；队列是一种先入先出的数据容器，我们总是把新元素插入到队列的尾部，而从队列的头部删除元素。
+  </p>
+  <p>
+   <strong>
+    12
+   </strong>
+  </p>
+  <p>
+   假设有一颗二叉树，已知这棵树的节点上不均匀的分布了若干石头，石头数跟这棵二叉树的节点数相同，石头只可以在子节点和父节点之间进行搬运，每次只能搬运一颗石头。请问如何以最少的步骤将石头搬运均匀，使得每个节点上的石头上刚好为1。
+  </p>
+  <p>
+   <strong>
+    13
+   </strong>
+  </p>
+  <p>
+   对于一颗完全二叉树，要求给所有节点加上一个pNext指针，指向同一层的相邻节点；如果当前节点已经是该层的最后一个节点，则将pNext指针指向NULL；给出程序实现，并分析时间复杂度和空间复杂度。
+  </p>
+  <p>
+   <strong>
+    14
+   </strong>
+  </p>
+  <p>
+   两个用户之间可能互相认识，也可能是单向的认识，用什么数据结构来表示？如果一个用户不认识别人，而且别人也不认识他，那么他就是无效节点，如何找出这些无效节点？自定义数据接口并实现之，要求尽可能节约内存和空间复杂度。
+  </p>
+  <p>
+   <strong>
+    15
+   </strong>
+  </p>
+  <p>
+   有一个一亿节点的树，现在已知两个点，找这两个点的共同的祖先
+  </p>
+  <p>
+   <strong>
+    16
+   </strong>
+  </p>
+  <p>
+   给一个二叉树，每个节点都是正或负整数，如何找到一个子树，它所有节点的和最大？
+  </p>
+  <p>
+   提示：后序遍历，每一个节点保存左右子树的和加上自己的值。额外一个空间存放最大值。
+  </p>
+  <p>
+   写完后序遍历，面试官可能接着与你讨论，
+  </p>
+  <ul>
+   <li>
+    a). 如果要求找出只含正数的最大子树，程序该如何修改来实现？
+   </li>
+   <li>
+    b). 假设我们将子树定义为它和它的部分后代，那该如何解决？
+   </li>
+   <li>
+    c). 对于b，加上正数的限制，方案又该如何？
+   </li>
+  </ul>
+  <p>
+   总之，一道看似简单的面试题，可能能变换成各种花样。
+  </p>
+  <p>
+   比如，面试管可能还会再提两个要求：第一，不能用全局变量；第二，有个参数控制是否要只含正数的子树。
+  </p>
+  <p>
+   <strong>
+    17
+   </strong>
+  </p>
+  <p>
+   有一个排序二叉树，数据类型是int型，如何找出中间大的元素。
+  </p>
+  <p>
+   <strong>
+    18
+   </strong>
+  </p>
+  <p>
+   中序遍历二叉树，结果为ABCDEFGH，后序遍历结果为ABEDCHGF，那么前序遍历结果为?
+  </p>
+  <p>
+   <strong>
+    19
+   </strong>
+  </p>
+  <p>
+   写程序输出8皇后问题的所有排列，要求使用非递归的深度优先遍历。
+  </p>
+  <p>
+   <strong>
+    20
+   </strong>
+  </p>
+  <p>
+   在8X8的棋盘上分布着n个骑士，他们想约在某一个格中聚会。骑士每天可以像国际象棋中的马那样移动一次，可以从中间像8个方向移动（当然不能走出棋盘），请计算n个骑士的最早聚会地点和要走多少天。要求尽早聚会，且n个人走的总步数最少，先到聚会地点的骑士可以不再移动等待其他的骑士。
+  </p>
+  <p>
+   从键盘输入n（0&lt;n&lt;=64），然后一次输入n个骑士的初始位置xi,yi（0&lt;=xi,yi&lt;=7）。屏幕输出以空格分隔的三个数，分别为聚会点（x，y）以及走的天数。
+  </p>
+  <p>
+   提示：BFS。
+  </p>
+  <p>
+   <strong>
+    21、城市遍历
+   </strong>
+  </p>
+  <p>
+   某人家住北京，想去青海玩，可能会经过许多城市，现已知地图上的城市连接，求经过M个城市到达青海的路线种类。城市可以多次到达的，比如去了天津又回到北京，再去天津，即为3次。北京出发不算1次。
+  </p>
+  <p>
+   输入：
+  </p>
+  <p>
+   N  M  S
+    N为城市总数，北京为0，青海为N-1；
+    M为经过的城市数目；
+    S为之后有S行
+i  j
+    表示第i个城市可以去第j个城市，是有方向的。
+  </p>
+  <p>
+   输出：
+N
+    表示路径种类。
+  </p>
+  <p>
+   <strong>
+    22
+   </strong>
+  </p>
+  <p>
+   给定两个站点，如果没有直达的路线，如何找到换乘次数最少的路线？
+  </p>
+  <p>
+   <strong>
+    23
+   </strong>
+  </p>
+  <p>
+   有两座桥，其中一座可能是坏的，两个守桥人分别守在这两座桥的入口。他们一个总是会说实话，一个总是说谎话。
+你现在需要找出哪一座桥可以通过。
+  </p>
+  <p>
+   请问最少需要问守桥人几个问题，可以找出可以通过的桥？如何问？
+  </p>
+ </body>
+</html>
+		  </article>
+		  
+			<div id="nav">
+				
+					<a href="03.06.html">prev</a>
+					|
+				
+				
+					<a href="04.01.html">next</a>
+				
+				<span style="float: right"><a href="index.html">Back to home</a>
+			</div>
+		  
+		</div>
+	</div>
+  </div>
+  
+  <div>&nbsp;</div>
+  </div>
+  <div style="text-align:center; margin-bottom: 30px">
+	  Generated by <a href="https://github.com/marchtea/md_to_github_html">mdtogh</a>
+  </div>
+</body>
+</html>

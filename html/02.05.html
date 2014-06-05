@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0282bede6135e06ec35e92d06a80225f92812b0e.css" />
-  <link rel="stylesheet" href="style_cache/github2-dcf6ca6edf1a82a2dcaebf74f6b2d9eface5db5d.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
+  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,11 +105,11 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0%E5%AF%BB%E6%89%BE%E5%92%8C%E4%B8%BA%E5%AE%9A%E5%80%BC%E7%9A%84%E5%A4%9A%E4%B8%AA%E6%95%B0" name="user-content-%E7%AC%AC%E4%BA%94%E7%AB%A0%E5%AF%BB%E6%89%BE%E5%92%8C%E4%B8%BA%E5%AE%9A%E5%80%BC%E7%9A%84%E5%A4%9A%E4%B8%AA%E6%95%B0">
+   <a class="anchor" href="#%E5%AF%BB%E6%89%BE%E5%92%8C%E4%B8%BA%E5%AE%9A%E5%80%BC%E7%9A%84%E5%A4%9A%E4%B8%AA%E6%95%B0" name="user-content-%E5%AF%BB%E6%89%BE%E5%92%8C%E4%B8%BA%E5%AE%9A%E5%80%BC%E7%9A%84%E5%A4%9A%E4%B8%AA%E6%95%B0">
     <span class="octicon octicon-link">
     </span>
    </a>
-   第五章、寻找和为定值的多个数
+   寻找和为定值的多个数
   </h1>
   <h2>
    <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
@@ -119,88 +119,79 @@
    题目描述
   </h2>
   <p>
-   输入两个整数 n 和 m，从数列1，2，3.......n 中 随意取几个数,
-  </p>
-  <p>
-   使其和等于 m ,要求将其中所有的可能组合列出来。
+   输入两个整数n和sum，从数列1，2，3.......n 中随意取几个数，使其和等于sum，要求将其中所有的可能组合列出来。
   </p>
   <h2>
+   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   分析与解法
+  </h2>
+  <h3>
    <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
     <span class="octicon octicon-link">
     </span>
    </a>
    解法一
-  </h2>
+  </h3>
   <p>
-   我想，稍后给出的程序已经足够清楚了，就是要注意到放n，和不放n个区别，即可，代码如下：
+   注意到取n，和不取n个区别即可，考虑是否取第n个数的策略，可以转化为一个只和前n-1个数相关的问题。
+  </p>
+  <ul>
+   <li>
+    如果取第n个数，那么问题就转化为“取前n-1个数使得它们的和为sum-n”，对应的代码语句就是sumOfkNumber(sum - n, n - 1)；
+   </li>
+   <li>
+    如果不取第n个数，那么问题就转化为“取前n-1个数使得他们的和为sum”，对应的代码语句为sumOfkNumber(sum, n - 1)。
+   </li>
+  </ul>
+  <p>
+   参考代码如下：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="c1">// 21题递归方法</span>
-<span class="c1">//copyright@ July &amp;&amp; yansha</span>
-<span class="c1">//July、yansha，updated。</span>
-<span class="cp">#include&lt;list&gt;</span>
-<span class="cp">#include&lt;iostream&gt;</span>
-<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
-
-<span class="n">list</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="n">list1</span><span class="p">;</span>
-<span class="kt">void</span> <span class="nf">find_factor</span><span class="p">(</span><span class="kt">int</span> <span class="n">sum</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+   <pre><span class="n">list</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="n">list1</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">SumOfkNumber</span><span class="p">(</span><span class="kt">int</span> <span class="n">sum</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="c1">// 递归出口</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">sum</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">sum</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
         <span class="k">return</span><span class="p">;</span>
 
     <span class="c1">// 输出找到的结果</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">sum</span> <span class="o">==</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">sum</span> <span class="o">==</span> <span class="n">n</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="c1">// 反转list</span>
         <span class="n">list1</span><span class="p">.</span><span class="n">reverse</span><span class="p">();</span>
-        <span class="k">for</span><span class="p">(</span><span class="n">list</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">iter</span> <span class="o">=</span> <span class="n">list1</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">iter</span> <span class="o">!=</span> <span class="n">list1</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">iter</span><span class="o">++</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">list</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">iter</span> <span class="o">=</span> <span class="n">list1</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">iter</span> <span class="o">!=</span> <span class="n">list1</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">iter</span><span class="o">++</span><span class="p">)</span>
             <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">iter</span> <span class="o">&lt;&lt;</span> <span class="s">" + "</span><span class="p">;</span>
         <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">n</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-        <span class="n">list1</span><span class="p">.</span><span class="n">reverse</span><span class="p">();</span>
     <span class="p">}</span>
 
     <span class="n">list1</span><span class="p">.</span><span class="n">push_front</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>      <span class="c1">//典型的01背包问题</span>
-    <span class="n">find_factor</span><span class="p">(</span><span class="n">sum</span><span class="o">-</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>   <span class="c1">//放n，n-1个数填满sum-n</span>
+    <span class="n">SumOfkNumber</span><span class="p">(</span><span class="n">sum</span> <span class="o">-</span> <span class="n">n</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>   <span class="c1">//“放”n，前n-1个数“填满”sum-n</span>
     <span class="n">list1</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
-    <span class="n">find_factor</span><span class="p">(</span><span class="n">sum</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>     <span class="c1">//不放n，n-1个数填满sum</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">sum</span><span class="p">,</span> <span class="n">n</span><span class="p">;</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"请输入你要等于多少的数值sum:"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">sum</span><span class="p">;</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"请输入你要从1.....n数列中取值的n："</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"所有可能的序列，如下："</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-    <span class="n">find_factor</span><span class="p">(</span><span class="n">sum</span><span class="p">,</span><span class="n">n</span><span class="p">);</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">SumOfkNumber</span><span class="p">(</span><span class="n">sum</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>     <span class="c1">//不“放”n，n-1个数“填满”sum</span>
 <span class="p">}</span>
 </pre>
   </div>
-  <h2>
+  <h3>
    <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C">
     <span class="octicon octicon-link">
     </span>
    </a>
    解法二
-  </h2>
+  </h3>
   <p>
-   @zhouzhenren：
+   这个问题属于子集和问题（也是背包问题）。本程序采用回溯法+剪枝，其中X数组是解向量，t=∑(1,..,k-1)Wi*Xi, r=∑(k,..,n)Wi，且
   </p>
-  <p>
-   这个问题属于子集和问题（也是背包问题）。本程序采用 回溯法+剪枝
-  </p>
-  <p>
-   X数组是解向量，t=∑(1,..,k-1)Wi*Xi, r=∑(k,..,n)Wi
-  </p>
-  <p>
-   若t+Wk+W(k+1)&lt;=M,则Xk=true，递归左儿子(X1,X2,..,X(k-1),1)；否则剪枝；
-  </p>
-  <p>
-   若t+r-Wk&gt;=M &amp;&amp; t+W(k+1)&lt;=M,则置Xk=0，递归右儿子(X1,X2,..,X(k-1),0)；否则剪枝；
-  </p>
+  <ul>
+   <li>
+    若t+Wk+W(k+1)&lt;=M,则Xk=true，递归左儿子(X1,X2,..,X(k-1),1)；否则剪枝；
+   </li>
+   <li>
+    若t+r-Wk&gt;=M &amp;&amp; t+W(k+1)&lt;=M,则置Xk=0，递归右儿子(X1,X2,..,X(k-1),0)；否则剪枝；
+   </li>
+  </ul>
   <p>
    本题中W数组就是(1,2,..,n),所以直接用k代替WK值。
   </p>
@@ -208,19 +199,8 @@
    代码编写如下：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="c1">//copyright@ 2011 zhouzhenren</span>
-
-<span class="c1">//输入两个整数 n 和 m，从数列1，2，3.......n 中 随意取几个数,</span>
-<span class="c1">//使其和等于 m ,要求将其中所有的可能组合列出来。</span>
-
-<span class="cp">#include &lt;stdio.h&gt;</span>
-<span class="cp">#include &lt;stdlib.h&gt;</span>
-<span class="cp">#include &lt;memory.h&gt;</span>
-
-<span class="cm">/**</span>
-<span class="cm"> * 输入t， r， 尝试Wk</span>
-<span class="cm"> */</span>
-<span class="kt">void</span> <span class="nf">sumofsub</span><span class="p">(</span><span class="kt">int</span> <span class="n">t</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span> <span class="p">,</span><span class="kt">int</span> <span class="n">r</span><span class="p">,</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">M</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&amp;</span> <span class="n">flag</span><span class="p">,</span> <span class="kt">bool</span><span class="o">*</span> <span class="n">X</span><span class="p">)</span>
+   <pre><span class="c1">//输入t， r， 尝试Wk</span>
+<span class="kt">void</span> <span class="nf">SumOfkNumber</span><span class="p">(</span><span class="kt">int</span> <span class="n">t</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">,</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">M</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&amp;</span> <span class="n">flag</span><span class="p">,</span> <span class="kt">bool</span><span class="o">*</span> <span class="n">X</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="n">X</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>   <span class="c1">// 选第k个数</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">k</span> <span class="o">==</span> <span class="n">M</span><span class="p">)</span> <span class="c1">// 若找到一个和为M，则设置解向量的标志位，输出解</span>
@@ -233,19 +213,19 @@
                 <span class="n">printf</span><span class="p">(</span><span class="s">"%d "</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
             <span class="p">}</span>
         <span class="p">}</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">"/n"</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
     <span class="p">}</span>
     <span class="k">else</span>
     <span class="p">{</span>   <span class="c1">// 若第k+1个数满足条件，则递归左子树</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">k</span> <span class="o">+</span> <span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">M</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">k</span> <span class="o">+</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">M</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">sumofsub</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">k</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span> <span class="o">-</span> <span class="n">k</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">flag</span><span class="p">,</span> <span class="n">X</span><span class="p">);</span>
+            <span class="n">SumOfkNumber</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">k</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span> <span class="o">-</span> <span class="n">k</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">flag</span><span class="p">,</span> <span class="n">X</span><span class="p">);</span>
         <span class="p">}</span>
         <span class="c1">// 若不选第k个数，选第k+1个数满足条件，则递归右子树</span>
-        <span class="k">if</span> <span class="p">((</span><span class="n">t</span> <span class="o">+</span> <span class="n">r</span> <span class="o">-</span> <span class="n">k</span> <span class="o">&gt;=</span> <span class="n">M</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">M</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">t</span> <span class="o">+</span> <span class="n">r</span> <span class="o">-</span> <span class="n">k</span> <span class="o">&gt;=</span> <span class="n">M</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">M</span><span class="p">))</span>
         <span class="p">{</span>
             <span class="n">X</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-            <span class="n">sumofsub</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span> <span class="o">-</span> <span class="n">k</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">flag</span><span class="p">,</span> <span class="n">X</span><span class="p">);</span>
+            <span class="n">SumOfkNumber</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span> <span class="o">-</span> <span class="n">k</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">flag</span><span class="p">,</span> <span class="n">X</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
@@ -253,209 +233,65 @@
 <span class="kt">void</span> <span class="nf">search</span><span class="p">(</span><span class="kt">int</span><span class="o">&amp;</span> <span class="n">N</span><span class="p">,</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">M</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="c1">// 初始化解空间</span>
-    <span class="kt">bool</span><span class="o">*</span> <span class="n">X</span> <span class="o">=</span> <span class="p">(</span><span class="kt">bool</span><span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">bool</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">));</span>
-    <span class="n">memset</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">bool</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">));</span>
+    <span class="kt">bool</span><span class="o">*</span> <span class="n">X</span> <span class="o">=</span> <span class="p">(</span><span class="kt">bool</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">bool</span><span class="p">)</span><span class="o">*</span> <span class="p">(</span><span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+    <span class="n">memset</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">bool</span><span class="p">)</span><span class="o">*</span> <span class="p">(</span><span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
     <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="p">(</span><span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">N</span> <span class="o">*</span> <span class="mf">0.5f</span><span class="p">;</span>
     <span class="k">if</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&gt;</span> <span class="n">M</span> <span class="o">||</span> <span class="n">sum</span> <span class="o">&lt;</span> <span class="n">M</span><span class="p">)</span> <span class="c1">// 预先排除无解情况</span>
     <span class="p">{</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">"not found/n"</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"not found</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
         <span class="k">return</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="kt">bool</span> <span class="n">f</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-    <span class="n">sumofsub</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sum</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">X</span><span class="p">);</span>
+    <span class="n">SumOfkNumber</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sum</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">X</span><span class="p">);</span>
     <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">f</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">"not found/n"</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"not found</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
     <span class="p">}</span>
     <span class="n">free</span><span class="p">(</span><span class="n">X</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">;</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">"请输入整数N和M/n"</span><span class="p">);</span>
-    <span class="n">scanf</span><span class="p">(</span><span class="s">"%d%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">N</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">M</span><span class="p">);</span>
-    <span class="n">search</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">);</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
 </pre>
   </div>
   <h2>
-   <a class="anchor" href="#%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95" name="user-content-%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95">
+   <a class="anchor" href="#0-1%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98" name="user-content-0-1%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98">
     <span class="octicon octicon-link">
     </span>
    </a>
-   问题扩展
+   0-1背包问题
   </h2>
   <p>
-   1、有N个数，组成的字符串，如012345，求出字串和取MOD3==0的字串，如012 12 123 45。
+   0-1背包问题是最基础的背包问题，其具体描述为：有N件物品和一个容量为V的背包。放入第i件物品耗费的费用是Ci，得到的价值是Wi。求解将哪些物品装入背包可使价值总和最大。
   </p>
   <p>
-   2、从一列数中筛除尽可能少的数使得从左往右看，这些数是从小到大再从大到小的（网易）。
+   简单分析下：这是最基础的背包问题，特点是每种物品仅有一件，可以选择放或不放。用子问题定义状态：即F[i, v]表示前i件物品恰放入一个容量为v的背包可以获得的最大价值。则其状态转移方程便是：
   </p>
+  <ul>
+   <li>
+    F[i, v] = max{F[i-1, v], F[i-1, v-Ci ] + Wi}
+   </li>
+  </ul>
   <p>
-   3、有两个序列a,b，大小都为n,序列元素的值是任意整数，无序；
+   根据前面的分析，我们不难理解这个方程的意义：“将前i件物品放入容量为v的背包中”这个子问题，若只考虑第i件物品的策略（放或不放），那么就可以转化为一个只和前 i-1 件物品相关的问题。即：
   </p>
+  <ul>
+   <li>
+    如果不放第i件物品，那么问题就转化为“前i-1件物品放入容量为v的背包中”，价值为 F[i-1, v ]；
+   </li>
+   <li>
+    如果放第i件物品，那么问题就转化为“前i-1件物品放入剩下的容量为v-Ci的背包中”，此时能获得的最大价值就是F[i-1, v-Ci]再加上通过放入第i件物品获得的价值Wi。
+   </li>
+  </ul>
   <p>
-   要求：通过交换a,b中的元素，使[序列a元素的和]与[序列b元素的和]之间的差最小。
-  </p>
-  <p>
-   例如:
-  </p>
-  <p>
-   var a=[100,99,98,1,2, 3];
-  </p>
-  <p>
-   var b=[1, 2, 3, 4,5,40];（微软100题第32题）。
-  </p>
-  <p>
-   @well：[fairywell]:
-  </p>
-  <p>
-   给出扩展问题 2 的一个解法：
-  </p>
-  <p>
-   1、从一列数中筛除尽可能少的数使得从左往右看，这些数是从小到大再从大到小的（网易）。
-  </p>
-  <p>
-   双端 LIS 问题，用 DP 的思想可解，目标规划函数 max{ b[i] + c[i] - 1 }, 其中 b[i] 为从左到右， 0 ~ i 个数之间满足递增的数字个数； c[i] 为从右到左， n-1 ~ i 个数之间满足递增的数字个数。最后结果为 n - max + 1。其中 DP 的时候，可以维护一个 inc[] 数组表示递增数字序列，inc[i] 为从小到大第 i 大的数字，然后在计算 b[i] c[i] 的时候使用二分查找在 inc[] 中找出区间 inc[0] ~ inc[i-1] 中小于 a[i] 的元素个数（low）。
-源代码如下：
+   伪代码如下：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="cm">/**</span>
-<span class="cm">* The problem:</span>
-<span class="cm">* 从一列数中筛除尽可能少的数使得从左往右看，这些数是从小到大再从大到小的（网易）。</span>
-<span class="cm">* use binary search, perhaps you should compile it with -std=c99</span>
-<span class="cm">* fairywell 2011</span>
-<span class="cm">*/</span>
-<span class="cp">#include &lt;stdio.h&gt;</span>
-
-<span class="cp">#define MAX_NUM    (1U&lt;&lt;31)</span>
-
-<span class="kt">int</span>
-<span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">,</span> <span class="n">mid</span><span class="p">,</span> <span class="n">max</span><span class="p">;</span>
-
-    <span class="n">printf</span><span class="p">(</span><span class="s">"Input how many numbers there are: "</span><span class="p">);</span>
-    <span class="n">scanf</span><span class="p">(</span><span class="s">"%d/n"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">);</span>
-    <span class="cm">/* a[] holds the numbers, b[i] holds the number of increasing numbers</span>
-<span class="cm">    * from a[0] to a[i], c[i] holds the number of increasing numbers</span>
-<span class="cm">    * from a[n-1] to a[i]</span>
-<span class="cm">    * inc[] holds the increasing numbers</span>
-<span class="cm">    * VLA needs c99 features, compile with -stc=c99</span>
-<span class="cm">    */</span>
-    <span class="kt">double</span> <span class="n">a</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">c</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">inc</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
-
-    <span class="n">printf</span><span class="p">(</span><span class="s">"Please input the numbers:/n"</span><span class="p">);</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="n">scanf</span><span class="p">(</span><span class="s">"%lf"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-
-    <span class="c1">// update array b from left to right</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="n">inc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span><span class="p">)</span> <span class="n">MAX_NUM</span><span class="p">;</span>
-    <span class="c1">//b[0] = 0;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">low</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">high</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">low</span> <span class="o">&lt;</span> <span class="n">high</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">mid</span> <span class="o">=</span> <span class="n">low</span> <span class="o">+</span> <span class="p">(</span><span class="n">high</span><span class="o">-</span><span class="n">low</span><span class="p">)</span><span class="o">*</span><span class="mf">0.5</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">inc</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="n">low</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-            <span class="k">else</span> <span class="n">high</span> <span class="o">=</span> <span class="n">mid</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">low</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="n">inc</span><span class="p">[</span><span class="n">low</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="p">}</span>
-
-    <span class="c1">// update array c from right to left</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="n">inc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span><span class="p">)</span> <span class="n">MAX_NUM</span><span class="p">;</span>
-    <span class="c1">//c[0] = 0;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">low</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">high</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">low</span> <span class="o">&lt;</span> <span class="n">high</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">mid</span> <span class="o">=</span> <span class="n">low</span> <span class="o">+</span> <span class="p">(</span><span class="n">high</span><span class="o">-</span><span class="n">low</span><span class="p">)</span><span class="o">*</span><span class="mf">0.5</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">inc</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="n">low</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-            <span class="k">else</span> <span class="n">high</span> <span class="o">=</span> <span class="n">mid</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">low</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="n">inc</span><span class="p">[</span><span class="n">low</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="p">}</span>
-
-    <span class="n">max</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span> <span class="p">)</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">max</span><span class="p">)</span> <span class="n">max</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">"%d number(s) should be erased at least./n"</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="o">-</span><span class="n">max</span><span class="p">);</span>
-        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+   <pre><span class="n">F</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.</span><span class="p">..</span><span class="n">V</span><span class="p">]</span> <span class="err">←</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="err">←</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">N</span>
+    <span class="k">for</span> <span class="n">v</span> <span class="err">←</span> <span class="n">Ci</span> <span class="n">to</span> <span class="n">V</span>
+        <span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">v</span><span class="p">]</span> <span class="err">←</span> <span class="n">max</span><span class="p">{</span><span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">v</span><span class="p">],</span> <span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">v</span><span class="o">-</span><span class="n">Ci</span><span class="p">]</span> <span class="o">+</span> <span class="n">Wi</span> <span class="p">}</span>
 </pre>
   </div>
   <p>
-   @yansha：fairywell的程序很赞，时间复杂度O(N log N)，这也是我能想到的时间复杂度最优值了。不知能不能达到O(N)。
-  </p>
-  <p>
-   扩展题第3题
-  </p>
-  <p>
-   当前数组a和数组b的和之差为
-  </p>
-  <p>
-   <code>
-    A = sum(a) - sum(b)
-   </code>
-  </p>
-  <p>
-   a的第i个元素和b的第j个元素交换后，a和b的和之差为
-  </p>
-  <pre><code>A' = sum(a) - a[i] + b[j] - （sum(b) - b[j] + a[i])
-
-       = sum(a) - sum(b) - 2 (a[i] - b[j])
-
-       = A - 2 (a[i] - b[j])
-</code></pre>
-  <p>
-   设x = a[i] - b[j]，得
-  </p>
-  <p>
-   <code>
-    |A| - |A'| = |A| - |A-2x|
-   </code>
-  </p>
-  <p>
-   假设A &gt; 0,
-  </p>
-  <p>
-   当x 在 (0,A)之间时，做这样的交换才能使得交换后的a和b的和之差变小，x越接近A/2效果越好,
-  </p>
-  <p>
-   如果找不到在(0,A)之间的x，则当前的a和b就是答案。
-  </p>
-  <p>
-   所以算法大概如下：
-  </p>
-  <p>
-   在a和b中寻找使得x在(0,A)之间并且最接近A/2的i和j，交换相应的i和j元素，重新计算A后，重复前面的步骤直至找不到(0,A)之间的x为止。
-  </p>
-  <p>
-   接上，@yuan：
-  </p>
-  <p>
-   a[i]-b[j]要接近A/2，则可以这样想，
-  </p>
-  <p>
-   我们可以对于a数组的任意一个a[k],在数组b中找出与a[k]-C最接近的数（C就是常数，也就是0.5*A）
-  </p>
-  <p>
-   这个数要么就是a[k]-C，要么就是比他稍大，要么比他稍小，所以可以要二分查找。
-  </p>
-  <p>
-   查找最后一个小于等于a[k]-C的数和第一个大于等于a[k]-C的数，
-  </p>
-  <p>
-   然后看哪一个与a[k]-C更加接近，所以T(N) = N log N。
-  </p>
-  <p>
-   除此之外，受本文读者xiafei1987128启示，有朋友在stacoverflow上也问过一个类似的题，:-)，见此：
-   <a href="http://stackoverflow.com/questions/9047908/swap-the-elements-of-two-sequences-such-that-the-difference-of-the-element-sums">
-    http://stackoverflow.com/questions/9047908/swap-the-elements-of-two-sequences-such-that-the-difference-of-the-element-sums
-   </a>
-   。感兴趣的可以看看。
+   这段代码的时间和空间复杂度均为 O(VN)，其中时间复杂度应该已经不能再优化了，但空间复杂度却可以优化到O(V)。感兴趣的读者可以继续思考或者参考网上一个不错的文档《背包问题九讲》。
   </p>
   <h2>
    <a class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
@@ -465,7 +301,7 @@
    举一反三
   </h2>
   <p>
-   1、《挑战程序设计竞赛》的开票有个类似的抽签问题，挺有意思，题目如下：
+   1、《挑战程序设计竞赛》的开篇有个类似的抽签问题，挺有意思，题目如下：
   </p>
   <p>
    将写有数字的n个纸片放入一个纸箱子中，然后你和你的朋友从纸箱子中抽取4张纸片，每次记下纸片上的数字后放回子箱子中，如果这4个数字的和是m，代表你赢，否则就是你的朋友赢。
@@ -527,6 +363,35 @@
   </p>
   <p>
    分析：此题相对于本节“寻找满足条件的多个数”如出一辙，不同的是此题只要求判断，不要求把所有可能的组合给输出来。因为此题需要考虑到加上a[i]和不加上a[i]的情况，故可以采用深度优先搜索的办法，递归解决。
+  </p>
+  <p>
+   3、有n个数，输出期中所有和为s的k个数的组合。
+  </p>
+  <p>
+   分析：此题有两个坑，一是这里的n个数是任意给定的，不一定是：1,2,3...n，所以可能有重复的数（如果有重复的数怎么处理？）；二是不要求你输出所有和为s的全部组合，而只要求输出和为s的k个数的组合。
+  </p>
+  <p>
+   举个例子，假定n=6，这6个数为：1 2 1 3 0 1，如果要求输出和为3的全部组合的话，
+  </p>
+  <ul>
+   <li>
+    1 2
+   </li>
+   <li>
+    1 2 0
+   </li>
+   <li>
+    0 3
+   </li>
+   <li>
+    1 1 1
+   </li>
+   <li>
+    1 1 1 0
+   </li>
+  </ul>
+  <p>
+   而题目加了个限制条件，若令k=2，则只要求输出：[{1,2}, {0,3}] 即可。
   </p>
  </body>
 </html>

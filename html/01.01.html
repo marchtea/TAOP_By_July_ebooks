@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0282bede6135e06ec35e92d06a80225f92812b0e.css" />
-  <link rel="stylesheet" href="style_cache/github2-dcf6ca6edf1a82a2dcaebf74f6b2d9eface5db5d.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
+  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,11 +105,11 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#%E5%AD%97%E7%AC%A6%E7%9A%84%E7%A7%BB%E5%8A%A8" name="user-content-%E5%AD%97%E7%AC%A6%E7%9A%84%E7%A7%BB%E5%8A%A8">
+   <a class="anchor" href="#%E6%97%8B%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2" name="user-content-%E6%97%8B%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2">
     <span class="octicon octicon-link">
     </span>
    </a>
-   字符的移动
+   旋转字符串
   </h1>
   <h2>
    <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
@@ -159,7 +159,7 @@
    因此，若要把字符串开头的m个字符移动到字符串的尾部，则可以如下操作：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="kt">void</span> <span class="nf">LeftShiftString</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">m</span><span class="p">)</span>
+   <pre><span class="kt">void</span> <span class="nf">LeftRotateString</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">m</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="k">while</span> <span class="p">(</span><span class="n">m</span><span class="o">--</span><span class="p">)</span>
     <span class="p">{</span>
@@ -218,7 +218,7 @@
   <div class="highlight highlight-c">
    <pre><span class="c1">//updated@caopengcs &amp;&amp; July</span>
 <span class="c1">//2014-1-6</span>
-<span class="kt">void</span> <span class="nf">reverse</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span><span class="kt">int</span> <span class="n">from</span><span class="p">,</span><span class="kt">int</span> <span class="n">to</span><span class="p">)</span>
+<span class="kt">void</span> <span class="nf">ReverseString</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span><span class="kt">int</span> <span class="n">from</span><span class="p">,</span><span class="kt">int</span> <span class="n">to</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="k">while</span> <span class="p">(</span><span class="n">from</span> <span class="o">&lt;</span> <span class="n">to</span><span class="p">)</span>
     <span class="p">{</span>
@@ -231,9 +231,9 @@
 <span class="kt">void</span> <span class="nf">LeftRotateString</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span><span class="kt">int</span> <span class="n">m</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="n">m</span> <span class="o">%=</span> <span class="n">n</span><span class="p">;</span>               <span class="c1">//若要左移动大于n位，那么和%n 是等价的</span>
-    <span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">//反转[0..m - 1]，套用到上面举的例子中，就是X-&gt;X^T，即 abc-&gt;cba</span>
-    <span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">//反转[m..n - 1]，例如Y-&gt;Y^T，即 def-&gt;fed</span>
-    <span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">//反转[0..n - 1]，即如整个反转，(X^TY^T)^T=YX，即 cbafed-&gt;defabc。</span>
+    <span class="n">ReverseString</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">//反转[0..m - 1]，套用到上面举的例子中，就是X-&gt;X^T，即 abc-&gt;cba</span>
+    <span class="n">ReverseString</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">//反转[m..n - 1]，例如Y-&gt;Y^T，即 def-&gt;fed</span>
+    <span class="n">ReverseString</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">//反转[0..n - 1]，即如整个反转，(X^TY^T)^T=YX，即 cbafed-&gt;defabc。</span>
 <span class="p">}</span>
 </pre>
   </div>

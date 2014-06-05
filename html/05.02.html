@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0282bede6135e06ec35e92d06a80225f92812b0e.css" />
-  <link rel="stylesheet" href="style_cache/github2-dcf6ca6edf1a82a2dcaebf74f6b2d9eface5db5d.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
+  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -116,214 +116,112 @@
     <span class="octicon octicon-link">
     </span>
    </a>
-   题目描述：
+   题目描述
   </h2>
   <p>
    给一个浮点数序列，取最大乘积连续子串的值，例如 -2.5，4，0，3，0.5，8，-1，则取出的最大乘积连续子串为3，0.5，8。也就是说，上述数组中，3 0.5 8这3个数的乘积3*0.5*8=12是最大的，而且是连续的。
   </p>
-  <p>
-   提醒：此最大乘积连续子串与最大乘积子序列不同，请勿混淆，前者子串要求连续，后者子序列不要求连续。也就是说：最长公共子串（Longest CommonSubstring）和最长公共子序列（LongestCommon Subsequence，LCS）的区别：
-  </p>
-  <ul>
-   <li>
-    <p>
-     子串（Substring）是串的一个连续的部分，
-    </p>
-   </li>
-   <li>
-    <p>
-     子序列（Subsequence）则是从不改变序列的顺序，而从序列中去掉任意的元素而获得的新序列；
-    </p>
-   </li>
-  </ul>
-  <p>
-   更简略地说，前者（子串）的字符的位置必须连续，后者（子序列LCS）则不必。比如字符串“ acdfg ”同“ akdfc ”的最长公共子串为“ df ”，而它们的最长公共子序列LCS是“ adf ”，LCS可以使用动态规划法解决。
-  </p>
-  <h2>
+  <h3>
    <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
     <span class="octicon octicon-link">
     </span>
    </a>
    分析与解法
-  </h2>
-  <h3>
+  </h3>
+  <p>
+   此最大乘积连续子串与最大乘积子序列不同，请勿混淆，前者子串要求连续，后者子序列不要求连续。也就是说，最长公共子串（Longest CommonSubstring）和最长公共子序列（LongestCommon Subsequence，LCS）是：
+  </p>
+  <ul>
+   <li>
+    子串（Substring）是串的一个连续的部分，
+   </li>
+   <li>
+    子序列（Subsequence）则是从不改变序列的顺序，而从序列中去掉任意的元素而获得的新序列；
+    <br/>
+   </li>
+  </ul>
+  <p>
+   更简略地说，前者（子串）的字符的位置必须连续，后者（子序列LCS）则不必。比如字符串“ acdfg ”同“ akdfc ”的最长公共子串为“ df ”，而它们的最长公共子序列LCS是“ adf ”，LCS可以使用动态规划法解决。
+  </p>
+  <h4>
    <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
     <span class="octicon octicon-link">
     </span>
    </a>
    解法一
-  </h3>
+  </h4>
   <p>
-   或许，读者初看此题，自然会想到最大乘积子序列问题类似于
-   <a href="http://blog.csdn.net/v_JULY_v/article/details/6444021">
-    最大子数组和问题
-   </a>
-   ，可能立马会想到用最简单粗暴的方式：两个for循环直接轮询。
+   或许，读者初看此题，可能立马会想到用最简单粗暴的方式：两个for循环直接轮询。
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="kt">double</span> <span class="n">max</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="kt">double</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="kt">double</span> <span class="n">end</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+   <pre><span class="kt">double</span> <span class="nf">MaxProductSubstring</span><span class="p">(</span><span class="kt">double</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">length</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="kt">double</span> <span class="n">x</span> <span class="o">=</span> <span class="n">arrs</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+    <span class="kt">double</span> <span class="n">maxResult</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">end</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="n">x</span> <span class="o">*=</span> <span class="n">arrs</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">max</span><span class="p">)</span>
+        <span class="kt">double</span> <span class="n">x</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">max</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
-            <span class="n">start</span> <span class="o">=</span> <span class="n">arrs</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-            <span class="n">end</span> <span class="o">=</span> <span class="n">arrs</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+            <span class="n">x</span> <span class="o">*=</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">maxResult</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">maxResult</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+                <span class="n">start</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                <span class="n">end</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+            <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">}</span>
+    <span class="k">return</span> <span class="n">maxResult</span><span class="p">;</span>
 <span class="p">}</span>
 </pre>
   </div>
-  <h3>
+  <p>
+   但这种蛮力的方法的时间复杂度为O(N^2)，能否想办法降低时间复杂度呢？
+  </p>
+  <h4>
    <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C">
     <span class="octicon octicon-link">
     </span>
    </a>
    解法二
-  </h3>
+  </h4>
   <p>
-   虽说类似于最大子数组和问题，但实际上具体处理起来诸多不同。为什么呢，因为乘积子序列中有正有负也还可能有0。我们可以把问题简化成这样：数组中找一个子序列，使得它的乘积最大；同时找一个子序列，使得它的乘积最小（负数的情况）。因为虽然我们只要一个最大积，但由于负数的存在，我们同时找这两个乘积做起来反而方便。也就是说，不但记录最大乘积，也要记录最小乘积。So，我们让
-  </p>
-  <ul>
-   <li>
-    maxCurrent表示当前最大乘积的candidate，
-   </li>
-   <li>
-    minCurrent反之，表示当前最小乘积的candidate，
-   </li>
-   <li>
-    而maxProduct则记录到目前为止所有最大乘积candidates的最大值。
-（以上用candidate这个词是因为只是可能成为新一轮的最大/最小乘积）
-    <br/>
-   </li>
-  </ul>
-  <p>
-   由于空集的乘积定义为1，在搜索数组前，maxCurrent，minCurrent，maxProduct都赋为1。
-假设在任何时刻你已经有了maxCurrent和minCurrent这两个最大/最小乘积的candidates，新读入数组的元素x(i)后，新的最大乘积candidate只可能是maxCurrent或者minCurrent与x(i)的乘积中的较大者，如果x(i) &lt; 0导致maxCurrent &lt; minCurrent，需要交换这两个candidates的值。
+   考虑到乘积子序列中有正有负也还可能有0，我们可以把问题简化成这样：数组中找一个子序列，使得它的乘积最大；同时找一个子序列，使得它的乘积最小（负数的情况）。因为虽然我们只要一个最大积，但由于负数的存在，我们同时找这两个乘积做起来反而方便。也就是说，不但记录最大乘积，也要记录最小乘积。
   </p>
   <p>
-   当任何时候maxCurrent&lt;1，由于1（空集）是比maxCurrent更好的candidate，所以更新maxCurrent为1，类似的可以更新minCurrent。任何时候maxCurrent如果比最好的maxProduct大，更新maxProduct。
+   假设数组为a[]，直接利用动态规划来求解，考虑到可能存在负数的情况，我们用maxend来表示以a[i]结尾的最大连续子串的乘积值，用minend表示以a[i]结尾的最小的子串的乘积值，那么状态转移方程为：
+  </p>
+  <pre><code>  maxend = max(max(maxend * a[i], minend * a[i]), a[i]);
+  minend = min(min(maxend * a[i], minend * a[i]), a[i]);  
+</code></pre>
+  <p>
+   初始状态为maxend = minend = a[0]。
   </p>
   <p>
    参考代码如下：
   </p>
-  <pre><code>template &lt;typename Comparable&gt;
-Comparable maxprod( const vector&lt;Comparable&gt;&amp;v)
-{
-    int i;
-    Comparable maxProduct = 1;
-    Comparable minProduct = 1;
-    Comparable maxCurrent = 1;
-    Comparable minCurrent = 1;
-    //Comparable t;
-
-    for ( i = 0; i &lt; v.size() ; i++)
-    {
-        maxCurrent *= v[i];
-        minCurrent *= v[i];
-        if (maxCurrent &gt; maxProduct)
-            maxProduct = maxCurrent;
-        if (minCurrent &gt; maxProduct)
-            maxProduct = minCurrent;
-        if (maxCurrent &lt; minProduct)
-            minProduct = maxCurrent;
-        if (minCurrent &lt; minProduct)
-            minProduct = minCurrent;
-        if (minCurrent &gt; maxCurrent)
-            swap(maxCurrent, minCurrent);
-        if (maxCurrent &lt; 1)
-            maxCurrent = 1;
-        //if(minCurrent&gt;1)
-        //    minCurrent =1;
-    }
-    return maxProduct;
-}
-</code></pre>
-  <h3>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%89" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%89">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   解法三
-  </h3>
-  <p>
-   本题除了上述类似最大子数组和的解法，也可以直接用动态规划求解（其实，上述的解法一本质上也是动态规划，只是解题所表现出来的具体形式与接下来的解法二不同罢了。这个不同就在于下面的解法二会写出动态规划问题中经典常见的DP方程，而解法一是直接求解）。具体解法如下：
-  </p>
-  <p>
-   假设数组为a[]，直接利用动归来求解，考虑到可能存在负数的情况，我们用Max来表示以a结尾的最大连续子串的乘积值，用Min表示以a结尾的最小的子串的乘积值，那么状态转移方程为：
-  </p>
-  <pre><code>  Max=max{a, Max[i-1]*a, Min[i-1]*a};  
-  Min=min{a, Max[i-1]*a, Min[i-1]*a};  
-</code></pre>
-  <p>
-   初始状态为Max[1]=Min[1]=a[1]。
-  </p>
-  <p>
-   C/C++代码一：
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="kt">double</span> <span class="nf">func</span><span class="p">(</span><span class="kt">double</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+  <div class="highlight highlight-cpp">
+   <pre><span class="kt">double</span> <span class="nf">MaxProductSubstring</span><span class="p">(</span><span class="kt">double</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">length</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="kt">double</span> <span class="o">*</span><span class="n">maxA</span> <span class="o">=</span> <span class="n">new</span> <span class="kt">double</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
-    <span class="kt">double</span> <span class="o">*</span><span class="n">minA</span> <span class="o">=</span> <span class="n">new</span> <span class="kt">double</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
-    <span class="n">maxA</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">minA</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-    <span class="kt">double</span> <span class="n">value</span> <span class="o">=</span> <span class="n">maxA</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="kt">double</span> <span class="n">maxEnd</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="kt">double</span> <span class="n">minEnd</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="kt">double</span> <span class="n">maxResult</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="n">maxA</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">maxA</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">minA</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-        <span class="n">minA</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">min</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">maxA</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">minA</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-        <span class="n">value</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">maxA</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="kt">double</span> <span class="n">end1</span> <span class="o">=</span> <span class="n">maxEnd</span> <span class="o">*</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">end2</span> <span class="o">=</span> <span class="n">minEnd</span> <span class="o">*</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">maxEnd</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="n">end1</span><span class="p">,</span> <span class="n">end2</span><span class="p">),</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">minEnd</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">min</span><span class="p">(</span><span class="n">end1</span><span class="p">,</span> <span class="n">end2</span><span class="p">),</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">maxResult</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">maxResult</span><span class="p">,</span> <span class="n">maxEnd</span><span class="p">);</span>
     <span class="p">}</span>
-    <span class="k">return</span> <span class="n">value</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">maxResult</span><span class="p">;</span>
 <span class="p">}</span>
 </pre>
   </div>
   <p>
-   C/C++代码二：
+   动态规划求解的方法一个for循环搞定，所以时间复杂度为O(N)。
   </p>
-  <div class="highlight highlight-c">
-   <pre><span class="cm">/*</span>
-<span class="cm"> 给定一个浮点数数组，有正有负数，0，正数组成,数组下标从1算起</span>
-<span class="cm"> 求最大连续子序列乘积，并输出这个序列，如果最大子序列乘积为负数，那么就输出-1</span>
-<span class="cm"> 用Max[i]表示以a[i]结尾乘积最大的连续子序列</span>
-<span class="cm"> 用Min[i]表示以a[i]结尾乘积最小的连续子序列  因为有复数，所以保存这个是必须的</span>
-<span class="cm">*/</span>
-<span class="kt">void</span> <span class="nf">longest_multiple</span><span class="p">(</span><span class="kt">double</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">double</span> <span class="o">*</span><span class="n">Min</span> <span class="o">=</span> <span class="n">new</span> <span class="kt">double</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]();</span>
-    <span class="kt">double</span> <span class="o">*</span><span class="n">Max</span> <span class="o">=</span> <span class="n">new</span> <span class="kt">double</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]();</span>
-    <span class="kt">double</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="n">new</span> <span class="kt">double</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]();</span>
-    <span class="c1">//初始化</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="n">Min</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-    <span class="n">Max</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-    <span class="kt">double</span> <span class="n">max_val</span> <span class="o">=</span> <span class="n">Max</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">Max</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">Max</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">Min</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-        <span class="n">Min</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">Max</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">Min</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">max_val</span> <span class="o">&lt;</span> <span class="n">Max</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-            <span class="n">max_val</span> <span class="o">=</span> <span class="n">Max</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">max_val</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-    <span class="k">else</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="n">max_val</span><span class="p">);</span>
-    <span class="c1">//内存释放</span>
-    <span class="n">delete</span> <span class="p">[]</span> <span class="n">Max</span><span class="p">;</span>
-    <span class="n">delete</span> <span class="p">[]</span> <span class="n">Min</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
-  </div>
   <h2>
    <a class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
     <span class="octicon octicon-link">
@@ -336,70 +234,6 @@ Comparable maxprod( const vector&lt;Comparable&gt;&amp;v)
   </p>
   <p>
    分析：我们可以把所有可能的（N-1）个数的组合找出来，分别计算它们的乘积，并比较大小。由于总共有N个（N-1）个数的组合，总的时间复杂度为O（N2），显然这不是最好的解法。
-  </p>
-  <p>
-   OK，以下解答来自编程之美
-  </p>
-  <p>
-   <strong>
-    解法1
-   </strong>
-  </p>
-  <p>
-   <a href="../images/28%7E29/28.1.jpg" target="_blank">
-    <img alt="" src="../images/28%7E29/28.1.jpg" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   <strong>
-    解法2、
-   </strong>
-  </p>
-  <p>
-   此外，还可以通过分析，进一步减少解答问题的计算量。假设N个整数的乘积为P，针对P的正负性进行如下分析（其中，AN-1表示N-1个数的组合，PN-1表示N-1个数的组合的乘积）。
-  </p>
-  <ol>
-   <li>
-    P为0
-   </li>
-  </ol>
-  <p>
-   那么，数组中至少包含有一个0。假设除去一个0之外，其他N-1个数的乘积为Q，根据Q的正负性进行讨论：
-  </p>
-  <p>
-   Q为0
-   <br/>
-   说明数组中至少有两个0，那么N-1个数的乘积只能为0，返回0；
-   <br/>
-   Q为正数
-   <br/>
-   返回Q，因为如果以0替换此时AN-1中的任一个数，所得到的PN-1为0，必然小于Q；
-   <br/>
-   Q为负数
-   <br/>
-   如果以0替换此时AN-1中的任一个数，所得到的PN-1为0，大于Q，乘积最大值为0。
-  </p>
-  <ol>
-   <li>
-    P为负数
-    <br/>
-   </li>
-  </ol>
-  <p>
-   根据“负负得正”的乘法性质，自然想到从N个整数中去掉一个负数，使得PN-1为一个正数。而要使这个正数最大，这个被去掉的负数的绝对值必须是数组中最小的。我们只需要扫描一遍数组，把绝对值最小的负数给去掉就可以了。
-  </p>
-  <ol>
-   <li>
-    P为正数
-   </li>
-  </ol>
-  <p>
-   类似地，如果数组中存在正数值，那么应该去掉最小的正数值，否则去掉绝对值最大的负数值。
-   <br/>
-   上面的解法采用了直接求N个整数的乘积P，进而判断P的正负性的办法，但是直接求乘积在编译环境下往往会有溢出的危险（这也就是本题要求不使用除法的潜在用意），事实上可做一个小的转变，不需要直接求乘积，而是求出数组中正数（+）、负数（-）和0的个数，从而判断P的正负性，其余部分与以上面的解法相同。
-  </p>
-  <p>
-   在时间复杂度方面，由于只需要遍历数组一次，在遍历数组的同时就可得到数组中正数（+）、负数（-）和0的个数，以及数组中绝对值最小的正数和负数，时间复杂度为O（N）。
   </p>
  </body>
 </html>

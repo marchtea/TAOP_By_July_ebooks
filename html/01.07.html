@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0282bede6135e06ec35e92d06a80225f92812b0e.css" />
-  <link rel="stylesheet" href="style_cache/github2-dcf6ca6edf1a82a2dcaebf74f6b2d9eface5db5d.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
+  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,196 +105,179 @@
 			<html>
  <body>
   <h2>
-   <a class="anchor" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%85%B6%E5%AE%83%E9%97%AE%E9%A2%98" name="user-content-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%85%B6%E5%AE%83%E9%97%AE%E9%A2%98">
+   <a class="anchor" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%85%A8%E6%8E%92%E5%88%97" name="user-content-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%85%A8%E6%8E%92%E5%88%97">
     <span class="octicon octicon-link">
     </span>
    </a>
-   字符串其它问题
+   字符串的全排列
   </h2>
+  <h3>
+   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   题目描述
+  </h3>
   <p>
-   <strong>
-    1、第一个只出现一次的字符
-   </strong>
+   输入一个字符串，打印出该字符串中字符的所有排列。
   </p>
   <p>
-   在一个字符串中找到第一个只出现一次的字符。如输入abaccdeff，则输出b。
+   例如输入字符串abc，则输出由字符a、b、c 所能排列出来的所有字符串
   </p>
   <p>
-   分析：这道题是2006年google 的一道笔试题。它在今年又出现了，不过换了一种形式。即最近的搜狐笔试大题：数组非常长，如何找到第一个只出现一次的数字，说明算法复杂度。此问题已经在程序员编程艺术系列第二章中有所阐述，在此不再作过多讲解。
+   abc、acb、bac、bca、cab 和 cba。
+  </p>
+  <h3>
+   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   分析与解法
+  </h3>
+  <h4>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法一、递归实现
+  </h4>
+  <p>
+   从集合中依次选出每一个元素，作为排列的第一个元素，然后对剩余的元素进行全排列，如此递归处理，从而得到所有元素的全排列。以对字符串abc进行全排列为例，我们可以这么做：以abc为例
   </p>
   <p>
-   代码，可编写如下：
+   固定a，求后面bc的排列：abc，acb，求好后，a和b交换，得到bac
+  </p>
+  <p>
+   固定b，求后面ac的排列：bac，bca，求好后，c放到第一位置，得到cba
+  </p>
+  <p>
+   固定c，求后面ba的排列：cba，cab。代码可如下编写所示：
   </p>
   <div class="highlight highlight-cpp">
-   <pre><span class="c1">//查找第一个只出现一次的字符，第2个程序</span>
-<span class="c1">//copyright@ yansha</span>
-<span class="c1">//July、updated，2011.04.24.</span>
-<span class="kt">char</span> <span class="nf">FirstNotRepeatChar</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">pString</span><span class="p">)</span>
+   <pre><span class="kt">void</span> <span class="nf">CalcAllPermutation</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">perm</span><span class="p">,</span> <span class="kt">int</span> <span class="n">from</span><span class="p">,</span> <span class="kt">int</span> <span class="n">to</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">pString</span><span class="p">)</span>
-        <span class="k">return</span> <span class="sc">'\0'</span><span class="p">;</span>
-
-    <span class="k">const</span> <span class="kt">int</span> <span class="n">tableSize</span> <span class="o">=</span> <span class="mi">256</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">hashTable</span><span class="p">[</span><span class="n">tableSize</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span> <span class="c1">//存入数组，并初始化为0</span>
-
-    <span class="kt">char</span><span class="o">*</span> <span class="n">pHashKey</span> <span class="o">=</span> <span class="n">pString</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">pHashKey</span><span class="p">)</span> <span class="o">!=</span> <span class="sc">'\0'</span><span class="p">)</span>
-        <span class="n">hashTable</span><span class="p">[</span><span class="o">*</span><span class="p">(</span><span class="n">pHashKey</span><span class="o">++</span><span class="p">)]</span><span class="o">++</span><span class="p">;</span>
-
-    <span class="k">while</span> <span class="p">(</span><span class="o">*</span><span class="n">pString</span> <span class="o">!=</span> <span class="sc">'\0'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">to</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">hashTable</span><span class="p">[</span><span class="o">*</span><span class="n">pString</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="k">return</span> <span class="o">*</span><span class="n">pString</span><span class="p">;</span>
-
-        <span class="n">pString</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">return</span><span class="p">;</span>
     <span class="p">}</span>
-    <span class="k">return</span> <span class="sc">'\0'</span><span class="p">;</span>  <span class="c1">//没有找到满足条件的字符，退出</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">from</span> <span class="o">==</span> <span class="n">to</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">to</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">from</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">to</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">swap</span><span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">perm</span><span class="p">[</span><span class="n">from</span><span class="p">]);</span>
+            <span class="n">CalcAllPermutation</span><span class="p">(</span><span class="n">perm</span><span class="p">,</span> <span class="n">from</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">to</span><span class="p">);</span>
+            <span class="n">swap</span><span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">perm</span><span class="p">[</span><span class="n">from</span><span class="p">]);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
+  </div>
+  <h4>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C%E5%AD%97%E5%85%B8%E5%BA%8F%E6%8E%92%E5%88%97" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C%E5%AD%97%E5%85%B8%E5%BA%8F%E6%8E%92%E5%88%97">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法二、字典序排列
+  </h4>
+  <p>
+   把升序的排列（当然，也可以实现为降序）作为当前排列开始，然后依次计算当前排列的下一个字典序排列。例如abc为当前排列，现在我们要计算她的下一个排列acb。怎么计算呢？计算过程如下：
+  </p>
+  <p>
+   对当前排列从后向前扫描，找到一对为升序的相邻元素，记为i和j（i &lt; j）。如果不存在这样一对为升序的相邻元素，则所有排列均已找到，算法结束；否则，重新对当前排列从后向前扫描，找到第一个大于i的元素k，交换i和k，然后对从j开始到结束的子序列反转，则此时得到的新排列就为下一个字典序排列。这种方式实现得到的所有排列是按字典序有序的，这也是C++ STL算法next_permutation的思想。算法实现如下：
+  </p>
+  <div class="highlight highlight-cpp">
+   <pre><span class="kt">bool</span> <span class="nf">CalcAllPermutation</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">perm</span><span class="p">,</span> <span class="kt">int</span> <span class="n">num</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">num</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">perm</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]);</span> <span class="o">--</span><span class="n">i</span><span class="p">){</span>
+        <span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">// 已经找到所有排列</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">){</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>  
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">k</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">k</span> <span class="o">=</span> <span class="n">num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="p">(</span><span class="n">k</span> <span class="o">&gt;</span> <span class="n">i</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span> <span class="o">--</span><span class="n">k</span><span class="p">){</span>
+        <span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">swap</span><span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">perm</span><span class="p">[</span><span class="n">k</span><span class="p">]);</span>
+    <span class="n">reverse</span><span class="p">(</span><span class="n">perm</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">perm</span> <span class="o">+</span> <span class="n">num</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
 <span class="p">}</span>
 </pre>
   </div>
   <p>
-   <strong>
-    2、带通配符的字符串匹配问题
-   </strong>
+   然后在主函数里循环判断和调用calcAllPermutation函数输出全排列即可。
+  </p>
+  <h4>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E6%80%BB%E7%BB%93" name="user-content-%E8%A7%A3%E6%B3%95%E6%80%BB%E7%BB%93">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法总结
+  </h4>
+  <p>
+   由于全排列总共有n!种排列情况，所以不论解法一中的递归方法，还是上述解法二的字典序排列方法，这两种方法的时间复杂度都为O(n!)。
+  </p>
+  <h3>
+   <a class="anchor" href="#%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98" name="user-content-%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   类似问题
+  </h3>
+  <p>
+   1、已知字符串里的字符是互不相同的，现在任意组合，比如ab，则输出aa，ab，ba，bb，编程按照字典序输出所有的组合。
   </p>
   <p>
-   字符串匹配问题：给定一个字符串，按照指定规则对其进行匹配，并将匹配的结果保存至output数组中。多个匹配项用空格间隔，最后一个不需要空格。
-  </p>
-  <p>
-   要求：
-  </p>
-  <ol>
-   <li>
-    匹配规则中包含通配符?和*，其中?表示匹配任意一个字符，*表示匹配任意多个（&gt;=0）字符。
-    <br/>
-   </li>
-   <li>
-    匹配规则要求匹配最大的字符子串，例如a*d,匹配abbdd而非abbd,即最大匹配子串。
-    <br/>
-   </li>
-   <li>
-    匹配后的输入串不再进行匹配，从当前匹配后的字符串重新匹配其他字符串。
-    <br/>
-   </li>
-  </ol>
-  <p>
-   请实现函数：
+   分析：非简单的全排列问题（跟全排列的形式不同,abc全排列的话，只有6个不同的输出）。
+本题可用递归的思想，设置一个变量表示已输出的个数，然后当个数达到字符串长度时，就输出。
   </p>
   <div class="highlight highlight-c">
-   <pre>  <span class="kt">char</span><span class="o">*</span> <span class="n">my_find</span><span class="p">(</span><span class="kt">char</span> <span class="n">input</span><span class="p">[],</span> <span class="kt">char</span> <span class="n">rule</span><span class="p">[])</span>
+   <pre><span class="c1">//copyright@ 一直很安静 &amp;&amp; World Gao</span>
+<span class="c1">//假设str已经有序</span>
+<span class="kt">void</span> <span class="nf">perm</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">result</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">,</span> <span class="kt">int</span> <span class="n">size</span><span class="p">,</span> <span class="kt">int</span> <span class="n">resPos</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="n">resPos</span> <span class="o">==</span> <span class="n">size</span><span class="p">)</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">result</span><span class="p">);</span>
+  <span class="k">else</span>
+    <span class="p">{</span>
+      <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="n">result</span><span class="p">[</span><span class="n">resPos</span><span class="p">]</span> <span class="o">=</span> <span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+          <span class="n">perm</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">str</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">resPos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </pre>
   </div>
   <p>
-   举例说明：
+   2、如果不是求字符的所有排列，而是求字符的所有组合，应该怎么办呢？当输入的字符串中含有相同的字符串时，相同的字符交换位置是不同的排列，但是同一个组合。举个例子，如果输入abc，它的组合有a、b、c、ab、ac、bc、abc。
   </p>
   <p>
-   <a href="../images/30%7E31/31.1.jpg" target="_blank">
-    <img alt="31.1.jpg" src="../images/30%7E31/31.1.jpg" style="max-width:100%;"/>
-   </a>
+   3、写一个程序，打印出以下的序列。
   </p>
   <p>
-   注意事项：
-   <br/>
-   1. 自行实现函数my_find，勿在my_find函数里夹杂输出，且不准用C、C++库，和Java的String对象；
-   <br/>
-   2. 请注意代码的时间，空间复杂度，及可读性，简洁性；
-   <br/>
-   3. input=aaa，rule=aa时，返回一个结果aa，即可。
+   (a),(b),(c),(d),(e)........(z)
   </p>
   <p>
-   <strong>
-    3、对称子字符串的最大长度
-   </strong>
+   (a,b),(a,c),(a,d),(a,e)......(a,z),(b,c),(b,d).....(b,z),(c,d).....(y,z)
   </p>
   <p>
-   题目：输入一个字符串，输出该字符串中对称的子字符串的最大长度。
-比如输入字符串“google”，由于该字符串里最长的对称子字符串是“goog”，因此输出4。
+   (a,b,c),(a,b,d)....(a,b,z),(a,c,d)....(x,y,z)
   </p>
   <p>
-   分析：可能很多人都写过判断一个字符串是不是对称的函数，这个题目可以看成是该函数的加强版。
+   ....
   </p>
   <p>
-   <strong>
-    4、实现memcpy函数
-   </strong>
+   (a,b,c,d,.....x,y,z)
   </p>
-  <p>
-   已知memcpy的函数为： void* memcpy(void
-   <em>
-    dest , const void
-   </em>
-   src , size_t count)其中dest是目的指针，src是源指针。不调用c++/c的memcpy库函数，请编写memcpy。
-  </p>
-  <p>
-   分析：参考代码如下：
-  </p>
-  <div class="highlight highlight-cpp">
-   <pre><span class="c1">//copyright@July 2013/9/24  </span>
-<span class="kt">void</span><span class="o">*</span> <span class="nf">memcpy</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">dst</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">src</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">count</span><span class="p">)</span>      
-<span class="p">{</span>      
-    <span class="c1">//安全检查  </span>
-    <span class="n">assert</span><span class="p">(</span> <span class="p">(</span><span class="n">dst</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">src</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">);</span>      
-
-    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pdst</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">dst</span><span class="p">;</span>      
-    <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">psrc</span> <span class="o">=</span> <span class="p">(</span><span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">src</span><span class="p">;</span>      
-
-    <span class="c1">//防止内存重复  </span>
-    <span class="n">assert</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">psrc</span><span class="o">&lt;=</span><span class="n">pdst</span> <span class="o">&amp;&amp;</span> <span class="n">pdst</span><span class="o">&lt;</span><span class="n">psrc</span><span class="o">+</span><span class="n">count</span><span class="p">));</span>      
-    <span class="n">assert</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">pdst</span><span class="o">&lt;=</span><span class="n">psrc</span> <span class="o">&amp;&amp;</span> <span class="n">psrc</span><span class="o">&lt;</span><span class="n">pdst</span><span class="o">+</span><span class="n">count</span><span class="p">));</span>      
-
-    <span class="k">while</span><span class="p">(</span><span class="n">count</span><span class="o">--</span><span class="p">)</span>      
-    <span class="p">{</span>      
-        <span class="o">*</span><span class="n">pdst</span> <span class="o">=</span> <span class="o">*</span><span class="n">psrc</span><span class="p">;</span>      
-        <span class="n">pdst</span><span class="o">++</span><span class="p">;</span>      
-        <span class="n">psrc</span><span class="o">++</span><span class="p">;</span>      
-    <span class="p">}</span>      
-    <span class="k">return</span> <span class="n">dst</span><span class="p">;</span>      
-<span class="p">}</span>    
-</pre>
-  </div>
-  <p>
-   <strong>
-    5、实现memmove函数
-   </strong>
-  </p>
-  <p>
-   分析：memmove函数是的标准函数，其作用是把从source开始的num个字符拷贝到destination。
-   <br/>
-   最简单的方法是直接复制，但是由于它们可能存在内存的重叠区，因此可能覆盖了原有数据。  比如当source+count&gt;=dest&amp;&amp;source&lt;dest时，dest可能覆盖了原有source的数据。
-   <br/>
-   解决办法是从后往前拷贝，对于其它情况，则从前往后拷贝。
-  </p>
-  <p>
-   参考代码如下：
-  </p>
-  <div class="highlight highlight-cpp">
-   <pre><span class="c1">//void * memmove ( void * destination, const void * source, size_t num );)  </span>
- <span class="kt">void</span><span class="o">*</span> <span class="nf">memmove</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">dest</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">source</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">count</span><span class="p">)</span>  
-   <span class="p">{</span>  
-
-      <span class="kt">void</span><span class="o">*</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">dest</span><span class="p">;</span>  
-
-      <span class="k">if</span> <span class="p">(</span><span class="n">dest</span> <span class="o">&lt;=</span> <span class="n">source</span> <span class="o">||</span> <span class="n">dest</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="n">source</span> <span class="o">+</span> <span class="n">count</span><span class="p">))</span>  
-       <span class="p">{</span>  
-          <span class="c1">//正向拷贝  </span>
-         <span class="c1">//copy from lower addresses to higher addresses  </span>
-         <span class="k">while</span> <span class="p">(</span><span class="n">count</span> <span class="o">--</span><span class="p">)</span>  
-             <span class="o">*</span><span class="n">dest</span><span class="o">++</span> <span class="o">=</span> <span class="o">*</span><span class="n">source</span><span class="o">++</span><span class="p">;</span>  
-     <span class="p">}</span>  
-     <span class="k">else</span>  
-     <span class="p">{</span>  
-         <span class="c1">//反向拷贝  </span>
-         <span class="c1">//copy from higher addresses to lower addresses  </span>
-         <span class="n">dest</span> <span class="o">+=</span> <span class="n">count</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>  
-         <span class="n">source</span> <span class="o">+=</span> <span class="n">count</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>  
-
-         <span class="k">while</span> <span class="p">(</span><span class="n">count</span><span class="o">--</span><span class="p">)</span>  
-             <span class="o">*</span><span class="n">dest</span><span class="o">--</span> <span class="o">=</span> <span class="o">*</span><span class="n">source</span><span class="o">--</span><span class="p">;</span>  
-     <span class="p">}</span>  
-     <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>  
- <span class="p">}</span>  
-</pre>
-  </div>
  </body>
 </html>
 		  </article>
@@ -305,7 +288,7 @@
 					|
 				
 				
-					<a href="02.00.html">next</a>
+					<a href="01.10.html">next</a>
 				
 				<span style="float: right"><a href="index.html">Back to home</a>
 			</div>

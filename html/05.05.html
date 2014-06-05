@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0282bede6135e06ec35e92d06a80225f92812b0e.css" />
-  <link rel="stylesheet" href="style_cache/github2-dcf6ca6edf1a82a2dcaebf74f6b2d9eface5db5d.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
+  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -136,14 +136,14 @@
     如果s1当前字符（即s1[i-1]）等于s3当前字符（即s3[i+j-1]），而且dp[i-1][j]为真，那么可以取s1当前字符而忽略s2的情况，dp[i][j]返回真；
    </li>
    <li>
-    如果s2当前字符等于s3当前字符，并且dp[i][j-1]为真，那么可以取s2而忽略s1的情况，dp[i][j]返回真，其它情况，dp[i][j]放回假
+    如果s2当前字符等于s3当前字符，并且dp[i][j-1]为真，那么可以取s2而忽略s1的情况，dp[i][j]返回真，其它情况，dp[i][j]返回假
    </li>
   </ul>
   <p>
    参考代码如下：
   </p>
   <div class="highlight highlight-java">
-   <pre><span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isInterleave</span><span class="o">(</span><span class="n">String</span> <span class="n">s1</span><span class="o">,</span> <span class="n">String</span> <span class="mi">2</span><span class="o">,</span> <span class="n">String</span> <span class="mi">3</span><span class="o">){</span>
+   <pre><span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">IsInterleave</span><span class="o">(</span><span class="n">String</span> <span class="n">s1</span><span class="o">,</span> <span class="n">String</span> <span class="mi">2</span><span class="o">,</span> <span class="n">String</span> <span class="mi">3</span><span class="o">){</span>
     <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s1</span><span class="o">.</span><span class="na">length</span><span class="o">(),</span> <span class="n">m</span> <span class="o">=</span> <span class="n">s2</span><span class="o">.</span><span class="na">length</span><span class="o">(),</span> <span class="n">s</span> <span class="o">=</span> <span class="n">s3</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
 
     <span class="c1">//如果长度不一致，则s3不可能由s1和s2交错组成</span>

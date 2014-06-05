@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0282bede6135e06ec35e92d06a80225f92812b0e.css" />
-  <link rel="stylesheet" href="style_cache/github2-dcf6ca6edf1a82a2dcaebf74f6b2d9eface5db5d.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
+  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -104,199 +104,158 @@
 		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
 			<html>
  <body>
-  <h2>
-   <a class="anchor" href="#%E7%AC%AC%E5%8D%81%E5%85%AD%E7%AB%A0%E5%85%A8%E6%8E%92%E5%88%97%E9%97%AE%E9%A2%98" name="user-content-%E7%AC%AC%E5%8D%81%E5%85%AD%E7%AB%A0%E5%85%A8%E6%8E%92%E5%88%97%E9%97%AE%E9%A2%98">
+  <h1>
+   <a class="anchor" href="#bitmap" name="user-content-bitmap">
     <span class="octicon octicon-link">
     </span>
    </a>
-   第十六章、全排列问题
+   Bitmap
+  </h1>
+  <h2>
+   <a class="anchor" href="#bitmap-1" name="user-content-bitmap-1">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   Bitmap
   </h2>
   <h3>
-   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+   <a class="anchor" href="#%E4%BB%80%E4%B9%88%E6%98%AFbit-map" name="user-content-%E4%BB%80%E4%B9%88%E6%98%AFbit-map">
     <span class="octicon octicon-link">
     </span>
    </a>
-   题目描述
+   什么是Bit-map
   </h3>
   <p>
-   输入一个字符串，打印出该字符串中字符的所有排列。
+   所谓的Bit-map就是用一个bit位来标记某个元素对应的Value， 而Key即是该元素。由于采用了Bit为单位来存储数据，因此在存储空间方面，可以大大节省。
   </p>
   <p>
-   例如输入字符串abc，则输出由字符a、b、c 所能排列出来的所有字符串
+   来看一个具体的例子，假设我们要对0-7内的5个元素(4,7,2,5,3)排序（这里假设这些元素没有重复）。那么我们就可以采用Bit-map的方法来达到排序的目的。要表示8个数，我们就只需要8个Bit（1Bytes），首先我们开辟1Byte的空间，将这些空间的所有Bit位都置为0(如下图：)
   </p>
   <p>
-   abc、acb、bac、bca、cab 和 cba。
-  </p>
-  <h3>
-   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
-    <span class="octicon octicon-link">
-    </span>
+   <a href="../images/9/9.2/9.2.1.gif" target="_blank">
+    <img alt="" src="../images/9/9.2/9.2.1.gif" style="max-width:100%;"/>
    </a>
-   分析与解法
-  </h3>
-  <h4>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0">
-    <span class="octicon octicon-link">
-    </span>
+  </p>
+  <p>
+   然后遍历这5个元素，首先第一个元素是4，那么就把4对应的位置为1（可以这样操作 p+(i/8)|(0×01&lt;&lt;(i%8)) 当然了这里的操作涉及到Big-ending和Little-ending的情况，这里默认为Big-ending）,因为是从零开始的，所以要把第五位置为一（如下图）：
+  </p>
+  <p>
+   <a href="../images/9/9.2/9.2.2.gif" target="_blank">
+    <img alt="" src="../images/9/9.2/9.2.2.gif" style="max-width:100%;"/>
    </a>
-   解法一、递归实现
-  </h4>
-  <p>
-   从集合中依次选出每一个元素，作为排列的第一个元素，然后对剩余的元素进行全排列，如此递归处理，从而得到所有元素的全排列。以对字符串abc进行全排列为例，我们可以这么做：以abc为例
   </p>
   <p>
-   固定a，求后面bc的排列：abc，acb，求好后，a和b交换，得到bac
+   然后再处理第二个元素7，将第八位置为1,，接着再处理第三个元素，一直到最后处理完所有的元素，将相应的位置为1，这时候的内存的Bit位的状态如下：
   </p>
   <p>
-   固定b，求后面ac的排列：bac，bca，求好后，c放到第一位置，得到cba
-  </p>
-  <p>
-   固定c，求后面ba的排列：cba，cab。代码可如下编写所示：
-  </p>
-  <div class="highlight highlight-cpp">
-   <pre><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-<span class="kt">void</span> <span class="n">CalcAllPermutation_R</span><span class="p">(</span><span class="n">T</span> <span class="n">perm</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">first</span><span class="p">,</span> <span class="kt">int</span> <span class="n">num</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">return</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">first</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">first</span> <span class="o">+</span> <span class="n">num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">swap</span><span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">perm</span><span class="p">[</span><span class="n">first</span><span class="p">]);</span>
-        <span class="n">CalcAllPermutation_R</span><span class="p">(</span><span class="n">perm</span><span class="p">,</span> <span class="n">first</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
-        <span class="n">swap</span><span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">perm</span><span class="p">[</span><span class="n">first</span><span class="p">]);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre>
-  </div>
-  <p>
-   或者如此编写，亦可：
-  </p>
-  <div class="highlight highlight-cpp">
-   <pre><span class="kt">void</span> <span class="nf">Permutation</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">pStr</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">pBegin</span><span class="p">);</span>
-
-<span class="kt">void</span> <span class="nf">Permutation</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">pStr</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">Permutation</span><span class="p">(</span><span class="n">pStr</span><span class="p">,</span> <span class="n">pStr</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="kt">void</span> <span class="nf">Permutation</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">pStr</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">pBegin</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">pStr</span> <span class="o">||</span> <span class="o">!</span><span class="n">pBegin</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">;</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">pBegin</span> <span class="o">==</span> <span class="sc">'\0'</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">pStr</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">pCh</span> <span class="o">=</span> <span class="n">pBegin</span><span class="p">;</span> <span class="o">*</span><span class="n">pCh</span> <span class="o">!=</span> <span class="sc">'\0'</span><span class="p">;</span> <span class="o">++</span> <span class="n">pCh</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="c1">// swap pCh and pBegin</span>
-            <span class="kt">char</span> <span class="n">temp</span> <span class="o">=</span> <span class="o">*</span><span class="n">pCh</span><span class="p">;</span>
-            <span class="o">*</span><span class="n">pCh</span> <span class="o">=</span> <span class="o">*</span><span class="n">pBegin</span><span class="p">;</span>
-            <span class="o">*</span><span class="n">pBegin</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
-
-            <span class="n">Permutation</span><span class="p">(</span><span class="n">pStr</span><span class="p">,</span> <span class="n">pBegin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
-            <span class="c1">// restore pCh and pBegin</span>
-            <span class="n">temp</span> <span class="o">=</span> <span class="o">*</span><span class="n">pCh</span><span class="p">;</span>
-            <span class="o">*</span><span class="n">pCh</span> <span class="o">=</span> <span class="o">*</span><span class="n">pBegin</span><span class="p">;</span>
-            <span class="o">*</span><span class="n">pBegin</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre>
-  </div>
-  <h4>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C%E5%AD%97%E5%85%B8%E5%BA%8F%E6%8E%92%E5%88%97" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C%E5%AD%97%E5%85%B8%E5%BA%8F%E6%8E%92%E5%88%97">
-    <span class="octicon octicon-link">
-    </span>
+   <a href="../images/9/9.2/9.2.3.gif" target="_blank">
+    <img alt="" src="../images/9/9.2/9.2.3.gif" style="max-width:100%;"/>
    </a>
-   解法二、字典序排列
-  </h4>
-  <p>
-   把升序的排列（当然，也可以实现为降序）作为当前排列开始，然后依次计算当前排列的下一个字典序排列。
   </p>
   <p>
-   对当前排列从后向前扫描，找到一对为升序的相邻元素，记为i和j（i &lt; j）。如果不存在这样一对为升序的相邻元素，则所有排列均已找到，算法结束；否则，重新对当前排列从后向前扫描，找到第一个大于i的元素k，交换i和k，然后对从j开始到结束的子序列反转，则此时得到的新排列就为下一个字典序排列。这种方式实现得到的所有排列是按字典序有序的，这也是C++ STL算法next_permutation的思想。算法实现如下：
-  </p>
-  <div class="highlight highlight-cpp">
-   <pre><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-<span class="kt">void</span> <span class="n">CalcAllPermutation</span><span class="p">(</span><span class="n">T</span> <span class="n">perm</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">num</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">;</span>
-
-    <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">num</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">perm</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
-                <span class="k">break</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="k">break</span><span class="p">;</span>  <span class="c1">// 已经找到所有排列</span>
-
-        <span class="kt">int</span> <span class="n">k</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">k</span> <span class="o">=</span> <span class="n">num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">i</span><span class="p">;</span> <span class="o">--</span><span class="n">k</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-                <span class="k">break</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="n">swap</span><span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">perm</span><span class="p">[</span><span class="n">k</span><span class="p">]);</span>
-        <span class="n">reverse</span><span class="p">(</span><span class="n">perm</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">perm</span> <span class="o">+</span> <span class="n">num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre>
-  </div>
-  <p>
-   扩展：如果不是求字符的所有排列，而是求字符的所有组合，应该怎么办呢？当输入的字符串中含有相同的字符串时，相同的字符交换位置是不同的排列，但是同一个组合。举个例子，如果输入abc，它的组合有a、b、c、ab、ac、bc、abc。
-  </p>
-  <h3>
-   <a class="anchor" href="#%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98" name="user-content-%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   类似问题
-  </h3>
-  <p>
-   已知字符串里的字符是互不相同的，现在任意组合，比如ab，则输出aa，ab，ba，bb，编程按照字典序输出所有的组合。
-  </p>
-  <p>
-   点评：非简单的全排列问题（跟全排列的形式不同,abc全排列的话，只有6个不同的输出）。
-本题可用递归的思想，设置一个变量表示已输出的个数，然后当个数达到字符串长度时，就输出。
+   然后我们现在遍历一遍Bit区域，将该位是一的位的编号输出（2，3，4，5，7），这样就达到了排序的目的。下面的代码给出了一个BitMap的用法：排序。
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="c1">//copyright@ 一直很安静 &amp;&amp; World Gao</span>
-<span class="c1">//假设str已经有序</span>
-<span class="kt">void</span> <span class="nf">perm</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">result</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">,</span> <span class="kt">int</span> <span class="n">size</span><span class="p">,</span> <span class="kt">int</span> <span class="n">resPos</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span><span class="n">resPos</span> <span class="o">==</span> <span class="n">size</span><span class="p">)</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">result</span><span class="p">);</span>
-  <span class="k">else</span>
-    <span class="p">{</span>
-      <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-        <span class="p">{</span>
-          <span class="n">result</span><span class="p">[</span><span class="n">resPos</span><span class="p">]</span> <span class="o">=</span> <span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-          <span class="n">perm</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">str</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">resPos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+   <pre><span class="c1">//定义每个Byte中有8个Bit位  </span>
+<span class="cp">#include ＜memory.h＞  </span>
+<span class="cp">#define BYTESIZE 8  </span>
+<span class="kt">void</span> <span class="nf">SetBit</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="kt">int</span> <span class="n">posi</span><span class="p">)</span>  
+<span class="p">{</span>  
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="err">＜</span> <span class="p">(</span><span class="n">posi</span><span class="o">/</span><span class="n">BYTESIZE</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>  
+    <span class="p">{</span>  
+        <span class="n">p</span><span class="o">++</span><span class="p">;</span>  
+    <span class="p">}</span>  
+
+    <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="o">*</span><span class="n">p</span><span class="o">|</span><span class="p">(</span><span class="mh">0x01</span><span class="err">＜＜</span><span class="p">(</span><span class="n">posi</span><span class="o">%</span><span class="n">BYTESIZE</span><span class="p">));</span><span class="c1">//将该Bit位赋值1  </span>
+    <span class="k">return</span><span class="p">;</span>  
+<span class="p">}</span>  
+
+<span class="kt">void</span> <span class="nf">BitMapSortDemo</span><span class="p">()</span>  
+<span class="p">{</span>  
+    <span class="c1">//为了简单起见，我们不考虑负数  </span>
+    <span class="kt">int</span> <span class="n">num</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">9</span><span class="p">};</span>  
+
+    <span class="c1">//BufferLen这个值是根据待排序的数据中最大值确定的  </span>
+    <span class="c1">//待排序中的最大值是14，因此只需要2个Bytes(16个Bit)  </span>
+    <span class="c1">//就可以了。  </span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">BufferLen</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>  
+    <span class="kt">char</span> <span class="o">*</span><span class="n">pBuffer</span> <span class="o">=</span> <span class="n">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">BufferLen</span><span class="p">];</span>  
+
+    <span class="c1">//要将所有的Bit位置为0，否则结果不可预知。  </span>
+    <span class="n">memset</span><span class="p">(</span><span class="n">pBuffer</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">BufferLen</span><span class="p">);</span>  
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="err">＜</span><span class="mi">9</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>  
+    <span class="p">{</span>  
+        <span class="c1">//首先将相应Bit位上置为1  </span>
+        <span class="n">SetBit</span><span class="p">(</span><span class="n">pBuffer</span><span class="p">,</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>  
+    <span class="p">}</span>  
+
+    <span class="c1">//输出排序结果  </span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="err">＜</span><span class="n">BufferLen</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="c1">//每次处理一个字节(Byte)  </span>
+    <span class="p">{</span>  
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="err">＜</span><span class="n">BYTESIZE</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="c1">//处理该字节中的每个Bit位  </span>
+        <span class="p">{</span>  
+            <span class="c1">//判断该位上是否是1，进行输出，这里的判断比较笨。  </span>
+            <span class="c1">//首先得到该第j位的掩码（0x01＜＜j），将内存区中的  </span>
+            <span class="c1">//位和此掩码作与操作。最后判断掩码是否和处理后的  </span>
+            <span class="c1">//结果相同  </span>
+            <span class="k">if</span><span class="p">((</span><span class="o">*</span><span class="n">pBuffer</span><span class="o">&amp;</span><span class="p">(</span><span class="mh">0x01</span><span class="err">＜＜</span><span class="n">j</span><span class="p">))</span> <span class="o">==</span> <span class="p">(</span><span class="mh">0x01</span><span class="err">＜＜</span><span class="n">j</span><span class="p">))</span>  
+            <span class="p">{</span>  
+                <span class="n">printf</span><span class="p">(</span><span class="s">"%d "</span><span class="p">,</span><span class="n">i</span><span class="o">*</span><span class="n">BYTESIZE</span> <span class="o">+</span> <span class="n">j</span><span class="p">);</span>  
+            <span class="p">}</span>  
+        <span class="p">}</span>  
+        <span class="n">pBuffer</span><span class="o">++</span><span class="p">;</span>  
+    <span class="p">}</span>  
+<span class="p">}</span>  
+
+<span class="kt">int</span> <span class="nf">_tmain</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="n">_TCHAR</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>  
+<span class="p">{</span>  
+    <span class="n">BitMapSortDemo</span><span class="p">();</span>  
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>  
+<span class="p">}</span>  
 </pre>
   </div>
+  <p>
+   可进行数据的快速查找，判重，删除，一般来说数据范围是int的10倍以下
+  </p>
+  <h3>
+   <a class="anchor" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%8F%8A%E8%A6%81%E7%82%B9" name="user-content-%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%8F%8A%E8%A6%81%E7%82%B9">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   基本原理及要点
+  </h3>
+  <p>
+   使用bit数组来表示某些元素是否存在，比如8位电话号码.
+  </p>
+  <h3>
+   <a class="anchor" href="#%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B" name="user-content-%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   问题实例：
+  </h3>
+  <p>
+   “13、在2.5亿个整数中找出不重复的整数，注，内存不足以容纳这2.5亿个整数。
+  </p>
+  <p>
+   方案1：采用2-Bitmap（每个数分配2bit，00表示不存在，01表示出现一次，10表示多次，11无意义）进行，共需内存2^32 * 2 bit=1 GB内存，还可以接受。然后扫描这2.5亿个整数，查看Bitmap中相对应位，如果是00变01，01变10，10保持不变。所描完事后，查看bitmap，把对应位是01的整数输出即可。
+  </p>
+  <p>
+   方案2：也可采用与第1题类似的方法，进行划分小文件的方法。然后在小文件中找出不重复的整数，并排序。然后再进行归并，注意去除重复的元素。”
+  </p>
+  <p>
+   15、给40亿个不重复的unsigned int的整数，没排过序的，然后再给一个数，如何快速判断这个数是否在那40亿个数当中？
+  </p>
+  <p>
+   方案1：frome oo，用位图/Bitmap的方法，申请512M的内存，一个bit位代表一个unsigned int值。读入40亿个数，设置相应的bit位，读入要查询的数，查看相应bit位是否为1，为1表示存在，为0表示不存在。
+  </p>
  </body>
 </html>
 		  </article>
 		  
 			<div id="nav">
 				
-					<a href="06.02.html">prev</a>
+					<a href="06.04.html">prev</a>
 					|
 				
 				

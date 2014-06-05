@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0282bede6135e06ec35e92d06a80225f92812b0e.css" />
-  <link rel="stylesheet" href="style_cache/github2-dcf6ca6edf1a82a2dcaebf74f6b2d9eface5db5d.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
+  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -104,89 +104,189 @@
 		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
 			<html>
  <body>
-  <h1>
-   <a class="anchor" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%B8%89%E7%AB%A0%E6%9D%A8%E6%B0%8F%E7%9F%A9%E9%98%B5%E6%9F%A5%E6%89%BE" name="user-content-%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%B8%89%E7%AB%A0%E6%9D%A8%E6%B0%8F%E7%9F%A9%E9%98%B5%E6%9F%A5%E6%89%BE">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   第二十三章：杨氏矩阵查找
-  </h1>
   <h2>
-   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+   <a class="anchor" href="#%E5%90%8E%E7%BC%80%E6%A0%91" name="user-content-%E5%90%8E%E7%BC%80%E6%A0%91">
     <span class="octicon octicon-link">
     </span>
    </a>
-   题目描述
-  </h2>
-  <p>
-   在一个m行n列二维数组中，每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。
-  </p>
-  <p>
-   例如下面的二维数组就是每行、每列都递增排序。如果在这个数组中查找数字6，则返回true；如果查找数字5，由于数组不含有该数字，则返回false。
-  </p>
-  <p>
-   <a href="../images/23%7E24/23.1.gif" target="_blank">
-    <img alt="img" src="../images/23%7E24/23.1.gif" style="max-width:100%;"/>
-   </a>
-  </p>
-  <h2>
-   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   分析与解法
+   后缀树
   </h2>
   <h3>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80%E5%88%86%E6%B2%BB%E6%B3%95" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80%E5%88%86%E6%B2%BB%E6%B3%95">
+   <a class="anchor" href="#11%E5%90%8E%E7%BC%80%E6%A0%91%E7%9A%84%E5%AE%9A%E4%B9%89" name="user-content-11%E5%90%8E%E7%BC%80%E6%A0%91%E7%9A%84%E5%AE%9A%E4%B9%89">
     <span class="octicon octicon-link">
     </span>
    </a>
-   解法一、分治法
+   1.1、后缀树的定义
   </h3>
   <p>
-   以查找数字6为例，把整个矩阵，分为四个小矩阵，配以二分查找，如果要找的数是6介于对角线上相邻的两个数4、10，可以排除掉左上和右下的两个矩形，而递归在左下和右上的两个矩形继续找，如下图所示：
+   后缀树（Suffix tree）是一种数据结构，能快速解决很多关于字符串的问题。后缀树的概念最早由Weiner 于1973年提出，既而由McCreight 在1976年和Ukkonen在1992年和1995年加以改进完善。
+  </p>
+  <p>
+   后缀，顾名思义，甚至通俗点来说，就是所谓后缀就是后面尾巴的意思。比如说给定一长度为n的字符串S=S1S2..Si..Sn，和整数i，1 &lt;= i &lt;= n，子串SiSi+1...Sn便都是字符串S的后缀。
+  </p>
+  <p>
+   以字符串S=XMADAMYX为例，它的长度为8，所以S[1..8], S[2..8], ... , S[8..8]都算S的后缀，我们一般还把空字串也算成后缀。这样，我们一共有如下后缀。对于后缀S[i..n]，我们说这项后缀起始于i。
+  </p>
+  <p>
+   S[1..8], XMADAMYX， 也就是字符串本身，起始位置为1
    <br/>
-   <a href="../images/23%7E24/23.2.gif" target="_blank">
-    <img alt="img" src="../images/23%7E24/23.2.gif" style="max-width:100%;"/>
+   S[2..8], MADAMYX，起始位置为2
+   <br/>
+   S[3..8], ADAMYX，起始位置为3
+   <br/>
+   S[4..8], DAMYX，起始位置为4
+   <br/>
+   S[5..8], AMYX，起始位置为5
+   <br/>
+   S[6..8], MYX，起始位置为6
+   <br/>
+   S[7..8], YX，起始位置为7
+   <br/>
+   S[8..8], X，起始位置为8
+   <br/>
+   空字串，记为$。
+  </p>
+  <p>
+   而后缀树，就是包含一则字符串所有后缀的压缩Trie。把上面的后缀加入Trie后，我们得到下面的结构：
+  </p>
+  <p>
+   <a href="../images/8/8.4/3.gif" target="_blank">
+    <img alt="" src="../images/8/8.4/3.gif" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   仔细观察上图，我们可以看到不少值得压缩的地方。比如蓝框标注的分支都是独苗，没有必要用单独的节点同边表示。如果我们允许任意一条边里包含多个字 母，就可以把这种没有分叉的路径压缩到一条边。另外每条边已经包含了足够的后缀信息，我们就不用再给节点标注字符串信息了。我们只需要
+   <strong>
+    在叶节点上标注上每项后缀的起始位置
+   </strong>
+   。于是我们得到下图：
+  </p>
+  <p>
+   <a href="../images/8/8.4/4.gif" target="_blank">
+    <img alt="" src="../images/8/8.4/4.gif" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   这样的结构丢失了某些后缀。比如后
+   <strong>
+    缀X在上图中消失了
+   </strong>
+   ，因为它正好是字符串XMADAMYX的前缀。为了避免这种情况，我们也规定
+   <strong>
+    每项后缀不能是其它后缀的前缀
+   </strong>
+   。要解决这个问题其实挺简单，在
+   <strong>
+    待处理的子串后加一个空字串
+   </strong>
+   就行了。例如我们处理XMADAMYX前，先把XMADAMYX变为 XMADAMYX$，于是就得到suffix tree--后缀树了，如下图所示：
+  </p>
+  <p>
+   <a href="../images/8/8.4/5.gif" target="_blank">
+    <img alt="" src="../images/8/8.4/5.gif" style="max-width:100%;"/>
    </a>
   </p>
   <h3>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C%E5%AE%9A%E4%BD%8D%E6%B3%95" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C%E5%AE%9A%E4%BD%8D%E6%B3%95">
+   <a class="anchor" href="#12%E5%90%8E%E7%BC%80%E6%A0%91%E7%9A%84%E5%BA%94%E7%94%A8" name="user-content-12%E5%90%8E%E7%BC%80%E6%A0%91%E7%9A%84%E5%BA%94%E7%94%A8">
     <span class="octicon octicon-link">
     </span>
    </a>
-   解法二、定位法
+   1.2、后缀树的应用
   </h3>
   <p>
-   首先直接定位到最右上角的元素，再配以二分查找，比要找的数（6）大就往左走，比要找数（6）的小就往下走，直到找到要找的数字（6）为止，这个方法的时间复杂度O（m+n）。如下图所示：
-   <br/>
-   <a href="../images/23%7E24/23.3.gif" target="_blank">
-    <img alt="img" src="../images/23%7E24/23.3.gif" style="max-width:100%;"/>
+   后缀树可以解决最长回文问题，那它和最长回文有什么关系呢？在此之前，我们得先知道两个简单概念：
+  </p>
+  <ul>
+   <li>
+    最低共有祖先，
+    <strong>
+     LCA
+    </strong>
+    （Lowest Common Ancestor)，也就是任意两节点（多个也行）最长的共有前缀。比如下图中，节点7同节点1的共同祖先是节点5与节点10，但最低共同祖先是5。 查找LCA的算法是O(1)的复杂度，当然，代价是需要对后缀树做复杂度为O(n)的预处理。
+   </li>
+  </ul>
+  <p>
+   <a href="../images/8/8.4/6.jpg" target="_blank">
+    <img alt="" src="../images/8/8.4/6.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <ul>
+   <li>
+    广义后缀树(Generalized Suffix Tree)。传统的后缀树处理一坨单词的所有后缀。广义后缀树存储任意多个单词的所有后缀。例如下图是单词
+    <strong>
+     XMADAMYX与XYMADAMX的广义后缀 树
+    </strong>
+    。注意我们需要区分不同单词的后缀，所以叶节点用不同的特殊符号与后缀位置配对。
+   </li>
+  </ul>
+  <p>
+   <a href="../images/8/8.4/7.gif" target="_blank">
+    <img alt="" src="../images/8/8.4/7.gif" style="max-width:100%;"/>
    </a>
   </p>
   <p>
-   上述方法二的关键代码+程序运行如下图所示：
-   <br/>
-   <a href="../images/23%7E24/23.4.gif" target="_blank">
-    <img alt="img" src="../images/23%7E24/23.4.gif" style="max-width:100%;"/>
-   </a>
+   有了上面的概念，本文引言中提出的查找最长回文问题就相对简单了。咱们来回顾下引言中提出的回文问题的具体描述：找出给定字符串里的最长回文。例如输入XMADAMYX，则输出MADAM。
   </p>
   <p>
-   试问，上述算法复杂么？不复杂，只要稍微动点脑筋便能想到，还可以参看友人老梦的文章，Young氏矩阵：
-   <a href="http://blog.csdn.net/zhanglei8893/article/details/6234564">
-    http://blog.csdn.net/zhanglei8893/article/details/6234564
-   </a>
-   ，除此之外，何海涛先生一书剑指offer中也收集了此题，感兴趣的朋友也可以去看看。
+   思维的突破点在于考察回文的半径，而不是回文本身。所谓半径，就是回文对折后的字串。比如回文MADAM 的半径为MAD，半径长度为3，半径的中心是字母D。显然，最长回文必有最长半径，且两条半径相等。还是以MADAM为例，以D为中心往左，我们得到半径 DAM；以D为中心向右，我们得到半径DAM。二者肯定相等。因为MADAM已经是单词XMADAMYX里的最长回文，我们可以肯定从
+   <strong>
+    D往左数的字串 DAMX与从D往右数的子串DAMYX共享最长前缀DAM
+   </strong>
+   。而这，正是解决回文问题的关键。现在我们有后缀树，怎么把从D向左数的字串DAMX变成后缀 呢？
   </p>
-  <h2>
-   <a class="anchor" href="#%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98" name="user-content-%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   类似问题
-  </h2>
   <p>
-   行列都递增的矩阵，求中位数。
+   到这个地步，答案应该明显：
+   <strong>
+    把单词XMADAMYX翻转（XMADAMYX=&gt;XYMADAMX
+   </strong>
+   ，
+   <strong>
+    DAMX
+   </strong>
+   就变成后缀了
+   <strong>
+    ）
+   </strong>
+   就行了。于是我们把寻找回文的问题转换成了寻找两坨后缀的
+   <strong>
+    LCA
+   </strong>
+   的问题。当然，我们还需要知道 到底查询那些后缀间的LCA。很简单，给定字符串S，如果最长回文的中心在i，那从位置i向右数的后缀刚好是S(i)，而向左数的字符串刚好是翻转S后得到的字符串S‘的后缀S'(n-i+1)。这里的n是字符串S的长度。
+  </p>
+  <p>
+   拿单词XMADAMYX来说，回文中心为D，那么D向右的后缀
+   <strong>
+    DAMYX
+   </strong>
+   假设是S(i)（当N=8，i从1开始计数，i=4时，便是S(4..8)）;而对于翻转后的单词XYMADAMX而言，回文中心D向右对应的后缀为
+   <strong>
+    DAMX
+   </strong>
+   ，也就是S'(N-i+1)(（N=8，i=4，便是S‘（5..8）） 。此刻已经可以得出，它们共享最长前缀，即
+   <strong>
+    LCA（DAMYX，DAMX）=DAM
+   </strong>
+   。有了这套直观解释，算法自然呼之欲出:
+  </p>
+  <ol>
+   <li>
+    <p>
+     预处理后缀树，使得查询LCA的复杂度为O(1)。这步的开销是O(N)，N是单词S的长度 ；
+    </p>
+   </li>
+   <li>
+    <p>
+     对单词的每一位置i(也就是从0到N-1)，获取LCA(S(i), S‘(N-i+1)) 以及LCA(S(i+1), S’(n-i+1))。查找两次的原因是我们需要考虑奇数回文和偶数回文的情况。这步要考察每坨i，所以复杂度是O(N) ；
+    </p>
+   </li>
+   <li>
+    <p>
+     找到最大的LCA，我们也就得到了回文的中心i以及回文的半径长度，自然也就得到了最长回文。总的复杂度O(n)。
+    </p>
+   </li>
+  </ol>
+  <p>
+   i为4时，LCA(4$, 5#)为DAM，正好是最长半径。此外，创建后缀树为O(n)的时间复杂度。
   </p>
  </body>
 </html>

@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0282bede6135e06ec35e92d06a80225f92812b0e.css" />
-  <link rel="stylesheet" href="style_cache/github2-dcf6ca6edf1a82a2dcaebf74f6b2d9eface5db5d.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
+  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -119,7 +119,7 @@
    题目描述
   </h2>
   <p>
-   题目：输入一个数组和一个数字，在数组中查找两个数，使得它们的和正好是输入的那个数字。
+   输入一个数组和一个数字，在数组中查找两个数，使得它们的和正好是输入的那个数字。
   </p>
   <p>
    要求时间复杂度是O(N)。如果有多对数字的和等于输入的数字，输出任意一对即可。
@@ -127,26 +127,19 @@
   <p>
    例如输入数组1、2、4、7、11、15和数字15。由于4+11=15，因此输出4和11。
   </p>
-  <h2>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
+  <h3>
+   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
     <span class="octicon octicon-link">
     </span>
    </a>
-   解法一
-  </h2>
+   分析与解法
+  </h3>
   <p>
    咱们试着一步一步解决这个问题（注意阐述中数列有序无序的区别）：
   </p>
   <p>
-   直接穷举，从数组中任意选取两个数，判定它们的和是否为输入的那个数字。此举复杂度为O(N^2)。很显然，我们要寻找效率更高的解法。
+   直接穷举，从数组中任意选取两个数，判定它们的和是否为输入的那个数字。此举复杂度为O(N^2)。很显然，我们要寻找效率更高的解法
   </p>
-  <h2>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   解法二
-  </h2>
   <p>
    题目相当于，对每个a[i]，查找sum-a[i]是否也在原始序列中，每一次要查找的时间都要花费为O(N)，这样下来，最终找到两个数还是需要O（N^2）的复杂度。那如何提高查找判断的速度呢？
   </p>
@@ -154,127 +147,141 @@
    答案是二分查找，可以将O(N)的查找时间提高到O(log N)，这样对于N个a[i]，都要花logN的时间去查找相对应的sum-a[i]是否在原始序列中，总的时间复杂度已降为O(N log N)，且空间复杂度为O(1)。
 （如果有序，直接二分O(N log N)，如果无序，先排序后二分，复杂度同样为O（N log N + N log N）= O(N log N)，空间复杂度总为O(1)）。
   </p>
-  <h2>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%89" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%89">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   解法三
-  </h2>
   <p>
-   当然，你还可以构造hash表，正如编程之美上的所述，给定一个数字，根据hash映射查找另一个数字是否也在数组中，只需用O(1)的时间，这样的话，总体的算法同上述思路3 一样，也能降到O(N)，但有个缺陷，就是构造hash额外增加了O(N)的空间，此点同上述思路 3。不过，空间换时间，仍不失为在时间要求较严格的情况下的一种好办法。
+   可以继续优化做到时间O(N)么？
   </p>
-  <h2>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%9B%9B" name="user-content-%E8%A7%A3%E6%B3%95%E5%9B%9B">
+  <h4>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
     <span class="octicon octicon-link">
     </span>
    </a>
-   解法四
-  </h2>
+   解法一
+  </h4>
   <p>
-   有没有更好的办法呢？咱们可以依据上述思路2的思想，a[i]在序列中，如果a[i]+a[k]=sum的话，那么sum-a[i]（a[k])也必然在序列中。
+   根据前面的分析，a[i]在序列中，如果a[i]+a[k]=sum的话，那么sum-a[i]（a[k])也必然在序列中。
 举个例子，如下：
 原始序列：
-1、 2、 4、 7、11、15
-用输入数字15减一下各个数，得到对应的序列为：
-14、13、11、8、4、 0
   </p>
+  <ul>
+   <li>
+    1、 2、 4、 7、11、15
+   </li>
+  </ul>
+  <p>
+   用输入数字15减一下各个数，得到对应的序列为：
+  </p>
+  <ul>
+   <li>
+    14、13、11、8、4、 0
+   </li>
+  </ul>
   <p>
    第一个数组以一指针i 从数组最左端开始向右扫描，第二个数组以一指针j 从数组最右端开始向左扫描，如果第一个数组出现了和第二个数组一样的数，即a[*i]=a[*j]，就找出这俩个数来了。
 如上，i，j最终在第一个，和第二个序列中找到了相同的数4和11，所以符合条件的两个数，即为4+11=15。
 怎么样，两端同时查找，时间复杂度瞬间缩短到了O(N)，但却同时需要O(N)的空间存储第二个数组。
   </p>
-  <p>
-   但事实上，也不一定非得开辟第二个数组，要达到O(N)的复杂度，第一个数组以一指针i 从数组最左端开始向右扫描，第二个数组以一指针j 从数组最右端开始向左扫描，首先初始i指向元素1，j指向元素0，谁指的元素小，谁先移动，由于1(i)&gt; 0(j)，所以i不动，j向左移动。然后j移动到元素4发现大于元素1，故而停止移动j，开始移动i，直到i指向4，这时,i指向的元素与j指向的元素相同，故而判断4是满足条件的第一个数；然后同时移动i,j再进行判断，直到它们到达边界。
-  </p>
-  <h2>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%94" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%94">
+  <h4>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C">
     <span class="octicon octicon-link">
     </span>
    </a>
-   解法五
-  </h2>
+   解法二
+  </h4>
   <p>
-   如果数组是无序的，先排序(N log N)，然后用两个指针i，j，各自指向数组的首尾两端，令i=0，j=n-1，然后i++，j--，逐次判断a[i]+a[j]?=sum，如果某一刻a[i]+a[j] &gt; sum，则要想办法让sum的值减小，所以此刻i不动，j--，如果某一刻a[i]+a[j] &lt; sum，则要想办法让sum的值增大，所以此刻i++，j不动。所以，数组无序的时候，时间复杂度最终为O(N log N + N）=O(N log N)，若原数组是有序的，则不需要事先的排序，直接O(N)搞定，且空间复杂度还是O(1)，此思路是相对于上述所有思路的一种改进。（如果有序，直接两个指针两端扫描，时间O(N)，如果无序，先排序后两端扫描，时间O(N log N + N)=O(N log N)，空间始终都为O(1)）。（与上述解法二相比，排序后的时间开销由之前的二分的n*logn降到了扫描的O(N)）。
+   当题目对时间复杂度要求比较严格时，我们可以考虑下用空间换时间，上述解法一即是此思想，此外，构造hash表也是典型的用空间换时间的处理办法。
   </p>
   <p>
-   下面，咱们先来实现思路5（这里假定数组已经是有序的），代码可以如下编写（两段代码实现）：
+   即给定一个数字，根据hash映射查找另一个数字是否也在数组中，只需用O(1)的时间，前提是经过O(N)时间的预处理，和用O(N)的空间构造hash表。
+  </p>
+  <p>
+   但能否做到在时间复杂度为O(N)的情况下，空间复杂度能进一步降低达到O(1)呢？
+  </p>
+  <h4>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%89" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%89">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法三
+  </h4>
+  <p>
+   如果数组是无序的，先排序(N log N)，然后用两个指针i，j，各自指向数组的首尾两端，令i=0，j=n-1，然后i++，j--，逐次判断a[i]+a[j]?=sum，
+  </p>
+  <ul>
+   <li>
+    如果某一刻a[i]+a[j] &gt; sum，则要想办法让sum的值减小，所以此刻i不动，j--；
+   </li>
+   <li>
+    如果某一刻a[i]+a[j] &lt; sum，则要想办法让sum的值增大，所以此刻i++，j不动。
+   </li>
+  </ul>
+  <p>
+   所以，数组无序的时候，时间复杂度最终为O(N log N + N)=O(N log N)。
+  </p>
+  <p>
+   如果原数组是有序的，则不需要事先的排序，直接用两指针分别从头和尾向中间扫描，O(N)搞定，且空间复杂度还是O(1)。
+  </p>
+  <p>
+   下面，咱们先来实现此思路（这里假定数组已经是有序的），代码可以如下编写：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="c1">//代码一</span>
-<span class="c1">//O（N）</span>
-<span class="n">Pair</span> <span class="nf">findSum</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x</span><span class="p">)</span>
+   <pre><span class="kt">void</span> <span class="nf">TwoSum</span><span class="p">(</span><span class="kt">int</span> <span class="n">data</span><span class="p">[],</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">length</span><span class="p">,</span> <span class="kt">int</span> <span class="n">sum</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="c1">//sort(s, s+n);   如果数组非有序的，那就事先排好序O(N log N)</span>
-
-    <span class="kt">int</span> <span class="o">*</span><span class="n">begin</span> <span class="o">=</span> <span class="n">s</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="o">*</span><span class="n">end</span> <span class="o">=</span> <span class="n">s</span><span class="o">+</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-
-    <span class="k">while</span><span class="p">(</span><span class="n">begin</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">)</span>    <span class="c1">//俩头夹逼，或称两个指针两端扫描法，很经典的方法，O(N)</span>
-    <span class="p">{</span>
-        <span class="k">if</span><span class="p">(</span><span class="o">*</span><span class="n">begin</span> <span class="o">+</span> <span class="o">*</span><span class="n">end</span> <span class="o">&gt;</span> <span class="n">x</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="o">--</span><span class="n">end</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="o">*</span><span class="n">begin</span> <span class="o">+</span> <span class="o">*</span><span class="n">end</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="o">++</span><span class="n">begin</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span>
-        <span class="p">{</span>
-            <span class="k">return</span> <span class="n">Pair</span><span class="p">(</span><span class="o">*</span><span class="n">begin</span><span class="p">,</span> <span class="o">*</span><span class="n">end</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="n">Pair</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="c1">//或者如下编写，</span>
-<span class="c1">//代码二</span>
-<span class="c1">//copyright@ zhedahht &amp;&amp; yansha</span>
-<span class="c1">//July、updated，2011.05.14。</span>
-<span class="kt">bool</span> <span class="nf">find_num</span><span class="p">(</span><span class="kt">int</span> <span class="n">data</span><span class="p">[],</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">length</span><span class="p">,</span> <span class="kt">int</span> <span class="n">sum</span><span class="p">,</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">first_num</span><span class="p">,</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">second_num</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">length</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
 
     <span class="kt">int</span> <span class="n">begin</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
     <span class="kt">int</span> <span class="n">end</span> <span class="o">=</span> <span class="n">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
 
-    <span class="k">while</span><span class="p">(</span><span class="n">end</span> <span class="o">&gt;</span> <span class="n">begin</span><span class="p">)</span>
+    <span class="c1">//俩头夹逼，或称两个指针两端扫描法，很经典的方法，O(N)</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">begin</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="kt">long</span> <span class="n">current_sum</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">begin</span><span class="p">]</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="n">end</span><span class="p">];</span>
+        <span class="kt">long</span> <span class="n">currSum</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">begin</span><span class="p">]</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="n">end</span><span class="p">];</span>
 
-        <span class="k">if</span><span class="p">(</span><span class="n">current_sum</span> <span class="o">==</span> <span class="n">sum</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">currSum</span> <span class="o">==</span> <span class="n">sum</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">first_num</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">begin</span><span class="p">];</span>
-            <span class="n">second_num</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">end</span><span class="p">];</span>
-            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="c1">//题目只要求输出满足条件的任意一对即可</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">"%d %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">begin</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">end</span><span class="p">]);</span>
+
+            <span class="c1">//如果需要所有满足条件的数组对，则需要加上下面两条语句：</span>
+            <span class="c1">//begin++</span>
+            <span class="c1">//end--</span>
+            <span class="k">break</span><span class="p">;</span>
         <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">current_sum</span> <span class="o">&gt;</span> <span class="n">sum</span><span class="p">)</span>
-            <span class="n">end</span><span class="o">--</span><span class="p">;</span>
-        <span class="k">else</span>
-            <span class="n">begin</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">else</span><span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">currSum</span> <span class="o">&lt;</span> <span class="n">sum</span><span class="p">)</span>
+                <span class="n">begin</span><span class="o">++</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">end</span><span class="o">--</span><span class="p">;</span>
+        <span class="p">}</span>
     <span class="p">}</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
 <span class="p">}</span>
 </pre>
   </div>
-  <h2>
+  <h3>
    <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E6%80%BB%E7%BB%93" name="user-content-%E8%A7%A3%E6%B3%95%E6%80%BB%E7%BB%93">
     <span class="octicon octicon-link">
     </span>
    </a>
    解法总结
-  </h2>
+  </h3>
   <p>
-   不论原序列是有序还是无序，解决这类题有以下三种办法：1、二分（若无序，先排序后二分），时间复杂度总为O(N log N)，空间复杂度为O（1）；2、扫描一遍X-S[i]  映射到一个数组或构造hash表，时间复杂度为O(N)，空间复杂度为O(N)；3、两个指针两端扫描（若无序，先排序后扫描），时间复杂度最后为：有序O(N)，无序O(N log N + N)=O(N log N)，空间复杂度都为O(1)。
+   不论原序列是有序还是无序，解决这类题有以下三种办法：
+  </p>
+  <ul>
+   <li>
+    1、二分（若无序，先排序后二分），时间复杂度总为O(N log N)，空间复杂度为O（1）；
+   </li>
+   <li>
+    2、扫描一遍X-S[i]  映射到一个数组或构造hash表，时间复杂度为O(N)，空间复杂度为O(N)；
+   </li>
+   <li>
+    3、两个指针两端扫描（若无序，先排序后扫描），时间复杂度最后为：有序O(N)，无序O(N log N + N)=O(N log N)，空间复杂度都为O(1)。
+   </li>
+  </ul>
+  <p>
+   所以，要想达到时间O(N)，空间O(1)的目标，除非原数组是有序的（指针扫描法），不然，当数组无序的话，就只能先排序，后指针扫描法或二分（时间 O(Nlog N)，空间O(1)），或映射或hash（时间O(N)，空间O(N)）。时间或空间，必须牺牲一个，达到平衡。
   </p>
   <p>
-   所以，要想达到时间O(N)，空间O(1)的目标，除非原数组是有序的（指针扫描法），不然，当数组无序的话，就只能先排序，后指针扫描法或二分（时间 O(N log N)，空间O(1)），或映射或hash（时间O(N)，空间O(N)）。时间或空间，必须牺牲一个，自己权衡吧。
-  </p>
-  <p>
-   综上，若是数组有序的情况下，优先考虑两个指针两端扫描法，以达到最佳的时（O(N)），空（O(1)）效应。否则，如果要排序的话，时间复杂度最快当然是只能达到O(N log N)，空间O(1)则是不在话下。
+   综上，若是数组有序的情况下，优先考虑两个指针两端扫描法，以达到最佳的时O(N)，空O(1)效应。否则，如果要排序的话，时间复杂度最快当然是只能达到O(N log N)，空间O(1)则不在话下。
   </p>
   <h2>
    <a class="anchor" href="#%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95" name="user-content-%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95">
@@ -285,78 +292,15 @@
   </h2>
   <ol>
    <li>
-    如果在返回找到的两个数的同时，还要求你返回这两个数的位置列?
+    如果在返回找到的两个数的同时，还要求你返回这两个数的位置列？
    </li>
    <li>
-    如果把题目中的要你寻找的两个数改为“多个数”，或任意个数列?（请看下面第二节）
+    如果需要输出所有满足条件的整数对呢?
    </li>
    <li>
-    二分查找时：
-    <code>
-     left &lt;= right，right = middle - 1;left &lt; right，right = middle;
-    </code>
+    如果把题目中的要你寻找的两个数改为“多个数”，或任意个数列?
    </li>
   </ol>
-  <div class="highlight highlight-c">
-   <pre><span class="c1">//算法所操作的区间,是左闭右开区间,还是左闭右闭区间,这个区间,需要在循环初始化,</span>
-<span class="c1">//循环体是否终止的判断中,以及每次修改left,right区间值这三个地方保持一致,否则就可能出错.</span>
-
-<span class="c1">//二分查找实现一</span>
-<span class="kt">int</span> <span class="nf">search</span><span class="p">(</span><span class="kt">int</span> <span class="n">array</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">v</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">middle</span><span class="p">;</span>
-
-    <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-
-    <span class="k">while</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="n">right</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">middle</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">middle</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">v</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">right</span> <span class="o">=</span> <span class="n">middle</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">middle</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">v</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">left</span> <span class="o">=</span> <span class="n">middle</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span>
-        <span class="p">{</span>
-            <span class="k">return</span> <span class="n">middle</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="c1">//二分查找实现二</span>
-<span class="kt">int</span> <span class="nf">search</span><span class="p">(</span><span class="kt">int</span> <span class="n">array</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">v</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">middle</span><span class="p">;</span>
-
-    <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
-
-    <span class="k">while</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">middle</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">middle</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">v</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">right</span> <span class="o">=</span> <span class="n">middle</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">middle</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">v</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">left</span> <span class="o">=</span> <span class="n">middle</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span>
-        <span class="p">{</span>
-            <span class="k">return</span> <span class="n">middle</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
-  </div>
   <h2>
    <a class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
     <span class="octicon octicon-link">
@@ -392,10 +336,19 @@
 };
 </code></pre>
   <p>
-   2、3-sum问题
+   2、有一个数组a，设有一个值n。在数组中找到两个元素a[i]和a[j]，使得a[i]+a[j]等于n，求出所有满足以上条件的i和j。
   </p>
   <p>
-   3、4-sum问题
+   3、3-sum问题
+  </p>
+  <p>
+   给定一个整数数组，判断能否从中找出3个数a、b、c，使得他们的和为0，如果能，请找出所有满足和为0个3个数对。
+  </p>
+  <p>
+   4、4-sum问题
+  </p>
+  <p>
+   给定一个整数数组，判断能否从中找出4个数a、b、、d，使得他们的和为0，如果能，请找出所有满足和为0个4个数对。
   </p>
  </body>
 </html>

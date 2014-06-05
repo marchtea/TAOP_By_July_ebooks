@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0282bede6135e06ec35e92d06a80225f92812b0e.css" />
-  <link rel="stylesheet" href="style_cache/github2-dcf6ca6edf1a82a2dcaebf74f6b2d9eface5db5d.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
+  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -148,23 +148,26 @@
    代码如下：：
   </p>
   <div class="highlight highlight-cpp">
-   <pre><span class="cm">/**  </span>
-<span class="cm"> *检查字符串s是不是回文, 字符串s的长度为n  </span>
-<span class="cm"> *Copyright(C) fairywell 2011 </span>
-<span class="cm"> */</span>  
-<span class="kt">bool</span> <span class="nf">IsPalindrome</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>  
-<span class="p">{</span>  
-    <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="c1">// 非法输入  </span>
-    <span class="kt">char</span> <span class="o">*</span><span class="n">front</span><span class="p">,</span> <span class="o">*</span><span class="n">back</span><span class="p">;</span>  
-    <span class="n">front</span> <span class="o">=</span> <span class="n">s</span><span class="p">;</span> <span class="n">back</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 初始化头指针和尾指针  </span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">front</span> <span class="o">&lt;</span> <span class="n">back</span><span class="p">)</span> <span class="p">{</span>  
-        <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">front</span> <span class="o">!=</span> <span class="o">*</span><span class="n">back</span><span class="p">)</span> 
-          <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="c1">// 不是回文，立即返回  </span>
-        <span class="o">++</span><span class="n">front</span><span class="p">;</span> 
-        <span class="o">--</span><span class="n">back</span><span class="p">;</span>  
-    <span class="p">}</span>  
+   <pre><span class="kt">bool</span> <span class="nf">isPalindrome</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">//非法输入</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span> 
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>   
+    <span class="kt">char</span> <span class="o">*</span><span class="n">front</span><span class="p">,</span> <span class="o">*</span><span class="n">back</span><span class="p">;</span>
+
+    <span class="c1">//初始化头指针和尾指针</span>
+    <span class="n">front</span> <span class="o">=</span> <span class="n">s</span><span class="p">;</span> 
+    <span class="n">back</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> 
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">front</span> <span class="o">&lt;</span> <span class="n">back</span><span class="p">)</span> 
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">front</span> <span class="o">!=</span> <span class="o">*</span><span class="n">back</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="c1">// 不是回文，立即返回  </span>
+        <span class="o">++</span><span class="n">front</span><span class="p">;</span>
+        <span class="o">--</span><span class="n">back</span><span class="p">;</span>
+    <span class="p">}</span>
     <span class="k">return</span> <span class="nb">true</span><span class="p">;</span> <span class="c1">// 是回文  </span>
-<span class="p">}</span>  
+<span class="p">}</span>
 </pre>
   </div>
   <p>
@@ -181,20 +184,21 @@
    上述解法一从两头向中间扫描，那么是否还有其它办法呢？我们可以先从中间开始、然后向两边扩展查看字符是否相等。参考代码如下：
   </p>
   <div class="highlight highlight-cpp">
-   <pre><span class="cm">/**  </span>
-<span class="cm"> *检查字符串s是不是回文, 字符串s的长度为n </span>
-<span class="cm"> *Copyright(C) fairywell 2011 </span>
-<span class="cm"> */</span>  
-<span class="kt">bool</span> <span class="nf">IsPalindrome2</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>  
-<span class="p">{</span>  
-    <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="c1">// 非法输入  </span>
-    <span class="kt">char</span> <span class="o">*</span><span class="n">first</span><span class="p">,</span> <span class="o">*</span><span class="n">second</span><span class="p">;</span>  
+   <pre><span class="kt">bool</span> <span class="nf">isPalindrome2</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span> 
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="c1">// 非法输入  </span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">first</span><span class="p">,</span> <span class="o">*</span><span class="n">second</span><span class="p">;</span>
+
     <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="p">((</span><span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">?</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// m is themiddle point of s      </span>
-    <span class="n">first</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="n">m</span><span class="p">;</span> <span class="n">second</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">m</span><span class="p">;</span>  
-    <span class="k">while</span> <span class="p">(</span><span class="n">first</span> <span class="o">&gt;=</span> <span class="n">s</span><span class="p">)</span>  
-        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">first</span><span class="o">--</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">[</span><span class="n">second</span><span class="o">++</span><span class="p">])</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="c1">// not equal, so it's not apalindrome  </span>
+    <span class="n">first</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="n">m</span><span class="p">;</span> 
+    <span class="n">second</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">m</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">first</span> <span class="o">&gt;=</span> <span class="n">s</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">first</span><span class="o">--</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">[</span><span class="n">second</span><span class="o">++</span><span class="p">])</span> 
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="c1">// not equal, so it's not apalindrome  </span>
     <span class="k">return</span> <span class="nb">true</span><span class="p">;</span> <span class="c1">// check over, it's a palindrome  </span>
-<span class="p">}</span>  
+<span class="p">}</span>
 </pre>
   </div>
   <p>

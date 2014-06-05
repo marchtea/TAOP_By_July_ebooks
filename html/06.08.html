@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-5da842ffec8a31b5975487ab1278c7ac16876671.css" />
-  <link rel="stylesheet" href="style_cache/github2-0a16120e50749ebd0a7bbb45d3c848b65919ec7e.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
+  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -104,63 +104,40 @@
 		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
 			<html>
  <body>
-  <h2>
-   <a class="anchor" href="#%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E5%AD%97%E7%AC%A6" name="user-content-%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E5%AD%97%E7%AC%A6">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   第一个只出现一次的字符
-  </h2>
-  <h3>
-   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   题目描述
-  </h3>
   <p>
-   在一个字符串中找到第一个只出现一次的字符。如输入abaccdeff，则输出b。
-  </p>
-  <h3>
-   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   分析与解法
-  </h3>
-  <p>
-   分析：这道题是2006年google 的一道笔试题。它在今年又出现了，不过换了一种形式。即最近的搜狐笔试大题：数组非常长，如何找到第一个只出现一次的数字，说明算法复杂度。此问题已经在程序员编程艺术系列第二章中有所阐述，在此不再作过多讲解。
+   <strong>
+    数据库索引
+   </strong>
   </p>
   <p>
-   代码，可编写如下：
+   适用范围：大数据量的增删改查
   </p>
-  <div class="highlight highlight-cpp">
-   <pre><span class="c1">//查找第一个只出现一次的字符，第2个程序</span>
-<span class="c1">//copyright@ yansha</span>
-<span class="c1">//July、updated，2011.04.24.</span>
-<span class="kt">char</span> <span class="nf">FirstNotRepeatChar</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">pString</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">pString</span><span class="p">)</span>
-        <span class="k">return</span> <span class="sc">'\0'</span><span class="p">;</span>
-
-    <span class="k">const</span> <span class="kt">int</span> <span class="n">tableSize</span> <span class="o">=</span> <span class="mi">256</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">hashTable</span><span class="p">[</span><span class="n">tableSize</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span> <span class="c1">//存入数组，并初始化为0</span>
-
-    <span class="kt">char</span><span class="o">*</span> <span class="n">pHashKey</span> <span class="o">=</span> <span class="n">pString</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">pHashKey</span><span class="p">)</span> <span class="o">!=</span> <span class="sc">'\0'</span><span class="p">)</span>
-        <span class="n">hashTable</span><span class="p">[</span><span class="o">*</span><span class="p">(</span><span class="n">pHashKey</span><span class="o">++</span><span class="p">)]</span><span class="o">++</span><span class="p">;</span>
-
-    <span class="k">while</span> <span class="p">(</span><span class="o">*</span><span class="n">pString</span> <span class="o">!=</span> <span class="sc">'\0'</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">hashTable</span><span class="p">[</span><span class="o">*</span><span class="n">pString</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="k">return</span> <span class="o">*</span><span class="n">pString</span><span class="p">;</span>
-
-        <span class="n">pString</span><span class="o">++</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="sc">'\0'</span><span class="p">;</span>  <span class="c1">//没有找到满足条件的字符，退出</span>
-<span class="p">}</span>
-</pre>
-  </div>
+  <p>
+   基本原理及要点：利用数据的设计实现方法，对海量数据的增删改查进行处理。
+  </p>
+  <ul>
+   <li>
+    关于数据库索引及其优化，更多可参见此文：
+    <a href="http://www.cnblogs.com/pkuoliver/archive/2011/08/17/mass-data-topic-7-index-and-optimize.html">
+     http://www.cnblogs.com/pkuoliver/archive/2011/08/17/mass-data-topic-7-index-and-optimize.html
+    </a>
+    ；
+   </li>
+   <li>
+    关于MySQL索引背后的数据结构及算法原理，这里还有一篇很好的文章：
+    <a href="http://blog.codinglabs.org/articles/theory-of-mysql-index.html">
+     http://blog.codinglabs.org/articles/theory-of-mysql-index.html
+    </a>
+    ；
+   </li>
+   <li>
+    关于B 树、B+ 树、B* 树及R 树，本blog内有篇绝佳文章：
+    <a href="07.02.md">
+     从B树、B+树、B*树谈到R 树
+    </a>
+    。
+   </li>
+  </ul>
  </body>
 </html>
 		  </article>
@@ -171,7 +148,7 @@
 					|
 				
 				
-					<a href="06.11.html">next</a>
+					<a href="06.09.html">next</a>
 				
 				<span style="float: right"><a href="index.html">Back to home</a>
 			</div>

@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0282bede6135e06ec35e92d06a80225f92812b0e.css" />
-  <link rel="stylesheet" href="style_cache/github2-dcf6ca6edf1a82a2dcaebf74f6b2d9eface5db5d.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
+  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,11 +105,11 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#%E6%B1%82%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C" name="user-content-%E6%B1%82%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C">
+   <a class="anchor" href="#%E6%9C%80%E5%A4%A7%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C" name="user-content-%E6%9C%80%E5%A4%A7%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C">
     <span class="octicon octicon-link">
     </span>
    </a>
-   求连续子数组的最大和
+   最大连续子数组和
   </h1>
   <h2>
    <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
@@ -157,7 +157,7 @@
 currSum[i, …, j]为数组A中第i个元素到第j个元素的和（其中0 &lt;= i &lt;= j &lt; n），currSum[i, …, j]，那么时间复杂度为O(N^3)：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="kt">int</span> <span class="nf">maxSubArray</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">A</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+   <pre><span class="kt">int</span> <span class="nf">MaxSubArray</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">A</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="kt">int</span> <span class="n">maxSum</span> <span class="o">=</span> <span class="o">-</span><span class="n">INF</span><span class="p">;</span>
     <span class="kt">int</span> <span class="n">currSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
@@ -190,7 +190,7 @@ currSum[i, …, j]为数组A中第i个元素到第j个元素的和（其中0 &lt
    当全是负数的情况时，我们可以让程序返回0，也可以让程序返回最大的那个负数，这里，我们让程序返回最大的那个负数，参考代码如下：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="kt">int</span> <span class="nf">maxSubArray</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+   <pre><span class="kt">int</span> <span class="nf">MaxSubArray</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="kt">int</span> <span class="n">maxSum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>       <span class="c1">//全负情况，返回最大数</span>
     <span class="kt">int</span> <span class="n">currSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
@@ -251,11 +251,9 @@ currSum[i, …, j]为数组A中第i个元素到第j个元素的和（其中0 &lt
   <ul>
    <li>
     做为新子数组的第一个元素；
-    <ul>
-     <li>
-      放入前面找到的子数组。
-     </li>
-    </ul>
+   </li>
+   <li>
+    放入前面找到的子数组。
    </li>
   </ul>
   <pre><code>currSum[i+1] = max(a[i+1], currSum[i] + a[i+1])
@@ -265,7 +263,7 @@ maxSum = max(maxSum, currSum[i])
    参考代码如下：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="kt">int</span> <span class="nf">maxSubArray</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+   <pre><span class="kt">int</span> <span class="nf">MaxSubArray</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">nullptr</span> <span class="o">||</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
@@ -321,7 +319,11 @@ maxSum = max(maxSum, currSum[i])
    《算法竞赛入门经典》 P89 页。
   </p>
   <p>
-   3、求一个矩阵中各个元素和加起来最的二维矩阵，例如:
+   3、最大子矩阵和
+  </p>
+  <p>
+   一个M*N的矩阵，找到此矩阵的一个子矩阵，并且这个子矩阵的元素的和是最大的，输出这个最大的值。如果所有数都是负数，就输出0。
+例如：3*5的矩阵：
   </p>
   <p>
    1 2 0 3 4
@@ -333,10 +335,16 @@ maxSum = max(maxSum, currSum[i])
    1 1 5 3 0
   </p>
   <p>
-   中最大的是:
-4 5
-5 3
-要求:(1)写出算法;(2)分析时间复杂度;(3)用C写出关键代码。
+   和最大的子矩阵是：
+  </p>
+  <p>
+   4 5
+  </p>
+  <p>
+   5 3
+  </p>
+  <p>
+   最后输出和的最大值17。
   </p>
  </body>
 </html>

@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0282bede6135e06ec35e92d06a80225f92812b0e.css" />
-  <link rel="stylesheet" href="style_cache/github2-dcf6ca6edf1a82a2dcaebf74f6b2d9eface5db5d.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
+  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,11 +105,11 @@
 			<html>
  <body>
   <h2>
-   <a class="anchor" href="#%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2%E7%9A%84%E9%95%BF%E5%BA%A6" name="user-content-%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2%E7%9A%84%E9%95%BF%E5%BA%A6">
+   <a class="anchor" href="#%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2" name="user-content-%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2">
     <span class="octicon octicon-link">
     </span>
    </a>
-   最长回文子串的长度
+   最长回文子串
   </h2>
   <h3>
    <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
@@ -139,45 +139,37 @@
    解法一
   </h4>
   <p>
-   那么如何高效的进行判断呢？借鉴KMP算法的做法，既然对短的子串的判断和包含它的长的子串的判断重复了，我们何不复用下短的子串的判断呢，即让短的子串的判断成为长的子串的判断的一个部分。
+   那么如何高效的进行判断呢？我们想想，如果一段字符串是回文，那么以某个字符为中心的前缀和后缀都是相同的，例如以一段回文串“aba”为例，以b为中心，它的前缀和后缀都是相同的，都是a。
   </p>
   <p>
-   没错，扩展法。从一个字符开始，向两边扩展，看看最多能到多长，使其保持为回文。这也就是为什么我们在上一节里面要提出解法二的原因。
-  </p>
-  <p>
-   具体而言，我们可以枚举中心位置，然后再在该位置上用扩展法，记录并更新得到的最长的回文长度，即为所求。代码如下：
+   那么，我们是否可以可以枚举中心位置，然后再在该位置上用扩展法，记录并更新得到的最长的回文长度呢？答案是肯定的，参考代码如下：
   </p>
   <div class="highlight highlight-cpp">
-   <pre><span class="cm">/**  </span>
-<span class="cm"> *find the longest palindrome in a string, n is the length of string s </span>
-<span class="cm"> *Copyright(C) fairywell 2011 </span>
-<span class="cm"> */</span>  
-<span class="kt">int</span> <span class="nf">LongestPalindrome</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>  
+   <pre><span class="kt">int</span> <span class="nf">longestPalindrome</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">max</span><span class="p">;</span>  
-    <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>  
-    <span class="n">max</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">max</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">max</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
     <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// i is the middle point of the palindrome  </span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">);</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="c1">// if the lengthof the palindrome is odd  </span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="p">])</span> 
-              <span class="k">break</span><span class="p">;</span>  
-        <span class="k">if</span> <span class="p">(</span><span class="n">j</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span> <span class="o">&gt;</span> <span class="n">max</span><span class="p">)</span> 
-          <span class="n">max</span> <span class="o">=</span> <span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>  
-        <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">);</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="c1">// for theeven case  </span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span> 
-              <span class="k">break</span><span class="p">;</span>  
-        <span class="k">if</span> <span class="p">(</span><span class="n">j</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">2</span> <span class="o">&gt;</span> <span class="n">max</span><span class="p">)</span> 
-          <span class="n">max</span> <span class="o">=</span> <span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span><span class="p">;</span>  
-    <span class="p">}</span>  
-    <span class="k">return</span> <span class="n">max</span><span class="p">;</span>  
-<span class="p">}</span>  
+        <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">);</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="c1">// if the length of the palindrome is odd  </span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">])</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="n">max</span><span class="p">)</span>
+            <span class="n">max</span> <span class="o">=</span> <span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">);</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="c1">// for the even case  </span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">&gt;</span> <span class="n">max</span><span class="p">)</span>
+            <span class="n">max</span> <span class="o">=</span> <span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">max</span><span class="p">;</span>
+<span class="p">}</span>
 </pre>
   </div>
   <p>
    代码稍微难懂一点的地方就是内层的两个 for 循环，它们分别对于以 i 为中心的，长度为奇数和偶数的两种情况，整个代码遍历中心位置 i 并以之扩展，找出最长的回文。
-  </p>
-  <p>
-   当然，还有更先进但也更复杂的方法，比如用 s 和逆置 s' 的组合 s$s' 来建立后缀树的方法也能找到最长回文，但构建的过程比较复杂，所以在实践中用的比较少，感兴趣的朋友可以参考相应资料。--well。
   </p>
   <h4>
    <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8Con%E8%A7%A3%E6%B3%95" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8Con%E8%A7%A3%E6%B3%95">
@@ -187,19 +179,110 @@
    解法二、O(N)解法
   </h4>
   <p>
-   参考：
-   <a href="http://bbs.dlut.edu.cn/bbstcon.php?board=Competition&amp;gid=23474">
-    http://bbs.dlut.edu.cn/bbstcon.php?board=Competition&amp;gid=23474
+   在上文的解法一：枚举中心位置中，我们需要特别考虑字符串的长度是奇数还是偶数，所以导致我们在编写代码实现的时候要把奇数和偶数的情况分开编写，是否有一种方法，可以不用管长度是奇数还是偶数，而统一处理呢？比如是否能把所有的情况全部转换为奇数处理？
+  </p>
+  <p>
+   答案还是肯定的。这就是下面我们将要看到的Manacher算法，且这个算法求最长回文子串的时间复杂度是线性O(N)的。
+  </p>
+  <p>
+   首先通过在每个字符的两边都插入一个特殊的符号，将所有可能的奇数或偶数长度的回文子串都转换成了奇数长度。比如 abba 变成 #a#b#b#a#， aba变成 #a#b#a#。
+  </p>
+  <p>
+   此外，为了进一步减少编码的复杂度，可以在字符串的开始加入另一个特殊字符，这样就不用特殊处理越界问题，比如$#a#b#a#。
+  </p>
+  <p>
+   以字符串12212321为例，插入#和$这两个特殊符号，变成了 S[] = "$#1#2#2#1#2#3#2#1#"，然后用一个数组 P[i] 来记录以字符S[i]为中心的最长回文子串向左或向右扩张的长度（包括S[i]）。
+  </p>
+  <p>
+   比如S和P的对应关系：
+  </p>
+  <ul>
+   <li>
+    S  #  1  #  2  #  2  #  1  #  2  #  3  #  2  #  1  #
+   </li>
+   <li>
+    P  1  2  1  2  5  2  1  4  1  2  1  6  1  2  1  2  1
+   </li>
+  </ul>
+  <p>
+   可以看出，P[i]-1正好是原字符串中最长回文串的总长度，为5。
+  </p>
+  <p>
+   接下来怎么计算P[i]呢？Manacher算法增加两个辅助变量id和mx，其中id表示最大回文子串中心的位置，mx则为id+P[id]，也就是最大回文子串的边界。得到一个很重要的结论：
+  </p>
+  <ul>
+   <li>
+    如果mx &gt; i，那么P[i] &gt;= Min(P[2 * id - i], mx - i)
+   </li>
+  </ul>
+  <p>
+   C代码如下：
+  </p>
+  <div class="highlight highlight-c">
+   <pre><span class="c1">//mx &gt; i，那么P[i] &gt;= MIN(P[2 * id - i], mx - i)</span>
+<span class="c1">//故谁小取谁</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">mx</span> <span class="o">-</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">P</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">id</span> <span class="o">-</span> <span class="n">i</span><span class="p">])</span>
+    <span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">id</span> <span class="o">-</span> <span class="n">i</span><span class="p">];</span>
+<span class="k">else</span>  <span class="c1">//mx-i &lt;= P[2*id - i]</span>
+    <span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mx</span> <span class="o">-</span> <span class="n">i</span><span class="p">;</span> 
+</pre>
+  </div>
+  <p>
+   下面，令j = 2*id - i，也就是说j是i关于id的对称点。
+  </p>
+  <p>
+   当 mx - i &gt; P[j] 的时候，以S[j]为中心的回文子串包含在以S[id]为中心的回文子串中，由于i和j对称，以S[i]为中心的回文子串必然包含在以S[id]为中心的回文子串中，所以必有P[i] = P[j]；
+  </p>
+  <p>
+   <a href="https://camo.githubusercontent.com/6e347c94c2660435bde50fa5305135229c8d76cf/687474703a2f2f7777772e66656c69783032312e636f6d2f626c6f672f6174746163686d656e742f313331383437363238345f37393335346134372e706e67" target="_blank">
+    <img alt="" data-canonical-src="http://www.felix021.com/blog/attachment/1318476284_79354a47.png" src="https://camo.githubusercontent.com/6e347c94c2660435bde50fa5305135229c8d76cf/687474703a2f2f7777772e66656c69783032312e636f6d2f626c6f672f6174746163686d656e742f313331383437363238345f37393335346134372e706e67" style="max-width:100%;"/>
    </a>
-   ，或这篇文章：
+  </p>
+  <p>
+   当 P[j] &gt;= mx - i 的时候，以S[j]为中心的回文子串不一定完全包含于以S[id]为中心的回文子串中，但是基于对称性可知，下图中两个绿框所包围的部分是相同的，也就是说以S[i]为中心的回文子串，其向右至少会扩张到mx的位置，也就是说 P[i] &gt;= mx - i。至于mx之后的部分是否对称，再具体匹配。
+  </p>
+  <p>
+   <a href="https://camo.githubusercontent.com/ff7edaf62027622be69d38aa3412b542328f8386/687474703a2f2f7777772e66656c69783032312e636f6d2f626c6f672f6174746163686d656e742f313331383437383131345f34333739666235632e706e67" target="_blank">
+    <img alt="" data-canonical-src="http://www.felix021.com/blog/attachment/1318478114_4379fb5c.png" src="https://camo.githubusercontent.com/ff7edaf62027622be69d38aa3412b542328f8386/687474703a2f2f7777772e66656c69783032312e636f6d2f626c6f672f6174746163686d656e742f313331383437383131345f34333739666235632e706e67" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   此外，对于 mx &lt;= i 的情况，因为无法对 P[i]做更多的假设，只能让P[i] = 1，然后再去匹配。
+  </p>
+  <p>
+   综上，关键代码如下：
+  </p>
+  <div class="highlight highlight-c">
+   <pre><span class="c1">//输入，并处理得到字符串s</span>
+<span class="kt">int</span> <span class="n">p</span><span class="p">[</span><span class="mi">1000</span><span class="p">],</span> <span class="n">mx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">memset</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">p</span><span class="p">));</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">'\0'</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> 
+<span class="p">{</span>
+    <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mx</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="o">?</span> <span class="n">min</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">id</span> <span class="o">-</span> <span class="n">i</span><span class="p">],</span> <span class="n">mx</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span> <span class="o">:</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">==</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span> 
+        <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">mx</span><span class="p">)</span> 
+    <span class="p">{</span>
+        <span class="n">mx</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">id</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">//找出p[i]中最大的</span>
+</pre>
+  </div>
+  <p>
+   此Manacher算法使用id、mx做配合，可以在每次循环中，直接对P[i]的快速赋值，从而在计算以i为中心的回文子串的过程中，不必每次都从1开始比较，减少了比较次数，最终使得求解最长回文子串的长度达到线性O(N)的时间复杂度。
+  </p>
+  <p>
+   参考：
    <a href="http://www.felix021.com/blog/read.php?2040">
     http://www.felix021.com/blog/read.php?2040
    </a>
-   ，或：
+   。另外，这篇文章也不错：
    <a href="http://leetcode.com/2011/11/longest-palindromic-substring-part-ii.html">
     http://leetcode.com/2011/11/longest-palindromic-substring-part-ii.html
    </a>
-   ，待续。
+   。
   </p>
  </body>
 </html>

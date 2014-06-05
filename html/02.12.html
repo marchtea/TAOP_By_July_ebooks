@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
+  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
+  <style>
+    .file-box {
+      margin: 64px auto;
+      width: 920px;
+    }
+	body {
+		font-size: 14px;
+		line-height: 22px;
+		<!--font-family: "adelle",Georgia,"Times New Roman",serif;-->
+		color: #4e443c;
+		background: #f0efe7;
+	}
+
+	.book-toc {
+
+	}
+	a {
+		color: #0388a6;
+		text-decoration: none;
+	}
+	a:hover {
+		color: #04b1d8;
+		text-decoration: none;
+	}
+	ol.book-toc li.chapter{
+		margin-bottom:0.6em
+	}
+	ol.book-toc, ol{
+		list-style-type: disc
+	}
+	ol.book-toc{
+		margin:30px 36px
+	}
+	ol.book-toc a{
+		padding-left:4px
+	}
+	li {
+		line-height: 22px;
+	}
+	h1, h2, h3, h4, h5, h6, li, p, a, ol, div{
+		margin: 0;
+		padding: 0;
+		border: 0;
+		vertical-align: baseline;
+	}
+	ul, ol {
+		padding: 0;
+		margin: 0 0 11px 25px;
+	}
+	h1 {
+		font-size: 36px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	h2 {
+		font-size: 18px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h1{
+		font-size: 22px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	ol.book-toc h2 {
+		font-size: 16px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	ol.book-toc h3, h4, h5, h6 {
+		font-size: 14px;
+		color: #f14e32;
+		font-weight: bold;
+	}
+	p {
+		margin: 0 0 11px;
+		font-size: 14px;
+		line-height: 22px;
+	}
+	div {
+		display: block;
+	}
+	div#nav{
+		padding: 30px
+	}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="file-box">
+	<div class="file">
+		<div id="readme" class="blob instapaper_body announce md">
+		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
+			<html>
+ <body>
+  <h2>
+   <a class="anchor" href="#%E8%B7%B3%E5%8F%B0%E9%98%B6%E9%97%AE%E9%A2%98" name="user-content-%E8%B7%B3%E5%8F%B0%E9%98%B6%E9%97%AE%E9%A2%98">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   跳台阶问题
+  </h2>
+  <h3>
+   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   题目描述
+  </h3>
+  <p>
+   一个台阶总共有n 级，如果一次可以跳1 级，也可以跳2 级。
+  </p>
+  <p>
+   求总共有多少总跳法，并分析算法的时间复杂度。
+  </p>
+  <h3>
+   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   分析与解法
+  </h3>
+  <h4>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法一
+  </h4>
+  <p>
+   首先考虑最简单的情况。如果只有1级台阶，那显然只有一种跳法。如果有2级台阶，那就有两种跳的方法了：一种是分两次跳，每次跳1级；另外一种就是一次跳2级。
+  </p>
+  <p>
+   现在我们再来讨论一般情况。我们把n级台阶时的跳法看成是n的函数，记为f(n)。当n&gt;2时，第一次跳的时候就有两种不同的选择：一是第一次只跳1级，此时跳法数目等于后面剩下的n-1级台阶的跳法数目，即为f(n-1)；另外一种选择是第一次跳2级，此时跳法数目等于后面剩下的n-2级台阶的跳法数目，即为f(n-2)。因此n级台阶时的不同跳法的总数f(n)=f(n-1)+f(n-2)。
+  </p>
+  <p>
+   我们把上面的分析用一个公式总结如下：
+  </p>
+  <pre><code>        /  1                             n = 1
+f(n)=      2                             n = 2
+        \  f(n-1) + f(n-2)               n &gt; 2
+</code></pre>
+  <p>
+   原来上述问题就是我们平常所熟知的Fibonacci数列问题。可编写代码，如下：
+  </p>
+  <div class="highlight highlight-cpp">
+   <pre><span class="kt">long</span> <span class="kt">long</span> <span class="nf">Fibonacci_Solution1</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">result</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">};</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+
+    <span class="k">return</span> <span class="n">Fibonacci_Solution1</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">Fibonacci_Solution1</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
+  </div>
+  <p>
+   那么，如果是人人笔试那道题呢?一个人上台阶可以一次上1个，2个，或者3个，岂不是可以轻而易举的写下如下公式：
+  </p>
+  <pre><code>        / 1                                      n = 1
+f(n)=     2                                      n = 2
+          4                                      n = 3       //111, 12, 21, 3
+        \ f(n-1)+f(n-2)+f(n-3)                   n &gt; 3
+</code></pre>
+  <h4>
+   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法二
+  </h4>
+  <p>
+   一维数组dp记录每个台阶的方法数，且令dp[i] = dp[i-1] + dp[i-2]，初始化时，dp[0]=dp[1]=1，然后递推计算即可dp[n] = dp[n-1] + dp[n-2];
+  </p>
+  <p>
+   参考代码如下：
+  </p>
+  <div class="highlight highlight-java">
+   <pre><span class="kt">int</span> <span class="nf">ClimbStairs</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="kt">int</span><span class="o">[]</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+    <span class="n">dp</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="n">dp</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+        <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">+</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">2</span><span class="o">];</span> <span class="cm">/* 从其他地方可达路径*/</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">dp</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+<span class="o">}</span>
+</pre>
+  </div>
+  <h3>
+   <a class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   举一反三
+  </h3>
+  <p>
+   1、兔子繁殖问题
+  </p>
+  <p>
+   13世纪意大利数学家斐波那契在他的《算盘书》中提出这样一个问题：有人想知道一年内一对兔子可繁殖成多少对，便筑了一道围墙把一对兔子关在里面。已知一对兔子每一个月可以生一对小兔子，而一对兔子出生后.第三个月开始生小兔子假如一年内没有发生死亡，则一对兔子一年内能繁殖成多少对？
+  </p>
+  <p>
+   分析：这就是斐波那契数列的由来，本节的跳台阶问题便是此问题的变形，只是换了种表述形式。
+  </p>
+  <p>
+   2、换硬币问题。
+  </p>
+  <p>
+   想兑换100元钱，有1,2,5,10四种钱，问总共有多少兑换方法。
+  </p>
+  <pre><code>const int N = 100;
+int dimes[] = { 1, 2, 5, 10 };
+int arr[N + 1] = { 1 };
+for (int i = 0; i &lt; sizeof(dimes) / sizeof(int); ++i)
+{
+    for (int j = dimes[i]; j &lt;= N; ++j)
+    {
+        arr[j] += arr[j - dimes[i]];
+    }
+}
+</code></pre>
+  <p>
+   此问题还有一个变形，就是打印出路径目前只想到要使用递归来解决这个问题。对此，利用一个vector来保存路径，每进入一层，push_back一个路径，每退出一层，pop_back一个路径。
+  </p>
+ </body>
+</html>
+		  </article>
+		  
+			<div id="nav">
+				
+					<a href="02.11.html">prev</a>
+					|
+				
+				
+					<a href="02.15.html">next</a>
+				
+				<span style="float: right"><a href="index.html">Back to home</a>
+			</div>
+		  
+		</div>
+	</div>
+  </div>
+  
+  <div>&nbsp;</div>
+  </div>
+  <div style="text-align:center; margin-bottom: 30px">
+	  Generated by <a href="https://github.com/marchtea/md_to_github_html">mdtogh</a>
+  </div>
+</body>
+</html>

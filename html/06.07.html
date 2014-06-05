@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0282bede6135e06ec35e92d06a80225f92812b0e.css" />
-  <link rel="stylesheet" href="style_cache/github2-dcf6ca6edf1a82a2dcaebf74f6b2d9eface5db5d.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
+  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,213 +105,61 @@
 			<html>
  <body>
   <h2>
-   <a class="anchor" href="#%E5%A5%87%E5%81%B6%E8%B0%83%E5%BA%8F" name="user-content-%E5%A5%87%E5%81%B6%E8%B0%83%E5%BA%8F">
+   <a class="anchor" href="#trie%E6%A0%91" name="user-content-trie%E6%A0%91">
     <span class="octicon octicon-link">
     </span>
    </a>
-   奇偶调序
+   Trie树
   </h2>
-  <h3>
-   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   题目描述
-  </h3>
   <p>
-   输入一个整数数组，调整数组中数字的顺序，使得所有奇数位于数组的前半部分，所有偶数位于数组的后半部分。要求时间复杂度为O(n)。
-  </p>
-  <h3>
-   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   分析与解法
-  </h3>
-  <h4>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   解法一
-  </h4>
-  <p>
-   最容易想到的办法是从头扫描这个数组，每碰到一个偶数时，拿出这个数字，并把位于这个数字后面的所有数字往前挪动一位。挪完之后在数组的末尾有一个空位，这时把该偶数放入这个空位。由于碰到一个偶数，需要移动O(n)个数字，只是这种方法总的时间复杂度是O(n^2)，不符合要求。
-  </p>
-  <h4>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   解法二
-  </h4>
-  <p>
-   再细想下，我们发觉可以考虑维护两个指针，一个指针指向数组的第一个数字，向后移动；一个指针指向最后一个数字，向前移动。如果第一个指针指向的数字是偶数而第二个指针指向的数字是奇数，我们就交换这两个数字。
+   <strong>
+    Trie树
+   </strong>
   </p>
   <p>
-   思路有了，接下来，写代码实现：
-  </p>
-  <div class="highlight highlight-cpp">
-   <pre><span class="c1">//思路，很简答，俩指针，一首一尾  </span>
-<span class="c1">//如果第一个指针指向的数字是偶数而第二个指针指向的数字是奇数，  </span>
-<span class="c1">//我们就交换这两个数字  </span>
-
-<span class="c1">// 2 1 3 4 6 5 7   </span>
-<span class="c1">// 7 1 3 4 6 5 2  </span>
-<span class="c1">// 7 1 3 5 6 4 2  </span>
-
-<span class="c1">//如果限制空间复杂度为O（1），时间为O（N），且奇偶数之间相对顺序不变，就相当于正负数间顺序调整的那道题了。  </span>
-
-<span class="c1">//copyright@2010 zhedahht</span>
-<span class="kt">void</span> <span class="nf">Reorder</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">pData</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">length</span><span class="p">,</span> <span class="kt">bool</span> <span class="p">(</span><span class="o">*</span><span class="n">func</span><span class="p">)(</span><span class="kt">int</span><span class="p">));</span>
-<span class="kt">bool</span> <span class="nf">isEven</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">);</span>
-<span class="kt">void</span> <span class="nf">ReorderOddEven</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">pData</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">length</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">pData</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">;</span>
-
-    <span class="n">Reorder</span><span class="p">(</span><span class="n">pData</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">isEven</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="kt">void</span> <span class="nf">Reorder</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">pData</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">length</span><span class="p">,</span> <span class="kt">bool</span> <span class="p">(</span><span class="o">*</span><span class="n">func</span><span class="p">)(</span><span class="kt">int</span><span class="p">))</span>
-<span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">pData</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="o">*</span><span class="n">pBegin</span> <span class="o">=</span> <span class="n">pData</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="o">*</span><span class="n">pEnd</span> <span class="o">=</span> <span class="n">pData</span> <span class="o">+</span> <span class="n">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">pBegin</span> <span class="o">&lt;</span> <span class="n">pEnd</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="c1">// if *pBegin does not satisfy func, move forward</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">pBegin</span><span class="p">))</span>  <span class="c1">//如果是奇数, 则向后移一个位置</span>
-        <span class="p">{</span>
-            <span class="n">pBegin</span> <span class="o">++</span><span class="p">;</span>
-            <span class="k">continue</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="c1">// if *pEnd does not satisfy func, move backward</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">pEnd</span><span class="p">))</span>     <span class="c1">//如是是偶数, 则向前移一个位置</span>
-        <span class="p">{</span>
-            <span class="n">pEnd</span> <span class="o">--</span><span class="p">;</span>
-            <span class="k">continue</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="c1">// if *pBegin satisfy func while *pEnd does not,</span>
-        <span class="c1">// swap these integers</span>
-        <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="o">*</span><span class="n">pBegin</span><span class="p">;</span>
-        <span class="o">*</span><span class="n">pBegin</span> <span class="o">=</span> <span class="o">*</span><span class="n">pEnd</span><span class="p">;</span>
-        <span class="o">*</span><span class="n">pEnd</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-<span class="kt">bool</span> <span class="nf">isEven</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">n</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
-  </div>
-  <h3>
-   <a class="anchor" href="#%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95" name="user-content-%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   问题扩展
-  </h3>
-  <p>
-   细心的同学一看到上述解法二，可能会恍然大悟道，一前一后两个指针往中间扫描，这不就是快速排序中的其中一种实现么？的确如此。
+   适用范围：数据量大，重复多，但是数据种类小可以放入内存
   </p>
   <p>
-   然而，普林斯顿大学教授Robert在Coursera上讲快速排序时，他提到过Unix下的qsort有一个隐藏很久的bug，那就是当快速排序遇到大量的重复元素时，其效率会非常低下。
+   基本原理及要点：实现方式，节点孩子的表示方式
   </p>
   <p>
-   试想一下：假设每次将第一个元素设为pivot（即比较的向标），在一次partition结束后，所有小于该元素在pivot左边，所有大于该元素位于其右边。维护两个指针，beg_ptr和end_ptr，beg_ptr从左至右移动，end_ptr从右至左移动。当beg_ptr位置的元素比pivot小时，++beg_ptr；当beg_ptr位置的元素比pivot大时，比较pivot和end_ptr位置的元素，若end_ptr位置的元素比它小，则交换beg_ptr和end_ptr位置的元素，然后++beg_ptr和--end_ptr。
+   扩展：压缩实现。
   </p>
   <p>
-   在上述描述中当出现beg_ptr或end_ptr位置的元素和pivot相等时，如何操作？上述算法能保证：当pivot为5时，所有等于5的值在一次partition后都位于正确的位置上吗？
+   问题实例：
   </p>
-  <p>
-   4 3 1 3 3 5 5 5 5 5 7 8 6 9
-  </p>
-  <p>
-   显然利用上述简单的快速排序是无法实现这个目的的。提到这个问题，其实是想说明我们早就接触过奇偶排序，那就是快速排序中的partition。将上述partition中的交换规则换成奇数和偶数即是奇偶排序。
-  </p>
-  <p>
-   现在回到刚才那个问题上，即快速排序中出现很多重复的元素怎么办？Dijkstra提出了一种三向快速排序算法。三向快速排序相对于传统的快速排序其需要维护3个指针：beg_ptr, cur_ptr, end_ptr。其思想如下：
-  </p>
-  <p>
-   初始时：beg_ptr = cur_ptr指向首位，设首位是pivot, end_ptr指向末位
-  </p>
-  <p>
-   更新规则：
-  </p>
-  <ul>
+  <ol>
    <li>
-    while cur_ptr &lt;= end_ptr
+    上面的
+    <strong>
+     第2题
+    </strong>
+    ：寻找热门查询：查询串的重复度比较高，虽然总数是1千万，但如果除去重复后，不超过3百万个，每个不超过255字节。
    </li>
    <li>
-    若cur_ptr位置元素和beg_ptr位置元素相等，++cur_ptr, continue
+    上面的
+    <strong>
+     第5题
+    </strong>
+    ：有10个文件，每个文件1G，每个文件的每一行都存放的是用户的query，每个文件的query都可能重复。要你按照query的频度排序。
    </li>
    <li>
-    若cur_ptr位置的元素比beg_ptr位置元素大，swap(beg_ptr, end_ptr), --end_ptr, continue
+    1000万字符串，其中有些是相同的(重复),需要把重复的全部去掉，保留没有重复的字符串。请问怎么设计和实现？
    </li>
    <li>
-    若cur_ptr位置元素比beg_ptr位置元素小，则swap(beg_ptr, cur_ptr), ++beg_ptr, ++cur_ptr, continue
+    上面的
+    <strong>
+     第8题
+    </strong>
+    ：一个文本文件，大约有一万行，每行一个词，要求统计出其中最频繁出现的前10个词。其解决方法是：用trie树统计每个词出现的次数，时间复杂度是O(n*le)（le表示单词的平准长度），然后是找出出现最频繁的前10个词。
    </li>
-  </ul>
+  </ol>
   <p>
-   这样做以后就可以实现partition后，所有重复的pivot都在中间。这种三向快速排序的partition还可以实现一个比奇偶排序更多的功能：
-  </p>
-  <p>
-   将一个整数数组，其元素分为正数，负数和0，将正数在左边，负数在右边，0在中间（可能聪明的读者会再次恍然大悟道，咦，这不就是第二章所述的荷兰国旗问题么？是的，有兴趣进一步追究的读者可以参阅2.7节）。
-  </p>
-  <p>
-   在C++的STL中已经实现了非常通用的partition算法，在头文件中，
-  </p>
-  <div class="highlight highlight-cpp">
-   <pre><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">ForwardIterator</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Predicate</span><span class="o">&gt;</span>
-<span class="n">ForwardIterator</span> <span class="n">partition</span><span class="p">(</span><span class="n">ForwardIterator</span> <span class="n">first</span><span class="p">,</span>
-                          <span class="n">ForwardIterator</span> <span class="n">last</span><span class="p">,</span> <span class="n">Predicate</span> <span class="n">pred</span><span class="p">)</span> 
-<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">ForwardIterator</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Predicate</span><span class="o">&gt;</span>
-<span class="n">ForwardIterator</span> <span class="n">stable_partition</span><span class="p">(</span><span class="n">ForwardIterator</span> <span class="n">first</span><span class="p">,</span> <span class="n">ForwardIterator</span> <span class="n">last</span><span class="p">,</span> 
-                                 <span class="n">Predicate</span> <span class="n">pred</span><span class="p">);</span>
-</pre>
-  </div>
-  <p>
-   pred是一个仿函数或者是函数指针，其返回一个bool型变量。
-  </p>
-  <p>
-   下面用STL的partition实现一个奇偶排序：
-  </p>
-  <div class="highlight highlight-cpp">
-   <pre><span class="cp">#include&lt;iostream&gt;</span>
-<span class="cp">#include&lt;algorithm&gt;</span>
-<span class="cp">#include&lt;iterator&gt;</span>
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-
-<span class="k">struct</span> <span class="n">ODD_EVEN</span>
-<span class="p">{</span>
-    <span class="kt">bool</span> <span class="k">operator</span><span class="p">()(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">op</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="n">op</span><span class="o">&amp;</span><span class="mh">0x1</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">arr</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">};</span>
-    <span class="n">partition</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">arr</span> <span class="o">+</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span><span class="o">/</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">),</span> <span class="n">ODD_EVEN</span><span class="p">());</span>
-    <span class="n">copy</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">arr</span> <span class="o">+</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span><span class="o">/</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">),</span><span class="n">ostream_iterator</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">cout</span><span class="p">,</span> <span class="s">" "</span><span class="p">));</span>
-    <span class="k">return</span> <span class="n">EXIT_SUCCESS</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
-  </div>
-  <h3>
-   <a class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
-    <span class="octicon octicon-link">
-    </span>
+   更多有关Trie树的介绍，请参见此文：
+   <a href="http://blog.csdn.net/v_july_v/article/details/6897097">
+    从Trie树（字典树）谈到后缀树
    </a>
-   举一反三
-  </h3>
-  <p>
-   一个未排序整数数组，有正负数，重新排列使负数排在正数前面，并且要求不改变原来的正负数之间相对顺序，比如： input: 1,7,-5,9,-12,15 ans: -5,-12,1,7,9,15 要求时间复杂度O(N),空间O(1)。
-  </p>
-  <p>
-   分析：如果本题没有这个要求“并且要求不改变原来的正负数之间相对顺序”，那么同奇偶数排序是一道题，但加上这个不能改变正负数之间的相对顺序后，便使得问题变得比较艰难了，若有兴趣，读者可以参考这篇论文《STABLE MINIMUM SPACE PARTITIONING IN LINEAR TIME》。
+   。
   </p>
  </body>
 </html>
@@ -323,7 +171,7 @@
 					|
 				
 				
-					<a href="06.11.html">next</a>
+					<a href="06.08.html">next</a>
 				
 				<span style="float: right"><a href="index.html">Back to home</a>
 			</div>

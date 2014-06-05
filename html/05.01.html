@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0282bede6135e06ec35e92d06a80225f92812b0e.css" />
-  <link rel="stylesheet" href="style_cache/github2-dcf6ca6edf1a82a2dcaebf74f6b2d9eface5db5d.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
+  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,11 +105,11 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97lcs%E9%97%AE%E9%A2%98" name="user-content-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97lcs%E9%97%AE%E9%A2%98">
+   <a class="anchor" href="#%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97" name="user-content-%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97">
     <span class="octicon octicon-link">
     </span>
    </a>
-   第十一章：最长公共子序列（LCS）问题
+   最长公共子序列
   </h1>
   <h2>
    <a class="anchor" href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0" name="user-content-%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0">
@@ -131,9 +131,6 @@
    </a>
    分析与解法
   </h2>
-  <p>
-   注意最长公共子串（Longest CommonSubstring）和最长公共子序列（LongestCommon Subsequence, LCS）的区别：子串（Substring）是串的一个连续的部分，子序列（Subsequence）则是从不改变序列的顺序，而从序列中去掉任意的元素而获得的新序列；更简略地说，前者（子串）的字符的位置必须连续，后者（子序列LCS）则不必。比如字符串acdfg同akdfc的最长公共子串为df，而他们的最长公共子序列是adf。LCS可以使用动态规划法解决。下文具体描述。
-  </p>
   <h3>
    <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
     <span class="octicon octicon-link">
@@ -141,14 +138,9 @@
    </a>
    解法一
   </h3>
-  <ul>
-   <li>
-    穷举法
-    <br/>
-    解最长公共子序列问题时最容易想到的算法是穷举搜索法，即对X的每一个子序列，检查它是否也是Y的子序列，从而确定它是否为X和Y的公共子序列，并且在检查过程中选出最长的公共子序列。X和Y的所有子序列都检查过后即可求出X和Y的最长公共子序列。X的一个子序列相应于下标序列{1, 2, …, m}的一个子序列，因此，X共有2m个不同子序列（Y亦如此，如为2^n），从而穷举搜索法需要指数时间（2^m * 2^n）。
-    <br/>
-   </li>
-  </ul>
+  <p>
+   最容易想到的算法是穷举搜索法，即对X的每一个子序列，检查它是否也是Y的子序列，从而确定它是否为X和Y的公共子序列，并且在检查过程中选出最长的公共子序列。X和Y的所有子序列都检查过后即可求出X和Y的最长公共子序列。X的一个子序列相应于下标序列{1, 2, …, m}的一个子序列，因此，X共有2m个不同子序列（Y亦如此，如为2^n），从而穷举搜索法需要指数时间（2^m * 2^n）。
+  </p>
   <h3>
    <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C">
     <span class="octicon octicon-link">
@@ -156,12 +148,6 @@
    </a>
    解法二
   </h3>
-  <ul>
-   <li>
-    动态规划算法
-    <br/>
-   </li>
-  </ul>
   <p>
    事实上，最长公共子序列问题也有最优子结构性质。
   </p>
@@ -208,7 +194,7 @@
    的情况中，求LCS(Xm-1 , Y)的长度与LCS(X , Yn-1)的长度，这两个问题不是相互独立的：两者都需要求LCS(Xm-1，Yn-1)的长度。另外两个序列的LCS中包含了两个序列的前缀的LCS，故问题具有最优子结构性质考虑用动态规划法。
   </p>
   <p>
-   也就是说，解决这个LCS问题，你要求三个方面的东西：1、LCS（Xm-1，Yn-1）+1；2、LCS（Xm-1，Y），LCS（X，Yn-1）；3、max{LCS（Xm-1，Y），LCS（X，Yn-1）}。
+   也就是说，解决这个LCS问题，你要求三个方面的东西：1、LCS(Xm-1，Yn-1)+1；2、LCS(Xm-1，Y)，LCS(X，Yn-1)；3、max{LCS(Xm-1, Y)，LCS(X, Yn-1)}。
   </p>
   <h4>
    <a class="anchor" href="#%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E7%BB%93%E6%9E%84" name="user-content-%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E7%BB%93%E6%9E%84">
@@ -408,220 +394,6 @@ end;
   </p>
   <p>
    该算法的空间、时间复杂度均为O(n2)，经过优化后，空间复杂度可为O(n)，时间复杂度为O(nlogn)。
-  </p>
-  <p>
-   以下是此算法的java代码：
-  </p>
-  <div class="highlight highlight-java">
-   <pre><span class="kn">import</span> <span class="nn">java.util.Random</span><span class="o">;</span>  
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">LCS</span><span class="o">{</span>  
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>  
-
-        <span class="c1">//设置字符串长度  </span>
-        <span class="kt">int</span> <span class="n">substringLength1</span> <span class="o">=</span> <span class="mi">20</span><span class="o">;</span>  
-        <span class="kt">int</span> <span class="n">substringLength2</span> <span class="o">=</span> <span class="mi">20</span><span class="o">;</span>  <span class="c1">//具体大小可自行设置  </span>
-
-        <span class="c1">// 随机生成字符串  </span>
-        <span class="n">String</span> <span class="n">x</span> <span class="o">=</span> <span class="n">GetRandomStrings</span><span class="o">(</span><span class="n">substringLength1</span><span class="o">);</span>  
-        <span class="n">String</span> <span class="n">y</span> <span class="o">=</span> <span class="n">GetRandomStrings</span><span class="o">(</span><span class="n">substringLength2</span><span class="o">);</span>  
-
-        <span class="n">Long</span> <span class="n">startTime</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">nanoTime</span><span class="o">();</span>  
-        <span class="c1">// 构造二维数组记录子问题x[i]和y[i]的LCS的长度  </span>
-        <span class="kt">int</span><span class="o">[][]</span> <span class="n">opt</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">substringLength1</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">substringLength2</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>  
-
-        <span class="c1">// 动态规划计算所有子问题  </span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">substringLength1</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">--){</span>  
-            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">substringLength2</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span><span class="o">--){</span>  
-                <span class="k">if</span> <span class="o">(</span><span class="n">x</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">==</span> <span class="n">y</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">j</span><span class="o">))</span>  
-                    <span class="n">opt</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">opt</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>                                 <span class="c1">//参考上文我给的公式。  </span>
-                <span class="k">else</span>  
-                    <span class="n">opt</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">opt</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span><span class="o">],</span> <span class="n">opt</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]);</span>        <span class="c1">//参考上文我给的公式。  </span>
-            <span class="o">}</span>  
-        <span class="o">}</span>  
-
-        <span class="o">-------------------------------------------------------------------------------------</span>  
-
-        <span class="err">理解上段，参考上文我给的公式：</span>  
-
-        <span class="err">根据上述结论，可得到以下公式，</span>  
-
-        <span class="err">如果我们记字符串</span><span class="n">Xi</span><span class="err">和</span><span class="n">Yj</span><span class="err">的</span><span class="n">LCS</span><span class="err">的长度为</span><span class="n">c</span><span class="o">[</span><span class="n">i</span><span class="o">,</span><span class="n">j</span><span class="o">]</span><span class="err">，我们可以递归地求</span><span class="n">c</span><span class="o">[</span><span class="n">i</span><span class="o">,</span><span class="n">j</span><span class="o">]</span><span class="err">：</span>  
-
-                  <span class="o">/</span>      <span class="mi">0</span>                               <span class="k">if</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span> <span class="n">or</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span>  
-        <span class="n">c</span><span class="o">[</span><span class="n">i</span><span class="o">,</span><span class="n">j</span><span class="o">]=</span>          <span class="n">c</span><span class="o">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="o">,</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="o">]+</span><span class="mi">1</span>                    <span class="k">if</span> <span class="n">i</span><span class="o">,</span><span class="n">j</span><span class="o">&gt;</span><span class="mi">0</span> <span class="n">and</span> <span class="n">xi</span><span class="o">=</span><span class="n">xj</span>  
-                 <span class="o">/</span>       <span class="n">max</span><span class="o">(</span><span class="n">c</span><span class="o">[</span><span class="n">i</span><span class="o">,</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="o">],</span><span class="n">c</span><span class="o">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="o">,</span><span class="n">j</span><span class="o">])</span>           <span class="k">if</span> <span class="n">i</span><span class="o">,</span><span class="n">j</span><span class="o">&gt;</span><span class="mi">0</span> <span class="n">and</span> <span class="n">xi</span><span class="err">≠</span><span class="n">xj</span>  
-
-        <span class="o">-------------------------------------------------------------------------------------</span>  
-
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"substring1:"</span><span class="o">+</span><span class="n">x</span><span class="o">);</span>  
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"substring2:"</span><span class="o">+</span><span class="n">y</span><span class="o">);</span>  
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"LCS:"</span><span class="o">);</span>  
-
-        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>  
-        <span class="k">while</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">substringLength1</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">substringLength2</span><span class="o">){</span>  
-            <span class="k">if</span> <span class="o">(</span><span class="n">x</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">==</span> <span class="n">y</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">j</span><span class="o">)){</span>  
-                <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">x</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">));</span>  
-                <span class="n">i</span><span class="o">++;</span>  
-                <span class="n">j</span><span class="o">++;</span>  
-            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">opt</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">&gt;=</span> <span class="n">opt</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">])</span>  
-                <span class="n">i</span><span class="o">++;</span>  
-            <span class="k">else</span>  
-                <span class="n">j</span><span class="o">++;</span>  
-        <span class="o">}</span>  
-        <span class="n">Long</span> <span class="n">endTime</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">nanoTime</span><span class="o">();</span>  
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">" Totle time is "</span> <span class="o">+</span> <span class="o">(</span><span class="n">endTime</span> <span class="o">-</span> <span class="n">startTime</span><span class="o">)</span> <span class="o">+</span> <span class="s">" ns"</span><span class="o">);</span>  
-    <span class="o">}</span>  
-
-    <span class="c1">//取得定长随机字符串  </span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">GetRandomStrings</span><span class="o">(</span><span class="kt">int</span> <span class="n">length</span><span class="o">){</span>  
-        <span class="n">StringBuffer</span> <span class="n">buffer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuffer</span><span class="o">(</span><span class="s">"abcdefghijklmnopqrstuvwxyz"</span><span class="o">);</span>  
-        <span class="n">StringBuffer</span> <span class="n">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuffer</span><span class="o">();</span>  
-        <span class="n">Random</span> <span class="n">r</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Random</span><span class="o">();</span>  
-        <span class="kt">int</span> <span class="n">range</span> <span class="o">=</span> <span class="n">buffer</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>  
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>  
-            <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">buffer</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">r</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="n">range</span><span class="o">)));</span>  
-        <span class="o">}</span>  
-        <span class="k">return</span> <span class="n">sb</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>  
-    <span class="o">}</span>  
-<span class="o">}</span>  
-</pre>
-  </div>
-  <h3>
-   <a class="anchor" href="#%E6%94%B9%E8%BF%9B%E7%9A%84%E7%AE%97%E6%B3%95" name="user-content-%E6%94%B9%E8%BF%9B%E7%9A%84%E7%AE%97%E6%B3%95">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   改进的算法
-  </h3>
-  <p>
-   下面咱们来了解一种不同于动态规划法的一种新的求解最长公共子序列问题的方法,该算法主要是把求解公共字符串问题转化为求解矩阵L(p,m)的问题，在利用定理求解矩阵的元素过程中
-  </p>
-  <p>
-   （1）while(i &lt; k),L(k,i)=null,
-   <br/>
-   （2）while(L(k,i)=k),L(k,i+1)=L(k,i+2)=…L(k,m)=k；
-  </p>
-  <p>
-   求出每列元素，一直到发现第p+1 行都为null 时退出循环，得出矩阵L(k,m)后，B[L(1,m-p+1)]B[L(2,m-p+2)]…B[L(p,m)]即为A 和B 的LCS，其中p 为LCS 的长度。
-  </p>
-  <h4>
-   <a class="anchor" href="#%E4%B8%BB%E8%A6%81%E5%AE%9A%E4%B9%89%E5%8F%8A%E5%AE%9A%E7%90%86" name="user-content-%E4%B8%BB%E8%A6%81%E5%AE%9A%E4%B9%89%E5%8F%8A%E5%AE%9A%E7%90%86">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   主要定义及定理
-  </h4>
-  <ul>
-   <li>
-    <p>
-     定义 1 子序列(Subsequence)：给定字符串A=A[1]A[2]…A[m]，(A[i]是A 的第i 个字母，A[i]∈字符集Σ，l&lt;= i&lt;m = A ， A 表示字符串A 的长度)，字符串B 是A 的子序列是指B=A[ 1 i ]A[ 2 i ]…A[ k i ],其中1 i &lt; 2 i &lt;…&lt; k i 且k&lt;=m.
-    </p>
-   </li>
-   <li>
-    <p>
-     定义2 公共子序列(Common Subsequence)：给定字符串A、B、C，C 称为A 和B 的公共子序列是指C 既是A 的子序列，又是B 的子序列。
-    </p>
-   </li>
-   <li>
-    <p>
-     定义3 最长公共子序列(Longest Common Subsequence 简称LCS)：给定字符串A、B、C，C 称为A 和B 的最长公共子序列是指C 是A 和B 的公共子序列，且对于A 和B 的任意公共子序列D，都有D &lt;= C 。给定字符串A 和B，A =m，B =n，不妨设m&lt;=n，LCS 问题就是要求出A 和B 的LCS。
-    </p>
-   </li>
-   <li>
-    <p>
-     定义4 给定字符串A=A[1]A[2]…A[m]和字符串B=B[1]B[2]…[n]，A( 1:i)表示A 的连续子序列A[1]A[2]…A[i]，同样B(1:j)表示B 的连续子序列B[1]B[2]…[j]。Li(k)表示所有与字符串A(1:i) 有长度为k 的LCS 的字符串B(l:j) 中j 的最小值。用公式表示就是Li(k)=Minj(LCS(A(1:i)，B(l:j))=k) [3]。
-    </p>
-   </li>
-  </ul>
-  <p>
-   定理1 ∀ i∈[1，m]，有Li(l) &lt; Li(2) &lt; Li(3) &lt; … &lt; Li(m) .
-   <br/>
-   定理2 ∀i∈[l，m-1]，∀k∈[l，m]，有i 1 L + (k)&lt;= i L (k).
-   <br/>
-   定理3 ∀ i∈[l，m-1]， ∀ k∈[l，m-l]，有i L (k)&lt; i 1 L + (k+l).
-   <br/>
-   以上三个定理都不考虑Li(k)无定义的情况。
-   <br/>
-   定理4[3] i 1 L + (k)如果存在，那么它的取值必为: i 1 L + (k)=Min(j, i L (k))。这里j 是满足以下条件的最小整数:A[i+l]=B[j]且j&gt; i L (k-1)。
-  </p>
-  <p>
-   <a href="../images/11/11.3.jpg" target="_blank">
-    <img alt="" src="../images/11/11.3.jpg" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   矩阵中元素L(k，i)=Li(k)，这里(1 &lt; i &lt;= m，1 &lt; k &lt;= m)，null 表示L(k,i)不存在。当i &lt; k 时，显然L(k，i)不存在。
-  </p>
-  <p>
-   设p=Maxk(L(k ， m) ≠ null) ， 可以证明L 矩阵中L(p,m) 所在的对角线,L(1,m-p+1),L(2,m-p+2)…L(p-1,m-1),L(p,m) 所对应的子序列B[L(1,m-p+1)]B[L(2,m-p+2)]…B[L(p,m)]即为A 和B 的LCS，p 为该LCS 的长度。这样，LCS 问题的求解就转化为对m m L × 矩阵的求解。
-  </p>
-  <h4>
-   <a class="anchor" href="#%E7%AE%97%E6%B3%95%E6%80%9D%E6%83%B3" name="user-content-%E7%AE%97%E6%B3%95%E6%80%9D%E6%83%B3">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   算法思想
-  </h4>
-  <p>
-   根据定理,第一步求出第一行元素,L(1,1),L(1,2),…L(1,m),第二步求第二行,一直到发现第p+1 行都为null 为止。在计算过程中遇到i &lt; k 时,L(k,i)=null, 及L(k,i)=k时,L(k,i+1)=L(k,i+2)=…L(k,m)=k。这样,计算每行的时间复杂度为O(n),则整个时间复杂度为O(pn)。在求L 矩阵的过程中不用存储整个矩阵,只需存储当前行和上一行即可。空间复杂度为O(m+n)。
-  </p>
-  <p>
-   下面给出一个例子来说明:给定字符串A 和B，A=acdabbc，B=cddbacaba，(m= A =7，n= B =9)。按照定理给出的递推公式，求出A 和B 的L 矩阵如图2，其中的$表示NULL。
-  </p>
-  <p>
-   <a href="../images/11/11.4.jpg" target="_blank">
-    <img alt="" src="../images/11/11.4.jpg" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   则A 和B 的LCS 为B[1]B[2]B[4]B[6]=cdbc, LCS 的长度为4。
-  </p>
-  <h4>
-   <a class="anchor" href="#%E7%AE%97%E6%B3%95%E4%BC%AA%E4%BB%A3%E7%A0%81" name="user-content-%E7%AE%97%E6%B3%95%E4%BC%AA%E4%BB%A3%E7%A0%81">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   算法伪代码
-  </h4>
-  <p>
-   算法 L(A,B,L)
-   <br/>
-   输入 长度分别为m,n 的字符串A,B
-   <br/>
-   输出 A,B 的最长公共子序列LCS
-  </p>
-  <pre><code>L(A,B,L){//字符串A，B，所求矩阵L  
-  for(k=1;k&lt;=m;k++){ //m 为A 的长度  
-    for(i=1;i&lt;=m;i++){  
-      if(i&lt;k) L[k][i]=N;//i&lt;k 时,L(k,i)=null，N 代表无穷大  
-      if(L[k][i]==k)//L(k,i)=k 时,L(k,i+1)=L(k,i+2)=…L(k,m)=k  
-      for(l=i+1;l&lt;=m;l++)  
-       { L[k][l]=k;  
-         Break;}  
-      for(j=1;j&lt;=n;j++){//定理4 的实现  
-       if(A[i+1]==B[j]&amp;&amp;j&gt;L[k-1][i]){  
-        L[k][i+1]=(j&lt;L[k][i]?j:L[k][i]);  
-        break;  
-      }  
-      if(L[k][i+1]==0)  
-        L[k][i]=N;  
-     }  
-     if(L[k][m]==N)  
-      {p=k-1;break;}  
-  }  
-  p=k-1;  
-}  
-</code></pre>
-  <h4>
-   <a class="anchor" href="#%E7%BB%93%E8%AF%AD" name="user-content-%E7%BB%93%E8%AF%AD">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   结语
-  </h4>
-  <p>
-   本节主要描述区别于动态规划法的一种新的求解最长公共子序列问题的方法，在不影响精确度的前提下，提高序列匹配的速度，根据定理i 1 L + (k)=Min(j, i L (k))得出矩阵，在求解矩阵的过程中对最耗时的L(p,m)进行条件约束优化。我们在Intel(R) Core(TM)2 Quad 双核处理器、1G 内存，软件环境：windows xp 下试验结果证明，本文算法与其他经典的比对算法相比,不但能够取得准确的结果,而且速度有了较大的提高（本节参考了刘佳梅女士的论文）。
   </p>
   <h2>
    <a class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">

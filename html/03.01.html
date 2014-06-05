@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0282bede6135e06ec35e92d06a80225f92812b0e.css" />
-  <link rel="stylesheet" href="style_cache/github2-dcf6ca6edf1a82a2dcaebf74f6b2d9eface5db5d.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
+  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -104,149 +104,190 @@
 		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
 			<html>
  <body>
-  <h1>
-   <a class="anchor" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%BA%94%E7%AB%A0%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E5%AE%9E%E7%8E%B0" name="user-content-%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%BA%94%E7%AB%A0%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E5%AE%9E%E7%8E%B0">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   第二十五章：二分查找实现
-  </h1>
-  <p>
-   作者：July
-  </p>
-  <p>
-   出处：结构之法算法之道
-  </p>
   <h2>
-   <a class="anchor" href="#%E5%BC%95%E8%A8%80" name="user-content-%E5%BC%95%E8%A8%80">
+   <a class="anchor" href="#trie%E6%A0%91%E5%AD%97%E5%85%B8%E6%A0%91" name="user-content-trie%E6%A0%91%E5%AD%97%E5%85%B8%E6%A0%91">
     <span class="octicon octicon-link">
     </span>
    </a>
-   引言
+   Trie树（字典树）
   </h2>
+  <h3>
+   <a class="anchor" href="#11%E4%BB%80%E4%B9%88%E6%98%AFtrie%E6%A0%91" name="user-content-11%E4%BB%80%E4%B9%88%E6%98%AFtrie%E6%A0%91">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   1.1、什么是Trie树
+  </h3>
   <p>
-   Jon Bentley：90%以上的程序员无法正确无误的写出二分查找代码。也许很多人都早已听说过这句话，但我还是想引用《编程珠玑》上的如下几段文字：
+   Trie树，即字典树，又称单词查找树或键树，是一种树形结构，是一种哈希树的变种。典型应用是用于统计和排序大量的字符串（但不仅限于字符串），所以经常被搜索引擎系统用于文本词频统计。它的优点是：最大限度地减少无谓的字符串比较，查询效率比哈希表高。
   </p>
   <p>
-   二分查找可以解决（预排序数组的查找）问题：只要数组中包含T（即要查找的值），那么通过不断缩小包含T的范围，最终就可以找到它。一开始，范围覆盖整个数组。将数组的中间项与T进行比较，可以排除一半元素，范围缩小一半。就这样反复比较，反复缩小范围，最终就会在数组中找到T，或者确定原以为T所在的范围实际为空。对于包含N个元素的表，整个查找过程大约要经过log(2)N次比较。
+   Trie的核心思想是空间换时间。利用字符串的公共前缀来降低查询时间的开销以达到提高效率的目的。
   </p>
   <p>
-   多数程序员都觉得只要理解了上面的描述，写出代码就不难了；但事实并非如此。如果你不认同这一点，最好的办法就是放下书本，自己动手写一写。试试吧。
+   它有3个基本性质：
+  </p>
+  <ol>
+   <li>
+    根节点不包含字符，除根节点外每一个节点都只包含一个字符。
+   </li>
+   <li>
+    从根节点到某一节点，路径上经过的字符连接起来，为该节点对应的字符串。
+   </li>
+   <li>
+    每个节点的所有子节点包含的字符都不相同。
+   </li>
+  </ol>
+  <h3>
+   <a class="anchor" href="#12%E6%A0%91%E7%9A%84%E6%9E%84%E5%BB%BA" name="user-content-12%E6%A0%91%E7%9A%84%E6%9E%84%E5%BB%BA">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   1.2、树的构建
+  </h3>
+  <p>
+   举个在网上流传颇广的例子，如下：
   </p>
   <p>
-   我在贝尔实验室和IBM的时候都出过这道考题。那些专业的程序员有几个小时的时间，可以用他们选择的语言把上面的描述写出来；写出高级伪代码也可以。考试结束后，差不多所有程序员都认为自己写出了正确的程序。于是，我们花了半个钟头来看他们编写的代码经过测试用例验证的结果。几次课，一百多人的结果相差无几：90%的程序员写的程序中有bug（我并不认为没有bug的代码就正确）。
+   题目：给你100000个长度不超过10的单词。对于每一个单词，我们要判断他出没出现过，如果出现了，求第一次出现在第几个位置。
   </p>
   <p>
-   我很惊讶：在足够的时间内，只有大约10%的专业程序员可以把这个小程序写对。但写不对这个小程序的还不止这些人：高德纳在《计算机程序设计的艺术 第3卷 排序和查找》第6.2.1节的“历史与参考文献”部分指出，虽然早在1946年就有人将二分查找的方法公诸于世，但直到1962年才有人写出没有bug的二分查找程序。 ”——乔恩·本特利，《编程珠玑（第1版）》第35-36页。
+   分析：如果我们用最傻的方法，对于每一个单词，我们都要去查找它前面的单词中是否有它。那么这个算法的复杂度就是O(n^2)。显然对于100000的范围难以接受。现在我们换个思路想。假设我要查询的单词是abcd，那么在他前面的单词中，以b，c，d，f之类开头的我显然不必考虑。而只要找以a开头的中是否存在abcd就可以了。同样的，在以a开头中的单词中，我们只要考虑以b作为第二个字母的，一次次缩小范围和提高针对性，这样一个树的模型就渐渐清晰了。
   </p>
   <p>
+   假设现在有b，abc，abd，bcd，abcd，efg，hii 这6个单词，我们构建的树就是如下图这样的：
+  </p>
+  <p>
+   <a href="../images/8/8.4/1.jpg" target="_blank">
+    <img alt="" src="../images/8/8.4/1.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   如上图所示，对于每一个节点，从根遍历到他的过程就是一个单词，如果这个节点被标记为红色，就表示这个单词存在，否则不存在。
+  </p>
+  <p>
+   那么，对于一个单词，我只要顺着他从根走到对应的节点，再看这个节点是否被标记为红色就可以知道它是否出现过了。把这个节点标记为红色，就相当于插入了这个单词。
+  </p>
+  <p>
+   这样一来我们查询和插入可以一起完成，所用时间仅仅为单词长度，在这一个样例，便是10。
+  </p>
+  <p>
+   我们可以看到，trie树每一层的节点数是26^i级别的。所以为了节省空间。我们用动态链表，或者用数组来模拟动态。空间的花费，不会超过单词数×单词长度。
+  </p>
+  <h3>
+   <a class="anchor" href="#13%E5%89%8D%E7%BC%80%E6%9F%A5%E8%AF%A2" name="user-content-13%E5%89%8D%E7%BC%80%E6%9F%A5%E8%AF%A2">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   1.3、前缀查询
+  </h3>
+  <p>
+   上文中提到”比如说对于某一个单词，我们要询问它的前缀是否出现过。这样hash就不好搞了，而用trie还是很简单“。下面，咱们来看看这个前缀查询问题：
+  </p>
+  <p>
+   已知n个由小写字母构成的平均长度为10的单词,判断其中
    <strong>
-    你能正确无误的写出二分查找代码么？不妨一试。
+    是否存在某个串为另一个串的前缀子串
    </strong>
+   。下面对比3种方法：
   </p>
-  <h2>
-   <a class="anchor" href="#%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E4%BB%A3%E7%A0%81" name="user-content-%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E4%BB%A3%E7%A0%81">
+  <ol>
+   <li>
+    最容易想到的：即从字符串集中从头往后搜，看每个字符串是否为字符串集中某个字符串的前缀，复杂度为O(n^2)。
+   </li>
+   <li>
+    使用hash：我们用hash存下所有字符串的所有的前缀子串，建立存有子串hash的复杂度为O(n*len)，而查询的复杂度为O(n)* O(1)= O(n)。
+   </li>
+   <li>
+    使用trie：因为当查询如字符串abc是否为某个字符串的前缀时，显然以b,c,d....等不是以a开头的字符串就不用查找了。所以建立trie的复杂度为O(n*len)，而
+    <strong>
+     建立+查询在trie中是可以同时执行的
+    </strong>
+    ，建立的过程也就可以成为查询的过程，hash就不能实现这个功能。所以总的复杂度为O(n*len)，实际查询的复杂度也只是O(len)。（说白了，就是
+    <strong>
+     Trie树的平均高度h为len，所以Trie树的查询复杂度为O（h）=O（len）
+    </strong>
+    。好比一棵二叉平衡树的高度为logN，则其查询，插入的平均时间复杂度亦为O（logN））。
+   </li>
+  </ol>
+  <h3>
+   <a class="anchor" href="#14%E6%9F%A5%E8%AF%A2" name="user-content-14%E6%9F%A5%E8%AF%A2">
     <span class="octicon octicon-link">
     </span>
    </a>
-   二分查找代码
-  </h2>
+   1.4、查询
+  </h3>
   <p>
-   二分查找的原理想必不用多解释了，不过有一点必须提醒读者的是，二分查找是针对的排好序的数组。OK，纸上读来终觉浅，觉知此事要躬行。我先来写一份，下面是我写的一份二分查找的实现（之前去某一家公司面试也曾被叫当场实现二分查找，不过结果可能跟你一样，当时就未能完整无误写出），有任何问题或错误，恳请不吝指正：
-  </p>
-  <div class="highlight highlight-cpp">
-   <pre><span class="c1">//二分查找V0.1实现版</span>
-<span class="c1">//copyright@2011 July</span>
-
-<span class="c1">//首先要把握下面几个要点：</span>
-<span class="c1">//right = n-1 =&gt; while(left &lt;= right) =&gt; right = middle-1;</span>
-<span class="c1">//right = n   =&gt; while(left &lt;  right) =&gt; right = middle;</span>
-<span class="c1">//middle的计算不能写在while循环外，否则无法得到更新。</span>
-
-<span class="kt">int</span> <span class="nf">binary_search</span><span class="p">(</span><span class="kt">int</span> <span class="n">array</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="c1">//如果这里是int right = n 的话，那么下面有两处地方需要修改，以保证一一对应：</span>
-    <span class="c1">//1、下面循环的条件则是while(left &lt; right)</span>
-    <span class="c1">//2、循环内当 array[middle] &gt; value 的时候，right = mid</span>
-
-    <span class="k">while</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="n">right</span><span class="p">)</span>  <span class="c1">//循环条件，适时而变</span>
-    <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">middle</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="p">((</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">);</span>  <span class="c1">//防止溢出，移位也更高效。同时，每次循环都需要更新。</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">middle</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">value</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">right</span> <span class="o">=</span> <span class="n">middle</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>  <span class="c1">//right赋值，适时而变</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">middle</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">value</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">left</span> <span class="o">=</span> <span class="n">middle</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span>
-            <span class="k">return</span> <span class="n">middle</span><span class="p">;</span>
-        <span class="c1">//可能会有读者认为刚开始时就要判断相等，但毕竟数组中不相等的情况更多</span>
-        <span class="c1">//如果每次循环都判断一下是否相等，将耗费时间</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
-  </div>
-  <p>
-   简单测试下，运行结果如下所示（当然，一次测试正确不代表程序便0 bug了，且测试深度远远不够）：
+   Trie树是简单但实用的数据结构，通常用于实现字典查询。我们做即时响应用户输入的AJAX搜索框时，就是Trie开始。本质上，Trie是一颗存储多个字符串的树。相邻节点间的边代表一个字符，这样树的每条分支代表一则子串，而树的叶节点则代表完整的字符串。和普通树不同的地方是，相同的字符串前缀共享同一条分支。下面，再举一个例子。给出一组单词，inn, int, at, age, adv, ant, 我们可以得到下面的Trie：
   </p>
   <p>
-   <a href="../images/25.1.gif" target="_blank">
-    <img alt="img" src="../images/25.1.gif" style="max-width:100%;"/>
+   <a href="../images/8/8.4/2.gif" target="_blank">
+    <img alt="" src="../images/8/8.4/2.gif" style="max-width:100%;"/>
    </a>
   </p>
-  <h2>
-   <a class="anchor" href="#%E6%B5%8B%E8%AF%95" name="user-content-%E6%B5%8B%E8%AF%95">
+  <p>
+   可以看出：
+  </p>
+  <ul>
+   <li>
+    每条边对应一个字母。
+   </li>
+   <li>
+    每个节点对应一项前缀。叶节点对应最长前缀，即单词本身。
+   </li>
+   <li>
+    单词inn与单词int有共同的前缀“in”, 因此他们共享左边的一条分支，root-&gt;i-&gt;in。同理，ate, age, adv, 和ant共享前缀"a"，所以他们共享从根节点到节点"a"的边。
+   </li>
+  </ul>
+  <p>
+   查询操纵非常简单。比如要查找int，顺着路径i -&gt; in -&gt; int就找到了。
+  </p>
+  <p>
+   搭建Trie的基本算法也很简单，无非是逐一把每则单词的每个字母插入Trie。插入前先看前缀是否存在。如果存在，就共享，否则创建对应的节点和边。比如要插入单词add，就有下面几步：
+  </p>
+  <ol>
+   <li>
+    考察前缀"a"，发现边a已经存在。于是顺着边a走到节点a。
+   </li>
+   <li>
+    考察剩下的字符串"dd"的前缀"d"，发现从节点a出发，已经有边d存在。于是顺着边d走到节点ad
+   </li>
+   <li>
+    考察最后一个字符"d"，这下从节点ad出发没有边d了，于是创建节点ad的子节点add，并把边ad-&gt;add标记为d。
+   </li>
+  </ol>
+  <h3>
+   <a class="anchor" href="#15trie%E6%A0%91%E7%9A%84%E5%BA%94%E7%94%A8" name="user-content-15trie%E6%A0%91%E7%9A%84%E5%BA%94%E7%94%A8">
     <span class="octicon octicon-link">
     </span>
    </a>
-   测试
-  </h2>
+   1.5、Trie树的应用
+  </h3>
   <p>
-   也许你之前已经把二分查找实现过很多次了，但现在不妨再次测试一下。关闭所有网页，窗口，打开记事本，或者编辑器，或者直接在本文评论下，不参考上面我写的或其他任何人的程序，给自己十分钟到N个小时不等的时间，立即编写一个二分查找程序。
+   Trie树可以解决下述问题：
   </p>
   <p>
-   当然，能正确写出来不代表任何什么，不能正确写出来亦不代表什么，仅仅针对Jon Bentley的言论做一个简单的测试而已。
-  </p>
-  <h2>
-   <a class="anchor" href="#%E6%80%BB%E7%BB%93" name="user-content-%E6%80%BB%E7%BB%93">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   总结
-  </h2>
-  <p>
-   本文发表后，马上就有很多朋友自己尝试了。根据从朋友们在本文评论下留下的代码，发现出错率最高的在以下这么几个地方：
+   1、一个文本文件，大约有一万行，每行一个词，要求统计出其中最频繁出现的前10个词，请给出思想，给出时间复杂度分析。
   </p>
   <p>
-   注释里已经说得很明白了，可还是会有不少朋友犯此类的错误：
+   分析：用trie树统计每个词出现的次数，时间复杂度是O(n*le)（le表示单词的平均长度），然后是找出出现最频繁的前10个词。也可以用堆来实现（具体的操作可参考第三章、寻找最小的k个数），时间复杂度是O(n*lg10)。所以总的时间复杂度，是O(n*le)与O(n*lg10)中较大的哪一个。
   </p>
-  <pre><code>首先要把握下面几个要点：
-right = n-1 =&gt; while(left &lt;= right) =&gt; right = middle-1;
-middle的计算不能写在while循环外，否则无法得到更新。
-</code></pre>
   <p>
-   还有一个最最常犯的错误，具体可以参考
-   <a href="http://googleresearch.blogspot.com/2006/06/extra-extra-read-all-about-it-nearly.html">
-    Extra, Extra - Read All About It: Nearly All Binary Searches and Mergesorts are Broken
-   </a>
-   ，其中提到了JDK5中该BUG：
+   2、一个1G大小的一个文件，里面每一行是一个词，词的大小不超过16字节，内存限制大小是1M。返回频数最高的100个词。
   </p>
-  <pre><code>middle = (left+right)&gt;&gt;1; 这样的话left与right的值比较大的时候，其和可能溢出。
-</code></pre>
   <p>
-   这个也是错误的:
+   3、000万字符串，其中有些是重复的，需要把重复的全部去掉，保留没有重复的字符串。请怎么设计和实现？
   </p>
-  <pre><code>right = n   =&gt; while(left &lt;  right) =&gt; right = middle;
-</code></pre>
   <p>
-   如果搜索数组中不存在的数字的时候,可能会导致死循环.
-  因为最后left = middle, right = middle + 1,这样每次更新left和middle总是不变的.
+   4、本文件，大约有一万行，每行一个词，要求统计出其中最频繁出现的前10个词，请给出思想，给出时间复杂度分析。
+  </p>
+  <p>
+   5、寻找热门查询
+搜索引擎会通过日志文件把用户每次检索使用的所有检索串都记录下来，每个查询串的长度为1-255字节。假设目前有一千万个记录，这些查询串的重复读比较高，虽然总数是1千万，但是如果去除重复和，不超过3百万个。一个查询串的重复度越高，说明查询它的用户越多，也就越热门。请你统计最热门的10个查询串，要求使用的内存不能超过1G。
+   <br/>
+   (1) 请描述你解决这个问题的思路；
+   <br/>
+   (2) 请给出主要的处理流程，算法，以及算法的复杂度。
   </p>
  </body>
 </html>
@@ -254,7 +295,7 @@ middle的计算不能写在while循环外，否则无法得到更新。
 		  
 			<div id="nav">
 				
-					<a href="02.10.html">prev</a>
+					<a href="03.00.html">prev</a>
 					|
 				
 				
