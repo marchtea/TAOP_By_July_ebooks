@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
-  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-6fc7fb2a2ad956975983882a7f95b27577e851a4.css" />
+  <link rel="stylesheet" href="style_cache/github2-ade82cf93cc23c0e2691785e7976cc718fe1986f.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,7 +105,7 @@
 			<html>
  <body>
   <h2>
-   <a class="anchor" href="#%E6%9C%AC%E7%AB%A0%E5%AF%BC%E8%AF%BB" name="user-content-%E6%9C%AC%E7%AB%A0%E5%AF%BC%E8%AF%BB">
+   <a aria-hidden="true" class="anchor" href="#%E6%9C%AC%E7%AB%A0%E5%AF%BC%E8%AF%BB" name="user-content-%E6%9C%AC%E7%AB%A0%E5%AF%BC%E8%AF%BB">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -121,7 +121,7 @@
    OK，若有任何问题，欢迎随时不吝赐教。谢谢。
   </p>
   <h2>
-   <a class="anchor" href="#%E4%BD%95%E8%B0%93%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86" name="user-content-%E4%BD%95%E8%B0%93%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86">
+   <a aria-hidden="true" class="anchor" href="#%E4%BD%95%E8%B0%93%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86" name="user-content-%E4%BD%95%E8%B0%93%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -131,38 +131,44 @@
    所谓海量数据处理，无非就是基于海量数据上的存储、处理、操作。何谓海量，就是数据量太大，所以导致要么是无法在较短时间内迅速解决，要么是数据太大，导致无法一次性装入内存。
   </p>
   <p>
-   事实上，针对时间，我们可以采用巧妙的算法搭配合适的数据结构，如Bloom filter/Hash/bit-map/堆/数据库或倒排索引/trie树，针对空间，大而化小，分而治之（hash映射），也就是说规模太大的话，就把规模大化为规模小的，最终各个击破。
+   事实上，针对时间，我们可以采用巧妙的算法搭配合适的数据结构，如Bloom Filter/Hash/Bitmap/堆/数据库或倒排索引/Trie树，针对空间，大而化小，分而治之（hash映射），也就是说规模太大的话，就把规模大化为规模小的，最终各个击破。
   </p>
   <p>
-   至于所谓的单机及集群问题，通俗点来讲，单机就是处理装载数据的机器有限(只要考虑cpu，内存，硬盘的数据交互)，而集群，机器有多辆，适合分布式处理，并行计算(更多考虑节点和节点间的数据交互)。
+   至于所谓的单机及集群问题，通俗点来讲，单机就是处理装载数据的机器有限(只要考虑CPU，内存，硬盘的数据交互)，而集群，机器有多辆，适合分布式处理，并行计算(更多考虑节点和节点间的数据交互)。
   </p>
   <p>
-   一般说来，处理海量数据问题，有以下六种典型方法：
+   一般说来，处理海量数据问题，有以下十种典型方法：
   </p>
   <ol>
    <li>
-    分而治之/hash映射 + hash统计 + 堆/快速/归并排序；
-    <br/>
+    分而治之；
    </li>
    <li>
-    双层桶划分
-    <br/>
+    多层划分；
    </li>
    <li>
-    Bloom filter/Bitmap；
-    <br/>
+    Bloom Filter；
    </li>
    <li>
-    Trie树/数据库/倒排索引；
-    <br/>
+    Bitmap；
+   </li>
+   <li>
+    Trie树；
+   </li>
+   <li>
+    数据库；
+   </li>
+   <li>
+    倒排索引；
    </li>
    <li>
     外排序；
-    <br/>
    </li>
    <li>
-    分布式处理之Hadoop/Mapreduce。
-    <br/>
+    分布式处理之MapReduce；
+   </li>
+   <li>
+    simhash算法。
    </li>
   </ol>
   <p>

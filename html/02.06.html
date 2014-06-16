@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
-  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-6fc7fb2a2ad956975983882a7f95b27577e851a4.css" />
+  <link rel="stylesheet" href="style_cache/github2-ade82cf93cc23c0e2691785e7976cc718fe1986f.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,246 +105,120 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#%E6%9C%80%E5%A4%A7%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C" name="user-content-%E6%9C%80%E5%A4%A7%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C">
+   <a aria-hidden="true" class="anchor" href="#%E8%8D%B7%E5%85%B0%E5%9B%BD%E6%97%97" name="user-content-%E8%8D%B7%E5%85%B0%E5%9B%BD%E6%97%97">
     <span class="octicon octicon-link">
     </span>
    </a>
-   最大连续子数组和
+   荷兰国旗
   </h1>
-  <h2>
-   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
     <span class="octicon octicon-link">
     </span>
    </a>
    题目描述
-  </h2>
+  </h3>
   <p>
-   输入一个整形数组，数组里有正数也有负数。数组中连续的一个或多个整数组成一个子数组，每个子数组都有一个和。
-求所有子数组的和的最大值，要求时间复杂度为O(n)。
+   现有n个红白蓝三种不同颜色的小球，乱序排列在一起，请通过两两交换任意两个球，使得从左至右，依次是一些红球、一些白球、一些蓝球。
   </p>
   <p>
-   例如输入的数组为
-   <code>
-    1, -2, 3, 10, -4, 7, 2, -5
-   </code>
-   ，和最大的子数组为
-   <code>
-    3, 10, -4, 7, 2
-   </code>
-   ，
-因此输出为该子数组的和18。
+   这个问题之所以叫
+   <strong>
+    荷兰国旗
+   </strong>
+   ，是因为我们可以将红白蓝三色小球想象成条状物，有序排列后正好组成荷兰国旗。如下图所示：
   </p>
-  <h2>
-   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+  <p>
+   <a href="../images/41%7E42/41.1.jpg" target="_blank">
+    <img alt="img" src="../images/41%7E42/41.1.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
     <span class="octicon octicon-link">
     </span>
    </a>
    分析与解法
-  </h2>
-  <h3>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80%E6%9A%B4%E5%8A%9B%E5%BE%AA%E7%8E%AF" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80%E6%9A%B4%E5%8A%9B%E5%BE%AA%E7%8E%AF">
+  </h3>
+  <p>
+   初看此题，我们貌似除了暴力解决并无好的办法，但联想到我们所熟知的快速排序算法呢？
+  </p>
+  <p>
+   我们知道，快速排序依托于一个partition分治过程，在每一趟排序的过程中，选取的主元都会把整个数组排列成一大一小的部分，那我们是否可以借鉴partition过程设定三个指针完成重新排列，使得所有球排列成三个不同颜色的球呢？
+  </p>
+  <h4>
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
     <span class="octicon octicon-link">
     </span>
    </a>
-   解法一：暴力循环
-  </h3>
+   解法一
+  </h4>
   <p>
-   求一个数组的最大子数组和，如此序列
-   <code>
-    1, -2, 3, 10, -4, 7, 2, -5
-   </code>
-   ，我想最最直观也是最野蛮的办法便是，三个for循环三层遍历，求出数组中每一个子数组的和，最终求出这些子数组的最大的一个值。
-currSum[i, …, j]为数组A中第i个元素到第j个元素的和（其中0 &lt;= i &lt;= j &lt; n），currSum[i, …, j]，那么时间复杂度为O(N^3)：
+   通过前面的分析得知，这个问题类似快排中partition过程，只是需要用到三个指针：一个前指针begin，一个中指针current，一个后指针end，current指针遍历整个数组序列，当
   </p>
-  <div class="highlight highlight-c">
-   <pre><span class="kt">int</span> <span class="nf">MaxSubArray</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">A</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">maxSum</span> <span class="o">=</span> <span class="o">-</span><span class="n">INF</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">currSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="n">j</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="n">currSum</span> <span class="o">+=</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">];</span>
-            <span class="p">}</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">currSum</span> <span class="o">&gt;</span> <span class="n">maxSum</span><span class="p">)</span>
-                <span class="n">maxSum</span> <span class="o">=</span> <span class="n">currSum</span><span class="p">;</span>
-
-            <span class="n">currSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">//这里要记得清零，否则的话sum最终存放的是所有子数组的和。</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">maxSum</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
-  </div>
-  <h3>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8Con%E9%81%8D%E5%8E%86" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8Con%E9%81%8D%E5%8E%86">
-    <span class="octicon octicon-link">
-    </span>
+  <ol>
+   <li>
+    current指针所指元素为0时，与begin指针所指的元素交换，而后current++，begin++ ；
+   </li>
+   <li>
+    current指针所指元素为1时，不做任何交换（即球不动），而后current++ ；
+   </li>
+   <li>
+    current指针所指元素为2时，与end指针所指的元素交换，而后，current指针不动，end-- 。
+   </li>
+  </ol>
+  <p>
+   为什么上述第3点中，current指针所指元素为2时，与end指针所指元素交换之后，current指针不能动呢？因为第三步中current指针所指元素与end指针所指元素交换之前，如果end指针之前指的元素是0，那么与current指针所指元素交换之后，current指针此刻所指的元素是0，此时，current指针能动么？不能动，因为如上述第1点所述，如果current指针所指的元素是0，还得与begin指针所指的元素交换。
+  </p>
+  <p>
+   ok，说这么多，你可能不甚明了，直接引用下gnuhpc的图，就一目了然了：
+  </p>
+  <p>
+   <a href="../images/41%7E42/41.3.jpg" target="_blank">
+    <img alt="img" src="../images/41%7E42/41.3.jpg" style="max-width:100%;"/>
    </a>
-   解法二：O(N)遍历
-  </h3>
-  <p>
-   当全是负数的情况时，我们可以让程序返回0，也可以让程序返回最大的那个负数，这里，我们让程序返回最大的那个负数，参考代码如下：
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="kt">int</span> <span class="nf">MaxSubArray</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">maxSum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>       <span class="c1">//全负情况，返回最大数</span>
-    <span class="kt">int</span> <span class="n">currSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">currSum</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>    <span class="c1">//如果加上某个元素，sum&gt;=0的话，就加</span>
-            <span class="n">currSum</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
-        <span class="k">else</span>
-            <span class="n">currSum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>  <span class="c1">//如果加上某个元素，sum&lt;0了，就不加</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">currSum</span> <span class="o">&gt;</span> <span class="n">maxSum</span><span class="p">)</span>
-            <span class="n">maxSum</span> <span class="o">=</span> <span class="n">currSum</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">maxSum</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
-  </div>
-  <p>
-   解释下：
-例如输入的数组为1, -2, 3, 10, -4, 7, 2, -5，
-那么最大的子数组为3, 10, -4, 7, 2，
-因此输出为该子数组的和18。
-  </p>
-  <p>
-   所有的东西都在以下俩行，
-即：
-  </p>
-  <ul>
-   <li>
-    currSum：   0  1 - 1  3  13   9  16  18  13
-   </li>
-   <li>
-    maxSum ：  0  1   1  3  13  13  16  18  18
-   </li>
-  </ul>
-  <p>
-   其实算法很简单，当前面的几个数，加起来后，currSum&lt;0后，
-把currSum重新赋值，置为下一个元素，currSum = a[i]。
-  </p>
-  <ul>
-   <li>
-    当currSum &gt; maxSum，则更新maxSum = currSum;
-   </li>
-   <li>
-    若currSum &lt; maxSum，则maxSum保持原值，不更新。
-   </li>
-  </ul>
-  <h3>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%89%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%89%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92">
-    <span class="octicon octicon-link">
-    </span>
+   <a href="https://camo.githubusercontent.com/39648f0f0b2a257306d5560958a2d79a5d5367a8/687474703a2f2f68692e6373646e2e6e65742f6174746163686d656e742f3230313130322f32352f383339343332335f31323938363431323235654a34462e6a7067" target="_blank">
+    <img alt="img" data-canonical-src="http://hi.csdn.net/attachment/201102/25/8394323_1298641225eJ4F.jpg" src="https://camo.githubusercontent.com/39648f0f0b2a257306d5560958a2d79a5d5367a8/687474703a2f2f68692e6373646e2e6e65742f6174746163686d656e742f3230313130322f32352f383339343332335f31323938363431323235654a34462e6a7067" style="max-width:100%;"/>
    </a>
-   解法三：动态规划
-  </h3>
-  <p>
-   currSum[i] 为前i个元素中，包含第i个元素且和最大的连续子数组，result 为已找到的子数组中和最大的。
-对第i+1个元素有两种选择：
   </p>
-  <ul>
-   <li>
-    做为新子数组的第一个元素；
-   </li>
-   <li>
-    放入前面找到的子数组。
-   </li>
-  </ul>
-  <pre><code>currSum[i+1] = max(a[i+1], currSum[i] + a[i+1])
-maxSum = max(maxSum, currSum[i])
-</code></pre>
   <p>
    参考代码如下：
   </p>
-  <div class="highlight highlight-c">
-   <pre><span class="kt">int</span> <span class="nf">MaxSubArray</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">nullptr</span> <span class="o">||</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+  <div class="highlight highlight-cpp">
+   <pre><span class="c1">//引用自gnuhpc  </span>
+<span class="k">while</span><span class="p">(</span> <span class="n">current</span><span class="o">&lt;=</span><span class="n">end</span> <span class="p">)</span>        
+<span class="p">{</span>             
+  <span class="k">if</span><span class="p">(</span> <span class="n">array</span><span class="p">[</span><span class="n">current</span><span class="p">]</span> <span class="o">==</span><span class="mi">0</span> <span class="p">)</span>             
+   <span class="p">{</span>                 
+      <span class="n">swap</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">current</span><span class="p">],</span><span class="n">array</span><span class="p">[</span><span class="n">begin</span><span class="p">]);</span>                  
+      <span class="n">current</span><span class="o">++</span><span class="p">;</span>                  
+      <span class="n">begin</span><span class="o">++</span><span class="p">;</span>            
+   <span class="p">}</span>             
+   <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="n">array</span><span class="p">[</span><span class="n">current</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">)</span>            
+   <span class="p">{</span>                 
+      <span class="n">current</span><span class="o">++</span><span class="p">;</span>            
+   <span class="p">}</span>   
 
-    <span class="kt">int</span> <span class="n">currSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">maxSum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>       <span class="c1">//全负情况，返回最大数</span>
-
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">currSum</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">currSum</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">?</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">:</span> <span class="n">currSum</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
-        <span class="n">maxSum</span> <span class="o">=</span> <span class="p">(</span><span class="n">maxSum</span> <span class="o">&gt;</span> <span class="n">currSum</span><span class="p">)</span> <span class="o">?</span> <span class="n">maxSum</span> <span class="o">:</span> <span class="n">currSum</span><span class="p">;</span>
-
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">maxSum</span><span class="p">;</span>
-<span class="p">}</span>
+   <span class="k">else</span> <span class="c1">//When array[current] =2   </span>
+   <span class="p">{</span>               
+      <span class="n">swap</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">current</span><span class="p">],</span><span class="n">array</span><span class="p">[</span><span class="n">end</span><span class="p">]);</span>                
+      <span class="n">end</span><span class="o">--</span><span class="p">;</span>            
+   <span class="p">}</span>      
+<span class="p">}</span>  
 </pre>
   </div>
-  <h2>
-   <a class="anchor" href="#%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95" name="user-content-%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   问题扩展
-  </h2>
-  <ol>
-   <li>
-    如果数组是二维数组，同样要你求最大子数组的和列?
-   </li>
-   <li>
-    如果是要你求子数组的最大乘积列?
-   </li>
-   <li>
-    如果同时要求输出子段的开始和结束列?
-   </li>
-  </ol>
-  <h2>
-   <a class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
     <span class="octicon octicon-link">
     </span>
    </a>
    举一反三
-  </h2>
+  </h3>
   <p>
-   1 给定整型数组，其中每个元素表示木板的高度，木板的宽度都相同，求这些木板拼出的最大矩形的面积。并分析时间复杂度。
+   给定一个字符串里面只有"R" "G" "B" 三个字符，请排序，最终结果的顺序是R在前 G中 B在后。
   </p>
   <p>
-   此题类似leetcode里面关于连通器的题，需要明确的是高度可能为0，长度最长的矩形并不一定是最大矩形，还需要考虑高度很高，但长度较短的矩形。如[5,4,3,2,4,5,0,7,8,4,6]中最大矩形的高度是[7,8,4,6]组成的矩形，面积为16。
-  </p>
-  <p>
-   2、环面上的最大子矩形
-  </p>
-  <p>
-   《算法竞赛入门经典》 P89 页。
-  </p>
-  <p>
-   3、最大子矩阵和
-  </p>
-  <p>
-   一个M*N的矩阵，找到此矩阵的一个子矩阵，并且这个子矩阵的元素的和是最大的，输出这个最大的值。如果所有数都是负数，就输出0。
-例如：3*5的矩阵：
-  </p>
-  <p>
-   1 2 0 3 4
-  </p>
-  <p>
-   2 3 4 5 1
-  </p>
-  <p>
-   1 1 5 3 0
-  </p>
-  <p>
-   和最大的子矩阵是：
-  </p>
-  <p>
-   4 5
-  </p>
-  <p>
-   5 3
-  </p>
-  <p>
-   最后输出和的最大值17。
+   要求：空间复杂度是O(1)，且只能遍历一次字符串。
   </p>
  </body>
 </html>

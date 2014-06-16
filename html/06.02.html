@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
-  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-6fc7fb2a2ad956975983882a7f95b27577e851a4.css" />
+  <link rel="stylesheet" href="style_cache/github2-ade82cf93cc23c0e2691785e7976cc718fe1986f.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -104,790 +104,425 @@
 		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
 			<html>
  <body>
-  <h1>
-   <a class="anchor" href="#hash%E8%A1%A8%E7%AE%97%E6%B3%95" name="user-content-hash%E8%A1%A8%E7%AE%97%E6%B3%95">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   hash表算法
-  </h1>
   <h2>
-   <a class="anchor" href="#%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86top-k-%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3" name="user-content-%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86top-k-%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3">
+   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E8%80%8C%E6%B2%BB%E4%B9%8B" name="user-content-%E5%88%86%E8%80%8C%E6%B2%BB%E4%B9%8B">
     <span class="octicon octicon-link">
     </span>
    </a>
-   第一部分：Top K 算法详解
-  </h2>
-  <h4>
-   <a class="anchor" href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0" name="user-content-%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   问题描述
-  </h4>
-  <p>
-   百度面试题：
-  </p>
-  <p>
-   搜索引擎会通过日志文件把用户每次检索使用的所有检索串都记录下来，每个查询串的长度为1-255字节。
-假设目前有一千万个记录（这些查询串的重复度比较高，虽然总数是1千万，但如果除去重复后，不超过3百万个。一个查询串的重复度越高，说明查询它的用户越多，也就是越热门。），请你统计最热门的10个查询串，要求使用的内存不能超过1G。
-  </p>
-  <h4>
-   <a class="anchor" href="#%E5%BF%85%E5%A4%87%E7%9F%A5%E8%AF%86" name="user-content-%E5%BF%85%E5%A4%87%E7%9F%A5%E8%AF%86">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   必备知识
-  </h4>
-  <p>
-   什么是哈希表？
-  </p>
-  <p>
-   哈希表（Hash table，也叫散列表），是根据关键码值(Key value)而直接进行访问的数据结构。也就是说，它通过把关键码值映射到表中一个位置来访问记录，以加快查找的速度。这个映射函数叫做散列函数，存放记录的数组叫做散列表。
-  </p>
-  <p>
-   哈希表hashtable(key，value) 的做法其实很简单，就是把Key通过一个固定的算法函数既所谓的哈希函数转换成一个整型数字，然后就将该数字对数组长度进行取余，取余结果就当作数组的下标，将value存储在以该数字为下标的数组空间里。
-  </p>
-  <p>
-   而当使用哈希表进行查询的时候，就是再次使用哈希函数将key转换为对应的数组下标，并定位到该空间获取value，如此一来，就可以充分利用到数组的定位性能进行数据定位（文章第二、三部分，会针对Hash表详细阐述）。
-  </p>
-  <p>
-   问题解析：
-  </p>
-  <p>
-   要统计最热门查询，首先就是要统计每个Query出现的次数，然后根据统计结果，找出Top 10。所以我们可以基于这个思路分两步来设计该算法。
-  </p>
-  <p>
-   即，此问题的解决分为以下
-   <strong>
-    俩个步骤：
-   </strong>
-  </p>
-  <h3>
-   <a class="anchor" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5query%E7%BB%9F%E8%AE%A1" name="user-content-%E7%AC%AC%E4%B8%80%E6%AD%A5query%E7%BB%9F%E8%AE%A1">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   <strong>
-    第一步：Query统计
-   </strong>
-  </h3>
-  <p>
-   Query统计有以下俩个方法，可供选择：
-  </p>
-  <p>
-   <strong>
-    1、直接排序法
-   </strong>
-  </p>
-  <p>
-   首先我们最先想到的的算法就是排序了，首先对这个日志里面的所有Query都进行排序，然后再遍历排好序的Query，统计每个Query出现的次数了。
-  </p>
-  <p>
-   但是题目中有明确要求，那就是内存不能超过1G，一千万条记录，每条记录是255Byte，很显然要占据2.375G内存，这个条件就不满足要求了。
-  </p>
-  <p>
-   让我们回忆一下数据结构课程上的内容，当数据量比较大而且内存无法装下的时候，我们可以采用外排序的方法来进行排序，这里我们可以采用归并排序，因为归并排序有一个比较好的时间复杂度O(NlgN)。
-  </p>
-  <p>
-   排完序之后我们再对已经有序的Query文件进行遍历，统计每个Query出现的次数，再次写入文件中。
-  </p>
-  <p>
-   综合分析一下，排序的时间复杂度是O(NlgN)，而遍历的时间复杂度是O(N)，因此该算法的总体时间复杂度就是O(N+NlgN)=O（NlgN）。
-  </p>
-  <p>
-   <strong>
-    2、Hash Table法
-   </strong>
-  </p>
-  <p>
-   在第1个方法中，我们采用了排序的办法来统计每个Query出现的次数，时间复杂度是NlgN，那么能不能有更好的方法来存储，而时间复杂度更低呢？
-  </p>
-  <p>
-   题目中说明了，虽然有一千万个Query，但是由于重复度比较高，因此事实上只有300万的Query，每个Query255Byte，因此我们可以考虑把他们都放进内存中去，而现在只是需要一个合适的数据结构，在这里，Hash Table绝对是我们优先的选择，因为Hash Table的查询速度非常的快，几乎是O(1)的时间复杂度。
-  </p>
-  <p>
-   那么，我们的算法就有了：维护一个Key为Query字串，Value为该Query出现次数的HashTable，每次读取一个Query，如果该字串不在Table中，那么加入该字串，并且将Value值设为1；如果该字串在Table中，那么将该字串的计数加一即可。最终我们在O(N)的时间复杂度内完成了对该海量数据的处理。
-  </p>
-  <p>
-   本方法相比算法1：在时间复杂度上提高了一个数量级，为O（N），但不仅仅是时间复杂度上的优化，该方法只需要IO数据文件一次，而算法1的IO次数较多的，因此该算法2比算法1在工程上有更好的可操作性。
-  </p>
-  <h3>
-   <a class="anchor" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E6%89%BE%E5%87%BAtop-10" name="user-content-%E7%AC%AC%E4%BA%8C%E6%AD%A5%E6%89%BE%E5%87%BAtop-10">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   <strong>
-    第二步：找出Top 10
-   </strong>
-  </h3>
-  <p>
-   <strong>
-    算法一：普通排序
-   </strong>
-  </p>
-  <p>
-   我想对于排序算法大家都已经不陌生了，这里不在赘述，我们要注意的是排序算法的时间复杂度是NlgN，在本题目中，三百万条记录，用1G内存是可以存下的。
-  </p>
-  <p>
-   <strong>
-    算法二：部分排序
-   </strong>
-  </p>
-  <p>
-   题目要求是求出Top 10，因此我们没有必要对所有的Query都进行排序，我们只需要维护一个10个大小的数组，初始化放入10个Query，按照每个Query的统计次数由大到小排序，然后遍历这300万条记录，每读一条记录就和数组最后一个Query对比，如果小于这个Query，那么继续遍历，否则，将数组中最后一条数据淘汰，加入当前的Query。最后当所有的数据都遍历完毕之后，那么这个数组中的10个Query便是我们要找的Top10了。
-  </p>
-  <p>
-   不难分析出，这样，算法的最坏时间复杂度是N*K， 其中K是指top多少。
-  </p>
-  <p>
-   <strong>
-    算法三：堆
-   </strong>
-  </p>
-  <p>
-   在算法二中，我们已经将时间复杂度由NlogN优化到NK，不得不说这是一个比较大的改进了，可是有没有更好的办法呢？
-  </p>
-  <p>
-   分析一下，在算法二中，每次比较完成之后，需要的操作复杂度都是K，因为要把元素插入到一个线性表之中，而且采用的是顺序比较。这里我们注意一下，该数组是有序的，一次我们每次查找的时候可以采用二分的方法查找，这样操作的复杂度就降到了logK，可是，随之而来的问题就是数据移动，因为移动数据次数增多了。不过，这个算法还是比算法二有了改进。
-  </p>
-  <p>
-   基于以上的分析，我们想想，有没有一种既能快速查找，又能快速移动元素的数据结构呢？回答是肯定的，那就是堆。
-  </p>
-  <p>
-   借助堆结构，我们可以在log量级的时间内查找和调整/移动。因此到这里，我们的算法可以改进为这样，维护一个K(该题目中是10)大小的小根堆，然后遍历300万的Query，
-   <strong>
-    分别和根元素进行对比。
-   </strong>
-  </p>
-  <p>
-   具体过程是，堆顶存放的是整个堆中最小的数，现在遍历N个数，把最先遍历到的k个数存放到最小堆中，并假设它们就是我们要找的最大的k个数，X1&gt;X2...Xmin(堆顶)，而后遍历后续的N-K个数，一一与堆顶元素进行比较，如果遍历到的Xi大于堆顶元素Xmin，则把Xi放入堆中，而后更新整个堆，更新的时间复杂度为logK，如果Xi&lt;Xmin，则不更新堆，整个过程的复杂度为O(K)+O(（N-K）*logK)=O（N*logK）。
-  </p>
-  <p>
-   （堆排序的3D动画演示可以参看此链接：
-   <a href="http://www.benfrederickson.com/2013/10/10/heap-visualization.html">
-    http://www.benfrederickson.com/2013/10/10/heap-visualization.html
-   </a>
-   ）
-  </p>
-  <p>
-   思想与上述算法二一致，只是算法在算法三，我们采用了最小堆这种数据结构代替数组，把查找目标元素的时间复杂度有O（K）降到了O（logK）。
-  </p>
-  <p>
-   那么这样，采用堆数据结构，算法三，最终的时间复杂度就降到了N‘logK，和算法二相比，又有了比较大的改进。
-  </p>
-  <h3>
-   <a class="anchor" href="#%E6%80%BB%E7%BB%93" name="user-content-%E6%80%BB%E7%BB%93">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   <strong>
-    总结：
-   </strong>
-  </h3>
-  <p>
-   至此，算法就完全结束了，经过上述第一步、先用Hash表统计每个Query出现的次数，O（N）；然后第二步、采用堆数据结构找出Top 10，N*O（logK）。所以，我们最终的时间复杂度是：O（N） + N'*O（logK）。（N为1000万，N’为300万）。如果各位有什么更好的算法，欢迎留言评论。
-  </p>
-  <p>
-   此外，还可以看下此文第二部分的第二题：
-   <a href="08.01.html">
-    教你如何迅速秒杀掉：99%的海量数据处理面试题
-   </a>
-  </p>
-  <h2>
-   <a class="anchor" href="#%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86hash%E8%A1%A8-%E7%AE%97%E6%B3%95%E7%9A%84%E8%AF%A6%E7%BB%86%E8%A7%A3%E6%9E%90" name="user-content-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86hash%E8%A1%A8-%E7%AE%97%E6%B3%95%E7%9A%84%E8%AF%A6%E7%BB%86%E8%A7%A3%E6%9E%90">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   第二部分、Hash表 算法的详细解析
+   分而治之
   </h2>
   <h3>
-   <a class="anchor" href="#%E4%BB%80%E4%B9%88%E6%98%AFhash" name="user-content-%E4%BB%80%E4%B9%88%E6%98%AFhash">
+   <a aria-hidden="true" class="anchor" href="#%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D" name="user-content-%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D">
     <span class="octicon octicon-link">
     </span>
    </a>
-   <strong>
-    什么是Hash
-   </strong>
+   方法介绍
   </h3>
   <p>
-   Hash，一般翻译做“散列”，也有直接音译为“哈希”的，就是把任意长度的输入（又叫做预映射， pre-image），通过散列算法，变换成固定长度的输出，该输出就是散列值。这种转换是一种压缩映射，也就是，散列值的空间通常远小于输入的空间，不同的输入可能会散列成相同的输出，而不可能从散列值来唯一的确定输入值。简单的说就是一种将任意长度的消息压缩到某一固定长度的消息摘要的函数。
+   对于海量数据而言，由于无法一次性装进内存处理，导致我们不得不把海量的数据通过hash映射分割成相应的小块数据，然后再针对各个小块数据通过hash_map进行统计或其它操作。
   </p>
   <p>
-   HASH主要用于信息安全领域中加密算法，它把一些不同长度的信息转化成杂乱的128位的编码,这些编码值叫做HASH值. 也可以说，hash就是找到一种数据内容和数据存放地址之间的映射关系。
-  </p>
-  <p>
-   数组的特点是：寻址容易，插入和删除困难；而链表的特点是：寻址困难，插入和删除容易。那么我们能不能综合两者的特性，做出一种寻址容易，插入删除也容易的数据结构？答案是肯定的，这就是我们要提起的哈希表，哈希表有多种不同的实现方法，我接下来解释的是最常用的一种方法——拉链法，我们可以理解为“链表的数组”，如图：
-  </p>
-  <p>
-   <a href="../images/7/7.3.1.jpg" target="_blank">
-    <img alt="" src="../images/7/7.3.1.jpg" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   左边很明显是个数组，数组的每个成员包括一个指针，指向一个链表的头，当然这个链表可能为空，也可能元素很多。我们根据元素的一些特征把元素分配到不同的链表中去，也是根据这些特征，找到正确的链表，再从链表中找出这个元素。
-  </p>
-  <p>
-   元素特征转变为数组下标的方法就是散列法。散列法当然不止一种，下面列出三种比较常用的：
-  </p>
-  <p>
-   <strong>
-    1，除法散列法
-   </strong>
-  </p>
-  <p>
-   最直观的一种，上图使用的就是这种散列法，公式：
-  </p>
-  <p>
-   index = value % 16
-  </p>
-  <p>
-   学过汇编的都知道，求模数其实是通过一个除法运算得到的，所以叫“除法散列法”。
-  </p>
-  <p>
-   <strong>
-    2，平方散列法
-   </strong>
-  </p>
-  <p>
-   求index是非常频繁的操作，而乘法的运算要比除法来得省时（对现在的CPU来说，估计我们感觉不出来），所以我们考虑把除法换成乘法和一个位移操作。公式：
-  </p>
-  <p>
-   index = (value * value) &gt;&gt; 28   （右移，除以2^28。记法：左移变大，是乘。右移变小，是除。）
-  </p>
-  <p>
-   如果数值分配比较均匀的话这种方法能得到不错的结果，但我上面画的那个图的各个元素的值算出来的index都是0——非常失败。也许你还有个问题，value如果很大，value * value不会溢出吗？答案是会的，但我们这个乘法不关心溢出，因为我们根本不是为了获取相乘结果，而是为了获取index。
-  </p>
-  <p>
-   <strong>
-    3，斐波那契（Fibonacci）散列法
-   </strong>
-  </p>
-  <p>
-   平方散列法的缺点是显而易见的，所以我们能不能找出一个理想的乘数，而不是拿value本身当作乘数呢？答案是肯定的。
-  </p>
-  <ol>
-   <li>
-    对于16位整数而言，这个乘数是40503
-   </li>
-   <li>
-    对于32位整数而言，这个乘数是2654435769
-   </li>
-   <li>
-    对于64位整数而言，这个乘数是11400714819323198485
-   </li>
-  </ol>
-  <p>
-   这几个“理想乘数”是如何得出来的呢？这跟一个法则有关，叫黄金分割法则，而描述黄金分割法则的最经典表达式无疑就是著名的斐波那契数列，即如此形式的序列：0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610， 987, 1597, 2584, 4181, 6765, 10946，…。另外，斐波那契数列的值和太阳系八大行星的轨道半径的比例出奇吻合。
-  </p>
-  <p>
-   对我们常见的32位整数而言，公式：
-  </p>
-  <p>
-   index = (value * 2654435769) &gt;&gt; 28
-  </p>
-  <p>
-   如果用这种斐波那契散列法的话，那上面的图就变成这样了：
-  </p>
-  <p>
-   <a href="../images/7/7.3.2.jpg" target="_blank">
-    <img alt="" src="../images/7/7.3.2.jpg" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   注：用斐波那契散列法调整之后会比原来的取摸散列法好很多。
+   那什么是hash映射呢？简单来说，就是为了便于计算机在有限的内存中处理big数据，我们通过一种映射散列的方式让数据均匀分布在对应的内存位置(如大数据通过取余的方式映射成小数存放在内存中，或大文件映射成多个小文件)，而这个映射散列方式便是我们通常所说的hash函数，设计的好的hash函数能让数据均匀分布而减少冲突。
   </p>
   <h3>
-   <a class="anchor" href="#%E9%80%82%E7%94%A8%E8%8C%83%E5%9B%B4" name="user-content-%E9%80%82%E7%94%A8%E8%8C%83%E5%9B%B4">
+   <a aria-hidden="true" class="anchor" href="#%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B" name="user-content-%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B">
     <span class="octicon octicon-link">
     </span>
    </a>
-   <strong>
-    适用范围
-   </strong>
+   问题实例
   </h3>
   <p>
-   快速查找，删除的基本数据结构，通常需要总数据量可以放入内存。
+   <strong>
+    1、海量日志数据，提取出某日访问百度次数最多的那个IP
+   </strong>
+  </p>
+  <p>
+   <strong>
+    分析
+   </strong>
+   ：百度作为国内第一大搜索引擎，每天访问它的IP数量巨大，如果想一次性把所有IP数据装进内存处理，则内存容量明显不够，故针对数据太大，内存受限的情况，可以把大文件转化成（取模映射）小文件，从而大而化小，逐个处理。
+  </p>
+  <p>
+   换言之，先映射，而后统计，最后排序。
+  </p>
+  <p>
+   <strong>
+    解法
+   </strong>
+   ：具体分为以下3个步骤
+  </p>
+  <ul>
+   <li>
+    1.分而治之/hash映射
+    <ul>
+     <li>
+      首先把这一天访问百度日志的所有IP提取出来，然后逐个写入到一个大文件中，接着采用映射的方法，比如%1000，把整个大文件映射为1000个小文件。
+     </li>
+    </ul>
+   </li>
+   <li>
+    2.hash_map统计
+    <ul>
+     <li>
+      当大文件转化成了小文件，那么我们便可以采用hash_map(ip, value)来分别对1000个小文件中的IP进行频率统计，再找出每个小文件中出现频率最大的IP。
+     </li>
+    </ul>
+   </li>
+   <li>
+    3.堆/快速排序
+    <ul>
+     <li>
+      统计出1000个频率最大的IP后，依据各自频率的大小进行排序(可采取堆排序)，找出那个频率最大的IP，即为所求。
+     </li>
+    </ul>
+   </li>
+  </ul>
+  <p>
+   <strong>
+    注
+   </strong>
+   ：Hash取模是一种等价映射，不会存在同一个元素分散到不同小文件中去的情况，即这里采用的是%1000算法，那么同一个IP在hash后，只可能落在同一个文件中，不可能被分散的。
+  </p>
+  <p>
+   <strong>
+    2、寻找热门查询，300万个查询字符串中统计最热门的10个查询
+   </strong>
+  </p>
+  <p>
+   <strong>
+    原题
+   </strong>
+   ：搜索引擎会通过日志文件把用户每次检索使用的所有检索串都记录下来，每个查询串的长度为1-255字节。假设目前有一千万个记录，请你统计最热门的10个查询串，要求使用的内存不能超过1G。
+  </p>
+  <p>
+   <strong>
+    分析
+   </strong>
+   ：这些查询串的重复度比较高，虽然总数是1千万，但如果除去重复后，不超过3百万个。一个查询串的重复度越高，说明查询它的用户越多，也就是越热门。
+  </p>
+  <p>
+   由上面第1题，我们知道，数据大则划为小的，例如一亿个ip求Top 10，可先%1000将ip分到1000个小文件中去，并保证一种ip只出现在一个文件中，再对每个小文件中的ip进行hash_map统计并按数量排序，最后归并或者最小堆依次处理每个小文件的top10以得到最后的结果。
+  </p>
+  <p>
+   但对于本题，数据规模比较小，能一次性装入内存。因为根据题目描述，虽然有一千万个Query，但是由于重复度比较高，故去除重复后，事实上只有300万的Query，每个Query255Byte，因此我们可以考虑把他们都放进内存中去（300万个字符串假设没有重复，都是最大长度，那么最多占用内存3M*1K/4=0.75G。所以可以将所有字符串都存放在内存中进行处理）。
+  </p>
+  <p>
+   所以我们放弃分而治之/hash映射的步骤，直接上hash_map统计，然后排序。So，针对此类典型的TOP K问题，采取的对策往往是：hash_map + 堆。
+  </p>
+  <p>
+   <strong>
+    解法
+   </strong>
+   ：
+  </p>
+  <ul>
+   <li>
+    1.hash_map统计
+    <ul>
+     <li>
+      先对这批海量数据预处理。具体方法是：维护一个Key为Query字串，Value为该Query出现次数的hash_map，即hash_map(Query, Value)，每次读取一个Query，如果该字串不在Table中，那么加入该字串，并将Value值设为1；如果该字串在Table中，那么将该字串的计数加1 即可。最终我们在O(N)的时间复杂度内用hash_map完成了统计；
+     </li>
+    </ul>
+   </li>
+   <li>
+    2.堆排序
+    <ul>
+     <li>
+      借助堆这个数据结构，找出Top K，时间复杂度为N‘logK。即借助堆结构，我们可以在log量级的时间内查找和调整/移动。因此，维护一个K(该题目中是10)大小的小根堆，然后遍历300万的Query，分别和根元素进行对比。所以，我们最终的时间复杂度是：O(n) + N' * O(logk），其中，N为1000万，N’为300万。
+     </li>
+    </ul>
+   </li>
+  </ul>
+  <p>
+   关于第2步堆排序，可以维护k个元素的最小堆，即用容量为k的最小堆存储最先遍历到的k个数，并假设它们即是最大的k个数，建堆费时O（k），并调整堆(费时O(logk))后，有k1&gt;k2&gt;...kmin（kmin设为小顶堆中最小元素）。继续遍历数列，每次遍历一个元素x，与堆顶元素比较，若x&gt;kmin，则更新堆（x入堆，用时logk），否则不更新堆。这样下来，总费时O（k*logk+（n-k）*logk）=O（n*logk）。此方法得益于在堆中，查找等各项操作时间复杂度均为logk。
+  </p>
+  <p>
+   当然，你也可以采用trie树，关键字域存该查询串出现的次数，没有出现为0。最后用10个元素的最小推来对出现频率进行排序。
+  </p>
+  <p>
+   <strong>
+    3、有一个1G大小的一个文件，里面每一行是一个词，词的大小不超过16字节，内存限制大小是1M。返回频数最高的100个词
+   </strong>
+  </p>
+  <p>
+   <strong>
+    解法
+   </strong>
+   ：
+  </p>
+  <ul>
+   <li>
+    1.分而治之/hash映射
+    <ul>
+     <li>
+      顺序读取文件，对于每个词x，取hash(x)%5000，然后把该值存到5000个小文件（记为x0,x1,...x4999）中。这样每个文件大概是200k左右。当然，如果其中有的小文件超过了1M大小，还可以按照类似的方法继续往下分，直到分解得到的小文件的大小都不超过1M。
+     </li>
+    </ul>
+   </li>
+   <li>
+    2.hash_map统计
+    <ul>
+     <li>
+      对每个小文件，采用trie树/hash_map等统计每个文件中出现的词以及相应的频率。
+     </li>
+    </ul>
+   </li>
+   <li>
+    3.堆/归并排序
+    <ul>
+     <li>
+      取出出现频率最大的100个词（可以用含100个结点的最小堆）后，再把100个词及相应的频率存入文件，这样又得到了5000个文件。最后就是把这5000个文件进行归并（类似于归并排序）的过程了。
+     </li>
+    </ul>
+   </li>
+  </ul>
+  <p>
+   <strong>
+    4、海量数据分布在100台电脑中，想个办法高效统计出这批数据的TOP10
+   </strong>
+  </p>
+  <p>
+   <strong>
+    解法一
+   </strong>
+   ：
+  </p>
+  <p>
+   如果同一个数据元素只出现在某一台机器中，那么可以采取以下步骤统计出现次数TOP10的数据元素：
+  </p>
+  <ul>
+   <li>
+    1.堆排序
+    <ul>
+     <li>
+      在每台电脑上求出TOP 10，可以采用包含10个元素的堆完成（TOP 10小，用最大堆，TOP 10大，用最小堆，比如求TOP10大，我们首先取前10个元素调整成最小堆，如果发现，然后扫描后面的数据，并与堆顶元素比较，如果比堆顶元素大，那么用该元素替换堆顶，然后再调整为最小堆。最后堆中的元素就是TOP 10大）。
+     </li>
+    </ul>
+   </li>
+   <li>
+    2.组合归并
+    <ul>
+     <li>
+      求出每台电脑上的TOP 10后，然后把这100台电脑上的TOP 10组合起来，共1000个数据，再利用上面类似的方法求出TOP 10就可以了。
+     </li>
+    </ul>
+   </li>
+  </ul>
+  <p>
+   <strong>
+    解法二
+   </strong>
+   ：
+  </p>
+  <p>
+   但如果同一个元素重复出现在不同的电脑中呢，比如拿两台机器求top 2的情况来说：
+  </p>
+  <ul>
+   <li>
+    第一台的数据分布及各自出现频率为：a(50)，b(50)，c(49)，d(49) ，e(0)，f(0)
+    <ul>
+     <li>
+      其中，括号里的数字代表某个数据出现的频率，如a(50)表示a出现了50次。
+     </li>
+    </ul>
+   </li>
+   <li>
+    第二台的数据分布及各自出现频率为：a(0)，b(0)，c(49)，d(49)，e(50)，f(50)
+   </li>
+  </ul>
+  <p>
+   这个时候，你可以有两种方法：
+  </p>
+  <ul>
+   <li>
+    遍历一遍所有数据，重新hash取摸，如此使得同一个元素只出现在单独的一台电脑中，然后采用上面所说的方法，统计每台电脑中各个元素的出现次数找出TOP 10，继而组合100台电脑上的TOP 10，找出最终的TOP 10。
+   </li>
+   <li>
+    或者，暴力求解：直接统计统计每台电脑中各个元素的出现次数，然后把同一个元素在不同机器中的出现次数相加，最终从所有数据中找出TOP 10。
+   </li>
+  </ul>
+  <p>
+   <strong>
+    5、有10个文件，每个文件1G，每个文件的每一行存放的都是用户的query，每个文件的query都可能重复。要求你按照query的频度排序
+   </strong>
+  </p>
+  <p>
+   <strong>
+    解法一
+   </strong>
+   ：
+  </p>
+  <ul>
+   <li>
+    1.hash映射
+    <ul>
+     <li>
+      顺序读取10个文件，按照hash(query)%10的结果将query写入到另外10个文件（记为a0,a1,..a9）中。这样新生成的文件每个的大小大约也1G（假设hash函数是随机的）。
+     </li>
+    </ul>
+   </li>
+   <li>
+    2.hash_map统计
+    <ul>
+     <li>
+      找一台内存在2G左右的机器，依次对用hash_map(query, query_count)来统计每个query出现的次数。注：hash_map(query, query_count)是用来统计每个query的出现次数，不是存储他们的值，出现一次，则count+1。
+     </li>
+    </ul>
+   </li>
+   <li>
+    3.堆/快速/归并排序
+    <ul>
+     <li>
+      利用快速/堆/归并排序按照出现次数进行排序，将排序好的query和对应的query_cout输出到文件中，这样得到了10个排好序的文件（记为
+      <a href="../images/8/8.1/8.1.2.gif" target="_blank">
+       <img alt="" src="../images/8/8.1/8.1.2.gif" style="max-width:100%;"/>
+      </a>
+      ）。最后，对这10个文件进行归并排序（内排序与外排序相结合）。
+     </li>
+    </ul>
+   </li>
+  </ul>
+  <p>
+   <strong>
+    解法二
+   </strong>
+   ：
+  </p>
+  <p>
+   一般query的总量是有限的，只是重复的次数比较多而已，可能对于所有的query，一次性就可以加入到内存了。这样，我们就可以采用trie树/hash_map等直接来统计每个query出现的次数，然后按出现次数做快速/堆/归并排序就可以了。
+  </p>
+  <p>
+   <strong>
+    解法三
+   </strong>
+   ：
+  </p>
+  <p>
+   与解法1类似，但在做完hash，分成多个文件后，可以交给多个文件来处理，采用分布式的架构来处理（比如MapReduce），最后再进行合并。
+  </p>
+  <p>
+   <strong>
+    6、给定a、b两个文件，各存放50亿个url，每个url各占64字节，内存限制是4G，让你找出a、b文件共同的url？
+   </strong>
+  </p>
+  <p>
+   <strong>
+    解法
+   </strong>
+   ：
+  </p>
+  <p>
+   可以估计每个文件安的大小为5G×64=320G，远远大于内存限制的4G。所以不可能将其完全加载到内存中处理。考虑采取分而治之的方法。
+  </p>
+  <ul>
+   <li>
+    1.分而治之/hash映射
+    <ul>
+     <li>
+      遍历文件a，对每个url求取
+      <a href="../images/8/8.1/8.1.3.gif" target="_blank">
+       <img alt="" src="../images/8/8.1/8.1.3.gif" style="max-width:100%;"/>
+      </a>
+      ，然后根据所取得的值将url分别存储到1000个小文件（记为
+      <a href="../images/8/8.1/8.1.4.gif" target="_blank">
+       <img alt="" src="../images/8/8.1/8.1.4.gif" style="max-width:100%;"/>
+      </a>
+      ，这里漏写个了a1）中。这样每个小文件的大约为300M。遍历文件b，采取和a相同的方式将url分别存储到1000小文件中（记为
+      <a href="../images/8/8.1/8.1.5.gif" target="_blank">
+       <img alt="" src="../images/8/8.1/8.1.5.gif" style="max-width:100%;"/>
+      </a>
+      ）。这样处理后，所有可能相同的url都在对应的小文件（
+      <a href="../images/8/8.1/8.1.6.gif" target="_blank">
+       <img alt="" src="../images/8/8.1/8.1.6.gif" style="max-width:100%;"/>
+      </a>
+      ）中，不对应的小文件不可能有相同的url。然后我们只要求出1000对小文件中相同的url即可。
+     </li>
+    </ul>
+   </li>
+   <li>
+    2.hash_set统计
+    <ul>
+     <li>
+      求每对小文件中相同的url时，可以把其中一个小文件的url存储到hash_set中。然后遍历另一个小文件的每个url，看其是否在刚才构建的hash_set中，如果是，那么就是共同的url，存到文件里面就可以了。
+     </li>
+    </ul>
+   </li>
+  </ul>
+  <p>
+   <strong>
+    7、100万个数中找出最大的100个数
+   </strong>
+  </p>
+  <p>
+   <strong>
+    解法一
+   </strong>
+   ：采用局部淘汰法。选取前100个元素，并排序，记为序列L。然后一次扫描剩余的元素x，与排好序的100个元素中最小的元素比，如果比这个最小的要大，那么把这个最小的元素删除，并把x利用插入排序的思想，插入到序列L中。依次循环，知道扫描了所有的元素。复杂度为O(100万*100)。
+  </p>
+  <p>
+   <strong>
+    解法二
+   </strong>
+   ：采用快速排序的思想，每次分割之后只考虑比轴大的一部分，知道比轴大的一部分在比100多的时候，采用传统排序算法排序，取前100个。复杂度为O(100万*100)。
+  </p>
+  <p>
+   <strong>
+    解法三
+   </strong>
+   ：在前面的题中，我们已经提到了，用一个含100个元素的最小堆完成。复杂度为O(100万*lg100)。
   </p>
   <h3>
-   <a class="anchor" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%8F%8A%E8%A6%81%E7%82%B9" name="user-content-%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%8F%8A%E8%A6%81%E7%82%B9">
+   <a aria-hidden="true" class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
     <span class="octicon octicon-link">
     </span>
    </a>
-   <strong>
-    基本原理及要点
-   </strong>
+   举一反三
   </h3>
   <p>
-   hash函数选择，针对字符串，整数，排列，具体相应的hash方法。
-  </p>
-  <p>
-   碰撞处理，一种是open hashing，也称为拉链法；另一种就是closed hashing，也称开地址法，opened addressing。
-  </p>
-  <h3>
-   <a class="anchor" href="#%E6%89%A9%E5%B1%95" name="user-content-%E6%89%A9%E5%B1%95">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
    <strong>
-    扩展
+    1
    </strong>
-  </h3>
-  <p>
-   d-left hashing中的d是多个的意思，我们先简化这个问题，看一看2-left hashing。2-left hashing指的是将一个哈希表分成长度相等的两半，分别叫做T1和T2，给T1和T2分别配备一个哈希函数，h1和h2。在存储一个新的key时，同 时用两个哈希函数进行计算，得出两个地址h1[key]和h2[key]。这时需要检查T1中的h1[key]位置和T2中的h2[key]位置，哪一个 位置已经存储的（有碰撞的）key比较多，然后将新key存储在负载少的位置。如果两边一样多，比如两个位置都为空或者都存储了一个key，就把新key 存储在左边的T1子表中，2-left也由此而来。在查找一个key时，必须进行两次hash，同时查找两个位置。
-  </p>
-  <h3>
-   <a class="anchor" href="#%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86" name="user-content-%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   <strong>
-    问题实例（海量数据处理）
-   </strong>
-  </h3>
-  <p>
-   我们知道hash 表在海量数据处理中有着广泛的应用，下面，请看另一道百度面试题：
+   、怎么在海量数据中找出重复次数最多的一个？
   </p>
   <p>
-   题目：海量日志数据，提取出某日访问百度次数最多的那个IP。
-  </p>
-  <p>
-   方案：IP的数目还是有限的，最多2^32个，所以可以考虑使用hash将ip直接存入内存，然后进行统计。
-  </p>
-  <h2>
-   <a class="anchor" href="#%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86%E6%9C%80%E5%BF%AB%E7%9A%84hash%E8%A1%A8%E7%AE%97%E6%B3%95" name="user-content-%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86%E6%9C%80%E5%BF%AB%E7%9A%84hash%E8%A1%A8%E7%AE%97%E6%B3%95">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   第三部分、最快的Hash表算法
-  </h2>
-  <p>
-   接下来，咱们来具体分析一下一个最快的Hasb表算法。
-  </p>
-  <p>
-   我们由一个简单的问题逐步入手：有一个庞大的字符串数组，然后给你一个单独的字符串，让你从这个数组中查找是否有这个字符串并找到它，你会怎么做？有一个方法最简单，老老实实从头查到尾，一个一个比较，直到找到为止，我想只要学过程序设计的人都能把这样一个程序作出来，但要是有程序员把这样的程序交给用户，我只能用无语来评价，或许它真的能工作，但...也只能如此了。
-  </p>
-  <p>
-   最合适的算法自然是使用HashTable（哈希表），先介绍介绍其中的基本知识，所谓Hash，一般是一个整数，通过某种算法，可以把一个字符串"压缩" 成一个整数。当然，无论如何，一个32位整数是无法对应回一个字符串的，但在程序中，两个字符串计算出的Hash值相等的可能非常小，下面看看在MPQ中的Hash算法（参看自此文：
-   <a href="http://sfsrealm.hopto.org/inside_mopaq/chapter2.htm">
-    http://sfsrealm.hopto.org/inside_mopaq/chapter2.htm
-   </a>
-   ）：
+   提示：先做hash，然后求模映射为小文件，求出每个小文件中重复次数最多的一个，并记录重复次数。然后找出上一步求出的数据中重复次数最多的一个就是所求（具体参考前面的题）。
   </p>
   <p>
    <strong>
-    函数一、
+    2
    </strong>
-   以下的函数生成一个长度为0x500（合10进制数：1280）的cryptTable[0x500]
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="kt">void</span> <span class="nf">prepareCryptTable</span><span class="p">()</span>
-<span class="p">{</span> 
-    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">seed</span> <span class="o">=</span> <span class="mh">0x00100001</span><span class="p">,</span> <span class="n">index1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">index2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span>
-
-    <span class="k">for</span><span class="p">(</span> <span class="n">index1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">index1</span> <span class="o">&lt;</span> <span class="mh">0x100</span><span class="p">;</span> <span class="n">index1</span><span class="o">++</span> <span class="p">)</span>
-    <span class="p">{</span> 
-        <span class="k">for</span><span class="p">(</span> <span class="n">index2</span> <span class="o">=</span> <span class="n">index1</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">,</span> <span class="n">index2</span> <span class="o">+=</span> <span class="mh">0x100</span> <span class="p">)</span>
-        <span class="p">{</span> 
-            <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">temp1</span><span class="p">,</span> <span class="n">temp2</span><span class="p">;</span>
-
-            <span class="n">seed</span> <span class="o">=</span> <span class="p">(</span><span class="n">seed</span> <span class="o">*</span> <span class="mi">125</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="o">%</span> <span class="mh">0x2AAAAB</span><span class="p">;</span>
-            <span class="n">temp1</span> <span class="o">=</span> <span class="p">(</span><span class="n">seed</span> <span class="o">&amp;</span> <span class="mh">0xFFFF</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mh">0x10</span><span class="p">;</span>
-
-            <span class="n">seed</span> <span class="o">=</span> <span class="p">(</span><span class="n">seed</span> <span class="o">*</span> <span class="mi">125</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="o">%</span> <span class="mh">0x2AAAAB</span><span class="p">;</span>
-            <span class="n">temp2</span> <span class="o">=</span> <span class="p">(</span><span class="n">seed</span> <span class="o">&amp;</span> <span class="mh">0xFFFF</span><span class="p">);</span>
-
-            <span class="n">cryptTable</span><span class="p">[</span><span class="n">index2</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="n">temp1</span> <span class="o">|</span> <span class="n">temp2</span> <span class="p">);</span> 
-       <span class="p">}</span> 
-   <span class="p">}</span> 
-<span class="p">}</span> 
-</pre>
-  </div>
-  <p>
-   <strong>
-    函数二、
-   </strong>
-   以下函数计算lpszFileName 字符串的hash值，其中dwHashType 为hash的类型，在下面的函数三、GetHashTablePos函数中调用此函数二，其可以取的值为0、1、2；该函数返回lpszFileName 字符串的hash值：
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="kt">unsigned</span> <span class="kt">long</span> <span class="nf">HashString</span><span class="p">(</span> <span class="kt">char</span> <span class="o">*</span><span class="n">lpszFileName</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">dwHashType</span> <span class="p">)</span>
-<span class="p">{</span> 
-    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">key</span>  <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">lpszFileName</span><span class="p">;</span>
-<span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">seed1</span> <span class="o">=</span> <span class="mh">0x7FED7FED</span><span class="p">;</span>
-<span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">seed2</span> <span class="o">=</span> <span class="mh">0xEEEEEEEE</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">ch</span><span class="p">;</span>
-
-    <span class="k">while</span><span class="p">(</span> <span class="o">*</span><span class="n">key</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="p">{</span> 
-        <span class="n">ch</span> <span class="o">=</span> <span class="n">toupper</span><span class="p">(</span><span class="o">*</span><span class="n">key</span><span class="o">++</span><span class="p">);</span>
-
-        <span class="n">seed1</span> <span class="o">=</span> <span class="n">cryptTable</span><span class="p">[(</span><span class="n">dwHashType</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">ch</span><span class="p">]</span> <span class="o">^</span> <span class="p">(</span><span class="n">seed1</span> <span class="o">+</span> <span class="n">seed2</span><span class="p">);</span>
-        <span class="n">seed2</span> <span class="o">=</span> <span class="n">ch</span> <span class="o">+</span> <span class="n">seed1</span> <span class="o">+</span> <span class="n">seed2</span> <span class="o">+</span> <span class="p">(</span><span class="n">seed2</span> <span class="o">&lt;&lt;</span> <span class="mi">5</span><span class="p">)</span> <span class="o">+</span> <span class="mi">3</span><span class="p">;</span> 
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">seed1</span><span class="p">;</span> 
-<span class="p">}</span>
-</pre>
-  </div>
-  <p>
-   Blizzard的这个算法是非常高效的，被称为"One-Way Hash"( A one-way hash is a an algorithm that is constructed in such a way that deriving the original string (set of strings, actually) is virtually impossible)。举个例子，字符串"unitneutralacritter.grp"通过这个算法得到的结果是0xA26067F3。
+   、上千万或上亿数据（有重复），统计其中出现次数最多的前N个数据。
   </p>
   <p>
-   是不是把第一个算法改进一下，改成逐个比较字符串的Hash值就可以了呢，答案是，远远不够，要想得到最快的算法，就不能进行逐个的比较，通常是构造一个哈希表(Hash Table)来解决问题，哈希表是一个大数组，这个数组的容量根据程序的要求来定义，例如1024，每一个Hash值通过取模运算 (mod) 对应到数组中的一个位置，这样，只要比较这个字符串的哈希值对应的位置有没有被占用，就可以得到最后的结果了，想想这是什么速度？是的，是最快的O(1)，现在仔细看看这个算法吧：
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="k">typedef</span> <span class="k">struct</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">nHashA</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">nHashB</span><span class="p">;</span>
-    <span class="kt">char</span> <span class="n">bExists</span><span class="p">;</span>
-   <span class="p">......</span>
-<span class="p">}</span> <span class="n">SOMESTRUCTRUE</span><span class="p">;</span>
-</pre>
-  </div>
-  <p>
-   一种可能的结构体定义？
+   提示：上千万或上亿的数据，现在的机器的内存应该能存下。所以考虑采用hash_map/搜索二叉树/红黑树等来进行统计次数。然后就是取出前N个出现次数最多的数据了，可以用第2题提到的堆机制完成。
   </p>
   <p>
    <strong>
-    函数三、
+    3
    </strong>
-   下述函数为在Hash表中查找是否存在目标字符串，有则返回要查找字符串的Hash值，无则，return -1.
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="kt">int</span> <span class="nf">GetHashTablePos</span><span class="p">(</span> <span class="n">har</span> <span class="o">*</span><span class="n">lpszString</span><span class="p">,</span> <span class="n">SOMESTRUCTURE</span> <span class="o">*</span><span class="n">lpTable</span> <span class="p">)</span> 
-<span class="c1">//lpszString要在Hash表中查找的字符串，lpTable为存储字符串Hash值的Hash表。</span>
-<span class="p">{</span> 
-    <span class="kt">int</span> <span class="n">nHash</span> <span class="o">=</span> <span class="n">HashString</span><span class="p">(</span><span class="n">lpszString</span><span class="p">);</span>  <span class="c1">//调用上述函数二，返回要查找字符串lpszString的Hash值。</span>
-    <span class="kt">int</span> <span class="n">nHashPos</span> <span class="o">=</span> <span class="n">nHash</span> <span class="o">%</span> <span class="n">nTableSize</span><span class="p">;</span>
-
-    <span class="k">if</span> <span class="p">(</span> <span class="n">lpTable</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">].</span><span class="n">bExists</span>  <span class="o">&amp;&amp;</span>  <span class="o">!</span><span class="n">strcmp</span><span class="p">(</span> <span class="n">lpTable</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">].</span><span class="n">pString</span><span class="p">,</span> <span class="n">lpszString</span> <span class="p">)</span> <span class="p">)</span> 
-    <span class="p">{</span>  <span class="c1">//如果找到的Hash值在表中存在，且要查找的字符串与表中对应位置的字符串相同，</span>
-        <span class="k">return</span> <span class="n">nHashPos</span><span class="p">;</span>    <span class="c1">//则返回上述调用函数二后，找到的Hash值</span>
-    <span class="p">}</span> 
-    <span class="k">else</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>  
-    <span class="p">}</span> 
-<span class="p">}</span>
-</pre>
-  </div>
-  <p>
-   看到此，我想大家都在想一个很严重的问题：“如果两个字符串在哈希表中对应的位置相同怎么办？”,毕竟一个数组容量是有限的，这种可能性很大。解决该问题的方法很多，我首先想到的就是用“链表”,感谢大学里学的数据结构教会了这个百试百灵的法宝，我遇到的很多算法都可以转化成链表来解决，只要在哈希表的每个入口挂一个链表，保存所有对应的字符串就OK了。事情到此似乎有了完美的结局，如果是把问题独自交给我解决，此时我可能就要开始定义数据结构然后写代码了。
+   、一个文本文件，大约有一万行，每行一个词，要求统计出其中最频繁出现的前10个词，请给出思想，给出时间复杂度分析。
   </p>
   <p>
-   然而Blizzard的程序员使用的方法则是更精妙的方法。基本原理就是：他们在哈希表中不是用一个哈希值而是用三个哈希值来校验字符串。
+   提示：这题是考虑时间效率。用trie树统计每个词出现的次数，时间复杂度是O(n*le)（le表示单词的平准长度）。然后是找出出现最频繁的前10个词，可以用堆来实现，前面的题中已经讲到了，时间复杂度是O(n*lg10)。所以总的时间复杂度，是O(n*le)与O(n*lg10)中较大的哪一个。
   </p>
   <p>
-   MPQ使用文件名哈希表来跟踪内部的所有文件。但是这个表的格式与正常的哈希表有一些不同。首先，它没有使用哈希作为下标，把实际的文件名存储在表中用于验证，实际上它根本就没有存储文件名。而是使用了3种不同的哈希：一个用于哈希表的下标，两个用于验证。这两个验证哈希替代了实际文件名。
+   <strong>
+    4
+   </strong>
+   、1000万字符串，其中有些是重复的，需要把重复的全部去掉，保留没有重复的字符串。请怎么设计和实现？
   </p>
   <p>
-   当然了，这样仍然会出现2个不同的文件名哈希到3个同样的哈希。但是这种情况发生的概率平均是：1:18889465931478580854784，这个概率对于任何人来说应该都是足够小的。现在再回到数据结构上，Blizzard使用的哈希表没有使用链表，而采用"顺延"的方式来解决问题，看看这个算法：
+   提示：这题用trie树比较合适，hash_map也行。当然，也可以先hash成小文件分开处理再综合。
   </p>
   <p>
-   **函数四、**lpszString 为要在hash表中查找的字符串；lpTable 为存储字符串hash值的hash表；nTableSize 为hash表的长度：
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="kt">int</span> <span class="nf">GetHashTablePos</span><span class="p">(</span> <span class="kt">char</span> <span class="o">*</span><span class="n">lpszString</span><span class="p">,</span> <span class="n">MPQHASHTABLE</span> <span class="o">*</span><span class="n">lpTable</span><span class="p">,</span> <span class="kt">int</span> <span class="n">nTableSize</span> <span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">const</span> <span class="kt">int</span>  <span class="n">HASH_OFFSET</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">HASH_A</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">HASH_B</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-
-    <span class="kt">int</span>  <span class="n">nHash</span> <span class="o">=</span> <span class="n">HashString</span><span class="p">(</span> <span class="n">lpszString</span><span class="p">,</span> <span class="n">HASH_OFFSET</span> <span class="p">);</span>
-    <span class="kt">int</span>  <span class="n">nHashA</span> <span class="o">=</span> <span class="n">HashString</span><span class="p">(</span> <span class="n">lpszString</span><span class="p">,</span> <span class="n">HASH_A</span> <span class="p">);</span>
-    <span class="kt">int</span>  <span class="n">nHashB</span> <span class="o">=</span> <span class="n">HashString</span><span class="p">(</span> <span class="n">lpszString</span><span class="p">,</span> <span class="n">HASH_B</span> <span class="p">);</span>
-    <span class="kt">int</span>  <span class="n">nHashStart</span> <span class="o">=</span> <span class="n">nHash</span> <span class="o">%</span> <span class="n">nTableSize</span><span class="p">;</span>
-    <span class="kt">int</span>  <span class="n">nHashPos</span> <span class="o">=</span> <span class="n">nHashStart</span><span class="p">;</span>
-
-    <span class="k">while</span> <span class="p">(</span> <span class="n">lpTable</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">].</span><span class="n">bExists</span> <span class="p">)</span>
-   <span class="p">{</span>
-     <span class="cm">/*如果仅仅是判断在该表中时候存在这个字符串，就比较这两个hash值就可以了，不用对</span>
-<span class="cm">     *结构体中的字符串进行比较。这样会加快运行的速度？减少hash表占用的空间？这种</span>
-<span class="cm">      *方法一般应用在什么场合？*/</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="err">　</span> <span class="n">lpTable</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">].</span><span class="n">nHashA</span> <span class="o">==</span> <span class="n">nHashA</span>
-        <span class="o">&amp;&amp;</span>  <span class="n">lpTable</span><span class="p">[</span><span class="n">nHashPos</span><span class="p">].</span><span class="n">nHashB</span> <span class="o">==</span> <span class="n">nHashB</span> <span class="p">)</span>
-       <span class="p">{</span>
-            <span class="k">return</span> <span class="n">nHashPos</span><span class="p">;</span>
-       <span class="p">}</span>
-       <span class="k">else</span>
-       <span class="p">{</span>
-            <span class="n">nHashPos</span> <span class="o">=</span> <span class="p">(</span><span class="n">nHashPos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">nTableSize</span><span class="p">;</span>
-       <span class="p">}</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="n">nHashPos</span> <span class="o">==</span> <span class="n">nHashStart</span><span class="p">)</span>
-              <span class="k">break</span><span class="p">;</span>
-    <span class="p">}</span>
-     <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
-  </div>
-  <p>
-   上述程序解释：
-  </p>
-  <ol>
-   <li>
-    计算出字符串的三个哈希值（一个用来确定位置，另外两个用来校验)
-   </li>
-   <li>
-    察看哈希表中的这个位置
-   </li>
-   <li>
-    哈希表中这个位置为空吗？如果为空，则肯定该字符串不存在，返回-1。
-   </li>
-   <li>
-    如果存在，则检查其他两个哈希值是否也匹配，如果匹配，则表示找到了该字符串，返回其Hash值。
-   </li>
-   <li>
-    移到下一个位置，如果已经移到了表的末尾，则反绕到表的开始位置起继续查询
-   </li>
-   <li>
-    看看是不是又回到了原来的位置，如果是，则返回没找到
-   </li>
-   <li>
-    回到3
-   </li>
-  </ol>
-  <p>
-   ok，这就是本文中所说的最快的Hash表算法。什么?不够快?:D。欢迎，各位批评指正。
-  </p>
-  <hr/>
-  <p>
-   补充1、一个简单的hash函数：
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="cm">/*key为一个字符串，nTableLength为哈希表的长度</span>
-<span class="cm">*该函数得到的hash值分布比较均匀*/</span>
-<span class="kt">unsigned</span> <span class="kt">long</span> <span class="nf">getHashIndex</span><span class="p">(</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">key</span><span class="p">,</span> <span class="kt">int</span> <span class="n">nTableLength</span> <span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">nHash</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-    <span class="k">while</span> <span class="p">(</span><span class="o">*</span><span class="n">key</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">nHash</span> <span class="o">=</span> <span class="p">(</span><span class="n">nHash</span><span class="o">&lt;&lt;</span><span class="mi">5</span><span class="p">)</span> <span class="o">+</span> <span class="n">nHash</span> <span class="o">+</span> <span class="o">*</span><span class="n">key</span><span class="o">++</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="p">(</span> <span class="n">nHash</span> <span class="o">%</span> <span class="n">nTableLength</span> <span class="p">);</span>
-<span class="p">}</span>
-</pre>
-  </div>
-  <p>
-   补充2、一个完整测试程序：
+   <strong>
+    5
+   </strong>
+   、一个文本文件，找出前10个经常出现的词，但这次文件比较长，说是上亿行或十亿行，总之无法一次读入内存，问最优解。
   </p>
   <p>
-   哈希表的数组是定长的，如果太大，则浪费，如果太小，体现不出效率。合适的数组大小是哈希表的性能的关键。哈希表的尺寸最好是一个质数。当然，根据不同的数据量，会有不同的哈希表的大小。对于数据量时多时少的应用，最好的设计是使用动态可变尺寸的哈希表，那么如果你发现哈希表尺寸太小了，比如其中的元素是哈希表尺寸的2倍时，我们就需要扩大哈希表尺寸，一般是扩大一倍。
+   提示：首先根据用hash并求模，将文件分解为多个小文件，对于单个文件利用上题的方法求出每个文件件中10个最常出现的词。然后再进行归并处理，找出最终的10个最常出现的词。
   </p>
-  <p>
-   下面是哈希表尺寸大小的可能取值：
-  </p>
-  <table>
-   <thead>
-    <tr>
-     <th align="left">
-     </th>
-     <th align="right">
-     </th>
-     <th align="center">
-     </th>
-     <th align="center">
-     </th>
-     <th align="center">
-     </th>
-    </tr>
-   </thead>
-   <tbody>
-    <tr>
-     <td align="left">
-      17,
-     </td>
-     <td align="right">
-      37,
-     </td>
-     <td align="center">
-      79,
-     </td>
-     <td align="center">
-      163,
-     </td>
-     <td align="center">
-      331,
-     </td>
-    </tr>
-    <tr>
-     <td align="left">
-      673,
-     </td>
-     <td align="right">
-      1361,
-     </td>
-     <td align="center">
-      2729,
-     </td>
-     <td align="center">
-      5471,
-     </td>
-     <td align="center">
-      10949,
-     </td>
-    </tr>
-    <tr>
-     <td align="left">
-      21911,
-     </td>
-     <td align="right">
-      43853,
-     </td>
-     <td align="center">
-      87719,
-     </td>
-     <td align="center">
-      175447,
-     </td>
-     <td align="center">
-      350899,
-     </td>
-    </tr>
-    <tr>
-     <td align="left">
-      701819,
-     </td>
-     <td align="right">
-      1403641,
-     </td>
-     <td align="center">
-      2807303,
-     </td>
-     <td align="center">
-      5614657,
-     </td>
-     <td align="center">
-      11229331,
-     </td>
-    </tr>
-    <tr>
-     <td align="left">
-      22458671,
-     </td>
-     <td align="right">
-      44917381,
-     </td>
-     <td align="center">
-      89834777,
-     </td>
-     <td align="center">
-      179669557,
-     </td>
-     <td align="center">
-      359339171,
-     </td>
-    </tr>
-    <tr>
-     <td align="left">
-      718678369,
-     </td>
-     <td align="right">
-      1437356741,
-     </td>
-     <td align="center">
-      2147483647
-     </td>
-     <td align="center">
-     </td>
-     <td align="center">
-     </td>
-    </tr>
-   </tbody>
-  </table>
-  <p>
-   以下为该程序的完整源码，已在linux下测试通过：
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="cp">#include &lt;stdio.h&gt;  </span>
-<span class="cp">#include &lt;ctype.h&gt;     </span><span class="c1">//多谢citylove指正。  </span>
-<span class="c1">//crytTable[]里面保存的是HashString函数里面将会用到的一些数据，在prepareCryptTable  </span>
-<span class="c1">//函数里面初始化  </span>
-<span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">cryptTable</span><span class="p">[</span><span class="mh">0x500</span><span class="p">];</span>  
-
-<span class="c1">//以下的函数生成一个长度为0x500（合10进制数：1280）的cryptTable[0x500]  </span>
-<span class="kt">void</span> <span class="nf">prepareCryptTable</span><span class="p">()</span>  
-<span class="p">{</span>   
-    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">seed</span> <span class="o">=</span> <span class="mh">0x00100001</span><span class="p">,</span> <span class="n">index1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">index2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span>  
-
-    <span class="k">for</span><span class="p">(</span> <span class="n">index1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">index1</span> <span class="o">&lt;</span> <span class="mh">0x100</span><span class="p">;</span> <span class="n">index1</span><span class="o">++</span> <span class="p">)</span>  
-    <span class="p">{</span>   
-        <span class="k">for</span><span class="p">(</span> <span class="n">index2</span> <span class="o">=</span> <span class="n">index1</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">,</span> <span class="n">index2</span> <span class="o">+=</span> <span class="mh">0x100</span> <span class="p">)</span>  
-        <span class="p">{</span>   
-            <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">temp1</span><span class="p">,</span> <span class="n">temp2</span><span class="p">;</span>  
-
-            <span class="n">seed</span> <span class="o">=</span> <span class="p">(</span><span class="n">seed</span> <span class="o">*</span> <span class="mi">125</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="o">%</span> <span class="mh">0x2AAAAB</span><span class="p">;</span>  
-            <span class="n">temp1</span> <span class="o">=</span> <span class="p">(</span><span class="n">seed</span> <span class="o">&amp;</span> <span class="mh">0xFFFF</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mh">0x10</span><span class="p">;</span>  
-
-            <span class="n">seed</span> <span class="o">=</span> <span class="p">(</span><span class="n">seed</span> <span class="o">*</span> <span class="mi">125</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="o">%</span> <span class="mh">0x2AAAAB</span><span class="p">;</span>  
-            <span class="n">temp2</span> <span class="o">=</span> <span class="p">(</span><span class="n">seed</span> <span class="o">&amp;</span> <span class="mh">0xFFFF</span><span class="p">);</span>  
-
-            <span class="n">cryptTable</span><span class="p">[</span><span class="n">index2</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="n">temp1</span> <span class="o">|</span> <span class="n">temp2</span> <span class="p">);</span>   
-       <span class="p">}</span>   
-   <span class="p">}</span>   
-<span class="p">}</span>  
-
-<span class="c1">//以下函数计算lpszFileName 字符串的hash值，其中dwHashType 为hash的类型，  </span>
-<span class="c1">//在下面GetHashTablePos函数里面调用本函数，其可以取的值为0、1、2；该函数  </span>
-<span class="c1">//返回lpszFileName 字符串的hash值；  </span>
-<span class="kt">unsigned</span> <span class="kt">long</span> <span class="nf">HashString</span><span class="p">(</span> <span class="kt">char</span> <span class="o">*</span><span class="n">lpszFileName</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">dwHashType</span> <span class="p">)</span>  
-<span class="p">{</span>   
-    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">key</span>  <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">lpszFileName</span><span class="p">;</span>  
-<span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">seed1</span> <span class="o">=</span> <span class="mh">0x7FED7FED</span><span class="p">;</span>  
-<span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">seed2</span> <span class="o">=</span> <span class="mh">0xEEEEEEEE</span><span class="p">;</span>  
-    <span class="kt">int</span> <span class="n">ch</span><span class="p">;</span>  
-
-    <span class="k">while</span><span class="p">(</span> <span class="o">*</span><span class="n">key</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">)</span>  
-    <span class="p">{</span>   
-        <span class="n">ch</span> <span class="o">=</span> <span class="n">toupper</span><span class="p">(</span><span class="o">*</span><span class="n">key</span><span class="o">++</span><span class="p">);</span>  
-
-        <span class="n">seed1</span> <span class="o">=</span> <span class="n">cryptTable</span><span class="p">[(</span><span class="n">dwHashType</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">ch</span><span class="p">]</span> <span class="o">^</span> <span class="p">(</span><span class="n">seed1</span> <span class="o">+</span> <span class="n">seed2</span><span class="p">);</span>  
-        <span class="n">seed2</span> <span class="o">=</span> <span class="n">ch</span> <span class="o">+</span> <span class="n">seed1</span> <span class="o">+</span> <span class="n">seed2</span> <span class="o">+</span> <span class="p">(</span><span class="n">seed2</span> <span class="o">&lt;&lt;</span> <span class="mi">5</span><span class="p">)</span> <span class="o">+</span> <span class="mi">3</span><span class="p">;</span>   
-    <span class="p">}</span>  
-    <span class="k">return</span> <span class="n">seed1</span><span class="p">;</span>   
-<span class="p">}</span>  
-
-<span class="c1">//在main中测试argv[1]的三个hash值：  </span>
-<span class="c1">//./hash  "arr/units.dat"  </span>
-<span class="c1">//./hash  "unit/neutral/acritter.grp"  </span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span> <span class="p">)</span>  
-<span class="p">{</span>  
-    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">ulHashValue</span><span class="p">;</span>  
-    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  
-
-    <span class="k">if</span> <span class="p">(</span> <span class="n">argc</span> <span class="o">!=</span> <span class="mi">2</span> <span class="p">)</span>  
-    <span class="p">{</span>  
-        <span class="n">printf</span><span class="p">(</span><span class="s">"please input two arguments/n"</span><span class="p">);</span>  
-        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>  
-    <span class="p">}</span>  
-
-     <span class="cm">/*初始化数组：crytTable[0x500]*/</span>  
-     <span class="n">prepareCryptTable</span><span class="p">();</span>  
-
-     <span class="cm">/*打印数组crytTable[0x500]里面的值*/</span>  
-     <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mh">0x500</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>  
-     <span class="p">{</span>  
-         <span class="k">if</span> <span class="p">(</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span>  
-         <span class="p">{</span>  
-             <span class="n">printf</span><span class="p">(</span><span class="s">"/n"</span><span class="p">);</span>  
-         <span class="p">}</span>  
-
-         <span class="n">printf</span><span class="p">(</span><span class="s">"%-12X"</span><span class="p">,</span> <span class="n">cryptTable</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">);</span>  
-     <span class="p">}</span>  
-
-     <span class="n">ulHashValue</span> <span class="o">=</span> <span class="n">HashString</span><span class="p">(</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span> <span class="p">);</span>  
-     <span class="n">printf</span><span class="p">(</span><span class="s">"/n----%X ----/n"</span><span class="p">,</span> <span class="n">ulHashValue</span> <span class="p">);</span>  
-
-     <span class="n">ulHashValue</span> <span class="o">=</span> <span class="n">HashString</span><span class="p">(</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span> <span class="p">);</span>  
-     <span class="n">printf</span><span class="p">(</span><span class="s">"----%X ----/n"</span><span class="p">,</span> <span class="n">ulHashValue</span> <span class="p">);</span>  
-
-     <span class="n">ulHashValue</span> <span class="o">=</span> <span class="n">HashString</span><span class="p">(</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span> <span class="p">);</span>  
-     <span class="n">printf</span><span class="p">(</span><span class="s">"----%X ----/n"</span><span class="p">,</span> <span class="n">ulHashValue</span> <span class="p">);</span>  
-
-     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>  
-<span class="p">}</span> 
-</pre>
-  </div>
  </body>
 </html>
 		  </article>

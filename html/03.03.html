@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
-  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-6fc7fb2a2ad956975983882a7f95b27577e851a4.css" />
+  <link rel="stylesheet" href="style_cache/github2-ade82cf93cc23c0e2691785e7976cc718fe1986f.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,679 +105,669 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#%E6%95%99%E4%BD%A0%E9%80%8F%E5%BD%BB%E4%BA%86%E8%A7%A3%E7%BA%A2%E9%BB%91%E6%A0%91" name="user-content-%E6%95%99%E4%BD%A0%E9%80%8F%E5%BD%BB%E4%BA%86%E8%A7%A3%E7%BA%A2%E9%BB%91%E6%A0%91">
+   <a aria-hidden="true" class="anchor" href="#%E6%9C%80%E8%BF%91%E5%85%AC%E5%85%B1%E7%A5%96%E5%85%88lca%E9%97%AE%E9%A2%98" name="user-content-%E6%9C%80%E8%BF%91%E5%85%AC%E5%85%B1%E7%A5%96%E5%85%88lca%E9%97%AE%E9%A2%98">
     <span class="octicon octicon-link">
     </span>
    </a>
-   教你透彻了解红黑树
+   最近公共祖先LCA问题
   </h1>
-  <p>
-   作者：July、saturnman   2010年12月29日
-  </p>
-  <p>
-   本文参考：Google、算法导论、STL源码剖析、计算机程序设计艺术
-  </p>
-  <p>
-   推荐阅读：Left-Leaning Red-Black Trees, Dagstuhl Workshop on Data Structures, Wadern, Germany, February, 2008.
-   <br/>
-   直接下载：
-   <a href="http://www.cs.princeton.edu/%7Ers/talks/LLRB/RedBlack.pdf">
-    http://www.cs.princeton.edu/~rs/talks/LLRB/RedBlack.pdf
-   </a>
-   。
-  </p>
   <h2>
-   <a class="anchor" href="#%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91" name="user-content-%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91">
+   <a aria-hidden="true" class="anchor" href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0" name="user-content-%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0">
     <span class="octicon octicon-link">
     </span>
    </a>
-   二叉查找树
+   问题描述
   </h2>
   <p>
-   由于红黑树本质上就是一棵二叉查找树，所以在了解红黑树之前，咱们先来看下二叉查找树。
-  </p>
-  <p>
-   二叉查找树（Binary Search Tree），也称有序二叉树（ordered binary tree）,排序二叉树（sorted binary tree），是指一棵空树或者具有下列性质的二叉树：
-  </p>
-  <ul>
-   <li>
-    若任意节点的左子树不空，则左子树上所有结点的值均小于它的根结点的值；
-   </li>
-   <li>
-    任意节点的右子树不空，则右子树上所有结点的值均大于它的根结点的值；
-   </li>
-   <li>
-    任意节点的左、右子树也分别为二叉查找树。
-   </li>
-   <li>
-    没有键值相等的节点（no duplicate nodes）。
-   </li>
-  </ul>
-  <p>
-   因为，一棵由n个结点，随机构造的二叉查找树的高度为lgn，所以顺理成章，一般操作的执行时间为O（lgn）.（至于n个结点的二叉树高度为lgn的证明，可参考算法导论 第12章 二叉查找树 第12.4节）。
-  </p>
-  <p>
-   但二叉树若退化成了一棵具有n个结点的线性链后，则此些操作最坏情况运行时间为O（n）。后面我们会看到一种基于二叉查找树-红黑树，它通过一些性质使得树相对平衡，使得最终查找、插入、删除的时间复杂度最坏情况下依然为O（lgn）。
+   求二叉树的任意两个节点的最近公共祖先。
   </p>
   <h2>
-   <a class="anchor" href="#%E7%BA%A2%E9%BB%91%E6%A0%91" name="user-content-%E7%BA%A2%E9%BB%91%E6%A0%91">
+   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
     <span class="octicon octicon-link">
     </span>
    </a>
-   红黑树
+   分析与解法
   </h2>
   <p>
-   前面我们已经说过，红黑树，本质上来说就是一棵二叉查找树，但它在二叉查找树的基础上增加了着色和相关的性质使得红黑树相对平衡，从而保证了红黑树的查找、插入、删除的时间复杂度最坏为O(log n)。
+   解答这个问题之前，咱们得先搞清楚到底什么是最近公共祖先。最近公共祖先简称LCA，所谓LCA，是当给定一个有根树T时，对于任意两个结点u、v，找到一个离根最远的结点x，使得x同时是u和v的祖先，x 便是u、v的最近公共祖先。
   </p>
   <p>
-   下面，咱们便来具体看看红黑树的5条性质：
-  </p>
-  <pre><code>1）每个结点要么是红的，要么是黑的。  
-2）根结点是黑的。  
-3）每个叶结点（叶结点即指树尾端NIL指针或NULL结点）是黑的。  
-4）如果一个结点是红的，那么它的俩个儿子都是黑的。  
-5）对于任一结点而言，其到叶结点树尾端NIL指针的每一条路径都包含相同数目的黑结点。  
-</code></pre>
-  <p>
-   注：上述第3、5点性质中所说的NULL结点（包括wikipedia.算法导论上所认为的叶子结点），即为树尾端的NIL指针，或者说NULL结点。然百度百科以及网上一些其它博文直接说的叶结点，则易引起误会，因，此叶结点非子结点。
+   举个例子，如针对下图所示的一棵普通的二叉树来讲：
   </p>
   <p>
-   如下图所示，即是一颗红黑树(下图引自wikipedia：
-   <a href="http://t.cn/hgvH1l">
-    http://t.cn/hgvH1l
-   </a>
-   )：
-  </p>
-  <p>
-   <a href="../images/rbtree/1.png" target="_blank">
-    <img alt="" src="../images/rbtree/1.png" style="max-width:100%;"/>
+   <a href="../images/39/39.1.jpg" target="_blank">
+    <img alt="" src="../images/39/39.1.jpg" style="max-width:100%;"/>
    </a>
   </p>
   <p>
-   上文中我们所说的 "叶结点" 或"NULL结点"，它不包含数据而只充当树在此结束的指示，这些节点以及它们的父结点，在绘图中都会经常被省略。
+   结点3和结点4的最近公共祖先是结点2，即LCA（3 4）=2 。在此，需要注意到当两个结点在同一棵子树上的情况，如结点3和结点2的最近公共祖先为2，即 LCA（3 2）=2。同理：LCA（5 6）=4，LCA（6 10）=1。
+  </p>
+  <p>
+   明确了题意，咱们便来试着解决这个问题。一般文章的做法，可能是针对是否为二叉查找树分情况讨论，想必这也是一般人最先想到的思路。除此之外，还有所谓的Tarjan算法、倍增算法、以及转换为RMQ问题（求某段区间的极值）。
   </p>
   <h3>
-   <a class="anchor" href="#%E6%A0%91%E7%9A%84%E6%97%8B%E8%BD%AC%E7%9F%A5%E8%AF%86" name="user-content-%E6%A0%91%E7%9A%84%E6%97%8B%E8%BD%AC%E7%9F%A5%E8%AF%86">
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80%E6%9A%B4%E5%8A%9B%E5%AF%B9%E5%BE%85" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80%E6%9A%B4%E5%8A%9B%E5%AF%B9%E5%BE%85">
     <span class="octicon octicon-link">
     </span>
    </a>
-   树的旋转知识
+   解法一：暴力对待
+  </h3>
+  <h4>
+   <a aria-hidden="true" class="anchor" href="#11%E6%98%AF%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91" name="user-content-11%E6%98%AF%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   1.1、是二叉查找树
+  </h4>
+  <p>
+   在当这棵树是二叉查找树的情况下，如下图：
+  </p>
+  <p>
+   <a href="../images/39/39.2.jpg" target="_blank">
+    <img alt="" src="../images/39/39.2.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   那么从树根开始：
+  </p>
+  <ul>
+   <li>
+    如果当前结点t 大于结点u、v，说明u、v都在t 的左侧，所以它们的共同祖先必定在t 的左子树中，故从t 的左子树中继续查找；
+   </li>
+   <li>
+    如果当前结点t 小于结点u、v，说明u、v都在t 的右侧，所以它们的共同祖先必定在t 的右子树中，故从t 的右子树中继续查找；
+   </li>
+   <li>
+    如果当前结点t 满足 u &lt;t &lt; v，说明u和v分居在t 的两侧，故当前结点t 即为最近公共祖先；
+   </li>
+   <li>
+    而如果u是v的祖先，那么返回u的父结点，同理，如果v是u的祖先，那么返回v的父结点。
+   </li>
+  </ul>
+  <p>
+   代码如下所示：
+  </p>
+  <div class="highlight highlight-cpp">
+   <pre><span class="c1">//copyright@eriol 2011  </span>
+<span class="c1">//modified by July 2014  </span>
+<span class="k">public</span> <span class="kt">int</span> <span class="nf">query</span><span class="p">(</span><span class="n">Node</span> <span class="n">t</span><span class="p">,</span> <span class="n">Node</span> <span class="n">u</span><span class="p">,</span> <span class="n">Node</span> <span class="n">v</span><span class="p">)</span> <span class="p">{</span>    
+    <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="n">u</span><span class="p">.</span><span class="n">value</span><span class="p">;</span>    
+    <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">v</span><span class="p">.</span><span class="n">value</span><span class="p">;</span>    
+    <span class="n">Node</span> <span class="n">parent</span> <span class="o">=</span> <span class="n">null</span><span class="p">;</span>    
+
+    <span class="c1">//二叉查找树内，如果左结点大于右结点，不对，交换  </span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">left</span> <span class="o">&gt;</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span>    
+        <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span>    
+        <span class="n">left</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>    
+        <span class="n">right</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>    
+    <span class="p">}</span>    
+
+    <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>    
+        <span class="c1">//如果t小于u、v，往t的右子树中查找  </span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">value</span> <span class="o">&lt;</span> <span class="n">left</span><span class="p">)</span> <span class="p">{</span>    
+            <span class="n">parent</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>    
+            <span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="p">.</span><span class="n">right</span><span class="p">;</span>    
+
+        <span class="c1">//如果t大于u、v，往t的左子树中查找  </span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">value</span> <span class="o">&gt;</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span>    
+            <span class="n">parent</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>    
+            <span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="p">.</span><span class="n">left</span><span class="p">;</span>    
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">left</span> <span class="o">||</span> <span class="n">t</span><span class="p">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span>    
+            <span class="k">return</span> <span class="n">parent</span><span class="p">.</span><span class="n">value</span><span class="p">;</span>    
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>    
+            <span class="k">return</span> <span class="n">t</span><span class="p">.</span><span class="n">value</span><span class="p">;</span>    
+        <span class="p">}</span>    
+    <span class="p">}</span>    
+<span class="p">}</span>  
+</pre>
+  </div>
+  <h4>
+   <a aria-hidden="true" class="anchor" href="#12%E4%B8%8D%E6%98%AF%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91" name="user-content-12%E4%B8%8D%E6%98%AF%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   1.2、不是二叉查找树
+  </h4>
+  <p>
+   但如果这棵树不是二叉查找树，只是一棵普通的二叉树呢？如果每个结点都有一个指针指向它的父结点，于是我们可以从任何一个结点出发，得到一个到达树根结点的单向链表。因此这个问题转换为两个单向链表的第一个公共结点。
+  </p>
+  <p>
+   此外，如果给出根节点，LCA问题可以用递归很快解决。而关于树的问题一般都可以转换为递归（因为树本来就是递归描述），参考代码如下：
+  </p>
+  <div class="highlight highlight-cpp">
+   <pre><span class="c1">//copyright@allantop 2014-1-22-20:01  </span>
+<span class="n">node</span><span class="o">*</span> <span class="nf">getLCA</span><span class="p">(</span><span class="n">node</span><span class="o">*</span> <span class="n">root</span><span class="p">,</span> <span class="n">node</span><span class="o">*</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node</span><span class="o">*</span> <span class="n">node2</span><span class="p">)</span>  
+<span class="p">{</span>  
+    <span class="k">if</span><span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="n">null</span><span class="p">)</span>  
+        <span class="k">return</span> <span class="n">null</span><span class="p">;</span>  
+    <span class="k">if</span><span class="p">(</span><span class="n">root</span><span class="o">==</span> <span class="n">node1</span> <span class="o">||</span> <span class="n">root</span><span class="o">==</span><span class="n">node2</span><span class="p">)</span>  
+        <span class="k">return</span> <span class="n">root</span><span class="p">;</span>  
+
+    <span class="n">node</span><span class="o">*</span> <span class="n">left</span> <span class="o">=</span> <span class="n">getLCA</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">);</span>  
+    <span class="n">node</span><span class="o">*</span> <span class="n">right</span> <span class="o">=</span> <span class="n">getLCA</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">);</span>  
+
+    <span class="k">if</span><span class="p">(</span><span class="n">left</span> <span class="o">!=</span> <span class="n">null</span> <span class="o">&amp;&amp;</span> <span class="n">right</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span>  
+        <span class="k">return</span> <span class="n">root</span><span class="p">;</span>  
+    <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">left</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span>  
+        <span class="k">return</span> <span class="n">left</span><span class="p">;</span>  
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">right</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span>  
+        <span class="k">return</span> <span class="n">right</span><span class="p">;</span>  
+    <span class="k">else</span>   
+        <span class="k">return</span> <span class="n">null</span><span class="p">;</span>  
+<span class="p">}</span>  
+</pre>
+  </div>
+  <p>
+   然不论是针对普通的二叉树，还是针对二叉查找树，上面的解法有一个很大的弊端就是：如需N 次查询，则总体复杂度会扩大N 倍，故这种暴力解法仅适合一次查询，不适合多次查询。
+  </p>
+  <p>
+   接下来的解法，将不再区别对待是否为二叉查找树，而是一致当做是一棵普通的二叉树。总体来说，由于可以把LCA问题看成是询问式的，即给出一系列询问，程序对每一个询问尽快做出反应。故处理这类问题一般有两种解决方法：
+  </p>
+  <ul>
+   <li>
+    一种是在线算法，相当于循序渐进处理；
+   </li>
+   <li>
+    另外一种则是离线算法，如Tarjan算法，相当于一次性批量处理，一开始就知道了全部查询，只待询问。
+   </li>
+  </ul>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8Ctarjan%E7%AE%97%E6%B3%95" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8Ctarjan%E7%AE%97%E6%B3%95">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法二：Tarjan算法
   </h3>
   <p>
-   当我们在对红黑树进行插入和删除等操作时，对树做了修改，那么可能会违背红黑树的性质。
+   如上文末节所述，不论咱们所面对的二叉树是二叉查找树，或不是二叉查找树，都可以把求任意两个结点的最近公共祖先，当做是查询的问题，如果是只求一次，则是单次查询；如果要求多个任意两个结点的最近公共祖先，则相当于是批量查询。
   </p>
   <p>
-   为了继续保持红黑树的性质，我们可以通过对结点进行重新着色，以及对树进行相关的旋转操作，即修改树中某些结点的颜色及指针结构，来达到对红黑树进行插入或删除结点等操作后，继续保持它的性质或平衡。
+   涉及到批量查询的时候，咱们可以借鉴离线处理的方式，这就引出了解决此LCA问题的Tarjan离线算法。
+  </p>
+  <h4>
+   <a aria-hidden="true" class="anchor" href="#21%E4%BB%80%E4%B9%88%E6%98%AFtarjan%E7%AE%97%E6%B3%95" name="user-content-21%E4%BB%80%E4%B9%88%E6%98%AFtarjan%E7%AE%97%E6%B3%95">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   2.1、什么是Tarjan算法
+  </h4>
+  <p>
+   Tarjan算法 （以发现者Robert Tarjan命名）是一个在图中寻找强连通分量的算法。算法的基本思想为：任选一结点开始进行深度优先搜索dfs（若深度优先搜索结束后仍有未访问的结点，则再从中任选一点再次进行）。搜索过程中已访问的结点不再访问。搜索树的若干子树构成了图的强连通分量。
   </p>
   <p>
-   树的旋转，分为左旋和右旋，以下借助图来做形象的解释和介绍：
+   应用到咱们要解决的LCA问题上，则是：对于新搜索到的一个结点u，先创建由u构成的集合，再对u的每颗子树进行搜索，每搜索完一棵子树，这时候子树中所有的结点的最近公共祖先就是u了。
   </p>
   <p>
-   1.左旋
+   举一个例子，如下图（不同颜色的结点相当于不同的集合）：
   </p>
   <p>
-   <a href="../images/rbtree/2.jpg" target="_blank">
-    <img alt="" src="../images/rbtree/2.jpg" style="max-width:100%;"/>
+   <a href="../images/39/39.3.jpg" target="_blank">
+    <img alt="" src="../images/39/39.3.jpg" style="max-width:100%;"/>
    </a>
   </p>
   <p>
-   如上图所示：
+   假设遍历完10的孩子,要处理关于10的请求了，取根节点到当前正在遍历的节点的路径为关键路径,即1-3-8-10，集合的祖先便是关键路径上距离集合最近的点。
   </p>
   <p>
-   当在某个结点pivot上，做左旋操作时，我们假设它的右孩子y不是NIL[T]，pivot可以为树内任意左孩子而不是NIL[T]的结点。
+   比如：
+  </p>
+  <ul>
+   <li>
+    1，2，5，6为一个集合,祖先为1，集合中点和10的LCA为1
+   </li>
+   <li>
+    3，7为一个集合，祖先为3，集合中点和10的LCA为3
+   </li>
+   <li>
+    8，9，11为一个集合，祖先为8，集合中点和10的LCA为8
+   </li>
+   <li>
+    10，12为一个集合，祖先为10，集合中点和10的LCA为10
+   </li>
+  </ul>
+  <p>
+   得出的结论便是：LCA(u,v)便是根至u的路径上到节点v最近的点。
+  </p>
+  <h4>
+   <a aria-hidden="true" class="anchor" href="#22tarjan%E7%AE%97%E6%B3%95%E5%A6%82%E4%BD%95%E8%80%8C%E6%9D%A5" name="user-content-22tarjan%E7%AE%97%E6%B3%95%E5%A6%82%E4%BD%95%E8%80%8C%E6%9D%A5">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   2.2、Tarjan算法如何而来
+  </h4>
+  <p>
+   但关键是 Tarjan算法是怎么想出来的呢？再给定下图，你是否能看出来：分别从结点1的左右子树当中，任取一个结点，设为u、v，这两个任意结点u、v的最近公共祖先都为1。
   </p>
   <p>
-   左旋以pivot到y之间的链为“支轴”进行，它使y成为该孩子树新的根，而y的左孩子b则成为pivot的右孩子。
-  </p>
-  <p>
-   左旋操作的参考代码如下所示（以x代替上述的pivot）：
-  </p>
-  <pre><code> LEFT-ROTATE(T, x)  
-1  y ← right[x] ▹ Set y.  
-2  right[x] ← left[y]      ▹ Turn y's left subtree into x's right subtree.  
-3  p[left[y]] ← x  
-4  p[y] ← p[x]             ▹ Link x's parent to y.  
-5  if p[x] = nil[T]  
-6     then root[T] ← y  
-7     else if x = left[p[x]]  
-8             then left[p[x]] ← y  
-9             else right[p[x]] ← y  
-10  left[y] ← x             ▹ Put x on y's left.  
-11  p[x] ← y  
-</code></pre>
-  <p>
-   2.右旋
-  </p>
-  <p>
-   右旋与左旋差不多，再此不做详细介绍。
-  </p>
-  <p>
-   <a href="../images/rbtree/3.jpg" target="_blank">
-    <img alt="" src="../images/rbtree/3.jpg" style="max-width:100%;"/>
+   <a href="../images/39/39.4.jpg" target="_blank">
+    <img alt="" src="../images/39/39.4.jpg" style="max-width:100%;"/>
    </a>
   </p>
   <p>
-   对于树的旋转，能保持不变的只有原树的搜索性质，而原树的红黑性质则不能保持，在红黑树的数据插入和删除后可利用旋转和颜色重涂来恢复树的红黑性质。
+   于此，我们可以得知：若两个结点u、v分别分布于某节点t 的左右子树，那么此节点 t即为u和v的最近公共祖先。更进一步，考虑到一个节点自己就是LCA的情况，得知：
+  </p>
+  <ul>
+   <li>
+    若某结点t 是两结点u、v的祖先之一，且这两结点并不分布于该结点t 的一棵子树中，而是分别在结点t 的左子树、右子树中，那么该结点t 即为两结点u、v的最近公共祖先。
+   </li>
+  </ul>
+  <p>
+   这个定理就是Tarjan算法的基础。
+  </p>
+  <p>
+   一如上文1.1节我们得到的结论：“如果当前结点t 满足 u &lt;t &lt; v，说明u和v分居在t 的两侧，故当前结点t 即为最近公共祖先”。
+  </p>
+  <p>
+   而对于本节开头我们所说的“如果要求多个任意两个结点的最近公共祖先，则相当于是批量查询”，即在很多组的询问的情况下，或许可以先确定一个LCA。例如是根节点1，然后再去检查所有询问，看是否满足刚才的定理，不满足就忽视，满足就赋值，全部弄完，再去假设2号节点是LCA，再去访问一遍。
+  </p>
+  <p>
+   可此方法需要判断一个结点是在左子树、还是右子树，或是都不在，都只能遍历一棵树，而多次遍历的代价实在是太大了，所以我们需要找到更好的方法。这就引出了下面要阐述的Tarjan算法，即每个结点只遍历一次，怎么做到的呢，请看下文讲解。
   </p>
   <h3>
-   <a class="anchor" href="#%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E6%8F%92%E5%85%A5" name="user-content-%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E6%8F%92%E5%85%A5">
+   <a aria-hidden="true" class="anchor" href="#23tarjan%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B" name="user-content-23tarjan%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B">
     <span class="octicon octicon-link">
     </span>
    </a>
-   红黑树的插入
+   2.3、Tarjan算法流程
   </h3>
   <p>
-   要真正理解红黑树的插入和删除，还得先理解二叉查找树的插入和删除。磨刀不误砍柴工，咱们再来分别了解下二叉查找树的插入和删除。
+   Tarjan算法流程为：
   </p>
-  <h4>
-   <a class="anchor" href="#%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%9A%84%E6%8F%92%E5%85%A5" name="user-content-%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%9A%84%E6%8F%92%E5%85%A5">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   二叉查找树的插入
-  </h4>
-  <p>
-   如果要在二叉查找树中插入一个结点，首先要查找到结点插入的位置，然后进行插入，假设插入的结点为z的话，插入的伪代码如下：
-  </p>
-  <pre><code>TREE-INSERT(T, z)
- 1  y ← NIL
- 2  x ← root[T]
- 3  while x ≠ NIL
- 4      do y ←  x
- 5         if key[z] &lt; key[x]
- 6            then x ← left[x]
- 7            else x ← right[x]
- 8  p[z] ← y
- 9  if y = NIL
-10     then root[T] ← z              ⊹ Tree T was empty
-11     else if key[z] &lt; key[y]
-12             then left[y] ← z
-13             else right[y] ← z
+  <pre><code>Procedure dfs（u）；
+    begin
+        设置u号节点的祖先为u
+        若u的左子树不为空，dfs（u - 左子树）；
+        若u的右子树不为空，dfs（u - 右子树）；
+        访问每一条与u相关的询问u、v
+            -若v已经被访问过，则输出v当前的祖先t（t即u,v的LCA）
+        标记u为已经访问，将所有u的孩子包括u本身的祖先改为u的父亲
+    end
 </code></pre>
   <p>
-   可以看到，上述第3-7行代码即是在二叉查找树中查找z待插入的位置，如果插入结点z小于当前遍历到的结点，则到当前结点的左子树中继续查找，如果z大于当前结点，则到当前结点的右子树中继续查找，第9-13行代码找到待插入的位置，如果z依然比此刻遍历到的新的当前结点小，则z作为当前结点的左孩子，否则作为当前结点的右孩子。
-  </p>
-  <h4>
-   <a class="anchor" href="#%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E6%8F%92%E5%85%A5%E5%92%8C%E6%8F%92%E5%85%A5%E4%BF%AE%E5%A4%8D" name="user-content-%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E6%8F%92%E5%85%A5%E5%92%8C%E6%8F%92%E5%85%A5%E4%BF%AE%E5%A4%8D">
-    <span class="octicon octicon-link">
-    </span>
+   普通的dfs 不能直接解决LCA问题，故Tarjan算法的原理是dfs +
+   <a href="http://zh.wikipedia.org/zh-cn/%E5%B9%B6%E6%9F%A5%E9%9B%86">
+    并查集
    </a>
-   红黑树的插入和插入修复
-  </h4>
-  <p>
-   现在我们了解了二叉查找树的插入，接下来，咱们便来具体了解红黑树的插入操作。红黑树的插入相当于在二叉查找树插入的基础上，为了重新恢复平衡，继续做了插入修复操作。
-  </p>
-  <p>
-   假设插入的结点为z，红黑树的插入伪代码具体如下所示：
-  </p>
-  <pre><code>RB-INSERT(T, z)  
- 1  y ← nil[T]  
- 2  x ← root[T]  
- 3  while x ≠ nil[T]  
- 4      do y ← x  
- 5         if key[z] &lt; key[x]  
- 6            then x ← left[x]  
- 7            else x ← right[x]  
- 8  p[z] ← y  
- 9  if y = nil[T]  
-10     then root[T] ← z  
-11     else if key[z] &lt; key[y]  
-12             then left[y] ← z  
-13             else right[y] ← z  
-14  left[z] ← nil[T]  
-15  right[z] ← nil[T]  
-16  color[z] ← RED  
-17  RB-INSERT-FIXUP(T, z)  
-</code></pre>
-  <p>
-   我们把上面这段红黑树的插入代码，跟我们之前看到的二叉查找树的插入代码，可以看出，RB-INSERT(T, z)前面的第1-13行代码基本就是二叉查找树的插入代码，然后第14-16行代码把z的左孩子、右孩子都赋为叶结点nil，再把z结点着为红色，最后为保证红黑性质在插入操作后依然保持，调用一个辅助程序RB-INSERT-FIXUP来对结点进行重新着色，并旋转。
-  </p>
-  <p>
-   换言之
-  </p>
-  <ul>
-   <li>
-    如果插入的是根结点，因为原树是空树，此情况只会违反性质2，所以直接把此结点涂为黑色。
-    <br/>
-   </li>
-   <li>
-    如果插入的结点的父结点是黑色，由于此不会违反性质2和性质4，红黑树没有被破坏，所以此时也是什么也不做。
-    <br/>
-   </li>
-  </ul>
-  <p>
-   但当遇到下述3种情况时：
-  </p>
-  <ul>
-   <li>
-    插入修复情况1：如果当前结点的父结点是红色且祖父结点的另一个子结点（叔叔结点）是红色
-   </li>
-   <li>
-    插入修复情况2：当前节点的父节点是红色,叔叔节点是黑色，当前节点是其父节点的右子
-   </li>
-   <li>
-    插入修复情况3：当前节点的父节点是红色,叔叔节点是黑色，当前节点是其父节点的左子
-   </li>
-  </ul>
-  <p>
-   又该如何调整呢？答案就是根据红黑树插入代码RB-INSERT(T, z)最后一行调用的RB-INSERT-FIXUP（T,z）所示操作进行，具体如下所示：
-  </p>
-  <pre><code>RB-INSERT-FIXUP（T,z）
- 1 while color[p[z]] = RED  
- 2     do if p[z] = left[p[p[z]]]  
- 3           then y ← right[p[p[z]]]  
- 4                if color[y] = RED  
- 5                   then color[p[z]] ← BLACK                    ▹ Case 1  
- 6                        color[y] ← BLACK                       ▹ Case 1  
- 7                        color[p[p[z]]] ← RED                   ▹ Case 1  
- 8                        z ← p[p[z]]                            ▹ Case 1  
- 9                   else if z = right[p[z]]  
-10                           then z ← p[z]                       ▹ Case 2  
-11                                LEFT-ROTATE(T, z)              ▹ Case 2  
-12                           color[p[z]] ← BLACK                 ▹ Case 3  
-13                           color[p[p[z]]] ← RED                ▹ Case 3  
-14                           RIGHT-ROTATE(T, p[p[z]])            ▹ Case 3  
-15           else (same as then clause  
-                         with "right" and "left" exchanged)  
-16 color[root[T]] ← BLACK  
-</code></pre>
-  <p>
-   下面，咱们来分别处理上述3种插入修复情况。
-  </p>
-  <p>
-   <strong>
-    插入修复情况1：当前结点的父结点是红色且祖父结点的另一个子结点（叔叔结点）是红色。
-   </strong>
-  </p>
-  <p>
-   即如下代码所示：
-  </p>
-  <pre><code> 1 while color[p[z]] = RED  
- 2     do if p[z] = left[p[p[z]]]  
- 3           then y ← right[p[p[z]]]  
- 4                if color[y] = RED  
-</code></pre>
-  <p>
-   此时父结点的父结点一定存在，否则插入前就已不是红黑树。
-   <br/>
-   与此同时，又分为父结点是祖父结点的左子还是右子，对于对称性，我们只要解开一个方向就可以了。
-  </p>
-  <p>
-   在此，我们只考虑父结点为祖父左子的情况。
-   <br/>
-   同时，还可以分为当前结点是其父结点的左子还是右子，但是处理方式是一样的。我们将此归为同一类。
-  </p>
-  <p>
-   对策：将当前节点的父节点和叔叔节点涂黑，祖父结点涂红，把当前结点指向祖父节点，从新的当前节点重新开始算法。即如下代码所示：
-  </p>
-  <pre><code> 5                   then color[p[z]] ← BLACK                    ▹ Case 1  
- 6                        color[y] ← BLACK                       ▹ Case 1  
- 7                        color[p[p[z]]] ← RED                   ▹ Case 1  
- 8                        z ← p[p[z]]                            ▹ Case 1  
-</code></pre>
-  <p>
-   针对情况1，变化前（图片来源：saturnman）[当前节点为4节点]：
-  </p>
-  <p>
-   <a href="../images/rbtree/4.png" target="_blank">
-    <img alt="" src="../images/rbtree/4.png" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   变化后：
-  </p>
-  <p>
-   <a href="../images/rbtree/5.png" target="_blank">
-    <img alt="" src="../images/rbtree/5.png" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   <strong>
-    插入修复情况2：当前节点的父节点是红色,叔叔节点是黑色，当前节点是其父节点的右子
-   </strong>
-   <br/>
-   对策：当前节点的父节点做为新的当前节点，以新当前节点为支点左旋。即如下代码所示：
-  </p>
-  <pre><code> 9                   else if z = right[p[z]]
-10                           then z ← p[z]                       ▹ Case 2
-11                                LEFT-ROTATE(T, z)              ▹ Case 2
-</code></pre>
-  <p>
-   如下图所示，变化前[当前节点为7节点]：
-  </p>
-  <p>
-   <a href="../images/rbtree/6.png" target="_blank">
-    <img alt="" src="../images/rbtree/6.png" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   变化后：
-  </p>
-  <p>
-   <a href="../images/rbtree/7.png" target="_blank">
-    <img alt="" src="../images/rbtree/7.png" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   <strong>
-    插入修复情况3：当前节点的父节点是红色,叔叔节点是黑色，当前节点是其父节点的左子
-   </strong>
-   <br/>
-   解法：父节点变为黑色，祖父节点变为红色，在祖父节点为支点右旋，操作代码为：
-  </p>
-  <pre><code>12                           color[p[z]] ← BLACK                 ▹ Case 3
-13                           color[p[p[z]]] ← RED                ▹ Case 3
-14                           RIGHT-ROTATE(T, p[p[z]])            ▹ Case 3
-</code></pre>
-  <p>
-   最后，把根结点涂为红色，整棵红黑树便重新恢复了平衡。
-  </p>
-  <p>
-   如下图所示[当前节点为2节点]
-  </p>
-  <p>
-   <a href="../images/rbtree/8.png" target="_blank">
-    <img alt="" src="../images/rbtree/8.png" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   变化后：
-  </p>
-  <p>
-   <a href="../images/rbtree/9.png" target="_blank">
-    <img alt="" src="../images/rbtree/9.png" style="max-width:100%;"/>
-   </a>
+   ，它每次把两个结点对的最近公共祖先的查询保存起来，然后dfs 更新一次。如此，利用并查集优越的时空复杂度，此算法的时间复杂度可以缩小至O(n＋Q)，其中，n为数据规模，Q为询问个数。
   </p>
   <h3>
-   <a class="anchor" href="#%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E5%88%A0%E9%99%A4" name="user-content-%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E5%88%A0%E9%99%A4">
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%89%E8%BD%AC%E6%8D%A2%E4%B8%BArmq%E9%97%AE%E9%A2%98" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%89%E8%BD%AC%E6%8D%A2%E4%B8%BArmq%E9%97%AE%E9%A2%98">
     <span class="octicon octicon-link">
     </span>
    </a>
-   红黑树的删除
+   解法三：转换为RMQ问题
   </h3>
   <p>
-   ok，接下来，咱们最后来了解，红黑树的删除操作。
+   解决此最近公共祖先问题的还有一个算法，即转换为RMQ问题，用Sparse Table（简称ST）算法解决。
   </p>
-  <p>
-   "我们删除的节点的方法与常规二叉搜索树中删除节点的方法是一样的，如果被删除的节点不是有双非空子女，则直接删除这个节点，用它的唯一子节点顶替它的位置，如果它的子节点分是空节点，那就用空节点顶替它的位置，如果它的双子全为非空，我们就把它的直接后继节点内容复制到它的位置，之后以同样的方式删除它的后继节点，它的后继节点不可能是双子非空，因此此传递过程最多只进行一次。”
-  </p>
-  <h4>
-   <a class="anchor" href="#%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%9A%84%E5%88%A0%E9%99%A4" name="user-content-%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%9A%84%E5%88%A0%E9%99%A4">
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#31%E4%BB%80%E4%B9%88%E6%98%AFrmq%E9%97%AE%E9%A2%98" name="user-content-31%E4%BB%80%E4%B9%88%E6%98%AFrmq%E9%97%AE%E9%A2%98">
     <span class="octicon octicon-link">
     </span>
    </a>
-   二叉查找树的删除
-  </h4>
+   3.1、什么是RMQ问题
+  </h3>
   <p>
-   继续讲解之前，补充说明下二叉树结点删除的几种情况，待删除的节点按照儿子的个数可以分为三种：
+   RMQ，全称为Range Minimum Query，顾名思义，则是区间最值查询，它被用来在数组中查找两个指定索引中最小值的位置。即RMQ相当于给定数组A[0, N-1]，找出给定的两个索引如 i、j 间的最小值的位置。
   </p>
-  <ol>
-   <li>
-    没有儿子，即为叶结点。直接把父结点的对应儿子指针设为NULL，删除儿子结点就OK了。
-   </li>
-   <li>
-    只有一个儿子。那么把父结点的相应儿子指针指向儿子的独生子，删除儿子结点也OK了。
-   </li>
-   <li>
-    有两个儿子。这是最麻烦的情况，因为你删除节点之后，还要保证满足搜索二叉树的结构。其实也比较容易，我们可以选择左儿子中的最大元素或者右儿子中的最小元素放到待删除节点的位置，就可以保证结构的不变。当然，你要记得调整子树，毕竟又出现了节点删除。习惯上大家选择左儿子中的最大元素，其实选择右儿子的最小元素也一样，没有任何差别，只是人们习惯从左向右。这里咱们也选择左儿子的最大元素，将它放到待删结点的位置。左儿子的最大元素其实很好找，只要顺着左儿子不断的去搜索右子树就可以了，直到找到一个没有右子树的结点。那就是最大的了。
-   </li>
-  </ol>
   <p>
-   二叉查找树的删除代码如下所示：
+   假设一个算法预处理时间为 f(n)，查询时间为g(n)，那么这个算法复杂度的标记为。我们将用RMQA(i, j) 来表示数组A 中索引i 和 j 之间最小值的位置。 u和v的离树T根结点最远的公共祖先用LCA T(u, v)表示。
   </p>
-  <pre><code>TREE-DELETE(T, z)
- 1  if left[z] = NIL or right[z] = NIL
- 2      then y ← z
- 3      else y ← TREE-SUCCESSOR(z)
- 4  if left[y] ≠ NIL
- 5      then x ← left[y]
- 6      else x ← right[y]
- 7  if x ≠ NIL
- 8      then p[x] ← p[y]
- 9  if p[y] = NIL
-10      then root[T] ← x
-11      else if y = left[p[y]]
-12              then left[p[y]] ← x
-13              else right[p[y]] ← x
-14  if y ≠ z
-15      then key[z] ← key[y]
-16           copy y's satellite data into z
-17  return y
-</code></pre>
+  <p>
+   如下图所示，RMQA(2,7 )则表示求数组A中从A[2]~A[7]这段区间中的最小值：
+  </p>
+  <p>
+   <a href="../images/39/39.31.jpg" target="_blank">
+    <img alt="" src="../images/39/39.31.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   很显然，从上图中，我们可以看出最小值是A[3] = 1，所以也就不难得出最小值的索引值RMQA(2,7) = 3。
+  </p>
   <h4>
-   <a class="anchor" href="#%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E5%88%A0%E9%99%A4%E5%92%8C%E5%88%A0%E9%99%A4%E4%BF%AE%E5%A4%8D" name="user-content-%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E5%88%A0%E9%99%A4%E5%92%8C%E5%88%A0%E9%99%A4%E4%BF%AE%E5%A4%8D">
+   <a aria-hidden="true" class="anchor" href="#32%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3rmq%E9%97%AE%E9%A2%98" name="user-content-32%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3rmq%E9%97%AE%E9%A2%98">
     <span class="octicon octicon-link">
     </span>
    </a>
-   红黑树的删除和删除修复
+   3.2、如何解决RMQ问题
+  </h4>
+  <h5>
+   <a aria-hidden="true" class="anchor" href="#321trivial-algorithms-for-rmq" name="user-content-321trivial-algorithms-for-rmq">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   3.2.1、Trivial algorithms for RMQ
+  </h5>
+  <p>
+   下面，我们对对每一对索引(i, j)，将数组中索引i 和 j 之间最小值的位置 RMQA(i, j) 存储在M[0, N-1][0, N-1]表中。 RMQA(i, j) 有不同种计算方法，你会看到，随着计算方法的不同，它的时空复杂度也不同：
+  </p>
+  <ul>
+   <li>
+    普通的计算将得到一个 复杂度的算法。尽管如此，通过使用一个简单的动态规划方法，我们可以将复杂度降低到。如何做到的呢？方法如下代码所示：
+   </li>
+  </ul>
+  <div class="highlight highlight-cpp">
+   <pre><span class="c1">//copyright@  </span>
+<span class="c1">//modified by July 2014  </span>
+<span class="kt">void</span> <span class="nf">process1</span><span class="p">(</span><span class="kt">int</span> <span class="n">M</span><span class="p">[</span><span class="n">MAXN</span><span class="p">][</span><span class="n">MAXN</span><span class="p">],</span> <span class="kt">int</span> <span class="n">A</span><span class="p">[</span><span class="n">MAXN</span><span class="p">],</span> <span class="kt">int</span> <span class="n">N</span><span class="p">)</span>  
+<span class="p">{</span>  
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>  
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>  
+        <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>  
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>  
+        <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>  
+            <span class="c1">//若前者小于后者，则把后者的索引值付给M[i][j]  </span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">&lt;</span> <span class="n">A</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>  
+                <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>  
+            <span class="c1">//否则前者的索引值付给M[i][j]  </span>
+            <span class="k">else</span>  
+                <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>  
+<span class="p">}</span>  
+</pre>
+  </div>
+  <ul>
+   <li>
+    一个比较有趣的点子是把向量分割成sqrt(N)大小的段。我们将在M[0,sqrt(N)-1]为每一个段保存最小值的位置。如此，M可以很容易的在O(N)时间内预处理。
+   </li>
+  </ul>
+  <p>
+   <a href="../images/39/39.32.jpg" target="_blank">
+    <img alt="" src="../images/39/39.32.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <ul>
+   <li>
+    一个更好的方法预处理RMQ 是对2^k 的长度的子数组进行动态规划。我们将使用数组M[0, N-1][0, logN]进行保存，其中M[ i ][ j ] 是以i 开始，长度为 2^j 的子数组的最小值的索引。这就引出了咱们接下来要介绍的Sparse Table (ST) algorithm。
+   </li>
+  </ul>
+  <h5>
+   <a aria-hidden="true" class="anchor" href="#322sparse-table-st-algorithm" name="user-content-322sparse-table-st-algorithm">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   3.2.2、Sparse Table (ST) algorithm
+  </h5>
+  <p>
+   <a href="../images/39/39.33.jpg" target="_blank">
+    <img alt="" src="../images/39/39.33.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   在上图中，我们可以看出：
+  </p>
+  <ul>
+   <li>
+    在A[1]这个长度为2^0的区间内，最小值即为A[1] = 4，故最小值的索引M[1][0]为1；
+   </li>
+   <li>
+    在A[1]、A[2] 这个长度为2^1的区间内，最小值为A[2] = 3，故最小值的索引为M[1][1] = 2；
+   </li>
+   <li>
+    在A[1]、A[2]、A[3]、A[4]这个长度为2^2的区间内，最小值为A[3] = 1，故最小值的索引M[1][2] = 3。
+   </li>
+  </ul>
+  <p>
+   为了计算M[i][j]我们必须找到前半段区间和后半段区间的最小值。很明显小的片段有着2^(j-1)长度，因此递归如下
+  </p>
+  <p>
+   <a href="../images/39/39.34.jpg" target="_blank">
+    <img alt="" src="../images/39/39.34.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   根据上述公式，可以写出这个预处理的递归代码，如下：
+  </p>
+  <div class="highlight highlight-cpp">
+   <pre><span class="kt">void</span> <span class="nf">process2</span><span class="p">(</span><span class="kt">int</span> <span class="n">M</span><span class="p">[</span><span class="n">MAXN</span><span class="p">][</span><span class="n">LOGMAXN</span><span class="p">],</span> <span class="kt">int</span> <span class="n">A</span><span class="p">[</span><span class="n">MAXN</span><span class="p">],</span> <span class="kt">int</span> <span class="n">N</span><span class="p">)</span>  
+<span class="p">{</span>  
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>  
+    <span class="c1">//initialize M for the intervals with length 1  </span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>  
+        <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>  
+
+    <span class="c1">//compute values from smaller to bigger intervals  </span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">N</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>  
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">j</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>  
+            <span class="k">if</span> <span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">&lt;</span> <span class="n">A</span><span class="p">[</span><span class="n">M</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]])</span>  
+                <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>  
+            <span class="k">else</span>  
+                <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">M</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>  
+<span class="p">}</span>
+</pre>
+  </div>
+  <p>
+   经过这个O(N logN)时间复杂度的预处理之后，让我们看看怎样使用它们去计算 RMQA(i, j)。思路是选择两个能够完全覆盖区间[i..j]的块并且找到它们之间的最小值。设k = [log(j - i + 1)]。
+  </p>
+  <p>
+   为了计算 RMQA(i, j)，我们可以使用下面的公式：
+  </p>
+  <p>
+   <a href="../images/39/39.35.jpg" target="_blank">
+    <img alt="" src="../images/39/39.35.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   故，综合来看，咱们预处理的时间复杂度从O(N3)降低到了O(N logN)，查询的时间复杂度为O(1)，所以最终的整体复杂度为：&lt; O(N logN), O(1) &gt;。
+  </p>
+  <h4>
+   <a aria-hidden="true" class="anchor" href="#33lca%E4%B8%8Ermq%E7%9A%84%E5%85%B3%E8%81%94%E6%80%A7" name="user-content-33lca%E4%B8%8Ermq%E7%9A%84%E5%85%B3%E8%81%94%E6%80%A7">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   3.3、LCA与RMQ的关联性
   </h4>
   <p>
-   OK，回到红黑树上来，红黑树结点删除的算法实现是：
+   现在，让我们看看怎样用RMQ来计算LCA查询。事实上，我们可以在线性时间里将LCA问题规约到RMQ问题，因此每一个解决RMQ的问题都可以解决LCA问题。让我们通过例子来说明怎么规约的：
   </p>
   <p>
-   RB-DELETE(T, z)   单纯删除结点的总操作
-  </p>
-  <pre><code> 1 if left[z] = nil[T] or right[z] = nil[T]  
- 2    then y ← z  
- 3    else y ← TREE-SUCCESSOR(z)  
- 4 if left[y] ≠ nil[T]  
- 5    then x ← left[y]  
- 6    else x ← right[y]  
- 7 p[x] ← p[y]  
- 8 if p[y] = nil[T]  
- 9    then root[T] ← x  
-10    else if y = left[p[y]]  
-11            then left[p[y]] ← x  
-12            else right[p[y]] ← x  
-13 if y ≠ z  
-14    then key[z] ← key[y]  
-15         copy y's satellite data into z  
-16 if color[y] = BLACK  
-17    then RB-DELETE-FIXUP(T, x)  
-18 return y  
-</code></pre>
-  <p>
-   “在删除节点后，原红黑树的性质可能被改变，如果删除的是红色节点，那么原红黑树的性质依旧保持，此时不用做修正操作，如果删除的节点是黑色节点，原红黑树的性质可能会被改变，我们要对其做修正操作。那么哪些树的性质会发生变化呢，如果删除节点不是树唯一节点，那么删除节点的那一个支的到各叶节点的黑色节点数会发生变化，此时性质5被破坏。如果被删节点的唯一非空子节点是红色，而被删节点的父节点也是红色，那么性质4被破坏。如果被删节点是根节点，而它的唯一非空子节点是红色，则删除后新根节点将变成红色，违背性质2。”
+   <a href="../images/39/39.37.jpg" target="_blank">
+    <img alt="" src="../images/39/39.37.jpg" style="max-width:100%;"/>
+   </a>
   </p>
   <p>
-   RB-DELETE-FIXUP(T, x)   恢复与保持红黑性质的工作
-  </p>
-  <pre><code> 1 while x ≠ root[T] and color[x] = BLACK  
- 2     do if x = left[p[x]]  
- 3           then w ← right[p[x]]  
- 4                if color[w] = RED  
- 5                   then color[w] ← BLACK                        ▹  Case 1  
- 6                        color[p[x]] ← RED                       ▹  Case 1  
- 7                        LEFT-ROTATE(T, p[x])                    ▹  Case 1  
- 8                        w ← right[p[x]]                         ▹  Case 1  
- 9                if color[left[w]] = BLACK and color[right[w]] = BLACK  
-10                   then color[w] ← RED                          ▹  Case 2  
-11                        x ← p[x]                                ▹  Case 2  
-12                   else if color[right[w]] = BLACK  
-13                           then color[left[w]] ← BLACK          ▹  Case 3  
-14                                color[w] ← RED                  ▹  Case 3  
-15                                RIGHT-ROTATE(T, w)              ▹  Case 3  
-16                                w ← right[p[x]]                 ▹  Case 3  
-17                         color[w] ← color[p[x]]                 ▹  Case 4  
-18                         color[p[x]] ← BLACK                    ▹  Case 4  
-19                         color[right[w]] ← BLACK                ▹  Case 4  
-20                         LEFT-ROTATE(T, p[x])                   ▹  Case 4  
-21                         x ← root[T]                            ▹  Case 4  
-22        else (same as then clause with "right" and "left" exchanged)  
-23 color[x] ← BLACK  
-</code></pre>
-  <p>
-   “上面的修复情况看起来有些复杂，下面我们用一个分析技巧：我们从被删节点后来顶替它的那个节点开始调整，并认为它有额外的一重黑色。这里额外一重黑色是什么意思呢，我们不是把红黑树的节点加上除红与黑的另一种颜色，这里只是一种假设，我们认为我们当前指向它，因此空有额外一种黑色，可以认为它的黑色是从它的父节点被删除后继承给它的，它现在可以容纳两种颜色，如果它原来是红色，那么现在是红+黑，如果原来是黑色，那么它现在的颜色是黑+黑。有了这重额外的黑色，原红黑树性质5就能保持不变。现在只要恢复其它性质就可以了，做法还是尽量向根移动和穷举所有可能性。"--saturnman。
+   <a href="../images/39/39.38.jpg" target="_blank">
+    <img alt="" src="../images/39/39.38.jpg" style="max-width:100%;"/>
+   </a>
   </p>
   <p>
-   如果是以下情况，恢复比较简单：
+   注意LCAT(u, v)是在对T进行dfs过程当中在访问u和v之间离根结点最近的点。因此我们可以考虑树的欧拉环游过程u和v之间所有的结点，并找到它们之间处于最低层的结点。为了达到这个目的，我们可以建立三个数组：
   </p>
   <ul>
    <li>
-    a)当前节点是红+黑色
-    <br/>
-    解法，直接把当前节点染成黑色，结束此时红黑树性质全部恢复。
-    <br/>
+    E[1, 2*N-1]  - 对T进行欧拉环游过程中所有访问到的结点;E[i]是在环游过程中第i个访问的结点
    </li>
    <li>
-    b)当前节点是黑+黑且是根节点，
-解法：什么都不做，结束。
+    L[1,2*N-1] -  欧拉环游中访问到的结点所处的层数;L[i]是E[i]所在的层数
+   </li>
+   <li>
+    H[1, N] - H[i] 是E中结点i第一次出现的下标(任何出现i的地方都行，当然选第一个不会错)
    </li>
   </ul>
   <p>
-   但如果是以下情况呢？：
+   假定H[u]&lt;H
+   <a href="%E5%90%A6%E5%88%99%E4%BD%A0%E8%A6%81%E4%BA%A4%E6%8D%A2u%E5%92%8Cv">
+    v
+   </a>
+   。可以很容易的看到u和v第一次出现的结点是E[H[u]..H[v]]。现在，我们需要找到这些结点中的最低层。为了达到这个目的，我们可以使用RMQ。因此 LCAT(u, v) = E[RMQL(H[u], H[v])] ,RMQ返回的是索引，下面是E,L,H数组：
+  </p>
+  <p>
+   <a href="../images/39/39.39.jpg" target="_blank">
+    <img alt="" src="../images/39/39.39.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   注意L中连续的元素相差为1。
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#34%E4%BB%8Ermq%E5%88%B0lca" name="user-content-34%E4%BB%8Ermq%E5%88%B0lca">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   3.4、从RMQ到LCA
+  </h3>
+  <p>
+   我们已经看到了LCA问题可以在线性时间规约到RMQ问题。现在让我们来看看怎样把RMQ问题规约到LCA。这个意味着我们实际上可以把一般的RMQ问题规约到带约束的RMQ问题(这里相邻的元素相差1)。为了达到这个目的，我们需要使用笛卡尔树。
+  </p>
+  <p>
+   对于数组A[0,N-1]的笛卡尔树C(A)是一个二叉树，根节点是A的最小元素，假设i为A数组中最小元素的位置。当i&gt;0时，这个笛卡尔树的左子结点是A[0,i-1]构成的笛卡尔树，其他情况没有左子结点。右结点类似的用A[i+1,N-1]定义。注意对于具有相同元素的数组A，笛卡尔树并不唯一。在本文中，将会使用第一次出现的最小值，因此笛卡尔树看作唯一。可以很容易的看到RMQA(i, j) = LCAC(i, j)。
+  </p>
+  <p>
+   下面是一个例子：
+  </p>
+  <p>
+   <a href="../images/39/39.40.jpg" target="_blank">
+    <img alt="" src="../images/39/39.40.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   <a href="../images/39/39.41.jpg" target="_blank">
+    <img alt="" src="../images/39/39.41.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   现在我们需要做的仅仅是用线性时间计算C(A)。这个可以使用栈来实现。
   </p>
   <ul>
    <li>
-    删除修复情况1：当前节点是黑+黑且兄弟节点为红色(此时父节点和兄弟节点的子节点分为黑)
+    初始栈为空。
    </li>
    <li>
-    删除修复情况2：当前节点是黑加黑且兄弟是黑色且兄弟节点的两个子节点全为黑色
+    然后我们在栈中插入A的元素。
    </li>
    <li>
-    删除修复情况3：当前节点颜色是黑+黑，兄弟节点是黑色，兄弟的左子是红色，右子是黑色
+    在第i步,A[i]将会紧挨着栈中比A[i]小或者相等的元素插入,并且所有较大的元素将会被移除。
    </li>
    <li>
-    删除修复情况4：当前节点颜色是黑-黑色，它的兄弟节点是黑色，但是兄弟节点的右子是红色，兄弟节点左子的颜色任意
+    在插入结束之前栈中A[i]位置前的元素将成为i的左儿子，A[i]将会成为它之后一个较小元素的右儿子。
    </li>
   </ul>
   <p>
-   此时，我们需要调用RB-DELETE-FIXUP(T, x)，来恢复与保持红黑性质的工作。
+   在每一步中，栈中的第一个元素总是笛卡尔树的根。
   </p>
   <p>
-   下面，咱们便来分别处理这4种删除修复情况。
+   如果使用栈来保存元素的索引而不是值，我们可以很轻松的建立树。由于A中的每个元素最多被增加一次和最多被移除一次，所以建树的时间复杂度为O(N)。最终查询的时间复杂度为O(1)，故综上可得，咱们整个问题的最终时间复杂度为：。
   </p>
   <p>
-   <strong>
-    删除修复情况1：当前节点是黑+黑且兄弟节点为红色(此时父节点和兄弟节点的子节点分为黑)。
-   </strong>
+   现在，对于询问 RMQA(i, j) 我们有两种情况:
+  </p>
+  <ul>
+   <li>
+    i和j在同一个块中,因此我们使用在P和T中计算的值
+   </li>
+   <li>
+    i和j在不同的块中，因此我们计算三个值:从i到i所在块的末尾的P和T中的最小值，所有i和j中块中的通过与处理得到的最小值以及从j所在块i和j在同一个块中,因此我们使用在P和T中计算的值j的P和T的最小值；最后我们我们只要计算三个值中最小值的位置即可。
+   </li>
+  </ul>
+  <p>
+   RMQ和LCA是密切相关的问题，因为它们之间可以相互规约。有许多算法可以用来解决它们，并且他们适应于一类问题。
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%9B%9B%E7%BA%BF%E6%AE%B5%E6%A0%91" name="user-content-%E8%A7%A3%E6%B3%95%E5%9B%9B%E7%BA%BF%E6%AE%B5%E6%A0%91">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法四：线段树
+  </h3>
+  <p>
+   解决RMQ问题也可以用所谓的线段树Segment trees。线段树是一个类似堆的数据结构，可以在基于区间数组上用对数时间进行更新和查询操作。我们用下面递归方式来定义线段树的[i, j]区间：
+  </p>
+  <ul>
+   <li>
+    第一个结点将保存区间[i, j]区间的信息
+   </li>
+   <li>
+    如果i&lt;j 左右的孩子结点将保存区间[i, (i+j)/2]和[(i+j)/2+1, j] 的信息
+   </li>
+  </ul>
+  <p>
+   注意具有N个区间元素的线段树的高度为[logN] + 1。下面是区间[0,9]的线段树：
   </p>
   <p>
-   解法：把父节点染成红色，把兄弟结点染成黑色，之后重新进入算法（我们只讨论当前节点是其父节点左孩子时的情况）。此变换后原红黑树性质5不变，而把问题转化为兄弟节点为黑色的情况(注：变化前，原本就未违反性质5，只是为了
-   <strong>
-    把问题转化为兄弟节点为黑色的情况
-   </strong>
-   )。  即如下代码操作：
-  </p>
-  <pre><code>//调用RB-DELETE-FIXUP(T, x) 的1-8行代码
- 1 while x ≠ root[T] and color[x] = BLACK
- 2     do if x = left[p[x]]
- 3           then w ← right[p[x]]
- 4                if color[w] = RED
- 5                   then color[w] ← BLACK                        ▹  Case 1
- 6                        color[p[x]] ← RED                       ▹  Case 1
- 7                        LEFT-ROTATE(T, p[x])                    ▹  Case 1
- 8                        w ← right[p[x]]                         ▹  Case 1
-</code></pre>
-  <p>
-   变化前：
-  </p>
-  <p>
-   <a href="../images/rbtree/10.jpg" target="_blank">
-    <img alt="" src="../images/rbtree/10.jpg" style="max-width:100%;"/>
+   <a href="../images/39/39.36.jpg" target="_blank">
+    <img alt="" src="../images/39/39.36.jpg" style="max-width:100%;"/>
    </a>
   </p>
   <p>
-   变化后：
+   线段树和堆具有相同的结构，因此我们定义x是一个非叶结点，那么左孩子结点为2*x,而右孩子结点为2*x+1。想要使用线段树解决RMQ问题，我们则要要使用数组 M[1, 2 * 2[logN] + 1]，这里M[i]保存结点i区间最小值的位置。初始时M的所有元素为-1。树应当用下面的函数进行初始化(b和e是当前区间的范围)：
+  </p>
+  <div class="highlight highlight-cpp">
+   <pre><span class="kt">void</span> <span class="nf">initialize</span><span class="p">(</span><span class="kt">int</span> <span class="n">node</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="n">e</span><span class="p">,</span> <span class="kt">int</span> <span class="n">M</span><span class="p">[</span><span class="n">MAXIND</span><span class="p">],</span> <span class="kt">int</span> <span class="n">A</span><span class="p">[</span><span class="n">MAXN</span><span class="p">],</span> <span class="kt">int</span> <span class="n">N</span><span class="p">)</span>  
+<span class="p">{</span>  
+    <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">==</span> <span class="n">e</span><span class="p">)</span>  
+        <span class="n">M</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>  
+    <span class="k">else</span>  
+    <span class="p">{</span>  
+        <span class="c1">//compute the values in the left and right subtrees  </span>
+        <span class="n">initialize</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">node</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">e</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>  
+        <span class="n">initialize</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">node</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">e</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>  
+
+        <span class="c1">//search for the minimum value in the first and  </span>
+        <span class="c1">//second half of the interval  </span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">M</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">node</span><span class="p">]]</span> <span class="o">&lt;=</span> <span class="n">A</span><span class="p">[</span><span class="n">M</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">node</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]])</span>  
+            <span class="n">M</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">M</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">node</span><span class="p">];</span>  
+        <span class="k">else</span>  
+            <span class="n">M</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">M</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">node</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>  
+    <span class="p">}</span>  
+<span class="p">}</span>
+</pre>
+  </div>
+  <p>
+   上面的函数映射出了这棵树建造的方式。当计算一些区间的最小值位置时，我们应当首先查看子结点的值。调用函数的时候使用 node = 1, b = 0和e  = N-1。
   </p>
   <p>
-   <a href="../images/rbtree/11.jpg" target="_blank">
-    <img alt="" src="../images/rbtree/11.jpg" style="max-width:100%;"/>
+   现在我们可以开始进行查询了。如果我们想要查找区间[i, j]中的最小值的位置时，我们可以使用下一个简单的函数：
+  </p>
+  <div class="highlight highlight-cpp">
+   <pre><span class="kt">int</span> <span class="nf">query</span><span class="p">(</span><span class="kt">int</span> <span class="n">node</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="n">e</span><span class="p">,</span> <span class="kt">int</span> <span class="n">M</span><span class="p">[</span><span class="n">MAXIND</span><span class="p">],</span> <span class="kt">int</span> <span class="n">A</span><span class="p">[</span><span class="n">MAXN</span><span class="p">],</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">j</span><span class="p">)</span>  
+<span class="p">{</span>  
+    <span class="kt">int</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">;</span>  
+    <span class="c1">//if the current interval doesn't intersect  </span>
+    <span class="c1">//the query interval return -1  </span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;</span> <span class="n">e</span> <span class="o">||</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">)</span>  
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>  
+
+    <span class="c1">//if the current interval is included in  </span>
+    <span class="c1">//the query interval return M[node]  </span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">&gt;=</span> <span class="n">i</span> <span class="o">&amp;&amp;</span> <span class="n">e</span> <span class="o">&lt;=</span> <span class="n">j</span><span class="p">)</span>  
+        <span class="k">return</span> <span class="n">M</span><span class="p">[</span><span class="n">node</span><span class="p">];</span>  
+
+    <span class="c1">//compute the minimum position in the  </span>
+    <span class="c1">//left and right part of the interval  </span>
+    <span class="n">p1</span> <span class="o">=</span> <span class="n">query</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">node</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">e</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">);</span>  
+    <span class="n">p2</span> <span class="o">=</span> <span class="n">query</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">node</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">e</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">);</span>  
+
+    <span class="c1">//return the position where the overall  </span>
+    <span class="c1">//minimum is  </span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">p1</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>  
+        <span class="k">return</span> <span class="n">M</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">p2</span><span class="p">;</span>  
+    <span class="k">if</span> <span class="p">(</span><span class="n">p2</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>  
+        <span class="k">return</span> <span class="n">M</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">p1</span><span class="p">;</span>  
+    <span class="k">if</span> <span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">p1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">A</span><span class="p">[</span><span class="n">p2</span><span class="p">])</span>  
+        <span class="k">return</span> <span class="n">M</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">p1</span><span class="p">;</span>  
+    <span class="k">return</span> <span class="n">M</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">p2</span><span class="p">;</span>  
+<span class="p">}</span>
+</pre>
+  </div>
+  <p>
+   你应该使用node = 1, b = 0和e = N - 1来调用这个函数，因为分配给第一个结点的区间是[0, N-1]。
+  </p>
+  <p>
+   可以很容易的看出任何查询都可以在O(log N)内完成。注意当我们碰到完整的in/out区间时我们停止了，因此数中的路径最多分裂一次。用线段树我们获得了的算法
+  </p>
+  <p>
+   线段树非常强大，不仅仅是因为它能够用在RMQ上，还因为它是一个非常灵活的数据结构，它能够解决动态版本的RMQ问题和大量的区间搜索问题。
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#%E5%85%B6%E4%BD%99%E8%A7%A3%E6%B3%95" name="user-content-%E5%85%B6%E4%BD%99%E8%A7%A3%E6%B3%95">
+    <span class="octicon octicon-link">
+    </span>
    </a>
-  </p>
+   其余解法
+  </h3>
   <p>
-   <strong>
-    删除修复情况2：当前节点是黑加黑且兄弟是黑色且兄弟节点的两个子节点全为黑色。
-   </strong>
-  </p>
-  <p>
-   解法：把当前节点和兄弟节点中抽取一重黑色追加到父节点上，把父节点当成新的当前节点，重新进入算法。（此变换后性质5不变），即调用RB-INSERT-FIXUP(T, z) 的第9-10行代码操作，如下：
-  </p>
-  <pre><code>//调用RB-DELETE-FIXUP(T, x) 的9-11行代码
-9                if color[left[w]] = BLACK and color[right[w]] = BLACK
-10                   then color[w] ← RED                          ▹  Case 2
-11                        x p[x]                                  ▹  Case 2
-</code></pre>
-  <p>
-   变化前：
-  </p>
-  <p>
-   <a href="../images/rbtree/12.jpg" target="_blank">
-    <img alt="" src="../images/rbtree/12.jpg" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   变化后：
-  </p>
-  <p>
-   <a href="../images/rbtree/13.jpg" target="_blank">
-    <img alt="" src="../images/rbtree/13.jpg" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   <strong>
-    删除修复情况3：当前节点颜色是黑+黑，兄弟节点是黑色，兄弟的左子是红色，右子是黑色。
-   </strong>
-  </p>
-  <p>
-   解法：把兄弟结点染红，兄弟左子节点染黑，之后再在兄弟节点为支点解右旋，之后重新进入算法。此是把当前的情况转化为情况4，而性质5得以保持，即调用RB-INSERT-FIXUP(T, z) 的第12-16行代码，如下所示：
-  </p>
-  <pre><code>//调用RB-DELETE-FIXUP(T, x) 的第12-16行代码
-12                   else if color[right[w]] = BLACK
-13                           then color[left[w]] ← BLACK          ▹  Case 3
-14                                color[w] ← RED                  ▹  Case 3
-15                                RIGHT-ROTATE(T, w)              ▹  Case 3
-16                                w ← right[p[x]]                 ▹  Case 3
-</code></pre>
-  <p>
-   变化前：
-  </p>
-  <p>
-   <a href="../images/rbtree/14.jpg" target="_blank">
-    <img alt="" src="../images/rbtree/14.jpg" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   变化后：
-  </p>
-  <p>
-   <a href="../images/rbtree/15.jpg" target="_blank">
-    <img alt="" src="../images/rbtree/15.jpg" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   <strong>
-    删除修复情况4：当前节点颜色是黑-黑色，它的兄弟节点是黑色，但是兄弟节点的右子是红色，兄弟节点左子的颜色任意。
-   </strong>
-  </p>
-  <p>
-   解法：把兄弟节点染成当前节点父节点的颜色，把当前节点父节点染成黑色，兄弟节点右子染成黑色，之后以当前节点的父节点为支点进行左旋，此时算法结束，红黑树所有性质调整正确，即调用RB-INSERT-FIXUP(T, z)的第17-21行代码，如下所示：
-  </p>
-  <pre><code>//调用RB-DELETE-FIXUP(T, x) 的第17-21行代码
-17                         color[w] ← color[p[x]]                 ▹  Case 4
-18                         color[p[x]] ← BLACK                    ▹  Case 4
-19                         color[right[w]] ← BLACK                ▹  Case 4
-20                         LEFT-ROTATE(T, p[x])                   ▹  Case 4
-21                         x ← root[T]                            ▹  Case 4
-</code></pre>
-  <p>
-   变化前：
-  </p>
-  <p>
-   <a href="../images/rbtree/16.jpg" target="_blank">
-    <img alt="" src="../images/rbtree/16.jpg" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   变化后：
-  </p>
-  <p>
-   <a href="../images/rbtree/17.jpg" target="_blank">
-    <img alt="" src="../images/rbtree/17.jpg" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   July、二零一四年五月六日、再次更新。
+   除此之外，还有倍增法、重链剖分算法和后序遍历也可以解决该问题。其中，倍增思路相当于层序遍历，逐层或几层跳跃查，查询时间复杂度为O(log n)，空间复杂度为nlogn，对于每个节点先存储向上1层2层4层的节点，每个点有depth信息。
   </p>
  </body>
 </html>
@@ -789,7 +779,7 @@
 					|
 				
 				
-					<a href="03.04.html">next</a>
+					<a href="03.05.html">next</a>
 				
 				<span style="float: right"><a href="index.html">Back to home</a>
 			</div>

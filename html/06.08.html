@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
-  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-6fc7fb2a2ad956975983882a7f95b27577e851a4.css" />
+  <link rel="stylesheet" href="style_cache/github2-ade82cf93cc23c0e2691785e7976cc718fe1986f.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -104,40 +104,345 @@
 		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
 			<html>
  <body>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#bloom-filter" name="user-content-bloom-filter">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   Bloom Filter
+  </h1>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D" name="user-content-%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   方法介绍
+  </h2>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#%E4%B8%80%E4%BB%80%E4%B9%88%E6%98%AFbloom-filter" name="user-content-%E4%B8%80%E4%BB%80%E4%B9%88%E6%98%AFbloom-filter">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   一、什么是Bloom Filter
+  </h3>
   <p>
-   <strong>
-    数据库索引
-   </strong>
-  </p>
-  <p>
-   适用范围：大数据量的增删改查
-  </p>
-  <p>
-   基本原理及要点：利用数据的设计实现方法，对海量数据的增删改查进行处理。
+   Bloom Filter，被译作称布隆过滤器，是一种空间效率很高的随机数据结构，Bloom filter可以看做是对bit-map的扩展,它的原理是：
   </p>
   <ul>
    <li>
-    关于数据库索引及其优化，更多可参见此文：
-    <a href="http://www.cnblogs.com/pkuoliver/archive/2011/08/17/mass-data-topic-7-index-and-optimize.html">
-     http://www.cnblogs.com/pkuoliver/archive/2011/08/17/mass-data-topic-7-index-and-optimize.html
-    </a>
-    ；
-   </li>
-   <li>
-    关于MySQL索引背后的数据结构及算法原理，这里还有一篇很好的文章：
-    <a href="http://blog.codinglabs.org/articles/theory-of-mysql-index.html">
-     http://blog.codinglabs.org/articles/theory-of-mysql-index.html
-    </a>
-    ；
-   </li>
-   <li>
-    关于B 树、B+ 树、B* 树及R 树，本blog内有篇绝佳文章：
-    <a href="07.02.md">
-     从B树、B+树、B*树谈到R 树
-    </a>
-    。
+    当一个元素被加入集合时，通过K个Hash函数将这个元素映射成一个位阵列（Bit array）中的K个点，把它们置为1**。检索时，我们只要看看这些点是不是都是1就（大约）知道集合中有没有它了：
+    <ul>
+     <li>
+      如果这些点有任何一个0，则被检索元素一定不在；
+     </li>
+     <li>
+      如果都是1，则被检索元素很可能在。
+     </li>
+    </ul>
    </li>
   </ul>
+  <p>
+   其可以用来实现数据字典，进行数据的判重，或者集合求交集。
+  </p>
+  <p>
+   但Bloom Filter的这种高效是有一定代价的：在判断一个元素是否属于某个集合时，有可能会把不属于这个集合的元素误认为属于这个集合（false positive）。因此，Bloom Filter不适合那些“零错误”的应用场合。而在能容忍低错误率的应用场合下，Bloom Filter通过极少的错误换取了存储空间的极大节省。
+  </p>
+  <h4>
+   <a aria-hidden="true" class="anchor" href="#11%E9%9B%86%E5%90%88%E8%A1%A8%E7%A4%BA%E5%92%8C%E5%85%83%E7%B4%A0%E6%9F%A5%E8%AF%A2" name="user-content-11%E9%9B%86%E5%90%88%E8%A1%A8%E7%A4%BA%E5%92%8C%E5%85%83%E7%B4%A0%E6%9F%A5%E8%AF%A2">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   1.1、集合表示和元素查询
+  </h4>
+  <p>
+   下面我们具体来看Bloom Filter是如何用位数组表示集合的。初始状态时，Bloom Filter是一个包含m位的位数组，每一位都置为0。
+  </p>
+  <p>
+   <a href="../images/9/9.3/9.3.1.jpg" target="_blank">
+    <img alt="" src="../images/9/9.3/9.3.1.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   为了表达S={x
+   <sub>
+    1
+   </sub>
+   , x
+   <sub>
+    2
+   </sub>
+   ,…,x
+   <sub>
+    n
+   </sub>
+   }这样一个n个元素的集合，Bloom Filter使用k个相互独立的哈希函数（Hash Function），它们分别将集合中的每个元素映射到{1,…,m}的范围中。对任意一个元素x，第i个哈希函数映射的位置h
+   <sub>
+    i
+   </sub>
+   (x)就会被置为1（1≤i≤k）。注意，如果一个位置多次被置为1，那么只有第一次会起作用，后面几次将没有任何效果。在下图中，k=3，且有两个哈希函数选中同一个位置（从左边数第五位，即第二个“1“处）。
+  </p>
+  <p>
+   <a href="../images/9/9.3/9.3.2.jpg" target="_blank">
+    <img alt="" src="../images/9/9.3/9.3.2.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   在判断y是否属于这个集合时，我们对y应用k次哈希函数，如果所有h
+   <sub>
+    i
+   </sub>
+   (y)的位置都是1（1≤i≤k），那么我们就认为y是集合中的元素，否则就认为y不是集合中的元素。下图中y
+   <sub>
+    1
+   </sub>
+   就不是集合中的元素（因为y1有一处指向了“0”位）。y
+   <sub>
+    2
+   </sub>
+   或者属于这个集合，或者刚好是一个false positive。
+  </p>
+  <p>
+   <a href="../images/9/9.3/9.3.3.jpg" target="_blank">
+    <img alt="" src="../images/9/9.3/9.3.3.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <h4>
+   <a aria-hidden="true" class="anchor" href="#12%E9%94%99%E8%AF%AF%E7%8E%87%E4%BC%B0%E8%AE%A1" name="user-content-12%E9%94%99%E8%AF%AF%E7%8E%87%E4%BC%B0%E8%AE%A1">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   1.2、错误率估计
+  </h4>
+  <p>
+   前面我们已经提到了，Bloom Filter在判断一个元素是否属于它表示的集合时会有一定的错误率（false positive rate），下面我们就来估计错误率的大小。在估计之前为了简化模型，我们假设kn1, x
+   <sub>
+    2
+   </sub>
+   ,…,x
+   <sub>
+    n
+   </sub>
+   }的所有元素都被k个哈希函数映射到m位的位数组中时，这个位数组中某一位还是0的概率是：
+  </p>
+  <p>
+   <a href="https://camo.githubusercontent.com/9f38ec46f43d40341ae9d7426ad6265dc28a901a/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d70273d2535436c65667428312d25354366726163253742312537442537426d2537442535437269676874292535452537426b6e253744253543617070726f78253230652535452537422d6b6e2f6d253744" target="_blank">
+    <img alt="img" data-canonical-src="http://chart.apis.google.com/chart?cht=tx&amp;chl=p'=%5Cleft(1-%5Cfrac%7B1%7D%7Bm%7D%5Cright)%5E%7Bkn%7D%5Capprox%20e%5E%7B-kn/m%7D" src="https://camo.githubusercontent.com/9f38ec46f43d40341ae9d7426ad6265dc28a901a/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d70273d2535436c65667428312d25354366726163253742312537442537426d2537442535437269676874292535452537426b6e253744253543617070726f78253230652535452537422d6b6e2f6d253744" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   其中1/m表示任意一个哈希函数选中这一位的概率（前提是哈希函数是完全随机的），(1-1/m)表示哈希一次没有选中这一位的概率。要把S完全映射到位数组中，需要做kn次哈希。某一位还是0意味着kn次哈希都没有选中它，因此这个概率就是（1-1/m）的kn次方。令p = e
+   <sup>
+    -kn/m
+   </sup>
+   是为了简化运算，这里用到了计算e时常用的近似：
+  </p>
+  <p>
+   <a href="https://camo.githubusercontent.com/933b482ccc329e8776c5794a85991b13dfcadbdc/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d2535436c696d2535436c696d6974735f2537427825354372696768746172726f77253543696e6674792537442535436c65667428312d2535436672616325374231253744253742782537442535437269676874292535452537422d782537443d65" target="_blank">
+    <img alt="img" data-canonical-src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%5Clim%5Climits_%7Bx%5Crightarrow%5Cinfty%7D%5Cleft(1-%5Cfrac%7B1%7D%7Bx%7D%5Cright)%5E%7B-x%7D=e" src="https://camo.githubusercontent.com/933b482ccc329e8776c5794a85991b13dfcadbdc/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d2535436c696d2535436c696d6974735f2537427825354372696768746172726f77253543696e6674792537442535436c65667428312d2535436672616325374231253744253742782537442535437269676874292535452537422d782537443d65" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   令ρ为位数组中0的比例，则ρ的数学期望E(ρ)= p’。在ρ已知的情况下，要求的错误率（false positive rate）为：
+  </p>
+  <p>
+   <a href="https://camo.githubusercontent.com/7be38b6bcd1c6688da0e9ec7a971357fc2d6dfc8/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d28312d25354372686f292535456b253543617070726f7828312d7027292535456b253543617070726f7828312d70292535456b" target="_blank">
+    <img alt="img" data-canonical-src="http://chart.apis.google.com/chart?cht=tx&amp;chl=(1-%5Crho)%5Ek%5Capprox(1-p')%5Ek%5Capprox(1-p)%5Ek" src="https://camo.githubusercontent.com/7be38b6bcd1c6688da0e9ec7a971357fc2d6dfc8/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d28312d25354372686f292535456b253543617070726f7828312d7027292535456b253543617070726f7828312d70292535456b" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   (1-ρ)为位数组中1的比例，(1-ρ)
+   <sup>
+    k
+   </sup>
+   就表示k次哈希都刚好选中1的区域，即false positive rate。上式中第二步近似在前面已经提到了，现在来看第一步近似。p’只是ρ的数学期望，在实际中ρ的值有可能偏离它的数学期望值。M. Mitzenmacher已经证明
+   <sup>
+    [2]
+   </sup>
+   ，位数组中0的比例非常集中地分布在它的数学期望值的附近。因此，第一步的近似得以成立。分别将p和p’代入上式中，得：
+  </p>
+  <p>
+   <a href="https://camo.githubusercontent.com/706a0e0c3454137b3e7e46974bf2c036e5f4f032/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d66273d2535436c65667428312d2535436c65667428312d25354366726163253742312537442537426d2537442535437269676874292535452537426b6e2537442535437269676874292535456b3d28312d7027292535456b" target="_blank">
+    <img alt="img" data-canonical-src="http://chart.apis.google.com/chart?cht=tx&amp;chl=f'=%5Cleft(1-%5Cleft(1-%5Cfrac%7B1%7D%7Bm%7D%5Cright)%5E%7Bkn%7D%5Cright)%5Ek=(1-p')%5Ek" src="https://camo.githubusercontent.com/706a0e0c3454137b3e7e46974bf2c036e5f4f032/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d66273d2535436c65667428312d2535436c65667428312d25354366726163253742312537442537426d2537442535437269676874292535452537426b6e2537442535437269676874292535456b3d28312d7027292535456b" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   <a href="https://camo.githubusercontent.com/df149bb0de6739a79222d6b9066fe3bdf8d7f731/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d663d2535436c65667428312d652535452537422d6b6e2f6d2537442535437269676874292535456b3d28312d70292535456b" target="_blank">
+    <img alt="img" data-canonical-src="http://chart.apis.google.com/chart?cht=tx&amp;chl=f=%5Cleft(1-e%5E%7B-kn/m%7D%5Cright)%5Ek=(1-p)%5Ek" src="https://camo.githubusercontent.com/df149bb0de6739a79222d6b9066fe3bdf8d7f731/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d663d2535436c65667428312d652535452537422d6b6e2f6d2537442535437269676874292535456b3d28312d70292535456b" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   相比p’和f’，使用p和f通常在分析中更为方便。
+  </p>
+  <h4>
+   <a aria-hidden="true" class="anchor" href="#13%E6%9C%80%E4%BC%98%E7%9A%84%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0%E4%B8%AA%E6%95%B0" name="user-content-13%E6%9C%80%E4%BC%98%E7%9A%84%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0%E4%B8%AA%E6%95%B0">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   1.3、最优的哈希函数个数
+  </h4>
+  <p>
+   既然Bloom Filter要靠多个哈希函数将集合映射到位数组中，那么应该选择几个哈希函数才能使元素查询时的错误率降到最低呢？这里有两个互斥的理由：如果哈希函数的个数多，那么在对一个不属于集合的元素进行查询时得到0的概率就大；但另一方面，如果哈希函数的个数少，那么位数组中的0就多。为了得到最优的哈希函数个数，我们需要根据上一小节中的错误率公式进行计算。
+  </p>
+  <p>
+   先用p和f进行计算。注意到f = exp(k ln(1 − e
+   <sup>
+    −kn/m
+   </sup>
+   ))，我们令g = k ln(1 − e
+   <sup>
+    −kn/m
+   </sup>
+   )，只要让g取到最小，f自然也取到最小。由于p = e
+   <sup>
+    -kn/m
+   </sup>
+   ，我们可以将g写成
+  </p>
+  <p>
+   <a href="https://camo.githubusercontent.com/18745855685838b90b4765ca2f3d76ee0cec6f05/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d673d2d253543667261632537426d2537442537426e2537442535436c6e2870292535436c6e28312d7029" target="_blank">
+    <img alt="img" data-canonical-src="http://chart.apis.google.com/chart?cht=tx&amp;chl=g=-%5Cfrac%7Bm%7D%7Bn%7D%5Cln(p)%5Cln(1-p)" src="https://camo.githubusercontent.com/18745855685838b90b4765ca2f3d76ee0cec6f05/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d673d2d253543667261632537426d2537442537426e2537442535436c6e2870292535436c6e28312d7029" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   根据对称性法则可以很容易看出当p = 1/2，也就是k = ln2· (m/n)时，g取得最小值。在这种情况下，最小错误率f等于(1/2)
+   <sup>
+    k
+   </sup>
+   ≈ (0.6185)
+   <sup>
+    m/n
+   </sup>
+   。另外，注意到p是位数组中某一位仍是0的概率，所以p = 1/2对应着位数组中0和1各一半。换句话说，要想保持错误率低，最好让位数组有一半还空着。
+  </p>
+  <p>
+   需要强调的一点是，p = 1/2时错误率最小这个结果并不依赖于近似值p和f。同样对于f’ = exp(k ln(1 − (1 − 1/m)
+   <sup>
+    kn
+   </sup>
+   ))，g’ = k ln(1 − (1 − 1/m)
+   <sup>
+    kn
+   </sup>
+   )，p’ = (1 − 1/m)
+   <sup>
+    kn
+   </sup>
+   ，我们可以将g’写成
+  </p>
+  <p>
+   <a href="https://camo.githubusercontent.com/c5a7166edde1f33c6e460ef34b2384b881ae4f8c/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d67273d25354366726163253742312537442537426e2535436c6e28312d312f6d292537442535436c6e287027292535436c6e28312d702729" target="_blank">
+    <img alt="img" data-canonical-src="http://chart.apis.google.com/chart?cht=tx&amp;chl=g'=%5Cfrac%7B1%7D%7Bn%5Cln(1-1/m)%7D%5Cln(p')%5Cln(1-p')" src="https://camo.githubusercontent.com/c5a7166edde1f33c6e460ef34b2384b881ae4f8c/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d67273d25354366726163253742312537442537426e2535436c6e28312d312f6d292537442535436c6e287027292535436c6e28312d702729" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   同样根据对称性法则可以得到当p’ = 1/2时，g’取得最小值。
+  </p>
+  <h4>
+   <a aria-hidden="true" class="anchor" href="#14%E4%BD%8D%E6%95%B0%E7%BB%84%E7%9A%84%E5%A4%A7%E5%B0%8F" name="user-content-14%E4%BD%8D%E6%95%B0%E7%BB%84%E7%9A%84%E5%A4%A7%E5%B0%8F">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   1.4、位数组的大小
+  </h4>
+  <p>
+   下面我们来看看，在不超过一定错误率的情况下，Bloom Filter至少需要多少位才能表示全集中任意n个元素的集合。假设全集中共有u个元素，允许的最大错误率为є，下面我们来求位数组的位数m。
+  </p>
+  <p>
+   假设X为全集中任取n个元素的集合，F(X)是表示X的位数组。那么对于集合X中任意一个元素x，在s = F(X)中查询x都能得到肯定的结果，即s能够接受x。显然，由于Bloom Filter引入了错误，s能够接受的不仅仅是X中的元素，它还能够є (u - n)个false positive。因此，对于一个确定的位数组来说，它能够接受总共n + є (u - n)个元素。在n + є (u - n)个元素中，s真正表示的只有其中n个，所以一个确定的位数组可以表示
+  </p>
+  <p>
+   <a href="https://camo.githubusercontent.com/ec8494457b4173b98b9db1d22a6bb7219a5caf87/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d435f2537426e253242253543657073696c6f6e28752d6e292537442535456e" target="_blank">
+    <img alt="img" data-canonical-src="http://chart.apis.google.com/chart?cht=tx&amp;chl=C_%7Bn%2B%5Cepsilon(u-n)%7D%5En" src="https://camo.githubusercontent.com/ec8494457b4173b98b9db1d22a6bb7219a5caf87/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d435f2537426e253242253543657073696c6f6e28752d6e292537442535456e" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   个集合。m位的位数组共有2
+   <sup>
+    m
+   </sup>
+   个不同的组合，进而可以推出，m位的位数组可以表示
+  </p>
+  <p>
+   <a href="https://camo.githubusercontent.com/b07e4a1b453ba68feb7be42bce7c7f3692791682/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d322535456d435f2537426e253242253543657073696c6f6e28752d6e292537442535456e" target="_blank">
+    <img alt="img" data-canonical-src="http://chart.apis.google.com/chart?cht=tx&amp;chl=2%5EmC_%7Bn%2B%5Cepsilon(u-n)%7D%5En" src="https://camo.githubusercontent.com/b07e4a1b453ba68feb7be42bce7c7f3692791682/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d322535456d435f2537426e253242253543657073696c6f6e28752d6e292537442535456e" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   个集合。全集中n个元素的集合总共有
+  </p>
+  <p>
+   <a href="https://camo.githubusercontent.com/6ae48ae48f73fdfc1dce6c5b333473fcc184264e/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d435f253742752537442535456e" target="_blank">
+    <img alt="img" data-canonical-src="http://chart.apis.google.com/chart?cht=tx&amp;chl=C_%7Bu%7D%5En" src="https://camo.githubusercontent.com/6ae48ae48f73fdfc1dce6c5b333473fcc184264e/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d435f253742752537442535456e" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   个，因此要让m位的位数组能够表示所有n个元素的集合，必须有
+  </p>
+  <p>
+   <a href="https://camo.githubusercontent.com/e39dc78f8a8a6c587babccdd06160eef47832386/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d322535456d435f2537426e253242253543657073696c6f6e28752d6e292537442535456e253543676571253230435f253742752537442535456e" target="_blank">
+    <img alt="img" data-canonical-src="http://chart.apis.google.com/chart?cht=tx&amp;chl=2%5EmC_%7Bn%2B%5Cepsilon(u-n)%7D%5En%5Cgeq%20C_%7Bu%7D%5En" src="https://camo.githubusercontent.com/e39dc78f8a8a6c587babccdd06160eef47832386/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d322535456d435f2537426e253242253543657073696c6f6e28752d6e292537442535456e253543676571253230435f253742752537442535456e" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   即：
+  </p>
+  <p>
+   <a href="https://camo.githubusercontent.com/8babb7c1ab4acbe2b09c9a7edc6062c20c8fefdd/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d6d2535436765712535436c6f675f3225354366726163253742435f253742752537442535456e253744253742435f2537426e253242253543657073696c6f6e28752d6e292537442535456e253744253543617070726f782535436c6f675f3225354366726163253742435f253742752537442535456e253744253742435f253742253543657073696c6f6e253230752537442535456e2537442535436765712535436c6f675f32253543657073696c6f6e2535452537422d6e2537443d6e2535436c6f675f3228312f253543657073696c6f6e29" target="_blank">
+    <img alt="img" data-canonical-src="http://chart.apis.google.com/chart?cht=tx&amp;chl=m%5Cgeq%5Clog_2%5Cfrac%7BC_%7Bu%7D%5En%7D%7BC_%7Bn%2B%5Cepsilon(u-n)%7D%5En%7D%5Capprox%5Clog_2%5Cfrac%7BC_%7Bu%7D%5En%7D%7BC_%7B%5Cepsilon%20u%7D%5En%7D%5Cgeq%5Clog_2%5Cepsilon%5E%7B-n%7D=n%5Clog_2(1/%5Cepsilon)" src="https://camo.githubusercontent.com/8babb7c1ab4acbe2b09c9a7edc6062c20c8fefdd/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d6d2535436765712535436c6f675f3225354366726163253742435f253742752537442535456e253744253742435f2537426e253242253543657073696c6f6e28752d6e292537442535456e253744253543617070726f782535436c6f675f3225354366726163253742435f253742752537442535456e253744253742435f253742253543657073696c6f6e253230752537442535456e2537442535436765712535436c6f675f32253543657073696c6f6e2535452537422d6e2537443d6e2535436c6f675f3228312f253543657073696c6f6e29" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   上式中的近似前提是n和єu相比很小，这也是实际情况中常常发生的。根据上式，我们得出结论：在错误率不大于є的情况下，m至少要等于n log
+   <sub>
+    2
+   </sub>
+   (1/є)才能表示任意n个元素的集合。
+  </p>
+  <p>
+   上一小节中我们曾算出当k = ln2· (m/n)时错误率f最小，这时f = (1/2)
+   <sup>
+    k
+   </sup>
+   = (1/2)
+   <sup>
+    mln2 / n
+   </sup>
+   。现在令f≤є，可以推出
+  </p>
+  <p>
+   <a href="https://camo.githubusercontent.com/cba31bbdaf04ccdd2749dbfdb33575fa2dd19117/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d6d2535436765712532306e253543667261632537422535436c6f675f3228312f253543657073696c6f6e292537442537422535436c6e253230322537443d6e2535436c6f675f322535436c6f675f3228312f253543657073696c6f6e29" target="_blank">
+    <img alt="img" data-canonical-src="http://chart.apis.google.com/chart?cht=tx&amp;chl=m%5Cgeq%20n%5Cfrac%7B%5Clog_2(1/%5Cepsilon)%7D%7B%5Cln%202%7D=n%5Clog_2%5Clog_2(1/%5Cepsilon)" src="https://camo.githubusercontent.com/cba31bbdaf04ccdd2749dbfdb33575fa2dd19117/687474703a2f2f63686172742e617069732e676f6f676c652e636f6d2f63686172743f6368743d74782663686c3d6d2535436765712532306e253543667261632537422535436c6f675f3228312f253543657073696c6f6e292537442537422535436c6e253230322537443d6e2535436c6f675f322535436c6f675f3228312f253543657073696c6f6e29" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   这个结果比前面我们算得的下界n log
+   <sub>
+    2
+   </sub>
+   (1/є)大了log
+   <sub>
+    2
+   </sub>
+   e≈ 1.44倍。这说明在哈希函数的个数取到最优时，要让错误率不超过є，m至少需要取到最小值的1.44倍。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B" name="user-content-%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   问题实例
+  </h2>
+  <p>
+   <strong>
+    1、给你A,B两个文件，各存放50亿条URL，每条URL占用64字节，内存限制是4G，让你找出A,B文件共同的URL。如果是三个乃至n个文件呢？
+   </strong>
+  </p>
+  <p>
+   <strong>
+    分析
+   </strong>
+   ：如果允许有一定的错误率，可以使用Bloom filter，4G内存大概可以表示340亿bit。将其中一个文件中的url使用Bloom filter映射为这340亿bit，然后挨个读取另外一个文件的url，检查是否与Bloom filter，如果是，那么该url应该是共同的url（注意会有一定的错误率）。”
+  </p>
  </body>
 </html>
 		  </article>

@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
-  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-6fc7fb2a2ad956975983882a7f95b27577e851a4.css" />
+  <link rel="stylesheet" href="style_cache/github2-ade82cf93cc23c0e2691785e7976cc718fe1986f.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -104,438 +104,277 @@
 		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
 			<html>
  <body>
-  <h2>
-   <a class="anchor" href="#%E5%88%86%E8%80%8C%E6%B2%BB%E4%B9%8Bhash%E6%98%A0%E5%B0%84--hash_map%E7%BB%9F%E8%AE%A1--%E6%8E%92%E5%BA%8F" name="user-content-%E5%88%86%E8%80%8C%E6%B2%BB%E4%B9%8Bhash%E6%98%A0%E5%B0%84--hash_map%E7%BB%9F%E8%AE%A1--%E6%8E%92%E5%BA%8F">
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#simhash%E7%AE%97%E6%B3%95" name="user-content-simhash%E7%AE%97%E6%B3%95">
     <span class="octicon octicon-link">
     </span>
    </a>
-   分而治之：hash映射 + hash_map统计 + 排序
+   simhash算法
+  </h1>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D" name="user-content-%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   方法介绍
   </h2>
   <h3>
-   <a class="anchor" href="#1%E6%B5%B7%E9%87%8F%E6%97%A5%E5%BF%97%E6%95%B0%E6%8D%AE%E6%8F%90%E5%8F%96%E5%87%BA%E6%9F%90%E6%97%A5%E8%AE%BF%E9%97%AE%E7%99%BE%E5%BA%A6%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E9%82%A3%E4%B8%AAip" name="user-content-1%E6%B5%B7%E9%87%8F%E6%97%A5%E5%BF%97%E6%95%B0%E6%8D%AE%E6%8F%90%E5%8F%96%E5%87%BA%E6%9F%90%E6%97%A5%E8%AE%BF%E9%97%AE%E7%99%BE%E5%BA%A6%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E9%82%A3%E4%B8%AAip">
+   <a aria-hidden="true" class="anchor" href="#%E8%83%8C%E6%99%AF" name="user-content-%E8%83%8C%E6%99%AF">
     <span class="octicon octicon-link">
     </span>
    </a>
-   1、海量日志数据，提取出某日访问百度次数最多的那个IP。
-  </h3>
-  <h4>
-   <a class="anchor" href="#%E6%80%9D%E8%B7%AF%E5%88%86%E6%9E%90" name="user-content-%E6%80%9D%E8%B7%AF%E5%88%86%E6%9E%90">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   思路分析
-  </h4>
-  <p>
-   百度作为国内第一大搜索引擎，每天访问它的IP数量巨大，如果想一次性把所有IP数据装进内存处理，则内存容量明显不够，故针对数据太大，内存受限的情况，可以把大文件化成(取模映射)小文件，从而大而化小，逐个处理。换言之，先映射，而后统计，最后排序。
-  </p>
-  <h4>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   解法一
-  </h4>
-  <ol>
-   <li>
-    分而治之/hash映射：首先把这一天访问百度的日志的所有IP提取出来，然后逐个写入到一个大文件中，接着采用映射的方法，比如%1000，把整个大文件映射为1000个小文件。
-   </li>
-   <li>
-    hash_map统计：当大文件转化了小文件，那么我们便可以采用hash_map(ip，value)来分别对1000个小文件中的IP进行频率统计，再找出每个小文件中出现频率最大的IP及相应的频率。
-   </li>
-   <li>
-    堆/快速排序：统计出1000个频率最大的IP后，进行排序(可采取堆排序)，找出那个频率最大的IP，即为所求。
-   </li>
-  </ol>
-  <p>
-   关于本题，注意两点：
-  </p>
-  <ol>
-   <li>
-    Hash取模是一种等价映射，不会存在同一个元素分散到不同小文件中去的情况，即这里采用的是%1000算法，那么同一个IP在hash后，只可能落在同一个文件中，不可能被分散的。
-   </li>
-   <li>
-    那到底什么是hash映射呢？简单来说，就是为了便于计算机在有限的内存中处理big数据，从而通过一种映射散列的方式让数据均匀分布在对应的内存位置(如大数据通过取余的方式映射成小树存放在内存中，或大文件映射成多个小文件)，而这个映射散列方式便是我们通常所说的hash函数，设计的好的hash函数能让数据均匀分布而减少冲突。尽管数据映射到了另外一些不同的位置，但数据还是原来的数据，只是代替和表示这些原始数据的形式发生了变化而已。
-   </li>
-  </ol>
-  <h3>
-   <a class="anchor" href="#2%E5%AF%BB%E6%89%BE%E7%83%AD%E9%97%A8%E6%9F%A5%E8%AF%A2300%E4%B8%87%E4%B8%AA%E6%9F%A5%E8%AF%A2%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%BB%9F%E8%AE%A1%E6%9C%80%E7%83%AD%E9%97%A8%E7%9A%8410%E4%B8%AA%E6%9F%A5%E8%AF%A2" name="user-content-2%E5%AF%BB%E6%89%BE%E7%83%AD%E9%97%A8%E6%9F%A5%E8%AF%A2300%E4%B8%87%E4%B8%AA%E6%9F%A5%E8%AF%A2%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%BB%9F%E8%AE%A1%E6%9C%80%E7%83%AD%E9%97%A8%E7%9A%8410%E4%B8%AA%E6%9F%A5%E8%AF%A2">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   2、寻找热门查询，300万个查询字符串中统计最热门的10个查询
+   背景
   </h3>
   <p>
-   原题：搜索引擎会通过日志文件把用户每次检索使用的所有检索串都记录下来，每个查询串的长度为1-255字节。假设目前有一千万个记录，请你统计最热门的10个查询串，要求使用的内存不能超过1G。
-  </p>
-  <p>
-   注：这些查询串的重复度比较高，虽然总数是1千万，但如果除去重复后，不超过3百万个。一个查询串的重复度越高，说明查询它的用户越多，也就是越热门。
-  </p>
-  <h4>
-   <a class="anchor" href="#%E6%80%9D%E8%B7%AF%E5%88%86%E6%9E%90-1" name="user-content-%E6%80%9D%E8%B7%AF%E5%88%86%E6%9E%90-1">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   思路分析
-  </h4>
-  <p>
-   由上面第1题，我们知道，数据大则划为小的，一亿个Ip求Top 10，可先%1000将ip分到1000个小文件中去，并保证一种ip只出现在一个文件中，再对每个小文件中的ip进行hashmap计数统计并按数量排序，最后归并或者最小堆依次处理每个小文件的top10以得到最后的结。
-  </p>
-  <p>
-   但对于本题，数据规模比较小，能一次性装入内存，因为根据题目描述，虽然有一千万个Query，但是由于重复度比较高，故去除重复后，事实上只有300万的Query，每个Query255Byte，因此我们可以考虑把他们都放进内存中去（300万个字符串假设没有重复，都是最大长度，那么最多占用内存3M*1K/4=0.75G。所以可以将所有字符串都存放在内存中进行处理），而现在只是需要一个合适的数据结构，在这里，HashTable绝对是我们优先的选择。
-  </p>
-  <p>
-   所以我们放弃分而治之/hash映射的步骤，直接上hash统计，然后排序。So，针对此类典型的TOP K问题，采取的对策往往是：hashmap + 堆。
-  </p>
-  <h4>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80-1" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80-1">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   解法一
-  </h4>
-  <ol>
-   <li>
-    hash_map统计：先对这批海量数据预处理。具体方法是：维护一个Key为Query字串，Value为该Query出现次数的HashTable，即hash_map(Query，Value)，每次读取一个Query，如果该字串不在Table中，那么加入该字串，并将Value值设为1；如果该字串在Table中，那么将该字串的计数加1 即可。最终我们在O(N)的时间复杂度内用Hash表完成了统计；
-   </li>
-   <li>
-    堆排序：第二步、借助堆这个数据结构，找出Top K，时间复杂度为N‘logK。即借助堆结构，我们可以在log量级的时间内查找和调整/移动。因此，维护一个K(该题目中是10)大小的小根堆，然后遍历300万的Query，分别和根元素进行对比。所以，我们最终的时间复杂度是：O（N） + N' * O（logK），（N为1000万，N’为300万）。
-   </li>
-  </ol>
-  <p>
-   关于第2步堆排序，可以维护k个元素的最小堆，即用容量为k的最小堆存储最先遍历到的k个数，并假设它们即是最大的k个数，建堆费时O（k），并调整堆(费时O（logk）)后，有k1&gt;k2&gt;...kmin（kmin设为小顶堆中最小元素）。继续遍历数列，每次遍历一个元素x，与堆顶元素比较，若x&gt;kmin，则更新堆（x入堆，用时logk），否则不更新堆。这样下来，总费时O（k*logk+（n-k）*logk）=O（n*logk）。此方法得益于在堆中，查找等各项操作时间复杂度均为logk。
-  </p>
-  <h4>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   解法二
-  </h4>
-  <p>
-   当然，你也可以采用trie树，关键字域存该查询串出现的次数，没有出现为0。最后用10个元素的最小推来对出现频率进行排序。
-  </p>
-  <h3>
-   <a class="anchor" href="#3%E6%9C%89%E4%B8%80%E4%B8%AA1g%E5%A4%A7%E5%B0%8F%E7%9A%84%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6%E9%87%8C%E9%9D%A2%E6%AF%8F%E4%B8%80%E8%A1%8C%E6%98%AF%E4%B8%80%E4%B8%AA%E8%AF%8D%E8%AF%8D%E7%9A%84%E5%A4%A7%E5%B0%8F%E4%B8%8D%E8%B6%85%E8%BF%8716%E5%AD%97%E8%8A%82%E5%86%85%E5%AD%98%E9%99%90%E5%88%B6%E5%A4%A7%E5%B0%8F%E6%98%AF1m%E8%BF%94%E5%9B%9E%E9%A2%91%E6%95%B0%E6%9C%80%E9%AB%98%E7%9A%84100%E4%B8%AA%E8%AF%8D" name="user-content-3%E6%9C%89%E4%B8%80%E4%B8%AA1g%E5%A4%A7%E5%B0%8F%E7%9A%84%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6%E9%87%8C%E9%9D%A2%E6%AF%8F%E4%B8%80%E8%A1%8C%E6%98%AF%E4%B8%80%E4%B8%AA%E8%AF%8D%E8%AF%8D%E7%9A%84%E5%A4%A7%E5%B0%8F%E4%B8%8D%E8%B6%85%E8%BF%8716%E5%AD%97%E8%8A%82%E5%86%85%E5%AD%98%E9%99%90%E5%88%B6%E5%A4%A7%E5%B0%8F%E6%98%AF1m%E8%BF%94%E5%9B%9E%E9%A2%91%E6%95%B0%E6%9C%80%E9%AB%98%E7%9A%84100%E4%B8%AA%E8%AF%8D">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   3、有一个1G大小的一个文件，里面每一行是一个词，词的大小不超过16字节，内存限制大小是1M。返回频数最高的100个词。
-  </h3>
-  <h4>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80-2" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80-2">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   解法一
-  </h4>
-  <p>
-   由上面那两个例题，分而治之 + hash统计 + 堆/快速排序这个套路，我们已经开始有了屡试不爽的感觉。下面，再拿几道再多多验证下。请看此第3题：又是文件很大，又是内存受限，咋办?还能怎么办呢?无非还是：
-  </p>
-  <ol>
-   <li>
-    分而治之/hash映射：顺序读取文件，对于每个词x，取hash(x)%5000，然后把该值存到5000个小文件（记为x0,x1,...x4999）中。这样每个文件大概是200k左右。当然，如果其中有的小文件超过了1M大小，还可以按照类似的方法继续往下分，直到分解得到的小文件的大小都不超过1M。
-   </li>
-   <li>
-    hash_map统计：对每个小文件，采用trie树/hash_map等统计每个文件中出现的词以及相应的频率。
-   </li>
-   <li>
-    堆/归并排序：取出出现频率最大的100个词（可以用含100个结点的最小堆）后，再把100个词及相应的频率存入文件，这样又得到了5000个文件。最后就是把这5000个文件进行归并（类似于归并排序）的过程了。
-   </li>
-  </ol>
-  <h3>
-   <a class="anchor" href="#4%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%88%86%E5%B8%83%E5%9C%A8100%E5%8F%B0%E7%94%B5%E8%84%91%E4%B8%AD%E6%83%B3%E4%B8%AA%E5%8A%9E%E6%B3%95%E9%AB%98%E6%95%88%E7%BB%9F%E8%AE%A1%E5%87%BA%E8%BF%99%E6%89%B9%E6%95%B0%E6%8D%AE%E7%9A%84top10" name="user-content-4%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%88%86%E5%B8%83%E5%9C%A8100%E5%8F%B0%E7%94%B5%E8%84%91%E4%B8%AD%E6%83%B3%E4%B8%AA%E5%8A%9E%E6%B3%95%E9%AB%98%E6%95%88%E7%BB%9F%E8%AE%A1%E5%87%BA%E8%BF%99%E6%89%B9%E6%95%B0%E6%8D%AE%E7%9A%84top10">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   4、海量数据分布在100台电脑中，想个办法高效统计出这批数据的TOP10。
-  </h3>
-  <h4>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80-3" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80-3">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   解法一
-  </h4>
-  <p>
-   如果同一个数据元素只出现在某一台机器中，那么可以采取以下步骤统计出现次数TOP10的数据元素：
-  </p>
-  <ol>
-   <li>
-    堆排序：在每台电脑上求出TOP10，可以采用包含10个元素的堆完成（TOP10小，用最大堆，TOP10大，用最小堆，比如求TOP10大，我们首先取前10个元素调整成最小堆，如果发现，然后扫描后面的数据，并与堆顶元素比较，如果比堆顶元素大，那么用该元素替换堆顶，然后再调整为最小堆。最后堆中的元素就是TOP10大）。
-   </li>
-   <li>
-    求出每台电脑上的TOP10后，然后把这100台电脑上的TOP10组合起来，共1000个数据，再利用上面类似的方法求出TOP10就可以了。
-   </li>
-  </ol>
-  <h4>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C-1" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C-1">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   解法二
-  </h4>
-  <p>
-   但如果同一个元素重复出现在不同的电脑中呢，如下例子所述：
-  </p>
-  <p>
-   <a href="../images/8/8.1/8.1.1.jpg" target="_blank">
-    <img alt="" src="../images/8/8.1/8.1.1.jpg" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   这个时候，你可以有两种方法：
+   如果某一天，面试官问你如何设计一个比较两篇文章相似度的算法？可能你会回答几个比较传统点的思路：
   </p>
   <ul>
    <li>
-    遍历一遍所有数据，重新hash取摸，如此使得同一个元素只出现在单独的一台电脑中，然后采用上面所说的方法，统计每台电脑中各个元素的出现次数找出TOP10，继而组合100台电脑上的TOP10，找出最终的TOP10。
+    一种方案是先将两篇文章分别进行分词，得到一系列特征向量，然后计算特征向量之间的距离（可以计算它们之间的欧氏距离、海明距离或者夹角余弦等等），从而通过距离的大小来判断两篇文章的相似度。
    </li>
    <li>
-    或者，暴力求解：直接统计统计每台电脑中各个元素的出现次数，然后把同一个元素在不同机器中的出现次数相加，最终从所有数据中找出TOP10。
+    另外一种方案是传统hash，我们考虑为每一个web文档通过hash的方式生成一个指纹（finger print）。
    </li>
   </ul>
-  <h3>
-   <a class="anchor" href="#5%E6%9C%8910%E4%B8%AA%E6%96%87%E4%BB%B6%E6%AF%8F%E4%B8%AA%E6%96%87%E4%BB%B61g%E6%AF%8F%E4%B8%AA%E6%96%87%E4%BB%B6%E7%9A%84%E6%AF%8F%E4%B8%80%E8%A1%8C%E5%AD%98%E6%94%BE%E7%9A%84%E9%83%BD%E6%98%AF%E7%94%A8%E6%88%B7%E7%9A%84query%E6%AF%8F%E4%B8%AA%E6%96%87%E4%BB%B6%E7%9A%84query%E9%83%BD%E5%8F%AF%E8%83%BD%E9%87%8D%E5%A4%8D%E8%A6%81%E6%B1%82%E4%BD%A0%E6%8C%89%E7%85%A7query%E7%9A%84%E9%A2%91%E5%BA%A6%E6%8E%92%E5%BA%8F" name="user-content-5%E6%9C%8910%E4%B8%AA%E6%96%87%E4%BB%B6%E6%AF%8F%E4%B8%AA%E6%96%87%E4%BB%B61g%E6%AF%8F%E4%B8%AA%E6%96%87%E4%BB%B6%E7%9A%84%E6%AF%8F%E4%B8%80%E8%A1%8C%E5%AD%98%E6%94%BE%E7%9A%84%E9%83%BD%E6%98%AF%E7%94%A8%E6%88%B7%E7%9A%84query%E6%AF%8F%E4%B8%AA%E6%96%87%E4%BB%B6%E7%9A%84query%E9%83%BD%E5%8F%AF%E8%83%BD%E9%87%8D%E5%A4%8D%E8%A6%81%E6%B1%82%E4%BD%A0%E6%8C%89%E7%85%A7query%E7%9A%84%E9%A2%91%E5%BA%A6%E6%8E%92%E5%BA%8F">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   5、有10个文件，每个文件1G，每个文件的每一行存放的都是用户的query，每个文件的query都可能重复。要求你按照query的频度排序。
-  </h3>
-  <h4>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80-4" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80-4">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   解法一
-  </h4>
-  <ol>
+  <p>
+   下面，我们来分析下这两种方法。
+  </p>
+  <ul>
    <li>
-    hash映射：顺序读取10个文件，按照hash(query)%10的结果将query写入到另外10个文件（记为a0,a1,..a9）中。这样新生成的文件每个的大小大约也1G（假设hash函数是随机的）。
+    采取第一种方法，若是只比较两篇文章的相似性还好，但如果是海量数据呢，有着数以百万甚至亿万的网页，要求你计算这些网页的相似度。你还会去计算任意两个网页之间的距离或夹角余弦么？想必你不会了。
    </li>
    <li>
-    hash_map统计：找一台内存在2G左右的机器，依次对用hash_map(query, query_count)来统计每个query出现的次数。注：hash_map(query,query_count)是用来统计每个query的出现次数，不是存储他们的值，出现一次，则count+1。
+    而第二种方案中所说的传统加密方式md5，其设计的目的是为了让整个分布尽可能地均匀，但如果输入内容一旦出现哪怕轻微的变化，hash值就会发生很大的变化。
+   </li>
+  </ul>
+  <p>
+   举个例子，我们假设有以下三段文本：
+  </p>
+  <ul>
+   <li>
+    the cat sat on the mat
    </li>
    <li>
-    堆/快速/归并排序：利用快速/堆/归并排序按照出现次数进行排序，将排序好的query和对应的query_cout输出到文件中，这样得到了10个排好序的文件（记为
-    <a href="../images/8/8.1/8.1.2.gif" target="_blank">
-     <img alt="" src="../images/8/8.1/8.1.2.gif" style="max-width:100%;"/>
-    </a>
-    ）。最后，对这10个文件进行归并排序（内排序与外排序相结合）。根据此解法1，这里有一份实现：
-    <a href="https://github.com/ooooola/sortquery/blob/master/querysort.py">
-     https://github.com/ooooola/sortquery/blob/master/querysort.py
-    </a>
-    。
-   </li>
-  </ol>
-  <h4>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C-2" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C-2">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   解法二
-  </h4>
-  <p>
-   一般query的总量是有限的，只是重复的次数比较多而已，可能对于所有的query，一次性就可以加入到内存了。这样，我们就可以采用trie树/hash_map等直接来统计每个query出现的次数，然后按出现次数做快速/堆/归并排序就可以了。
-  </p>
-  <h4>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%89" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%89">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   解法三
-  </h4>
-  <p>
-   与解法1类似，但在做完hash，分成多个文件后，可以交给多个文件来处理，采用分布式的架构来处理（比如MapReduce），最后再进行合并。
-  </p>
-  <h3>
-   <a class="anchor" href="#6-%E7%BB%99%E5%AE%9Aab%E4%B8%A4%E4%B8%AA%E6%96%87%E4%BB%B6%E5%90%84%E5%AD%98%E6%94%BE50%E4%BA%BF%E4%B8%AAurl%E6%AF%8F%E4%B8%AAurl%E5%90%84%E5%8D%A064%E5%AD%97%E8%8A%82%E5%86%85%E5%AD%98%E9%99%90%E5%88%B6%E6%98%AF4g%E8%AE%A9%E4%BD%A0%E6%89%BE%E5%87%BAab%E6%96%87%E4%BB%B6%E5%85%B1%E5%90%8C%E7%9A%84url" name="user-content-6-%E7%BB%99%E5%AE%9Aab%E4%B8%A4%E4%B8%AA%E6%96%87%E4%BB%B6%E5%90%84%E5%AD%98%E6%94%BE50%E4%BA%BF%E4%B8%AAurl%E6%AF%8F%E4%B8%AAurl%E5%90%84%E5%8D%A064%E5%AD%97%E8%8A%82%E5%86%85%E5%AD%98%E9%99%90%E5%88%B6%E6%98%AF4g%E8%AE%A9%E4%BD%A0%E6%89%BE%E5%87%BAab%E6%96%87%E4%BB%B6%E5%85%B1%E5%90%8C%E7%9A%84url">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   6、 给定a、b两个文件，各存放50亿个url，每个url各占64字节，内存限制是4G，让你找出a、b文件共同的url？
-  </h3>
-  <h4>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95" name="user-content-%E8%A7%A3%E6%B3%95">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   解法
-  </h4>
-  <p>
-   可以估计每个文件安的大小为5G×64=320G，远远大于内存限制的4G。所以不可能将其完全加载到内存中处理。考虑采取分而治之的方法。
-  </p>
-  <ol>
-   <li>
-    分而治之/hash映射：遍历文件a，对每个url求取
-    <a href="../images/8/8.1/8.1.3.gif" target="_blank">
-     <img alt="" src="../images/8/8.1/8.1.3.gif" style="max-width:100%;"/>
-    </a>
-    ，然后根据所取得的值将url分别存储到1000个小文件（记为
-    <a href="../images/8/8.1/8.1.4.gif" target="_blank">
-     <img alt="" src="../images/8/8.1/8.1.4.gif" style="max-width:100%;"/>
-    </a>
-    ，这里漏写个了a1）中。这样每个小文件的大约为300M。遍历文件b，采取和a相同的方式将url分别存储到1000小文件中（记为
-    <a href="../images/8/8.1/8.1.5.gif" target="_blank">
-     <img alt="" src="../images/8/8.1/8.1.5.gif" style="max-width:100%;"/>
-    </a>
-    ）。这样处理后，所有可能相同的url都在对应的小文件（
-    <a href="../images/8/8.1/8.1.6.gif" target="_blank">
-     <img alt="" src="../images/8/8.1/8.1.6.gif" style="max-width:100%;"/>
-    </a>
-    ）中，不对应的小文件不可能有相同的url。然后我们只要求出1000对小文件中相同的url即可。
+    the cat sat on a mat
    </li>
    <li>
-    hash_set统计：求每对小文件中相同的url时，可以把其中一个小文件的url存储到hash_set中。然后遍历另一个小文件的每个url，看其是否在刚才构建的hash_set中，如果是，那么就是共同的url，存到文件里面就可以了。
+    we all scream for ice cream
    </li>
-  </ol>
+  </ul>
   <p>
-   OK，此第一种方法：分而治之/hash映射 + hash统计 + 堆/快速/归并排序，再看最后4道题，如下：
+   使用传统hash可能会得到如下的结果：
   </p>
-  <h3>
-   <a class="anchor" href="#7%E6%80%8E%E4%B9%88%E5%9C%A8%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E4%B8%AD%E6%89%BE%E5%87%BA%E9%87%8D%E5%A4%8D%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E4%B8%80%E4%B8%AA" name="user-content-7%E6%80%8E%E4%B9%88%E5%9C%A8%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E4%B8%AD%E6%89%BE%E5%87%BA%E9%87%8D%E5%A4%8D%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E4%B8%80%E4%B8%AA">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   7、怎么在海量数据中找出重复次数最多的一个？
-  </h3>
-  <p>
-   解法：先做hash，然后求模映射为小文件，求出每个小文件中重复次数最多的一个，并记录重复次数。然后找出上一步求出的数据中重复次数最多的一个就是所求（具体参考前面的题）。
-  </p>
-  <h3>
-   <a class="anchor" href="#8%E4%B8%8A%E5%8D%83%E4%B8%87%E6%88%96%E4%B8%8A%E4%BA%BF%E6%95%B0%E6%8D%AE%E6%9C%89%E9%87%8D%E5%A4%8D%E7%BB%9F%E8%AE%A1%E5%85%B6%E4%B8%AD%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E5%89%8Dn%E4%B8%AA%E6%95%B0%E6%8D%AE" name="user-content-8%E4%B8%8A%E5%8D%83%E4%B8%87%E6%88%96%E4%B8%8A%E4%BA%BF%E6%95%B0%E6%8D%AE%E6%9C%89%E9%87%8D%E5%A4%8D%E7%BB%9F%E8%AE%A1%E5%85%B6%E4%B8%AD%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E5%89%8Dn%E4%B8%AA%E6%95%B0%E6%8D%AE">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   8、上千万或上亿数据（有重复），统计其中出现次数最多的前N个数据。
-  </h3>
-  <p>
-   解法：上千万或上亿的数据，现在的机器的内存应该能存下。所以考虑采用hash_map/搜索二叉树/红黑树等来进行统计次数。然后就是取出前N个出现次数最多的数据了，可以用第2题提到的堆机制完成。
-  </p>
-  <h3>
-   <a class="anchor" href="#9%E4%B8%80%E4%B8%AA%E6%96%87%E6%9C%AC%E6%96%87%E4%BB%B6%E5%A4%A7%E7%BA%A6%E6%9C%89%E4%B8%80%E4%B8%87%E8%A1%8C%E6%AF%8F%E8%A1%8C%E4%B8%80%E4%B8%AA%E8%AF%8D%E8%A6%81%E6%B1%82%E7%BB%9F%E8%AE%A1%E5%87%BA%E5%85%B6%E4%B8%AD%E6%9C%80%E9%A2%91%E7%B9%81%E5%87%BA%E7%8E%B0%E7%9A%84%E5%89%8D10%E4%B8%AA%E8%AF%8D%E8%AF%B7%E7%BB%99%E5%87%BA%E6%80%9D%E6%83%B3%E7%BB%99%E5%87%BA%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" name="user-content-9%E4%B8%80%E4%B8%AA%E6%96%87%E6%9C%AC%E6%96%87%E4%BB%B6%E5%A4%A7%E7%BA%A6%E6%9C%89%E4%B8%80%E4%B8%87%E8%A1%8C%E6%AF%8F%E8%A1%8C%E4%B8%80%E4%B8%AA%E8%AF%8D%E8%A6%81%E6%B1%82%E7%BB%9F%E8%AE%A1%E5%87%BA%E5%85%B6%E4%B8%AD%E6%9C%80%E9%A2%91%E7%B9%81%E5%87%BA%E7%8E%B0%E7%9A%84%E5%89%8D10%E4%B8%AA%E8%AF%8D%E8%AF%B7%E7%BB%99%E5%87%BA%E6%80%9D%E6%83%B3%E7%BB%99%E5%87%BA%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   9、一个文本文件，大约有一万行，每行一个词，要求统计出其中最频繁出现的前10个词，请给出思想，给出时间复杂度分析。
-  </h3>
-  <p>
-   解法一：这题是考虑时间效率。用trie树统计每个词出现的次数，时间复杂度是O(n*le)（le表示单词的平准长度）。然后是找出出现最频繁的前10个词，可以用堆来实现，前面的题中已经讲到了，时间复杂度是O(n*lg10)。所以总的时间复杂度，是O(n*le)与O(n*lg10)中较大的哪一个。
-  </p>
-  <h3>
-   <a class="anchor" href="#10-1000%E4%B8%87%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%85%B6%E4%B8%AD%E6%9C%89%E4%BA%9B%E6%98%AF%E9%87%8D%E5%A4%8D%E7%9A%84%E9%9C%80%E8%A6%81%E6%8A%8A%E9%87%8D%E5%A4%8D%E7%9A%84%E5%85%A8%E9%83%A8%E5%8E%BB%E6%8E%89%E4%BF%9D%E7%95%99%E6%B2%A1%E6%9C%89%E9%87%8D%E5%A4%8D%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%AF%B7%E6%80%8E%E4%B9%88%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0" name="user-content-10-1000%E4%B8%87%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%85%B6%E4%B8%AD%E6%9C%89%E4%BA%9B%E6%98%AF%E9%87%8D%E5%A4%8D%E7%9A%84%E9%9C%80%E8%A6%81%E6%8A%8A%E9%87%8D%E5%A4%8D%E7%9A%84%E5%85%A8%E9%83%A8%E5%8E%BB%E6%8E%89%E4%BF%9D%E7%95%99%E6%B2%A1%E6%9C%89%E9%87%8D%E5%A4%8D%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%AF%B7%E6%80%8E%E4%B9%88%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   10. 1000万字符串，其中有些是重复的，需要把重复的全部去掉，保留没有重复的字符串。请怎么设计和实现？
-  </h3>
-  <p>
-   解法一：这题用trie树比较合适，hash_map也行。
-  </p>
-  <p>
-   解法二：1000w的数据规模插入操作完全不现实，以前试过在stl下100w元素插入set中已经慢得不能忍受，觉得基于hash的实现不会比红黑树好太多，使用vector+sort+unique都要可行许多，建议还是先hash成小文件分开处理再综合。
-  </p>
-  <p>
-   上述解法2中读者xbzju的方法让我想到了一些问题，即是
-   <strong>
-    set/map，与hash_set/hash_map的性能比较
-   </strong>
-   ?共计3个问题，如下：
-  </p>
-  <ol>
+  <ul>
    <li>
-    hash_set在千万级数据下，insert操作优于set? 这位blog：
-    <a href="http://t.cn/zOibP7t">
-     http://t.cn/zOibP7t
-    </a>
-    给的实践数据可靠不?
+    irb(main):006:0&gt; p1 = 'the cat sat on the mat'
+    <ul>
+     <li>
+      irb(main):007:0&gt; p1.hash =&gt; 415542861
+     </li>
+    </ul>
    </li>
    <li>
-    那map和hash_map的性能比较呢? 谁做过相关实验?
-    <br/>
-    <a href="../images/8/8.1/8.1.7.jpg" target="_blank">
-     <img alt="" src="../images/8/8.1/8.1.7.jpg" style="max-width:100%;"/>
+    irb(main):005:0&gt; p2 = 'the cat sat on a mat'
+    <ul>
+     <li>
+      irb(main):007:0&gt; p2.hash  =&gt; 668720516
+     </li>
+    </ul>
+   </li>
+   <li>
+    irb(main):007:0&gt; p3 = 'we all scream for ice cream'
+    <ul>
+     <li>
+      irb(main):007:0&gt; p3.hash =&gt; 767429688 "
+     </li>
+    </ul>
+   </li>
+  </ul>
+  <p>
+   可理想当中的hash函数，需要对几乎相同的输入内容，产生相同或者相近的hash值，换言之，hash值的相似程度要能直接反映输入内容的相似程度，故md5等传统hash方法也无法满足我们的需求。
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#%E5%87%BA%E4%B8%96" name="user-content-%E5%87%BA%E4%B8%96">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   出世
+  </h3>
+  <p>
+   车到山前必有路，来自于GoogleMoses Charikar发表的一篇论文“detecting near-duplicates for web crawling”中提出了simhash算法，专门用来解决亿万级别的网页的去重任务。
+  </p>
+  <p>
+   simhash作为locality sensitive hash（局部敏感哈希）的一种：
+  </p>
+  <ul>
+   <li>
+    其主要思想是降维，将高维的特征向量映射成低维的特征向量，通过两个向量的Hamming Distance来确定文章是否重复或者高度近似。
+    <ul>
+     <li>
+      其中，Hamming Distance，又称汉明距离，在信息论中，两个等长字符串之间的汉明距离是两个字符串对应位置的不同字符的个数。也就是说，它就是将一个字符串变换成另外一个字符串所需要替换的字符个数。例如：1011101 与 1001001 之间的汉明距离是 2。至于我们常说的字符串编辑距离则是一般形式的汉明距离。
+     </li>
+    </ul>
+   </li>
+  </ul>
+  <p>
+   如此，通过比较多个文档的simHash值的海明距离，可以获取它们的相似度。
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#%E6%B5%81%E7%A8%8B" name="user-content-%E6%B5%81%E7%A8%8B">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   流程
+  </h3>
+  <p>
+   simhash算法分为5个步骤：分词、hash、加权、合并、降维，具体过程如下所述：
+  </p>
+  <ul>
+   <li>
+    分词
+    <ul>
+     <li>
+      给定一段语句，进行分词，得到有效的特征向量，然后为每一个特征向量设置1-5等5个级别的权重（如果是给定一个文本，那么特征向量可以是文本中的词，其权重可以是这个词出现的次数）。例如给定一段语句：“CSDN博客结构之法算法之道的作者July”，分词后为：“CSDN 博客 结构 之 法 算法 之 道 的 作者 July”，然后为每个特征向量赋予权值：CSDN(4) 博客(5) 结构(3) 之(1) 法(2) 算法(3) 之(1) 道(2) 的(1) 作者(5) July(5)，其中括号里的数字代表这个单词在整条语句中的重要程度，数字越大代表越重要。
+     </li>
+    </ul>
+   </li>
+   <li>
+    hash
+    <ul>
+     <li>
+      通过hash函数计算各个特征向量的hash值，hash值为二进制数01组成的n-bit签名。比如“CSDN”的hash值Hash(CSDN)为100101，“博客”的hash值Hash(博客)为“101011”。就这样，字符串就变成了一系列数字。
+     </li>
+    </ul>
+   </li>
+   <li>
+    加权
+    <ul>
+     <li>
+      在hash值的基础上，给所有特征向量进行加权，即W = Hash * weight，且遇到1则hash值和权值正相乘，遇到0则hash值和权值负相乘。例如给“CSDN”的hash值“100101”加权得到：W(CSDN) = 100101*4 = 4 -4 -4 4 -4 4，给“博客”的hash值“101011”加权得到：W(博客)=101011*5 = 5 -5 5 -5 5 5，其余特征向量类似此般操作。
+     </li>
+    </ul>
+   </li>
+   <li>
+    合并
+    <ul>
+     <li>
+      将上述各个特征向量的加权结果累加，变成只有一个序列串。拿前两个特征向量举例，例如“CSDN”的“4 -4 -4 4 -4 4”和“博客”的“5 -5 5 -5 5 5”进行累加，得到“4+5 -4+-5 -4+5 4+-5 -4+5 4+5”，得到“9 -9 1 -1 1”。
+     </li>
+    </ul>
+   </li>
+   <li>
+    降维
+    <ul>
+     <li>
+      对于n-bit签名的累加结果，如果大于0则置1，否则置0，从而得到该语句的simhash值，最后我们便可以根据不同语句simhash的海明距离来判断它们的相似度。例如把上面计算出来的“9 -9 1 -1 1 9”降维（某位大于0记为1，小于0记为0），得到的01串为：“1 0 1 0 1 1”，从而形成它们的simhash签名。
+     </li>
+    </ul>
+   </li>
+  </ul>
+  <p>
+   其流程如下图所示：
+   <a href="https://camo.githubusercontent.com/efd5caf946abb03b9fe83ccb1ab85208d32d1c60/687474703a2f2f646c2e69746579652e636f6d2f75706c6f61642f6174746163686d656e742f3433373432362f62616634323337382d653632352d333564322d396138392d3437313532346133353564382e6a7067" target="_blank">
+    <img alt="" data-canonical-src="http://dl.iteye.com/upload/attachment/437426/baf42378-e625-35d2-9a89-471524a355d8.jpg" src="https://camo.githubusercontent.com/efd5caf946abb03b9fe83ccb1ab85208d32d1c60/687474703a2f2f646c2e69746579652e636f6d2f75706c6f61642f6174746163686d656e742f3433373432362f62616634323337382d653632352d333564322d396138392d3437313532346133353564382e6a7067" style="max-width:100%;"/>
+   </a>
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#%E5%BA%94%E7%94%A8" name="user-content-%E5%BA%94%E7%94%A8">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   应用
+  </h3>
+  <ul>
+   <li>
+    每篇文档得到SimHash签名值后，接着计算两个签名的海明距离即可。根据经验值，对64位的 SimHash值，海明距离在3以内的可认为相似度比较高。
+    <ul>
+     <li>
+      海明距离的求法：异或时，只有在两个比较的位不同时其结果是1 ，否则结果为0，两个二进制“异或”后得到1的个数即为海明距离的大小。
+     </li>
+    </ul>
+   </li>
+  </ul>
+  <p>
+   举个例子，上面我们计算到的“CSDN博客”的simhash签名值为“1 0 1 0 1 1”，假定我们计算出另外一个短语的签名值为“1 0 1 0 0 0”，那么根据异或规则，我们可以计算出这两个签名的海明距离为2，从而判定这两个短语的相似度是比较高的。
+  </p>
+  <p>
+   换言之，现在问题转换为：对于64位的SimHash值，我们只要找到海明距离在3以内的所有签名，即可找出所有相似的短语。
+  </p>
+  <p>
+   但关键是，如何将其扩展到海量数据呢？譬如如何在海量的样本库中查询与其海明距离在3以内的记录呢？
+  </p>
+  <ul>
+   <li>
+    一种方案是查找待查询文本的64位simhash code的所有3位以内变化的组合
+    <ul>
+     <li>
+      大约需要四万多次的查询。
+     </li>
+    </ul>
+   </li>
+   <li>
+    另一种方案是预生成库中所有样本simhash code的3位变化以内的组合
+    <ul>
+     <li>
+      大约需要占据4万多倍的原始空间。
+     </li>
+    </ul>
+   </li>
+  </ul>
+  <p>
+   这两种方案，要么时间复杂度高，要么空间复杂度复杂，能否有一种方案可以达到时空复杂度的绝佳平衡呢？答案是肯定的：
+  </p>
+  <ul>
+   <li>
+    我们可以把 64 位的二进制simhash签名均分成4块，每块16位。根据鸽巢原理（也称抽屉原理），如果两个签名的海明距离在 3 以内，它们必有一块完全相同。如下图所示：
+    <a href="https://camo.githubusercontent.com/d6cc444c5a3db896a0b3aae6333cb6dcc42598cc/687474703a2f2f646c2e69746579652e636f6d2f75706c6f61642f6174746163686d656e742f3433373535392f36383937313964662d353462372d333138632d626339302d6532383966383433343462392e6a7067" target="_blank">
+     <img alt="" data-canonical-src="http://dl.iteye.com/upload/attachment/437559/689719df-54b7-318c-bc90-e289f84344b9.jpg" src="https://camo.githubusercontent.com/d6cc444c5a3db896a0b3aae6333cb6dcc42598cc/687474703a2f2f646c2e69746579652e636f6d2f75706c6f61642f6174746163686d656e742f3433373535392f36383937313964662d353462372d333138632d626339302d6532383966383433343462392e6a7067" style="max-width:100%;"/>
     </a>
    </li>
    <li>
-    那查询操作呢，如下段文字所述?
-    <br/>
-    <a href="../images/8/8.1/8.1.8.jpg" target="_blank">
-     <img alt="" src="../images/8/8.1/8.1.8.jpg" style="max-width:100%;"/>
-    </a>
+    然后把分成的4 块中的每一个块分别作为前16位来进行查找，建倒排索引。
    </li>
-  </ol>
+  </ul>
   <p>
-   或者小数据量时用map，构造快，大数据量时用hash_map?
+   具体如下图所示：
   </p>
   <p>
-   <strong>
-    rbtree PK hashtable
-   </strong>
+   <a href="https://camo.githubusercontent.com/52160c9c5b3160034d76d1ccd0e9e7f514b46c80/687474703a2f2f646c2e69746579652e636f6d2f75706c6f61642f6174746163686d656e742f3433373538362f62373262386463322d393133392d333037382d616432342d6236383966363466643731612e6a7067" target="_blank">
+    <img alt="" data-canonical-src="http://dl.iteye.com/upload/attachment/437586/b72b8dc2-9139-3078-ad24-b689f64fd71a.jpg" src="https://camo.githubusercontent.com/52160c9c5b3160034d76d1ccd0e9e7f514b46c80/687474703a2f2f646c2e69746579652e636f6d2f75706c6f61642f6174746163686d656e742f3433373538362f62373262386463322d393133392d333037382d616432342d6236383966363466643731612e6a7067" style="max-width:100%;"/>
+   </a>
   </p>
   <p>
-   据朋友№邦卡猫№的做的红黑树和hash table的性能测试中发现：当数据量基本上int型key时，hash table是rbtree的3-4倍，但hash table一般会浪费大概一半内存。
+   如此，如果样本库中存有2^34（差不多10亿）的simhash签名，则每个table返回2^(34-16)=262144个候选结果，大大减少了海明距离的计算成本。
   </p>
+  <ul>
+   <li>
+    假设数据是均匀分布，16位的数据，产生的像限为2^16个，则平均每个像限分布的文档数则为2^34/2^16 = 2^(34-16)) ，四个块返回的总结果数为 4* 262144 （大概 100 万）。
+    <ul>
+     <li>
+      这样，原本需要比较10亿次，经过索引后，大概只需要处理100万次。
+     </li>
+    </ul>
+   </li>
+  </ul>
   <p>
-   因为hash table所做的运算就是个%，而rbtree要比较很多，比如rbtree要看value的数据 ，每个节点要多出3个指针（或者偏移量） 如果需要其他功能，比如，统计某个范围内的key的数量，就需要加一个计数成员。
+   （部分内容及图片参考自：
+   <a href="http://grunt1223.iteye.com/blog/964564">
+    http://grunt1223.iteye.com/blog/964564
+   </a>
+   ，后续图片会全部重画）
   </p>
-  <p>
-   且1s rbtree能进行大概50w+次插入，hash table大概是差不多200w次。不过很多的时候，其速度可以忍了，例如倒排索引差不多也是这个速度，而且单线程，且倒排表的拉链长度不会太大。正因为基于树的实现其实不比hashtable慢到哪里去，所以数据库的索引一般都是用的B/B+树，而且B+树还对磁盘友好(B树能有效降低它的高度，所以减少磁盘交互次数)。比如现在非常流行的NoSQL数据库，像MongoDB也是采用的B树索引。关于B树系列，请参考本blog内此篇文章：从B树、B+树、B*树谈到R 树。更多请待后续实验论证。
-  </p>
-  <h3>
-   <a class="anchor" href="#11-%E4%B8%80%E4%B8%AA%E6%96%87%E6%9C%AC%E6%96%87%E4%BB%B6%E6%89%BE%E5%87%BA%E5%89%8D10%E4%B8%AA%E7%BB%8F%E5%B8%B8%E5%87%BA%E7%8E%B0%E7%9A%84%E8%AF%8D%E4%BD%86%E8%BF%99%E6%AC%A1%E6%96%87%E4%BB%B6%E6%AF%94%E8%BE%83%E9%95%BF%E8%AF%B4%E6%98%AF%E4%B8%8A%E4%BA%BF%E8%A1%8C%E6%88%96%E5%8D%81%E4%BA%BF%E8%A1%8C%E6%80%BB%E4%B9%8B%E6%97%A0%E6%B3%95%E4%B8%80%E6%AC%A1%E8%AF%BB%E5%85%A5%E5%86%85%E5%AD%98%E9%97%AE%E6%9C%80%E4%BC%98%E8%A7%A3" name="user-content-11-%E4%B8%80%E4%B8%AA%E6%96%87%E6%9C%AC%E6%96%87%E4%BB%B6%E6%89%BE%E5%87%BA%E5%89%8D10%E4%B8%AA%E7%BB%8F%E5%B8%B8%E5%87%BA%E7%8E%B0%E7%9A%84%E8%AF%8D%E4%BD%86%E8%BF%99%E6%AC%A1%E6%96%87%E4%BB%B6%E6%AF%94%E8%BE%83%E9%95%BF%E8%AF%B4%E6%98%AF%E4%B8%8A%E4%BA%BF%E8%A1%8C%E6%88%96%E5%8D%81%E4%BA%BF%E8%A1%8C%E6%80%BB%E4%B9%8B%E6%97%A0%E6%B3%95%E4%B8%80%E6%AC%A1%E8%AF%BB%E5%85%A5%E5%86%85%E5%AD%98%E9%97%AE%E6%9C%80%E4%BC%98%E8%A7%A3">
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B" name="user-content-%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B">
     <span class="octicon octicon-link">
     </span>
    </a>
-   11. 一个文本文件，找出前10个经常出现的词，但这次文件比较长，说是上亿行或十亿行，总之无法一次读入内存，问最优解。
-  </h3>
+   问题实例
+  </h2>
   <p>
-   解法一：首先根据用hash并求模，将文件分解为多个小文件，对于单个文件利用上题的方法求出每个文件件中10个最常出现的词。然后再进行归并处理，找出最终的10个最常出现的词。
-  </p>
-  <h3>
-   <a class="anchor" href="#12-100w%E4%B8%AA%E6%95%B0%E4%B8%AD%E6%89%BE%E5%87%BA%E6%9C%80%E5%A4%A7%E7%9A%84100%E4%B8%AA%E6%95%B0" name="user-content-12-100w%E4%B8%AA%E6%95%B0%E4%B8%AD%E6%89%BE%E5%87%BA%E6%9C%80%E5%A4%A7%E7%9A%84100%E4%B8%AA%E6%95%B0">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   12. 100w个数中找出最大的100个数。
-  </h3>
-  <p>
-   解法一：采用局部淘汰法。选取前100个元素，并排序，记为序列L。然后一次扫描剩余的元素x，与排好序的100个元素中最小的元素比，如果比这个最小的要大，那么把这个最小的元素删除，并把x利用插入排序的思想，插入到序列L中。依次循环，知道扫描了所有的元素。复杂度为O(100w*100)。
+   待续。
   </p>
   <p>
-   解法二：采用快速排序的思想，每次分割之后只考虑比轴大的一部分，知道比轴大的一部分在比100多的时候，采用传统排序算法排序，取前100个。复杂度为O(100w*100)。
-  </p>
-  <p>
-   解法三：在前面的题中，我们已经提到了，用一个含100个元素的最小堆完成。复杂度为O(100w*lg100)。
-  </p>
-  <h3>
-   <a class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   举一反三
-  </h3>
-  <p>
-   现有一200M的文本文件，里面记录着IP地址和对应地域信息，如
-  </p>
-  <p>
-   202.100.83.56 北京 北京大学
-  </p>
-  <p>
-   202.100.83.120 北京 人民大学
-  </p>
-  <p>
-   202.100.83.134 北京 中国青年政治学院
-  </p>
-  <p>
-   211.93.120.45 长春市 长春大学
-  </p>
-  <p>
-   211.93.120.129 吉林市 吉林大学
-  </p>
-  <p>
-   211.93.120.200 长春 长春KTV
-  </p>
-  <p>
-   现有6亿个IP地址，请编写程序，读取IP地址便转换成IP地址相对应的城市，要求有较好的时间复杂度和空间复杂度。
+   @复旦李斌：simhash不是google发明的，是princeton的人早在stoc02上发表的。google在www07上的那篇论文只是在网页查重上应用了下。事实上www07中的算法是stoc02中随机超平面的一个极其巧妙的实现，bit差异的期望正好等于原姶向量的余弦。
   </p>
  </body>
 </html>

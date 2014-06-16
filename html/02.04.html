@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
-  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-6fc7fb2a2ad956975983882a7f95b27577e851a4.css" />
+  <link rel="stylesheet" href="style_cache/github2-ade82cf93cc23c0e2691785e7976cc718fe1986f.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,186 +105,184 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#%E5%AF%BB%E6%89%BE%E5%92%8C%E4%B8%BA%E5%AE%9A%E5%80%BC%E7%9A%84%E4%B8%A4%E4%B8%AA%E6%95%B0" name="user-content-%E5%AF%BB%E6%89%BE%E5%92%8C%E4%B8%BA%E5%AE%9A%E5%80%BC%E7%9A%84%E4%B8%A4%E4%B8%AA%E6%95%B0">
+   <a aria-hidden="true" class="anchor" href="#%E6%9C%80%E5%A4%A7%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C" name="user-content-%E6%9C%80%E5%A4%A7%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C">
     <span class="octicon octicon-link">
     </span>
    </a>
-   寻找和为定值的两个数
+   最大连续子数组和
   </h1>
   <h2>
-   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+   <a aria-hidden="true" class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
     <span class="octicon octicon-link">
     </span>
    </a>
    题目描述
   </h2>
   <p>
-   输入一个数组和一个数字，在数组中查找两个数，使得它们的和正好是输入的那个数字。
+   输入一个整形数组，数组里有正数也有负数。数组中连续的一个或多个整数组成一个子数组，每个子数组都有一个和。
+求所有子数组的和的最大值，要求时间复杂度为O(n)。
   </p>
   <p>
-   要求时间复杂度是O(N)。如果有多对数字的和等于输入的数字，输出任意一对即可。
+   例如输入的数组为
+   <code>
+    1, -2, 3, 10, -4, 7, 2, -5
+   </code>
+   ，和最大的子数组为
+   <code>
+    3, 10, -4, 7, 2
+   </code>
+   ，
+因此输出为该子数组的和18。
   </p>
-  <p>
-   例如输入数组1、2、4、7、11、15和数字15。由于4+11=15，因此输出4和11。
-  </p>
-  <h3>
-   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
     <span class="octicon octicon-link">
     </span>
    </a>
    分析与解法
+  </h2>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80%E6%9A%B4%E5%8A%9B%E5%BE%AA%E7%8E%AF" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80%E6%9A%B4%E5%8A%9B%E5%BE%AA%E7%8E%AF">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法一：暴力循环
   </h3>
   <p>
-   咱们试着一步一步解决这个问题（注意阐述中数列有序无序的区别）：
-  </p>
-  <p>
-   直接穷举，从数组中任意选取两个数，判定它们的和是否为输入的那个数字。此举复杂度为O(N^2)。很显然，我们要寻找效率更高的解法
-  </p>
-  <p>
-   题目相当于，对每个a[i]，查找sum-a[i]是否也在原始序列中，每一次要查找的时间都要花费为O(N)，这样下来，最终找到两个数还是需要O（N^2）的复杂度。那如何提高查找判断的速度呢？
-  </p>
-  <p>
-   答案是二分查找，可以将O(N)的查找时间提高到O(log N)，这样对于N个a[i]，都要花logN的时间去查找相对应的sum-a[i]是否在原始序列中，总的时间复杂度已降为O(N log N)，且空间复杂度为O(1)。
-（如果有序，直接二分O(N log N)，如果无序，先排序后二分，复杂度同样为O（N log N + N log N）= O(N log N)，空间复杂度总为O(1)）。
-  </p>
-  <p>
-   可以继续优化做到时间O(N)么？
-  </p>
-  <h4>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   解法一
-  </h4>
-  <p>
-   根据前面的分析，a[i]在序列中，如果a[i]+a[k]=sum的话，那么sum-a[i]（a[k])也必然在序列中。
-举个例子，如下：
-原始序列：
-  </p>
-  <ul>
-   <li>
-    1、 2、 4、 7、11、15
-   </li>
-  </ul>
-  <p>
-   用输入数字15减一下各个数，得到对应的序列为：
-  </p>
-  <ul>
-   <li>
-    14、13、11、8、4、 0
-   </li>
-  </ul>
-  <p>
-   第一个数组以一指针i 从数组最左端开始向右扫描，第二个数组以一指针j 从数组最右端开始向左扫描，如果第一个数组出现了和第二个数组一样的数，即a[*i]=a[*j]，就找出这俩个数来了。
-如上，i，j最终在第一个，和第二个序列中找到了相同的数4和11，所以符合条件的两个数，即为4+11=15。
-怎么样，两端同时查找，时间复杂度瞬间缩短到了O(N)，但却同时需要O(N)的空间存储第二个数组。
-  </p>
-  <h4>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   解法二
-  </h4>
-  <p>
-   当题目对时间复杂度要求比较严格时，我们可以考虑下用空间换时间，上述解法一即是此思想，此外，构造hash表也是典型的用空间换时间的处理办法。
-  </p>
-  <p>
-   即给定一个数字，根据hash映射查找另一个数字是否也在数组中，只需用O(1)的时间，前提是经过O(N)时间的预处理，和用O(N)的空间构造hash表。
-  </p>
-  <p>
-   但能否做到在时间复杂度为O(N)的情况下，空间复杂度能进一步降低达到O(1)呢？
-  </p>
-  <h4>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%89" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%89">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   解法三
-  </h4>
-  <p>
-   如果数组是无序的，先排序(N log N)，然后用两个指针i，j，各自指向数组的首尾两端，令i=0，j=n-1，然后i++，j--，逐次判断a[i]+a[j]?=sum，
-  </p>
-  <ul>
-   <li>
-    如果某一刻a[i]+a[j] &gt; sum，则要想办法让sum的值减小，所以此刻i不动，j--；
-   </li>
-   <li>
-    如果某一刻a[i]+a[j] &lt; sum，则要想办法让sum的值增大，所以此刻i++，j不动。
-   </li>
-  </ul>
-  <p>
-   所以，数组无序的时候，时间复杂度最终为O(N log N + N)=O(N log N)。
-  </p>
-  <p>
-   如果原数组是有序的，则不需要事先的排序，直接用两指针分别从头和尾向中间扫描，O(N)搞定，且空间复杂度还是O(1)。
-  </p>
-  <p>
-   下面，咱们先来实现此思路（这里假定数组已经是有序的），代码可以如下编写：
+   求一个数组的最大子数组和，如此序列
+   <code>
+    1, -2, 3, 10, -4, 7, 2, -5
+   </code>
+   ，我想最最直观也是最野蛮的办法便是，三个for循环三层遍历，求出数组中每一个子数组的和，最终求出这些子数组的最大的一个值。
+currSum[i, …, j]为数组A中第i个元素到第j个元素的和（其中0 &lt;= i &lt;= j &lt; n），currSum[i, …, j]，那么时间复杂度为O(N^3)：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="kt">void</span> <span class="nf">TwoSum</span><span class="p">(</span><span class="kt">int</span> <span class="n">data</span><span class="p">[],</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">length</span><span class="p">,</span> <span class="kt">int</span> <span class="n">sum</span><span class="p">)</span>
+   <pre><span class="kt">int</span> <span class="nf">MaxSubArray</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">A</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="c1">//sort(s, s+n);   如果数组非有序的，那就事先排好序O(N log N)</span>
-
-    <span class="kt">int</span> <span class="n">begin</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">end</span> <span class="o">=</span> <span class="n">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-
-    <span class="c1">//俩头夹逼，或称两个指针两端扫描法，很经典的方法，O(N)</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">begin</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">)</span>
+    <span class="kt">int</span> <span class="n">maxSum</span> <span class="o">=</span> <span class="o">-</span><span class="n">INF</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">currSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="kt">long</span> <span class="n">currSum</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">begin</span><span class="p">]</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="n">end</span><span class="p">];</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="n">currSum</span> <span class="o">==</span> <span class="n">sum</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="c1">//题目只要求输出满足条件的任意一对即可</span>
-            <span class="n">printf</span><span class="p">(</span><span class="s">"%d %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">begin</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">end</span><span class="p">]);</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="n">j</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">currSum</span> <span class="o">+=</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">];</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">currSum</span> <span class="o">&gt;</span> <span class="n">maxSum</span><span class="p">)</span>
+                <span class="n">maxSum</span> <span class="o">=</span> <span class="n">currSum</span><span class="p">;</span>
 
-            <span class="c1">//如果需要所有满足条件的数组对，则需要加上下面两条语句：</span>
-            <span class="c1">//begin++</span>
-            <span class="c1">//end--</span>
-            <span class="k">break</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span><span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">currSum</span> <span class="o">&lt;</span> <span class="n">sum</span><span class="p">)</span>
-                <span class="n">begin</span><span class="o">++</span><span class="p">;</span>
-            <span class="k">else</span>
-                <span class="n">end</span><span class="o">--</span><span class="p">;</span>
+            <span class="n">currSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">//这里要记得清零，否则的话sum最终存放的是所有子数组的和。</span>
         <span class="p">}</span>
     <span class="p">}</span>
+    <span class="k">return</span> <span class="n">maxSum</span><span class="p">;</span>
 <span class="p">}</span>
 </pre>
   </div>
   <h3>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E6%80%BB%E7%BB%93" name="user-content-%E8%A7%A3%E6%B3%95%E6%80%BB%E7%BB%93">
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8Con%E9%81%8D%E5%8E%86" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8Con%E9%81%8D%E5%8E%86">
     <span class="octicon octicon-link">
     </span>
    </a>
-   解法总结
+   解法二：O(N)遍历
   </h3>
   <p>
-   不论原序列是有序还是无序，解决这类题有以下三种办法：
+   当全是负数的情况时，我们可以让程序返回0，也可以让程序返回最大的那个负数，这里，我们让程序返回最大的那个负数，参考代码如下：
+  </p>
+  <div class="highlight highlight-c">
+   <pre><span class="kt">int</span> <span class="nf">MaxSubArray</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">maxSum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>       <span class="c1">//全负情况，返回最大数</span>
+    <span class="kt">int</span> <span class="n">currSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">currSum</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>    <span class="c1">//如果加上某个元素，sum&gt;=0的话，就加</span>
+            <span class="n">currSum</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+        <span class="k">else</span>
+            <span class="n">currSum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>  <span class="c1">//如果加上某个元素，sum&lt;0了，就不加</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">currSum</span> <span class="o">&gt;</span> <span class="n">maxSum</span><span class="p">)</span>
+            <span class="n">maxSum</span> <span class="o">=</span> <span class="n">currSum</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">maxSum</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+  </div>
+  <p>
+   解释下：
+例如输入的数组为1, -2, 3, 10, -4, 7, 2, -5，
+那么最大的子数组为3, 10, -4, 7, 2，
+因此输出为该子数组的和18。
+  </p>
+  <p>
+   所有的东西都在以下俩行，
+即：
   </p>
   <ul>
    <li>
-    1、二分（若无序，先排序后二分），时间复杂度总为O(N log N)，空间复杂度为O（1）；
+    currSum：   0  1 - 1  3  13   9  16  18  13
    </li>
    <li>
-    2、扫描一遍X-S[i]  映射到一个数组或构造hash表，时间复杂度为O(N)，空间复杂度为O(N)；
-   </li>
-   <li>
-    3、两个指针两端扫描（若无序，先排序后扫描），时间复杂度最后为：有序O(N)，无序O(N log N + N)=O(N log N)，空间复杂度都为O(1)。
+    maxSum ：  0  1   1  3  13  13  16  18  18
    </li>
   </ul>
   <p>
-   所以，要想达到时间O(N)，空间O(1)的目标，除非原数组是有序的（指针扫描法），不然，当数组无序的话，就只能先排序，后指针扫描法或二分（时间 O(Nlog N)，空间O(1)），或映射或hash（时间O(N)，空间O(N)）。时间或空间，必须牺牲一个，达到平衡。
+   其实算法很简单，当前面的几个数，加起来后，currSum&lt;0后，
+把currSum重新赋值，置为下一个元素，currSum = a[i]。
   </p>
+  <ul>
+   <li>
+    当currSum &gt; maxSum，则更新maxSum = currSum;
+   </li>
+   <li>
+    若currSum &lt; maxSum，则maxSum保持原值，不更新。
+   </li>
+  </ul>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%89%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%89%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   解法三：动态规划
+  </h3>
   <p>
-   综上，若是数组有序的情况下，优先考虑两个指针两端扫描法，以达到最佳的时O(N)，空O(1)效应。否则，如果要排序的话，时间复杂度最快当然是只能达到O(N log N)，空间O(1)则不在话下。
+   currSum[i] 为前i个元素中，包含第i个元素且和最大的连续子数组，result 为已找到的子数组中和最大的。
+对第i+1个元素有两种选择：
   </p>
+  <ul>
+   <li>
+    做为新子数组的第一个元素；
+   </li>
+   <li>
+    放入前面找到的子数组。
+   </li>
+  </ul>
+  <pre><code>currSum[i+1] = max(a[i+1], currSum[i] + a[i+1])
+maxSum = max(maxSum, currSum[i])
+</code></pre>
+  <p>
+   参考代码如下：
+  </p>
+  <div class="highlight highlight-c">
+   <pre><span class="kt">int</span> <span class="nf">MaxSubArray</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">nullptr</span> <span class="o">||</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="n">currSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">maxSum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>       <span class="c1">//全负情况，返回最大数</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">currSum</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">currSum</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">?</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">:</span> <span class="n">currSum</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+        <span class="n">maxSum</span> <span class="o">=</span> <span class="p">(</span><span class="n">maxSum</span> <span class="o">&gt;</span> <span class="n">currSum</span><span class="p">)</span> <span class="o">?</span> <span class="nl">maxSum</span> <span class="p">:</span> <span class="n">currSum</span><span class="p">;</span>
+
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">maxSum</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+  </div>
   <h2>
-   <a class="anchor" href="#%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95" name="user-content-%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95">
+   <a aria-hidden="true" class="anchor" href="#%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95" name="user-content-%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -292,63 +290,71 @@
   </h2>
   <ol>
    <li>
-    如果在返回找到的两个数的同时，还要求你返回这两个数的位置列？
+    如果数组是二维数组，同样要你求最大子数组的和列?
    </li>
    <li>
-    如果需要输出所有满足条件的整数对呢?
+    如果是要你求子数组的最大乘积列?
    </li>
    <li>
-    如果把题目中的要你寻找的两个数改为“多个数”，或任意个数列?
+    如果同时要求输出子段的开始和结束列?
    </li>
   </ol>
   <h2>
-   <a class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
+   <a aria-hidden="true" class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
     <span class="octicon octicon-link">
     </span>
    </a>
    举一反三
   </h2>
   <p>
-   1、在二元树中找出和为某一值的所有路径
-输入一个整数和一棵二元树，从树的根结点开始往下访问一直到叶结点所经过的所有结点形成一条路径，然后打印出和与输入整数相等的所有路径。
-例如输入整数22和如下二元树
-  </p>
-  <pre><code>10  
-</code></pre>
-  <p>
-   /   \
-   <br/>
-   5    12
-   <br/>
-   / \
-   <br/>
-   4  7
+   1 给定整型数组，其中每个元素表示木板的高度，木板的宽度都相同，求这些木板拼出的最大矩形的面积。并分析时间复杂度。
   </p>
   <p>
-   则打印出两条路径：10, 12和10, 5, 7。
-其中，二元树节点的数据结构定义为：
-  </p>
-  <pre><code>struct BinaryTreeNode // a node in the binary tree
-{
-    int m_nValue; // value of node
-    BinaryTreeNode *m_pLeft; // left child of node
-    BinaryTreeNode *m_pRight; // right child of node
-};
-</code></pre>
-  <p>
-   2、有一个数组a，设有一个值n。在数组中找到两个元素a[i]和a[j]，使得a[i]+a[j]等于n，求出所有满足以上条件的i和j。
+   此题类似leetcode里面关于连通器的题，需要明确的是高度可能为0，长度最长的矩形并不一定是最大矩形，还需要考虑高度很高，但长度较短的矩形。如[5,4,3,2,4,5,0,7,8,4,6]中最大矩形的高度是[7,8,4,6]组成的矩形，面积为16。
   </p>
   <p>
-   3、3-sum问题
+   2、环面上的最大子矩形
   </p>
   <p>
-   给定一个整数数组，判断能否从中找出3个数a、b、c，使得他们的和为0，如果能，请找出所有满足和为0个3个数对。
+   《算法竞赛入门经典》 P89 页。
   </p>
   <p>
-   4、4-sum问题
+   3、最大子矩阵和
   </p>
   <p>
-   给定一个整数数组，判断能否从中找出4个数a、b、、d，使得他们的和为0，如果能，请找出所有满足和为0个4个数对。
+   一个M*N的矩阵，找到此矩阵的一个子矩阵，并且这个子矩阵的元素的和是最大的，输出这个最大的值。如果所有数都是负数，就输出0。
+例如：3*5的矩阵：
+  </p>
+  <p>
+   1 2 0 3 4
+  </p>
+  <p>
+   2 3 4 5 1
+  </p>
+  <p>
+   1 1 5 3 0
+  </p>
+  <p>
+   和最大的子矩阵是：
+  </p>
+  <p>
+   4 5
+  </p>
+  <p>
+   5 3
+  </p>
+  <p>
+   最后输出和的最大值17。
+  </p>
+  <p>
+   4、允许交换两个数的位置 求最大子数组和。
+  </p>
+  <p>
+   来源：
+   <a href="https://codility.com/cert/view/certDUMWPM-8RF86G8P9QQ6JC8X/details">
+    https://codility.com/cert/view/certDUMWPM-8RF86G8P9QQ6JC8X/details
+   </a>
+   。
   </p>
  </body>
 </html>

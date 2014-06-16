@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
-  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-6fc7fb2a2ad956975983882a7f95b27577e851a4.css" />
+  <link rel="stylesheet" href="style_cache/github2-ade82cf93cc23c0e2691785e7976cc718fe1986f.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,54 +105,51 @@
 			<html>
  <body>
   <h2>
-   <a class="anchor" href="#r%E6%A0%91%E5%A4%84%E7%90%86%E7%A9%BA%E9%97%B4%E5%AD%98%E5%82%A8%E9%97%AE%E9%A2%98" name="user-content-r%E6%A0%91%E5%A4%84%E7%90%86%E7%A9%BA%E9%97%B4%E5%AD%98%E5%82%A8%E9%97%AE%E9%A2%98">
+   <a aria-hidden="true" class="anchor" href="#r%E6%A0%91%E5%A4%84%E7%90%86%E7%A9%BA%E9%97%B4%E5%AD%98%E5%82%A8%E9%97%AE%E9%A2%98" name="user-content-r%E6%A0%91%E5%A4%84%E7%90%86%E7%A9%BA%E9%97%B4%E5%AD%98%E5%82%A8%E9%97%AE%E9%A2%98">
     <span class="octicon octicon-link">
     </span>
    </a>
    R树：处理空间存储问题
   </h2>
-  <p>
-   相信经过上面第一节的介绍，你已经对B树或者B+树有所了解。这种树可以非常好的处理一维空间存储的问题。B树是一棵平衡树，它是把一维直线分为若干段线段，当我们查找满足某个要求的点的时候，只要去查找它所属的线段即可。依我看来，这种思想其实就是先找一个大的空间，再逐步缩小所要查找的空间，最终在一个自己设定的最小不可分空间内找出满足要求的解。一个典型的B树查找如下：
-  </p>
-  <p>
-   <a href="../images/7/32.jpg" target="_blank">
-    <img alt="" src="../images/7/32.jpg" style="max-width:100%;"/>
-   </a>
-  </p>
-  <p>
-   要查找某一满足条件的点，先去找到满足条件的线段，然后遍历所在线段上的点，即可找到答案。
-  </p>
-  <p>
-   B树是一种相对来说比较复杂的数据结构，尤其是在它的删除与插入操作过程中，因为它涉及到了叶子结点的分解与合并。由于本文第一节已经详细介绍了B树和B+树，下面直接开始介绍我们的第二个主角：R树。
-  </p>
   <h4>
-   <a class="anchor" href="#%E7%AE%80%E4%BB%8B" name="user-content-%E7%AE%80%E4%BB%8B">
+   <a aria-hidden="true" class="anchor" href="#r%E6%A0%91%E7%AE%80%E4%BB%8B" name="user-content-r%E6%A0%91%E7%AE%80%E4%BB%8B">
     <span class="octicon octicon-link">
     </span>
    </a>
-   简介
+   R树简介
   </h4>
   <p>
-   984年，加州大学伯克利分校的Guttman发表了一篇题为“R-trees: a dynamic index structure for spatial searching”的论文，向世人介绍了R树这种处理高维空间存储问题的数据结构。本文便是基于这篇论文写作完成的，因此如果大家对R树非常有兴趣，我想最好还是参考一下原著：）。为表示对这位牛人的尊重，给个引用先：Guttman, A.; “R-trees: a dynamic index structure for spatial searching,” ACM, 1984, 14
+   984年，加州大学伯克利分校的Guttman发表了一篇题为“R-trees: a dynamic index structure for spatial searching”的论文，向世人介绍了R树这种处理高维空间存储问题的数据结构。本文便是基于这篇论文写作完成。
   </p>
   <p>
-   R树在数据库等领域做出的功绩是非常显著的。它很好的解决了在高维空间搜索等问题。举个R树在现实领域中能够解决的例子：查找20英里以内所有的餐厅。如果没有R树你会怎么解决？一般情况下我们会把餐厅的坐标(x,y)分为两个字段存放在数据库中，一个字段记录经度，另一个字段记录纬度。这样的话我们就需要遍历所有的餐厅获取其位置信息，然后计算是否满足要求。如果一个地区有100家餐厅的话，我们就要进行100次位置计算操作了，如果应用到谷歌地图这种超大数据库中，这种方法便必定不可行了。
+   R树在数据库等领域做出的功绩是非常显著的。它很好的解决了在高维空间搜索等问题。举个R树在现实领域中能够解决的例子：查找20英里以内所有的餐厅。如果没有R树你会怎么解决？
+  </p>
+  <ul>
+   <li>
+    一般情况下我们会把餐厅的坐标(x,y)分为两个字段存放在数据库中，一个字段记录经度，另一个字段记录纬度。
+   </li>
+   <li>
+    这样的话我们就需要遍历所有的餐厅获取其位置信息，然后计算是否满足要求。
+   </li>
+  </ul>
+  <p>
+   如果一个地区有100家餐厅的话，我们就要进行100次位置计算操作了，如果应用到谷歌地图这种超大数据库中，这种方法便必定不可行了
   </p>
   <p>
    R树就很好的解决了这种高维空间搜索问题。它把B树的思想很好的扩展到了多维空间，采用了B树分割空间的思想，并在添加、删除操作时采用合并、分解结点的方法，保证树的平衡性。因此，R树就是一棵用来存储高维数据的平衡树。
   </p>
   <p>
-   OK，接下来，本文将详细介绍R树的数据结构以及R树的操作。至于R树的扩展与R树的性能问题，可以查阅相关论文。
+   接下来，本文将详细介绍R树的数据结构以及R树的操作。至于R树的扩展与R树的性能问题，可以查阅相关论文。
   </p>
   <h4>
-   <a class="anchor" href="#r%E6%A0%91%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84" name="user-content-r%E6%A0%91%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">
+   <a aria-hidden="true" class="anchor" href="#r%E6%A0%91%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84" name="user-content-r%E6%A0%91%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">
     <span class="octicon octicon-link">
     </span>
    </a>
    R树的数据结构
   </h4>
   <p>
-   如上所述，R树是B树在高维空间的扩展，是一棵平衡树。每个R树的叶子结点包含了多个指向不同数据的指针，这些数据可以是存放在硬盘中的，也可以是存在内存中。根据R树的这种数据结构，当我们需要进行一个高维空间查询时，我们只需要遍历少数几个叶子结点所包含的指针，查看这些指针指向的数据是否满足要求即可。这种方式使我们不必遍历所有数据即可获得答案，效率显著提高。下图1是R树的一个简单实例：
+   R树是B树在高维空间的扩展，是一棵平衡树。每个R树的叶子结点包含了多个指向不同数据的指针，这些数据可以是存放在硬盘中的，也可以是存在内存中。根据R树的这种数据结构，当我们需要进行一个高维空间查询时，我们只需要遍历少数几个叶子结点所包含的指针，查看这些指针指向的数据是否满足要求即可。这种方式使我们不必遍历所有数据即可获得答案，效率显著提高。下图1是R树的一个简单实例：
   </p>
   <p>
    <a href="../images/7/33.jpg" target="_blank">
@@ -223,7 +220,7 @@
    </a>
   </p>
   <h5>
-   <a class="anchor" href="#%E4%B8%80%E6%A3%B5r%E6%A0%91%E6%BB%A1%E8%B6%B3%E5%A6%82%E4%B8%8B%E7%9A%84%E6%80%A7%E8%B4%A8" name="user-content-%E4%B8%80%E6%A3%B5r%E6%A0%91%E6%BB%A1%E8%B6%B3%E5%A6%82%E4%B8%8B%E7%9A%84%E6%80%A7%E8%B4%A8">
+   <a aria-hidden="true" class="anchor" href="#%E4%B8%80%E6%A3%B5r%E6%A0%91%E6%BB%A1%E8%B6%B3%E5%A6%82%E4%B8%8B%E7%9A%84%E6%80%A7%E8%B4%A8" name="user-content-%E4%B8%80%E6%A3%B5r%E6%A0%91%E6%BB%A1%E8%B6%B3%E5%A6%82%E4%B8%8B%E7%9A%84%E6%80%A7%E8%B4%A8">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -247,7 +244,7 @@
    </li>
   </ol>
   <h5>
-   <a class="anchor" href="#%E5%8F%B6%E5%AD%90%E7%BB%93%E7%82%B9%E7%9A%84%E7%BB%93%E6%9E%84" name="user-content-%E5%8F%B6%E5%AD%90%E7%BB%93%E7%82%B9%E7%9A%84%E7%BB%93%E6%9E%84">
+   <a aria-hidden="true" class="anchor" href="#%E5%8F%B6%E5%AD%90%E7%BB%93%E7%82%B9%E7%9A%84%E7%BB%93%E6%9E%84" name="user-content-%E5%8F%B6%E5%AD%90%E7%BB%93%E7%82%B9%E7%9A%84%E7%BB%93%E6%9E%84">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -276,7 +273,7 @@
    在这张图中，I所代表的就是图中的矩形，其范围是a&lt;=I0&lt;=b，c&lt;=I1&lt;=d。有两个tuple-identifier，在图中即表示为那两个点。这种形式完全可以推广到高维空间。大家简单想想三维空间中的样子就可以了。这样，叶子结点的结构就介绍完了。
   </p>
   <h5>
-   <a class="anchor" href="#%E9%9D%9E%E5%8F%B6%E5%AD%90%E7%BB%93%E7%82%B9" name="user-content-%E9%9D%9E%E5%8F%B6%E5%AD%90%E7%BB%93%E7%82%B9">
+   <a aria-hidden="true" class="anchor" href="#%E9%9D%9E%E5%8F%B6%E5%AD%90%E7%BB%93%E7%82%B9" name="user-content-%E9%9D%9E%E5%8F%B6%E5%AD%90%E7%BB%93%E7%82%B9">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -303,7 +300,7 @@
    我个人感觉这张图画的不那么精确，应该是矩形A要恰好覆盖D,E,F,G，而不应该再留出这么多没用的空间了。但为尊重原图的绘制者，特不作修改。
   </p>
   <h5>
-   <a class="anchor" href="#r%E6%A0%91%E7%9A%84%E6%93%8D%E4%BD%9C" name="user-content-r%E6%A0%91%E7%9A%84%E6%93%8D%E4%BD%9C">
+   <a aria-hidden="true" class="anchor" href="#r%E6%A0%91%E7%9A%84%E6%93%8D%E4%BD%9C" name="user-content-r%E6%A0%91%E7%9A%84%E6%93%8D%E4%BD%9C">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -313,7 +310,7 @@
    这一部分也许是编程者最关注的问题了。这么高效的数据结构该如何去实现呢？这便是这一节需要阐述的问题。
   </p>
   <h6>
-   <a class="anchor" href="#%E6%90%9C%E7%B4%A2" name="user-content-%E6%90%9C%E7%B4%A2">
+   <a aria-hidden="true" class="anchor" href="#%E6%90%9C%E7%B4%A2" name="user-content-%E6%90%9C%E7%B4%A2">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -353,7 +350,7 @@
    阴影部分所对应的矩形为搜索矩形。它与根结点对应的最大的矩形（未画出）有重叠。这样将Search操作作用在其两个子树上。两个子树对应的矩形分别为R1与R2。搜索R1，发现与R1中的R4矩形有重叠，继续搜索R4。最终在R4所包含的R11与R12两个矩形中查找是否有符合条件的记录。搜索R2的过程同样如此。很显然，该算法进行的是一个迭代操作。
   </p>
   <h6>
-   <a class="anchor" href="#%E6%8F%92%E5%85%A5" name="user-content-%E6%8F%92%E5%85%A5">
+   <a aria-hidden="true" class="anchor" href="#%E6%8F%92%E5%85%A5" name="user-content-%E6%8F%92%E5%85%A5">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -439,7 +436,7 @@ AT1：[初始化] 将N设为L。
    这个插入操作其实类似于第一节中B树的插入操作，这里不再具体介绍，不过想必看过上面的伪代码大家应该也清楚了。
   </p>
   <h6>
-   <a class="anchor" href="#%E5%88%A0%E9%99%A4" name="user-content-%E5%88%A0%E9%99%A4">
+   <a aria-hidden="true" class="anchor" href="#%E5%88%A0%E9%99%A4" name="user-content-%E5%88%A0%E9%99%A4">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -523,7 +520,7 @@ CT4：[调整覆盖矩形] 如果N没有被删除，则调整EN.I使得其对应
    有一点需要解释的是，我们发现这个删除操作向上传递之后，根结点的条目R1也被插入了Q中，这样根结点只剩下了R2。别着急，重新插入操作会有效的解决这个问题。我们插入R3，R12，d至它原来所处的层。这样，我们发现根结点只有一个条目了，此时根据Inert中的操作，我们把这个根结点删除，它的孩子结点，即R5，R6，R7，R3所在的结点被置为根结点。至此，删除操作结束。
   </p>
   <h4>
-   <a class="anchor" href="#%E7%BB%93%E8%AF%AD" name="user-content-%E7%BB%93%E8%AF%AD">
+   <a aria-hidden="true" class="anchor" href="#%E7%BB%93%E8%AF%AD" name="user-content-%E7%BB%93%E8%AF%AD">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -609,11 +606,11 @@ CT4：[调整覆盖矩形] 如果N没有被删除，则调整EN.I使得其对应
 		  
 			<div id="nav">
 				
-					<a href="03.04.html">prev</a>
+					<a href="03.03.html">prev</a>
 					|
 				
 				
-					<a href="03.06.html">next</a>
+					<a href="03.10.html">next</a>
 				
 				<span style="float: right"><a href="index.html">Back to home</a>
 			</div>

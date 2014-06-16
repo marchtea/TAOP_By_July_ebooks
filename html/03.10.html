@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
-  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-6fc7fb2a2ad956975983882a7f95b27577e851a4.css" />
+  <link rel="stylesheet" href="style_cache/github2-ade82cf93cc23c0e2691785e7976cc718fe1986f.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,11 +105,11 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#%E6%9C%AC%E7%AB%A0%E4%B9%A0%E9%A2%98" name="user-content-%E6%9C%AC%E7%AB%A0%E4%B9%A0%E9%A2%98">
+   <a aria-hidden="true" class="anchor" href="#%E6%9C%AC%E7%AB%A0%E5%A0%86%E6%A0%88%E6%A0%91%E5%9B%BE%E7%9B%B8%E5%85%B3%E7%9A%84%E4%B9%A0%E9%A2%98" name="user-content-%E6%9C%AC%E7%AB%A0%E5%A0%86%E6%A0%88%E6%A0%91%E5%9B%BE%E7%9B%B8%E5%85%B3%E7%9A%84%E4%B9%A0%E9%A2%98">
     <span class="octicon octicon-link">
     </span>
    </a>
-   本章习题
+   本章堆栈树图相关的习题
   </h1>
   <p>
    <strong>
@@ -332,12 +332,12 @@
   <div class="highlight highlight-cpp">
    <pre><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span> <span class="k">class</span> <span class="nc">CQueue</span>
 <span class="p">{</span>
-<span class="nl">public:</span>
+<span class="k">public</span><span class="o">:</span>
       <span class="n">CQueue</span><span class="p">()</span> <span class="p">{}</span>
       <span class="o">~</span><span class="n">CQueue</span><span class="p">()</span> <span class="p">{}</span>
       <span class="kt">void</span> <span class="n">appendTail</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">node</span><span class="p">);</span>  <span class="c1">// append a element to tail</span>
       <span class="kt">void</span> <span class="nf">deleteHead</span><span class="p">();</span>               <span class="c1">// remove a element from head</span>
-<span class="nl">private:</span>
+<span class="k">private</span><span class="o">:</span>
      <span class="n">T</span><span class="o">&gt;</span> <span class="n">m_stack1</span><span class="p">;</span>
      <span class="n">T</span><span class="o">&gt;</span> <span class="n">m_stack2</span><span class="p">;</span>
 <span class="p">};</span>
@@ -376,7 +376,7 @@
    </strong>
   </p>
   <p>
-   有一个一亿节点的树，现在已知两个点，找这两个点的共同的祖先
+   有一个一亿节点的树，现在已知两个点，找这两个点的共同的祖先。
   </p>
   <p>
    <strong>
@@ -491,13 +491,29 @@ N
   <p>
    请问最少需要问守桥人几个问题，可以找出可以通过的桥？如何问？
   </p>
+  <p>
+   <strong>
+    24
+   </strong>
+  </p>
+  <p>
+   一类似于蜂窝的结构的图，进行搜索最短路径（要求5分钟）。
+  </p>
+  <p>
+   <strong>
+    25
+   </strong>
+  </p>
+  <p>
+   对于一颗完全二叉树，要求给所有节点加上一个pNext指针，指向同一层的相邻节点；如果当前节点已经是该层的最后一个节点，则将pNext指针指向NULL；给出程序实现，并分析时间复杂度和空间复杂度。
+  </p>
  </body>
 </html>
 		  </article>
 		  
 			<div id="nav">
 				
-					<a href="03.06.html">prev</a>
+					<a href="03.05.html">prev</a>
 					|
 				
 				

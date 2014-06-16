@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
-  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-6fc7fb2a2ad956975983882a7f95b27577e851a4.css" />
+  <link rel="stylesheet" href="style_cache/github2-ade82cf93cc23c0e2691785e7976cc718fe1986f.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,293 +105,239 @@
 			<html>
  <body>
   <h1>
-   <a class="anchor" href="#%E5%AF%BB%E6%89%BE%E5%92%8C%E4%B8%BA%E5%AE%9A%E5%80%BC%E7%9A%84%E5%A4%9A%E4%B8%AA%E6%95%B0" name="user-content-%E5%AF%BB%E6%89%BE%E5%92%8C%E4%B8%BA%E5%AE%9A%E5%80%BC%E7%9A%84%E5%A4%9A%E4%B8%AA%E6%95%B0">
+   <a aria-hidden="true" class="anchor" href="#%E5%A5%87%E5%81%B6%E8%B0%83%E5%BA%8F" name="user-content-%E5%A5%87%E5%81%B6%E8%B0%83%E5%BA%8F">
     <span class="octicon octicon-link">
     </span>
    </a>
-   寻找和为定值的多个数
+   奇偶调序
   </h1>
   <h2>
-   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+   <a aria-hidden="true" class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
     <span class="octicon octicon-link">
     </span>
    </a>
    题目描述
   </h2>
   <p>
-   输入两个整数n和sum，从数列1，2，3.......n 中随意取几个数，使其和等于sum，要求将其中所有的可能组合列出来。
+   输入一个整数数组，调整数组中数字的顺序，使得所有奇数位于数组的前半部分，所有偶数位于数组的后半部分。要求时间复杂度为O(n)。
   </p>
-  <h2>
-   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
     <span class="octicon octicon-link">
     </span>
    </a>
    分析与解法
-  </h2>
-  <h3>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
+  </h3>
+  <p>
+   最容易想到的办法是从头扫描这个数组，每碰到一个偶数，拿出这个数字，并把位于这个数字后面的所有数字往前挪动一位。挪完之后在数组的末尾有一个空位，然后把该偶数放入这个空位。由于每碰到一个偶数，需要移动O(n)个数字，所以这种方法总的时间复杂度是O(n^2)，不符合题目要求。
+  </p>
+  <p>
+   事实上，若把奇数看做是小的数，偶数看做是大的数，那么按照题目所要求的奇数放在前面偶数放在后面，就相当于小数放在前面大数放在后面，联想到快速排序中的partition过程，不就是通过一个主元把整个数组分成大小两个部分么，小于主元的小数放在前面，大于主元的大数放在后面。
+  </p>
+  <p>
+   而partition过程有以下两种实现：
+  </p>
+  <ul>
+   <li>
+    一头一尾两个指针往中间扫描，如果头指针遇到的数比主元大且尾指针遇到的数比主元小，则交换头尾指针所分别指向的数字；
+   </li>
+   <li>
+    一前一后两个指针同时从左往右扫，如果前指针遇到的数比主元小，则后指针右移一位，然后交换各自所指向的数字。
+   </li>
+  </ul>
+  <p>
+   类似这个partition过程，奇偶排序问题也可以分别借鉴partition的两种实现解决。
+  </p>
+  <p>
+   为何？比如partition的实现一中，如果最终是为了让整个序列元素从小到大排序，那么头指针理应指向的就是小数，而尾指针理应指向的就是大数，故当头指针指的是大数且尾指针指的是小数的时候就不正常，此时就当交换。
+  </p>
+  <h4>
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
     <span class="octicon octicon-link">
     </span>
    </a>
    解法一
-  </h3>
+  </h4>
   <p>
-   注意到取n，和不取n个区别即可，考虑是否取第n个数的策略，可以转化为一个只和前n-1个数相关的问题。
+   借鉴partition的实现一，我们可以考虑维护两个指针，一个指针指向数组的第一个数字，我们称之为头指针，向右移动；一个指针指向最后一个数字，称之为尾指针，向左移动。
   </p>
-  <ul>
-   <li>
-    如果取第n个数，那么问题就转化为“取前n-1个数使得它们的和为sum-n”，对应的代码语句就是sumOfkNumber(sum - n, n - 1)；
-   </li>
-   <li>
-    如果不取第n个数，那么问题就转化为“取前n-1个数使得他们的和为sum”，对应的代码语句为sumOfkNumber(sum, n - 1)。
-   </li>
-  </ul>
   <p>
-   参考代码如下：
+   这样，两个指针分别从数组的头部和尾部向数组的中间移动，如果第一个指针指向的数字是偶数而第二个指针指向的数字是奇数，我们就交换这两个数字。
   </p>
-  <div class="highlight highlight-c">
-   <pre><span class="n">list</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="n">list1</span><span class="p">;</span>
-<span class="kt">void</span> <span class="nf">SumOfkNumber</span><span class="p">(</span><span class="kt">int</span> <span class="n">sum</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+  <p>
+   因为按照题目要求，最终是为了让奇数排在数组的前面，偶数排在数组的后面，所以头指针理应指向的就是奇数，尾指针理应指向的就是偶数，故当头指针指向的是偶数且尾指针指向的是奇数时，我们就当立即交换它们所指向的数字。
+  </p>
+  <p>
+   思路有了，接下来，写代码实现：
+  </p>
+  <div class="highlight highlight-cpp">
+   <pre><span class="c1">//判断是否为奇数</span>
+<span class="kt">bool</span> <span class="nf">IsOddNumber</span><span class="p">(</span><span class="kt">int</span> <span class="n">data</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="c1">// 递归出口</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">sum</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span> <span class="o">&amp;</span> <span class="mi">1</span> <span class="o">==</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">//交换两个元素</span>
+<span class="kt">void</span> <span class="nf">swap</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span><span class="o">*</span> <span class="n">y</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="o">*</span><span class="n">x</span><span class="p">;</span>
+    <span class="o">*</span><span class="n">x</span> <span class="o">=</span> <span class="o">*</span><span class="n">y</span><span class="p">;</span>
+    <span class="o">*</span><span class="n">y</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">//奇偶互换</span>
+<span class="kt">void</span> <span class="nf">OddEvenSort</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">pData</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">length</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">pData</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
         <span class="k">return</span><span class="p">;</span>
 
-    <span class="c1">// 输出找到的结果</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">sum</span> <span class="o">==</span> <span class="n">n</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="c1">// 反转list</span>
-        <span class="n">list1</span><span class="p">.</span><span class="n">reverse</span><span class="p">();</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">list</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">iter</span> <span class="o">=</span> <span class="n">list1</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">iter</span> <span class="o">!=</span> <span class="n">list1</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">iter</span><span class="o">++</span><span class="p">)</span>
-            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">iter</span> <span class="o">&lt;&lt;</span> <span class="s">" + "</span><span class="p">;</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">n</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-    <span class="p">}</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">pBegin</span> <span class="o">=</span> <span class="n">pData</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">pEnd</span> <span class="o">=</span> <span class="n">pData</span> <span class="o">+</span> <span class="n">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
 
-    <span class="n">list1</span><span class="p">.</span><span class="n">push_front</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>      <span class="c1">//典型的01背包问题</span>
-    <span class="n">SumOfkNumber</span><span class="p">(</span><span class="n">sum</span> <span class="o">-</span> <span class="n">n</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>   <span class="c1">//“放”n，前n-1个数“填满”sum-n</span>
-    <span class="n">list1</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
-    <span class="n">SumOfkNumber</span><span class="p">(</span><span class="n">sum</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>     <span class="c1">//不“放”n，n-1个数“填满”sum</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">pBegin</span> <span class="o">&lt;</span> <span class="n">pEnd</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//如果pBegin指针指向的是奇数，正常，向右移</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">IsOddNumber</span><span class="p">(</span><span class="o">*</span><span class="n">pBegin</span><span class="p">))</span>  
+        <span class="p">{</span>
+            <span class="n">pBegin</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">//如果pEnd指针指向的是偶数，正常，向左移</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">IsOddNumber</span><span class="p">(</span><span class="o">*</span><span class="n">pEnd</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">pEnd</span><span class="o">--</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="c1">//否则都不正常，交换</span>
+            <span class="n">swap</span><span class="p">(</span><span class="o">*</span><span class="n">pBegin</span><span class="p">,</span> <span class="o">*</span><span class="n">pEnd</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </pre>
   </div>
-  <h3>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C">
+  <p>
+   本方法通过头尾两个指针往中间扫描，一次遍历完成所有奇数偶数的重新排列，时间复杂度为O(n)。
+  </p>
+  <h4>
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C">
     <span class="octicon octicon-link">
     </span>
    </a>
    解法二
-  </h3>
+  </h4>
   <p>
-   这个问题属于子集和问题（也是背包问题）。本程序采用回溯法+剪枝，其中X数组是解向量，t=∑(1,..,k-1)Wi*Xi, r=∑(k,..,n)Wi，且
-  </p>
-  <ul>
-   <li>
-    若t+Wk+W(k+1)&lt;=M,则Xk=true，递归左儿子(X1,X2,..,X(k-1),1)；否则剪枝；
-   </li>
-   <li>
-    若t+r-Wk&gt;=M &amp;&amp; t+W(k+1)&lt;=M,则置Xk=0，递归右儿子(X1,X2,..,X(k-1),0)；否则剪枝；
-   </li>
-  </ul>
-  <p>
-   本题中W数组就是(1,2,..,n),所以直接用k代替WK值。
+   我们先来看看快速排序partition过程的第二种实现是具体怎样的一个原理。
   </p>
   <p>
-   代码编写如下：
+   partition分治过程，每一趟排序的过程中，选取的主元都会把整个数组排列成一大一小的序列，继而递归排序完整个数组。如下伪代码所示：
   </p>
-  <div class="highlight highlight-c">
-   <pre><span class="c1">//输入t， r， 尝试Wk</span>
-<span class="kt">void</span> <span class="nf">SumOfkNumber</span><span class="p">(</span><span class="kt">int</span> <span class="n">t</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">,</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">M</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&amp;</span> <span class="n">flag</span><span class="p">,</span> <span class="kt">bool</span><span class="o">*</span> <span class="n">X</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">X</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>   <span class="c1">// 选第k个数</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">k</span> <span class="o">==</span> <span class="n">M</span><span class="p">)</span> <span class="c1">// 若找到一个和为M，则设置解向量的标志位，输出解</span>
-    <span class="p">{</span>
-        <span class="n">flag</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="n">printf</span><span class="p">(</span><span class="s">"%d "</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>   <span class="c1">// 若第k+1个数满足条件，则递归左子树</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">k</span> <span class="o">+</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">M</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">SumOfkNumber</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">k</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span> <span class="o">-</span> <span class="n">k</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">flag</span><span class="p">,</span> <span class="n">X</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="c1">// 若不选第k个数，选第k+1个数满足条件，则递归右子树</span>
-        <span class="k">if</span> <span class="p">((</span><span class="n">t</span> <span class="o">+</span> <span class="n">r</span> <span class="o">-</span> <span class="n">k</span> <span class="o">&gt;=</span> <span class="n">M</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">M</span><span class="p">))</span>
-        <span class="p">{</span>
-            <span class="n">X</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-            <span class="n">SumOfkNumber</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span> <span class="o">-</span> <span class="n">k</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">flag</span><span class="p">,</span> <span class="n">X</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+  <pre><code>PARTITION(A, p, r)
+1  x ← A[r]
+2  i ← p - 1
+3  for j ← p to r - 1
+4       do if A[j] ≤ x
+5             then i ← i + 1
+6                  exchange A[i] &lt;-&gt; A[j]
+7  exchange A[i + 1] &lt;-&gt; A[r]
+8  return i + 1
+</code></pre>
+  <p>
+   举个例子如下：现要对数组data = {2, 8,7, 1, 3, 5, 6, 4}进行快速排序，为了表述方便，令
+   <code>
+    i
+   </code>
+   指向数组头部前一个位置，
+   <code>
+    j
+   </code>
+   指向数组头部元素，
+   <code>
+    j
+   </code>
+   在前，
+   <code>
+    i
+   </code>
+   在后，双双从左向右移动。
+  </p>
+  <p>
+   ① j 指向元素2时，i 也指向元素2，2与2互换不变
+  </p>
+  <pre><code>i  p/j
 
-<span class="kt">void</span> <span class="nf">search</span><span class="p">(</span><span class="kt">int</span><span class="o">&amp;</span> <span class="n">N</span><span class="p">,</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">M</span><span class="p">)</span>
+    2   8   7   1   3   5   6   4(主元)
+</code></pre>
+  <p>
+   ② 于是j 继续后移，直到指向了1，1 &lt;= 4，于是i++，i 指向8，故j 所指元素1 与 i 所指元素8 位置互换：
+  </p>
+  <pre><code>    i       j
+
+2   1   7   8   3   5   6   4
+</code></pre>
+  <p>
+   ③ j 继续后移，指到了元素3,3 &lt;= 4，于是同样i++，i 指向7，故j 所指元素3 与 i 所指元素7 位置互换：
+  </p>
+  <pre><code>        i       j
+
+2   1   3   8   7   5   6   4
+</code></pre>
+  <p>
+   ④ j 一路后移，没有再碰到比主元4小的元素：
+  </p>
+  <pre><code>        i               j
+
+2   1   3   8   7   5   6   4
+</code></pre>
+  <p>
+   ⑤ 最后，A[i + 1] &lt;-&gt; A[r]，即8与4交换，所以，数组最终变成了如下形式：
+  </p>
+  <pre><code>    2   1   3   4   7   5   6   8
+</code></pre>
+  <p>
+   这样，快速排序第一趟完成。就这样，4把整个数组分成了俩部分，2 1 3,7 5 6 8，再递归对这两部分分别进行排序。
+  </p>
+  <p>
+   借鉴partition的上述实现，我们也可以维护两个指针i和j，一个指针指向数组的第一个数的前一个位置，我们称之为后指针i，向右移动；一个指针指向数组第一个数，称之为前指针j，也向右移动，且前指针j先向右移动。如果前指针j指向的数字是奇数，则令i指针向右移动一位，然后交换i和j指针所各自指向的数字。
+  </p>
+  <p>
+   因为按照题目要求，最终是为了让奇数排在数组的前面，偶数排在数组的后面，所以i指针理应指向的就是奇数，j指针理应指向的就是偶数，所以，当j指针指向的是奇数时，不正常，我们就当让i++，然后交换i和j指针所各自指向的数字。
+  </p>
+  <p>
+   参考代码如下：
+  </p>
+  <div class="highlight highlight-c">
+   <pre><span class="c1">//奇偶互换</span>
+<span class="kt">void</span> <span class="nf">OddEvenSort2</span><span class="p">(</span><span class="kt">int</span> <span class="n">data</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">lo</span><span class="p">,</span> <span class="kt">int</span> <span class="n">hi</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="c1">// 初始化解空间</span>
-    <span class="kt">bool</span><span class="o">*</span> <span class="n">X</span> <span class="o">=</span> <span class="p">(</span><span class="kt">bool</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">bool</span><span class="p">)</span><span class="o">*</span> <span class="p">(</span><span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
-    <span class="n">memset</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">bool</span><span class="p">)</span><span class="o">*</span> <span class="p">(</span><span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
-    <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="p">(</span><span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">N</span> <span class="o">*</span> <span class="mf">0.5f</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&gt;</span> <span class="n">M</span> <span class="o">||</span> <span class="n">sum</span> <span class="o">&lt;</span> <span class="n">M</span><span class="p">)</span> <span class="c1">// 预先排除无解情况</span>
+    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">lo</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">lo</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">hi</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">"not found</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-        <span class="k">return</span><span class="p">;</span>
+        <span class="c1">//data[j]指向奇数，交换</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="n">IsOddNumber</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">swap</span><span class="p">(</span><span class="o">&amp;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+        <span class="p">}</span>
     <span class="p">}</span>
-    <span class="kt">bool</span> <span class="n">f</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-    <span class="n">SumOfkNumber</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sum</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">X</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">f</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">"not found</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="n">free</span><span class="p">(</span><span class="n">X</span><span class="p">);</span>
+    <span class="n">swap</span><span class="p">(</span><span class="o">&amp;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">data</span><span class="p">[</span><span class="n">hi</span><span class="p">]);</span>
 <span class="p">}</span>
 </pre>
   </div>
-  <h2>
-   <a class="anchor" href="#0-1%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98" name="user-content-0-1%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   0-1背包问题
-  </h2>
   <p>
-   0-1背包问题是最基础的背包问题，其具体描述为：有N件物品和一个容量为V的背包。放入第i件物品耗费的费用是Ci，得到的价值是Wi。求解将哪些物品装入背包可使价值总和最大。
+   此解法一前一后两个指针同时向右扫描的过程中，也是一次遍历完成奇数偶数的重新排列，故时间复杂度也为O(n)。
   </p>
-  <p>
-   简单分析下：这是最基础的背包问题，特点是每种物品仅有一件，可以选择放或不放。用子问题定义状态：即F[i, v]表示前i件物品恰放入一个容量为v的背包可以获得的最大价值。则其状态转移方程便是：
-  </p>
-  <ul>
-   <li>
-    F[i, v] = max{F[i-1, v], F[i-1, v-Ci ] + Wi}
-   </li>
-  </ul>
-  <p>
-   根据前面的分析，我们不难理解这个方程的意义：“将前i件物品放入容量为v的背包中”这个子问题，若只考虑第i件物品的策略（放或不放），那么就可以转化为一个只和前 i-1 件物品相关的问题。即：
-  </p>
-  <ul>
-   <li>
-    如果不放第i件物品，那么问题就转化为“前i-1件物品放入容量为v的背包中”，价值为 F[i-1, v ]；
-   </li>
-   <li>
-    如果放第i件物品，那么问题就转化为“前i-1件物品放入剩下的容量为v-Ci的背包中”，此时能获得的最大价值就是F[i-1, v-Ci]再加上通过放入第i件物品获得的价值Wi。
-   </li>
-  </ul>
-  <p>
-   伪代码如下：
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="n">F</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.</span><span class="p">..</span><span class="n">V</span><span class="p">]</span> <span class="err">←</span> <span class="mi">0</span>
-<span class="k">for</span> <span class="n">i</span> <span class="err">←</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">N</span>
-    <span class="k">for</span> <span class="n">v</span> <span class="err">←</span> <span class="n">Ci</span> <span class="n">to</span> <span class="n">V</span>
-        <span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">v</span><span class="p">]</span> <span class="err">←</span> <span class="n">max</span><span class="p">{</span><span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">v</span><span class="p">],</span> <span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">v</span><span class="o">-</span><span class="n">Ci</span><span class="p">]</span> <span class="o">+</span> <span class="n">Wi</span> <span class="p">}</span>
-</pre>
-  </div>
-  <p>
-   这段代码的时间和空间复杂度均为 O(VN)，其中时间复杂度应该已经不能再优化了，但空间复杂度却可以优化到O(V)。感兴趣的读者可以继续思考或者参考网上一个不错的文档《背包问题九讲》。
-  </p>
-  <h2>
-   <a class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
     <span class="octicon octicon-link">
     </span>
    </a>
    举一反三
-  </h2>
+  </h3>
   <p>
-   1、《挑战程序设计竞赛》的开篇有个类似的抽签问题，挺有意思，题目如下：
+   一个未排序整数数组，有正负数，重新排列使负数排在正数前面，并且要求不改变原来的正负数之间相对顺序，比如： input: 1,7,-5,9,-12,15 ans: -5,-12,1,7,9,15 要求时间复杂度O(n),空间O(1)。
   </p>
   <p>
-   将写有数字的n个纸片放入一个纸箱子中，然后你和你的朋友从纸箱子中抽取4张纸片，每次记下纸片上的数字后放回子箱子中，如果这4个数字的和是m，代表你赢，否则就是你的朋友赢。
-  </p>
-  <p>
-   请编写一个程序，当纸片上所写的数字是k1，k2，k3，k4，..，kn时，是否存在抽取4次和为m的方案，如果存在，输出YES；否则，输出NO。
-  </p>
-  <p>
-   限制条件：
-  </p>
-  <ul>
-   <li>
-    1 &lt;= n &lt;= 50
-   </li>
-   <li>
-    1 &lt;= m &lt;= 10^8
-   </li>
-   <li>
-    1 &lt;= ki &lt;= 10^8
-   </li>
-  </ul>
-  <p>
-   分析：最容易想到的方案是用4个for循环直接穷举所有方案，时间复杂度为O（N^4）,主体代码如下：
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="c1">//通过4重for循环枚举所有方案</span>
-<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">,</span> <span class="n">a</span><span class="o">++</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">b</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">c</span><span class="o">++</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">d</span><span class="o">++</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">+</span> <span class="n">k</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">+</span> <span class="n">k</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">+</span> <span class="n">k</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="n">f</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre>
-  </div>
-  <p>
-   但如果当n远大于50时，则程序会显得非常吃力，如此，我们需要找到更好的办法。
-  </p>
-  <p>
-   提供两个思路：
-  </p>
-  <p>
-   ①最内侧关于d的循环所做的事情：检查是否有d满足ka+ kb +kc + kd = m，移动下式子，等价于：检查是否有d使得kd = m - ka - kb - kc，也就是说，只要检查k中所有元素，判断是否有等于m-ka-kb-ka 的元素即可。设m-ka-kb-ka = x，接下来，就是要看x是否存在于数组k中，此时，可以先把数组k排序，然后利用二分查找在数组k中找x；
-  </p>
-  <p>
-   ②进一步，内侧的两个循环所做的事情：检查是否有c和d满足kc + kd = m - ka -kb。同样，可以预先枚举出kc+kd所得的n^2数字并排好序，便可以利用二分搜索继续求解。
-  </p>
-  <p>
-   2、给定整数a1、a2、a3、...、an，判断是否可以从中选出若干个数，使得它们的和等于k（k任意给定，且满足-10^8 &lt;= k &lt;= 10^8）。
-  </p>
-  <p>
-   分析：此题相对于本节“寻找满足条件的多个数”如出一辙，不同的是此题只要求判断，不要求把所有可能的组合给输出来。因为此题需要考虑到加上a[i]和不加上a[i]的情况，故可以采用深度优先搜索的办法，递归解决。
-  </p>
-  <p>
-   3、有n个数，输出期中所有和为s的k个数的组合。
-  </p>
-  <p>
-   分析：此题有两个坑，一是这里的n个数是任意给定的，不一定是：1,2,3...n，所以可能有重复的数（如果有重复的数怎么处理？）；二是不要求你输出所有和为s的全部组合，而只要求输出和为s的k个数的组合。
-  </p>
-  <p>
-   举个例子，假定n=6，这6个数为：1 2 1 3 0 1，如果要求输出和为3的全部组合的话，
-  </p>
-  <ul>
-   <li>
-    1 2
-   </li>
-   <li>
-    1 2 0
-   </li>
-   <li>
-    0 3
-   </li>
-   <li>
-    1 1 1
-   </li>
-   <li>
-    1 1 1 0
-   </li>
-  </ul>
-  <p>
-   而题目加了个限制条件，若令k=2，则只要求输出：[{1,2}, {0,3}] 即可。
+   分析：如果本题没有这个要求“并且要求不改变原来的正负数之间相对顺序”，那么同奇偶数排序是一道题，但加上这个不能改变正负数之间的相对顺序后，便使得问题变得比较艰难了，若有兴趣，读者可以参考这篇论文《STABLE MINIMUM SPACE PARTITIONING IN LINEAR TIME》。
   </p>
  </body>
 </html>

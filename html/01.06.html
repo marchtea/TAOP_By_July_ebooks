@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
-  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-6fc7fb2a2ad956975983882a7f95b27577e851a4.css" />
+  <link rel="stylesheet" href="style_cache/github2-ade82cf93cc23c0e2691785e7976cc718fe1986f.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,184 +105,308 @@
 			<html>
  <body>
   <h2>
-   <a class="anchor" href="#%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2" name="user-content-%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2">
+   <a aria-hidden="true" class="anchor" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%85%A8%E6%8E%92%E5%88%97" name="user-content-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%85%A8%E6%8E%92%E5%88%97">
     <span class="octicon octicon-link">
     </span>
    </a>
-   最长回文子串
+   字符串的全排列
   </h2>
   <h3>
-   <a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+   <a aria-hidden="true" class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
     <span class="octicon octicon-link">
     </span>
    </a>
    题目描述
   </h3>
   <p>
-   给定一个字符串，求它的最长回文子串的长度。
+   输入一个字符串，打印出该字符串中字符的所有排列。
+  </p>
+  <p>
+   例如输入字符串abc，则输出由字符a、b、c 所能排列出来的所有字符串
+  </p>
+  <p>
+   abc、acb、bac、bca、cab 和 cba。
   </p>
   <h3>
-   <a class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
     <span class="octicon octicon-link">
     </span>
    </a>
    分析与解法
   </h3>
-  <p>
-   最容易想到的办法是枚举所有的子串，分别判断其是否为回文。这个思路初看起来是正确的，但却做了很多无用功，如果一个长的子串包含另一个短一些的子串，那么对子串的回文判断其实是不需要的。
-  </p>
   <h4>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0">
     <span class="octicon octicon-link">
     </span>
    </a>
-   解法一
+   解法一、递归实现
   </h4>
   <p>
-   那么如何高效的进行判断呢？我们想想，如果一段字符串是回文，那么以某个字符为中心的前缀和后缀都是相同的，例如以一段回文串“aba”为例，以b为中心，它的前缀和后缀都是相同的，都是a。
+   从集合中依次选出每一个元素，作为排列的第一个元素，然后对剩余的元素进行全排列，如此递归处理，从而得到所有元素的全排列。以对字符串abc进行全排列为例，我们可以这么做：以abc为例
   </p>
+  <ul>
+   <li>
+    固定a，求后面bc的排列：abc，acb，求好后，a和b交换，得到bac
+   </li>
+   <li>
+    固定b，求后面ac的排列：bac，bca，求好后，c放到第一位置，得到cba
+   </li>
+   <li>
+    固定c，求后面ba的排列：cba，cab。
+   </li>
+  </ul>
   <p>
-   那么，我们是否可以可以枚举中心位置，然后再在该位置上用扩展法，记录并更新得到的最长的回文长度呢？答案是肯定的，参考代码如下：
+   代码可如下编写所示：
   </p>
   <div class="highlight highlight-cpp">
-   <pre><span class="kt">int</span> <span class="nf">longestPalindrome</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+   <pre><span class="kt">void</span> <span class="nf">CalcAllPermutation</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">perm</span><span class="p">,</span> <span class="kt">int</span> <span class="n">from</span><span class="p">,</span> <span class="kt">int</span> <span class="n">to</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">max</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="n">max</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// i is the middle point of the palindrome  </span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">);</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="c1">// if the length of the palindrome is odd  </span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">])</span>
-            <span class="k">break</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="n">max</span><span class="p">)</span>
-            <span class="n">max</span> <span class="o">=</span> <span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">);</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="c1">// for the even case  </span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
-            <span class="k">break</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">&gt;</span> <span class="n">max</span><span class="p">)</span>
-            <span class="n">max</span> <span class="o">=</span> <span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">to</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
     <span class="p">}</span>
-    <span class="k">return</span> <span class="n">max</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">from</span> <span class="o">==</span> <span class="n">to</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">to</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">from</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">to</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">swap</span><span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">perm</span><span class="p">[</span><span class="n">from</span><span class="p">]);</span>
+            <span class="n">CalcAllPermutation</span><span class="p">(</span><span class="n">perm</span><span class="p">,</span> <span class="n">from</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">to</span><span class="p">);</span>
+            <span class="n">swap</span><span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">perm</span><span class="p">[</span><span class="n">from</span><span class="p">]);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </pre>
   </div>
-  <p>
-   代码稍微难懂一点的地方就是内层的两个 for 循环，它们分别对于以 i 为中心的，长度为奇数和偶数的两种情况，整个代码遍历中心位置 i 并以之扩展，找出最长的回文。
-  </p>
   <h4>
-   <a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8Con%E8%A7%A3%E6%B3%95" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8Con%E8%A7%A3%E6%B3%95">
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C%E5%AD%97%E5%85%B8%E5%BA%8F%E6%8E%92%E5%88%97" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C%E5%AD%97%E5%85%B8%E5%BA%8F%E6%8E%92%E5%88%97">
     <span class="octicon octicon-link">
     </span>
    </a>
-   解法二、O(N)解法
+   解法二、字典序排列
   </h4>
   <p>
-   在上文的解法一：枚举中心位置中，我们需要特别考虑字符串的长度是奇数还是偶数，所以导致我们在编写代码实现的时候要把奇数和偶数的情况分开编写，是否有一种方法，可以不用管长度是奇数还是偶数，而统一处理呢？比如是否能把所有的情况全部转换为奇数处理？
+   首先，咱们得清楚什么是字典序。根据维基百科的定义：给定两个偏序集A和B,(a,b)和(a′,b′)属于笛卡尔集 A × B，则字典序定义为
   </p>
   <p>
-   答案还是肯定的。这就是下面我们将要看到的Manacher算法，且这个算法求最长回文子串的时间复杂度是线性O(N)的。
+   (a,b) ≤ (a′,b′) 当且仅当 a &lt; a′ 或 (a = a′ 且 b ≤ b′)。
   </p>
   <p>
-   首先通过在每个字符的两边都插入一个特殊的符号，将所有可能的奇数或偶数长度的回文子串都转换成了奇数长度。比如 abba 变成 #a#b#b#a#， aba变成 #a#b#a#。
+   所以给定两个字符串，逐个字符比较，那么先出现较小字符的那个串字典顺序小，如果字符一直相等，较短的串字典顺序小。例如：abc &lt; abcd &lt; abde &lt; afab。
   </p>
   <p>
-   此外，为了进一步减少编码的复杂度，可以在字符串的开始加入另一个特殊字符，这样就不用特殊处理越界问题，比如$#a#b#a#。
-  </p>
-  <p>
-   以字符串12212321为例，插入#和$这两个特殊符号，变成了 S[] = "$#1#2#2#1#2#3#2#1#"，然后用一个数组 P[i] 来记录以字符S[i]为中心的最长回文子串向左或向右扩张的长度（包括S[i]）。
-  </p>
-  <p>
-   比如S和P的对应关系：
+   那有没有这样的算法，使得
   </p>
   <ul>
    <li>
-    S  #  1  #  2  #  2  #  1  #  2  #  3  #  2  #  1  #
+    起点： 字典序最小的排列, 1-n , 例如12345
    </li>
    <li>
-    P  1  2  1  2  5  2  1  4  1  2  1  6  1  2  1  2  1
+    终点： 字典序最大的排列，n-1, 例如54321
+   </li>
+   <li>
+    过程： 从当前排列生成字典序刚好比它大的下一个排列
    </li>
   </ul>
   <p>
-   可以看出，P[i]-1正好是原字符串中最长回文串的总长度，为5。
+   答案是肯定的：有，即是STL中的next_permutation算法。
   </p>
   <p>
-   接下来怎么计算P[i]呢？Manacher算法增加两个辅助变量id和mx，其中id表示最大回文子串中心的位置，mx则为id+P[id]，也就是最大回文子串的边界。得到一个很重要的结论：
+   在了解next_permutation算法是怎么一个过程之前，咱们得先来分析下“下一个排列”的性质。
   </p>
   <ul>
    <li>
-    如果mx &gt; i，那么P[i] &gt;= Min(P[2 * id - i], mx - i)
+    假定现有字符串(A)x(B)，它的下一个排列是：(A)y(B’)，其中A、B和B’是“字符串”(可能为空），x和y是“字符”，前缀相同，都是A，且一定有y &gt; x。
+   </li>
+   <li>
+    那么，为使下一个排列字典顺序尽可能小，必有：
+    <ul>
+     <li>
+      A尽可能长
+     </li>
+     <li>
+      y尽可能小
+     </li>
+     <li>
+      B’里的字符按由小到大递增排列
+     </li>
+    </ul>
    </li>
   </ul>
   <p>
-   C代码如下：
+   现在的问题是：找到x和y。怎么找到呢？咱们来看一个例子。
   </p>
-  <div class="highlight highlight-c">
-   <pre><span class="c1">//mx &gt; i，那么P[i] &gt;= MIN(P[2 * id - i], mx - i)</span>
-<span class="c1">//故谁小取谁</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">mx</span> <span class="o">-</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">P</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">id</span> <span class="o">-</span> <span class="n">i</span><span class="p">])</span>
-    <span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">id</span> <span class="o">-</span> <span class="n">i</span><span class="p">];</span>
-<span class="k">else</span>  <span class="c1">//mx-i &lt;= P[2*id - i]</span>
-    <span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mx</span> <span class="o">-</span> <span class="n">i</span><span class="p">;</span> 
+  <p>
+   比如说，现在我们要找21543的下一个排列，我们可以从左至右逐个扫描每个数，看哪个能增大（至于如何判定能增大，是根据如果一个数右面有比它大的数存在，那么这个数就能增大），我们可以看到最后一个能增大的数是：x = 1。
+  </p>
+  <p>
+   而1应该增大到多少？1能增大到它右面比它大的那一系列数中最小的那个数，即：y = 3，故此时21543的下一个排列应该变为23xxx，显然 xxx(对应之前的B’）应由小到大排，于是我们最终找到比“21543”大，但字典顺序尽量小的23145，找到的23145刚好比21543大。
+  </p>
+  <p>
+   由这个例子可以得出next_permutation算法流程为：
+  </p>
+  <p>
+   next_permutation算法
+  </p>
+  <ul>
+   <li>
+    <p>
+     定义
+    </p>
+    <ul>
+     <li>
+      升序：相邻两个位置ai &lt; ai+1，ai 称作该升序的首位
+     </li>
+    </ul>
+   </li>
+   <li>
+    <p>
+     步骤（二找、一交换、一翻转）
+    </p>
+    <ul>
+     <li>
+      找到排列中最后（最右）一个升序的首位位置i，x = ai
+     </li>
+     <li>
+      找到排列中第i位右边最后一个比ai 大的位置j，y = aj
+     </li>
+     <li>
+      交换x，y
+     </li>
+     <li>
+      把第(i+ 1)位到最后的部分翻转
+     </li>
+    </ul>
+   </li>
+  </ul>
+  <p>
+   还是拿上面的21543举例，那么，应用next_permutation算法的过程如下：
+  </p>
+  <ul>
+   <li>
+    x = 1；
+   </li>
+   <li>
+    y = 3
+   </li>
+   <li>
+    1和3交换
+    <ul>
+     <li>
+      得23541
+     </li>
+    </ul>
+   </li>
+   <li>
+    翻转541
+    <ul>
+     <li>
+      得23145
+     </li>
+    </ul>
+   </li>
+  </ul>
+  <p>
+   23145即为所求的21543的下一个排列。参考实现代码如下：
+  </p>
+  <div class="highlight highlight-cpp">
+   <pre><span class="kt">bool</span> <span class="nf">CalcAllPermutation</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">perm</span><span class="p">,</span> <span class="kt">int</span> <span class="n">num</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+
+    <span class="c1">//①找到排列中最后（最右）一个升序的首位位置i，x = ai</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">num</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">perm</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]);</span> <span class="o">--</span><span class="n">i</span><span class="p">){</span>
+        <span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">// 已经找到所有排列</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">){</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">k</span><span class="p">;</span>
+    <span class="c1">//②找到排列中第i位右边最后一个比ai 大的位置j，y = aj</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">k</span> <span class="o">=</span> <span class="n">num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="p">(</span><span class="n">k</span> <span class="o">&gt;</span> <span class="n">i</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span> <span class="o">--</span><span class="n">k</span><span class="p">){</span>
+        <span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">//③交换x，y</span>
+    <span class="n">swap</span><span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">perm</span><span class="p">[</span><span class="n">k</span><span class="p">]);</span>
+    <span class="c1">//④把第(i+ 1)位到最后的部分翻转</span>
+    <span class="n">reverse</span><span class="p">(</span><span class="n">perm</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">perm</span> <span class="o">+</span> <span class="n">num</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
 </pre>
   </div>
   <p>
-   下面，令j = 2*id - i，也就是说j是i关于id的对称点。
+   然后在主函数里循环判断和调用calcAllPermutation函数输出全排列即可。
   </p>
-  <p>
-   当 mx - i &gt; P[j] 的时候，以S[j]为中心的回文子串包含在以S[id]为中心的回文子串中，由于i和j对称，以S[i]为中心的回文子串必然包含在以S[id]为中心的回文子串中，所以必有P[i] = P[j]；
-  </p>
-  <p>
-   <a href="https://camo.githubusercontent.com/6e347c94c2660435bde50fa5305135229c8d76cf/687474703a2f2f7777772e66656c69783032312e636f6d2f626c6f672f6174746163686d656e742f313331383437363238345f37393335346134372e706e67" target="_blank">
-    <img alt="" data-canonical-src="http://www.felix021.com/blog/attachment/1318476284_79354a47.png" src="https://camo.githubusercontent.com/6e347c94c2660435bde50fa5305135229c8d76cf/687474703a2f2f7777772e66656c69783032312e636f6d2f626c6f672f6174746163686d656e742f313331383437363238345f37393335346134372e706e67" style="max-width:100%;"/>
+  <h4>
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E6%80%BB%E7%BB%93" name="user-content-%E8%A7%A3%E6%B3%95%E6%80%BB%E7%BB%93">
+    <span class="octicon octicon-link">
+    </span>
    </a>
-  </p>
+   解法总结
+  </h4>
   <p>
-   当 P[j] &gt;= mx - i 的时候，以S[j]为中心的回文子串不一定完全包含于以S[id]为中心的回文子串中，但是基于对称性可知，下图中两个绿框所包围的部分是相同的，也就是说以S[i]为中心的回文子串，其向右至少会扩张到mx的位置，也就是说 P[i] &gt;= mx - i。至于mx之后的部分是否对称，再具体匹配。
+   由于全排列总共有n!种排列情况，所以不论解法一中的递归方法，还是上述解法二的字典序排列方法，这两种方法的时间复杂度都为O(n!)。
   </p>
-  <p>
-   <a href="https://camo.githubusercontent.com/ff7edaf62027622be69d38aa3412b542328f8386/687474703a2f2f7777772e66656c69783032312e636f6d2f626c6f672f6174746163686d656e742f313331383437383131345f34333739666235632e706e67" target="_blank">
-    <img alt="" data-canonical-src="http://www.felix021.com/blog/attachment/1318478114_4379fb5c.png" src="https://camo.githubusercontent.com/ff7edaf62027622be69d38aa3412b542328f8386/687474703a2f2f7777772e66656c69783032312e636f6d2f626c6f672f6174746163686d656e742f313331383437383131345f34333739666235632e706e67" style="max-width:100%;"/>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98" name="user-content-%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98">
+    <span class="octicon octicon-link">
+    </span>
    </a>
+   类似问题
+  </h3>
+  <p>
+   1、已知字符串里的字符是互不相同的，现在任意组合，比如ab，则输出aa，ab，ba，bb，编程按照字典序输出所有的组合。
   </p>
   <p>
-   此外，对于 mx &lt;= i 的情况，因为无法对 P[i]做更多的假设，只能让P[i] = 1，然后再去匹配。
-  </p>
-  <p>
-   综上，关键代码如下：
+   分析：非简单的全排列问题（跟全排列的形式不同,abc全排列的话，只有6个不同的输出）。
+本题可用递归的思想，设置一个变量表示已输出的个数，然后当个数达到字符串长度时，就输出。
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="c1">//输入，并处理得到字符串s</span>
-<span class="kt">int</span> <span class="n">p</span><span class="p">[</span><span class="mi">1000</span><span class="p">],</span> <span class="n">mx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="n">memset</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">p</span><span class="p">));</span>
-<span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">'\0'</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> 
+   <pre><span class="c1">//copyright@ 一直很安静 &amp;&amp; World Gao</span>
+<span class="c1">//假设str已经有序</span>
+<span class="kt">void</span> <span class="nf">perm</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">result</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">,</span> <span class="kt">int</span> <span class="n">size</span><span class="p">,</span> <span class="kt">int</span> <span class="n">resPos</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mx</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="o">?</span> <span class="n">min</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">id</span> <span class="o">-</span> <span class="n">i</span><span class="p">],</span> <span class="n">mx</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span> <span class="o">:</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">==</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span> 
-        <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">mx</span><span class="p">)</span> 
+  <span class="k">if</span><span class="p">(</span><span class="n">resPos</span> <span class="o">==</span> <span class="n">size</span><span class="p">)</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">result</span><span class="p">);</span>
+  <span class="k">else</span>
     <span class="p">{</span>
-        <span class="n">mx</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="n">id</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+      <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="n">result</span><span class="p">[</span><span class="n">resPos</span><span class="p">]</span> <span class="o">=</span> <span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+          <span class="n">perm</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">str</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">resPos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
-<span class="c1">//找出p[i]中最大的</span>
 </pre>
   </div>
   <p>
-   此Manacher算法使用id、mx做配合，可以在每次循环中，直接对P[i]的快速赋值，从而在计算以i为中心的回文子串的过程中，不必每次都从1开始比较，减少了比较次数，最终使得求解最长回文子串的长度达到线性O(N)的时间复杂度。
+   2、如果不是求字符的所有排列，而是求字符的所有组合，应该怎么办呢？当输入的字符串中含有相同的字符串时，相同的字符交换位置是不同的排列，但是同一个组合。举个例子，如果输入abc，它的组合有a、b、c、ab、ac、bc、abc。
   </p>
   <p>
-   参考：
-   <a href="http://www.felix021.com/blog/read.php?2040">
-    http://www.felix021.com/blog/read.php?2040
-   </a>
-   。另外，这篇文章也不错：
-   <a href="http://leetcode.com/2011/11/longest-palindromic-substring-part-ii.html">
-    http://leetcode.com/2011/11/longest-palindromic-substring-part-ii.html
-   </a>
-   。
+   3、写一个程序，打印出以下的序列。
+  </p>
+  <p>
+   (a),(b),(c),(d),(e)........(z)
+  </p>
+  <p>
+   (a,b),(a,c),(a,d),(a,e)......(a,z),(b,c),(b,d).....(b,z),(c,d).....(y,z)
+  </p>
+  <p>
+   (a,b,c),(a,b,d)....(a,b,z),(a,c,d)....(x,y,z)
+  </p>
+  <p>
+   ....
+  </p>
+  <p>
+   (a,b,c,d,.....x,y,z)
   </p>
  </body>
 </html>
@@ -294,7 +418,7 @@
 					|
 				
 				
-					<a href="01.07.html">next</a>
+					<a href="01.10.html">next</a>
 				
 				<span style="float: right"><a href="index.html">Back to home</a>
 			</div>

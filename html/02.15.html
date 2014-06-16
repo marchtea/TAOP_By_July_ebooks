@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
-  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-6fc7fb2a2ad956975983882a7f95b27577e851a4.css" />
+  <link rel="stylesheet" href="style_cache/github2-ade82cf93cc23c0e2691785e7976cc718fe1986f.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,26 +105,15 @@
 			<html>
  <body>
   <h2>
-   <a class="anchor" href="#%E6%9C%AC%E7%AB%A0%E4%B9%A0%E9%A2%98" name="user-content-%E6%9C%AC%E7%AB%A0%E4%B9%A0%E9%A2%98">
+   <a aria-hidden="true" class="anchor" href="#%E6%9C%AC%E7%AB%A0%E6%95%B0%E7%BB%84%E5%92%8C%E9%98%9F%E5%88%97%E7%9A%84%E4%B9%A0%E9%A2%98" name="user-content-%E6%9C%AC%E7%AB%A0%E6%95%B0%E7%BB%84%E5%92%8C%E9%98%9F%E5%88%97%E7%9A%84%E4%B9%A0%E9%A2%98">
     <span class="octicon octicon-link">
     </span>
    </a>
-   本章习题
+   本章数组和队列的习题
   </h2>
   <p>
    <strong>
     1、不用除法运算
-   </strong>
-  </p>
-  <p>
-   一个长度为n的数组a[0],a[1],...,a[n-1]。现在更新数组的名个元素，即a[0]变为a[1]到a[n-1]的积，a[1]变为a[0]和a[2]到a[n-1]的积，...，a[n-1]为a[0]到a[n-2]的积（就是除掉当前元素，其他所有元素的积）。程序要求：具有线性复杂度，且不能使用除法运算符。
-  </p>
-  <p>
-   提示：left[i]标示着a[i]之前的乘积，right[i]标示着a[i]之后的乘积，但不申请空间，那么a[i]=left[i]*right[i] 。不过，left的计算从左往右扫的时候得出，right是从右往左扫得出。因为就是当中某个元素a[i]的左边所有元素与右边所有元素的乘积，就这么简单。所以计算a[i]=left[i]*right[i]时，直接出结果。
-  </p>
-  <p>
-   <strong>
-    2
    </strong>
   </p>
   <p>
@@ -139,20 +128,35 @@
     2.除了循环计数值，a[N],b[N]外，不准再用其他任何变量（包括局部变量，全局变量等）
    </li>
    <li>
-    3.满足时间复杂度O（n），空间复杂度O（1）。
+    3.满足时间复杂度O(n)，空间复杂度O(1)。
    </li>
   </ul>
   <p>
-   提示：你要我求b=a[0]
-   <em>
-    a
-   </em>
-   ...a[i-1]
-   <em>
-    a*a[i+1]..*a[N-1]/a ，就是求：a[0]*a[1]
-   </em>
-   ...a[i-1]*a[i+1]..*a[N-1]。只是我把a[i]左边部分标示为left[i]，b[i]右边部分标示为right[i]，而实际上完全不申请left[i]，与right[i]变量，之所以那样标示，无非就是为了说明：除掉当前元素a[i]，其他所有元素(a[i]左边部分，和a[i]右边部分)的积。
+   提示：题目要求b[i] = a[0]*a[1]*a[2]...*a[N-1]/a[i] ，相当于求：a[0]*a[1]*a[2]*a[3]...a[i-1]*a[i+1]..*a[N-1]，等价于除掉当前元素a[i]，其他所有元素(a[i]左边部分，和a[i]右边部分)的积。
   </p>
+  <p>
+   记left[i]=∏a[k], (k=1...i-1); right=∏a[k], (k=i+1...n)，根据题目描述b[i]=left[i] * right[i]， 对于每一个b[i]初始化为1，left[i]和right[i]两部分可以分开两次相乘，即对于循环变量i=1...n, b[i]=left[i];b[n-i]=right[n-i]， 循环完成时即可完成计算。
+  </p>
+  <p>
+   参考代码如下所示：
+  </p>
+  <div class="highlight highlight-c">
+   <pre><span class="kt">void</span> <span class="nf">Multiplication</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">output</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">length</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">output</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">output</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="n">left</span><span class="p">;</span>
+        <span class="n">output</span><span class="p">[</span><span class="n">length</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*=</span> <span class="n">right</span><span class="p">;</span>
+        <span class="n">left</span> <span class="o">*=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">right</span> <span class="o">*=</span> <span class="n">a</span><span class="p">[</span><span class="n">length</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
+  </div>
   <p>
    <strong>
     3、找出数组中唯一的重复元素
@@ -174,6 +178,8 @@
    <strong>
     5、找出反序的个数
    </strong>
+  </p>
+  <p>
    给定一整型数组，若数组中某个下标值大的元素值小于某个下标值比它小的元素值，称这是一个反序。
 即：数组a[]; 对于i &lt; j 且 a[i] &gt; a[j],则称这是一个反序。
 给定一个数组，要求写一个函数，计算出这个数组里所有反序的个数。
@@ -186,41 +192,6 @@
   <p>
    有两个序列A和B,A=(a1,a2,...,ak),B=(b1,b2,...,bk),A和B都按升序排列，对于1&lt;=i,j&lt;=k，求k个最小的（ai+bj），要求算法尽量高效。
   </p>
-  <p>
-   <strong>
-    7、三数取中
-   </strong>
-  </p>
-  <p>
-   给定3个整数a、b、c，找出这3个数的中位数。
-  </p>
-  <p>
-   分析：
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="c1">// 采用两两比较的思路    </span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;=</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>    
-        <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">&lt;=</span> <span class="n">c</span><span class="p">)</span>    
-            <span class="k">return</span> <span class="n">b</span><span class="p">;</span>    
-        <span class="k">else</span> <span class="p">{</span>    
-            <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;=</span><span class="n">c</span><span class="p">)</span>    
-                <span class="k">return</span> <span class="n">c</span><span class="p">;</span>    
-            <span class="k">else</span>    
-                <span class="k">return</span> <span class="n">a</span><span class="p">;</span>    
-            <span class="p">}</span>    
-    <span class="p">}</span>    
-    <span class="k">else</span> <span class="p">{</span>    
-        <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;=</span> <span class="n">c</span><span class="p">)</span>    
-            <span class="k">return</span> <span class="n">a</span><span class="p">;</span>    
-        <span class="k">else</span> <span class="p">{</span>    
-            <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">&lt;=</span> <span class="n">c</span><span class="p">)</span>    
-                <span class="k">return</span> <span class="n">c</span><span class="p">;</span>    
-            <span class="k">else</span>    
-                <span class="k">return</span> <span class="n">b</span><span class="p">;</span>    
-            <span class="p">}</span>    
-    <span class="p">}</span>  
-</pre>
-  </div>
   <p>
    <strong>
     8
@@ -243,7 +214,7 @@
    </strong>
   </p>
   <p>
-   O(1)时间实现矩阵转置。
+   O(1)空间内实现矩阵转置。
   </p>
   <p>
    <strong>
@@ -251,7 +222,7 @@
    </strong>
   </p>
   <p>
-   有N个数，组成的字符串，如012345，求出字串和取MOD3==0的字串，如012 12 123 45。
+   有N个数，组成的字符串，如012345，求出字串和取MOD3==0的子串，如012 12 123 45。
   </p>
   <p>
    <strong>
@@ -262,76 +233,7 @@
    从一列数中筛除尽可能少的数使得从左往右看，这些数是从小到大再从大到小的。
   </p>
   <p>
-   分析：双端 LIS 问题，用 DP 的思想可解，目标规划函数 max{ b[i] + c[i] - 1 }, 其中 b[i] 为从左到右， 0 ~ i 个数之间满足递增的数字个数； c[i] 为从右到左， n-1 ~ i 个数之间满足递增的数字个数。最后结果为 n - max + 1。其中 DP 的时候，可以维护一个 inc[] 数组表示递增数字序列，inc[i] 为从小到大第 i 大的数字，然后在计算 b[i] c[i] 的时候使用二分查找在 inc[] 中找出区间 inc[0] ~ inc[i-1] 中小于 a[i] 的元素个数（low）。
-源代码如下：
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="cm">/**</span>
-<span class="cm">* The problem:</span>
-<span class="cm">* 从一列数中筛除尽可能少的数使得从左往右看，这些数是从小到大再从大到小的（网易）。</span>
-<span class="cm">* use binary search, perhaps you should compile it with -std=c99</span>
-<span class="cm">* fairywell 2011</span>
-<span class="cm">*/</span>
-<span class="cp">#include &lt;stdio.h&gt;</span>
-
-<span class="cp">#define MAX_NUM    (1U&lt;&lt;31)</span>
-
-<span class="kt">int</span>
-<span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">,</span> <span class="n">mid</span><span class="p">,</span> <span class="n">max</span><span class="p">;</span>
-
-    <span class="n">printf</span><span class="p">(</span><span class="s">"Input how many numbers there are: "</span><span class="p">);</span>
-    <span class="n">scanf</span><span class="p">(</span><span class="s">"%d/n"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">);</span>
-    <span class="cm">/* a[] holds the numbers, b[i] holds the number of increasing numbers</span>
-<span class="cm">    * from a[0] to a[i], c[i] holds the number of increasing numbers</span>
-<span class="cm">    * from a[n-1] to a[i]</span>
-<span class="cm">    * inc[] holds the increasing numbers</span>
-<span class="cm">    * VLA needs c99 features, compile with -stc=c99</span>
-<span class="cm">    */</span>
-    <span class="kt">double</span> <span class="n">a</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">c</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">inc</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
-
-    <span class="n">printf</span><span class="p">(</span><span class="s">"Please input the numbers:/n"</span><span class="p">);</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="n">scanf</span><span class="p">(</span><span class="s">"%lf"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-
-    <span class="c1">// update array b from left to right</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="n">inc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span><span class="p">)</span> <span class="n">MAX_NUM</span><span class="p">;</span>
-    <span class="c1">//b[0] = 0;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">low</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">high</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">low</span> <span class="o">&lt;</span> <span class="n">high</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">mid</span> <span class="o">=</span> <span class="n">low</span> <span class="o">+</span> <span class="p">(</span><span class="n">high</span><span class="o">-</span><span class="n">low</span><span class="p">)</span><span class="o">*</span><span class="mf">0.5</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">inc</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="n">low</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-            <span class="k">else</span> <span class="n">high</span> <span class="o">=</span> <span class="n">mid</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">low</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="n">inc</span><span class="p">[</span><span class="n">low</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="p">}</span>
-
-    <span class="c1">// update array c from right to left</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="n">inc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span><span class="p">)</span> <span class="n">MAX_NUM</span><span class="p">;</span>
-    <span class="c1">//c[0] = 0;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">low</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">high</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">low</span> <span class="o">&lt;</span> <span class="n">high</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">mid</span> <span class="o">=</span> <span class="n">low</span> <span class="o">+</span> <span class="p">(</span><span class="n">high</span><span class="o">-</span><span class="n">low</span><span class="p">)</span><span class="o">*</span><span class="mf">0.5</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">inc</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="n">low</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-            <span class="k">else</span> <span class="n">high</span> <span class="o">=</span> <span class="n">mid</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">low</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="n">inc</span><span class="p">[</span><span class="n">low</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="p">}</span>
-
-    <span class="n">max</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span> <span class="p">)</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">max</span><span class="p">)</span> <span class="n">max</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">"%d number(s) should be erased at least./n"</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="o">-</span><span class="n">max</span><span class="p">);</span>
-        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
-  </div>
-  <p>
-   @yansha：fairywell的程序很赞，时间复杂度O(N log N)，这也是我能想到的时间复杂度最优值了。不知能不能达到O(N)。
+   提示：双端 LIS 问题，用 DP 的思想可解。
   </p>
   <p>
    <strong>
@@ -349,71 +251,6 @@
   </p>
   <p>
    var b=[1, 2, 3, 4,5,40]。
-  </p>
-  <p>
-   分析：当前数组a和数组b的和之差为
-  </p>
-  <p>
-   <code>
-    A = sum(a) - sum(b)
-   </code>
-  </p>
-  <p>
-   a的第i个元素和b的第j个元素交换后，a和b的和之差为
-  </p>
-  <pre><code>A' = sum(a) - a[i] + b[j] - （sum(b) - b[j] + a[i])
-
-       = sum(a) - sum(b) - 2 (a[i] - b[j])
-
-       = A - 2 (a[i] - b[j])
-</code></pre>
-  <p>
-   设x = a[i] - b[j]，得
-  </p>
-  <p>
-   <code>
-    |A| - |A'| = |A| - |A-2x|
-   </code>
-  </p>
-  <p>
-   假设A &gt; 0,
-  </p>
-  <p>
-   当x 在 (0,A)之间时，做这样的交换才能使得交换后的a和b的和之差变小，x越接近A/2效果越好,
-  </p>
-  <p>
-   如果找不到在(0,A)之间的x，则当前的a和b就是答案。
-  </p>
-  <p>
-   所以算法大概如下：
-  </p>
-  <p>
-   在a和b中寻找使得x在(0,A)之间并且最接近A/2的i和j，交换相应的i和j元素，重新计算A后，重复前面的步骤直至找不到(0,A)之间的x为止。
-  </p>
-  <p>
-   接上，@yuan：
-  </p>
-  <p>
-   a[i]-b[j]要接近A/2，则可以这样想，
-  </p>
-  <p>
-   我们可以对于a数组的任意一个a[k],在数组b中找出与a[k]-C最接近的数（C就是常数，也就是0.5*A）
-  </p>
-  <p>
-   这个数要么就是a[k]-C，要么就是比他稍大，要么比他稍小，所以可以要二分查找。
-  </p>
-  <p>
-   查找最后一个小于等于a[k]-C的数和第一个大于等于a[k]-C的数，
-  </p>
-  <p>
-   然后看哪一个与a[k]-C更加接近，所以T(N) = N log N。
-  </p>
-  <p>
-   除此之外，有人在stacoverflow上也问过一个类似的题，见：
-   <a href="http://stackoverflow.com/questions/9047908/swap-the-elements-of-two-sequences-such-that-the-difference-of-the-element-sums">
-    http://stackoverflow.com/questions/9047908/swap-the-elements-of-two-sequences-such-that-the-difference-of-the-element-sums
-   </a>
-   。感兴趣的可以看看。
   </p>
   <p>
    <strong>
@@ -440,45 +277,6 @@
    </a>
   </p>
   <p>
-   提示：以下是一份参考代码：
-  </p>
-  <div class="highlight highlight-cpp">
-   <pre><span class="c1">//代码来源:http://discuss.leetcode.com/questions/29/spiral-matrix </span>
-<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>      
-<span class="nl">public:</span>      
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">spiralOrder</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&gt;&amp;</span> <span class="n">matrix</span><span class="p">)</span> <span class="p">{</span>      
-        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">result</span><span class="p">;</span>      
-        <span class="k">if</span> <span class="p">(</span><span class="n">matrix</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="k">return</span> <span class="n">result</span><span class="p">;</span>      
-        <span class="kt">ssize_t</span> <span class="n">beginX</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">endX</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>      
-        <span class="kt">ssize_t</span> <span class="n">beginY</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">endY</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>      
-
-        <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>      
-            <span class="c1">// From left to right      </span>
-            <span class="k">for</span> <span class="p">(</span><span class="kt">ssize_t</span> <span class="n">i</span> <span class="o">=</span> <span class="n">beginX</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">endX</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>      
-                <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">beginY</span><span class="p">][</span><span class="n">i</span><span class="p">]);</span>      
-            <span class="k">if</span> <span class="p">(</span><span class="o">++</span><span class="n">beginY</span> <span class="o">&gt;</span> <span class="n">endY</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>      
-
-            <span class="c1">// From top down      </span>
-            <span class="k">for</span> <span class="p">(</span><span class="kt">ssize_t</span> <span class="n">i</span> <span class="o">=</span> <span class="n">beginY</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">endY</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>      
-                <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">endX</span><span class="p">]);</span>      
-            <span class="k">if</span> <span class="p">(</span><span class="n">beginX</span> <span class="o">&gt;</span> <span class="o">--</span><span class="n">endX</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>      
-
-            <span class="c1">// From right to left      </span>
-            <span class="k">for</span> <span class="p">(</span><span class="kt">ssize_t</span> <span class="n">i</span> <span class="o">=</span> <span class="n">endX</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">beginX</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">)</span>      
-                <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">endY</span><span class="p">][</span><span class="n">i</span><span class="p">]);</span>      
-            <span class="k">if</span> <span class="p">(</span><span class="n">beginY</span> <span class="o">&gt;</span> <span class="o">--</span><span class="n">endY</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>      
-
-            <span class="c1">// From bottom up      </span>
-            <span class="k">for</span> <span class="p">(</span><span class="kt">ssize_t</span> <span class="n">i</span> <span class="o">=</span> <span class="n">endY</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">beginY</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">)</span>      
-                <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">beginX</span><span class="p">]);</span>      
-            <span class="k">if</span> <span class="p">(</span><span class="o">++</span><span class="n">beginX</span> <span class="o">&gt;</span> <span class="n">endX</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>      
-        <span class="p">}</span>      
-        <span class="k">return</span> <span class="n">result</span><span class="p">;</span>      
-    <span class="p">}</span>      
-<span class="p">};</span>      
-</pre>
-  </div>
-  <p>
    <strong>
     15
    </strong>
@@ -490,7 +288,7 @@
    上排的十个数如下：
   </p>
   <p>
-   【0，1，2，3，4，5，6，7，8，9】
+   0，1，2，3，4，5，6，7，8，9
   </p>
   <p>
    举一个例子，
@@ -555,7 +353,7 @@
    </strong>
   </p>
   <p>
-   如何对n个数进行排序，要求时间复杂度O(n)，空间复杂度O(1)。
+   如何对n个大小都小于100的整数进行排序，要求时间复杂度O(n)，空间复杂度O(1)。
   </p>
   <p>
    <strong>
@@ -738,23 +536,8 @@
   </p>
   <p>
    一个环形公路，上面有Ｎ个站点，A1, ..., AN，其中Ai和Ai+1之间的距离为Di,AN和A1之间的距离为D0。
-高效的求第i和第j个站点之间的距离，空间复杂度不超过O(N)
-它给出了部分代码如下：
+高效的求第i和第j个站点之间的距离，空间复杂度不超过O(N)。
   </p>
-  <div class="highlight highlight-c">
-   <pre><span class="cp">#define N 25</span>
-<span class="kt">double</span> <span class="n">D</span><span class="p">[</span><span class="n">N</span><span class="p">]</span> 
-<span class="p">....</span>
-<span class="kt">void</span> <span class="n">Preprocess</span><span class="p">()</span>
-<span class="p">{</span>
-     <span class="c1">//Write your code1;</span>
-<span class="p">}</span>
-<span class="kt">double</span> <span class="n">Distance</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">j</span><span class="p">)</span>
-<span class="p">{</span>
-      <span class="c1">//Write your code2;</span>
-<span class="p">}</span>
-</pre>
-  </div>
   <p>
    <strong>
     38
@@ -809,10 +592,13 @@
    </strong>
   </p>
   <p>
-   数组中的数分为两组，让给出一个算法，使得两个组的和的差的绝对值最小 
-数组中的数的取值范围是0&lt;x&lt;100，元素个数也是大于0， 小于100 
-比如a[]={2,4,5,6,7},得出的两组数｛2，4，6｝和｛5，7｝，abs(sum(a1)-sum(a2))=0；
-比如｛2，5，6，10｝，abs（sum(2,10)-sum(5,6))=1,所以得出的两组数分别为｛2，10｝和｛5，6｝。
+   数组中的数分为两组，让给出一个算法，使得两个组的和的差的绝对值最小，数组中的数的取值范围是0&lt;x&lt;100，元素个数也是大于0， 小于100 。
+  </p>
+  <p>
+   比如a[]={2,4,5,6,7},得出的两组数｛2，4，6｝和｛5，7｝，abs(sum(a1)-sum(a2))=0；
+  </p>
+  <p>
+   比如｛2，5，6，10｝，abs（sum(2,10)-sum(5,6))=1,所以得出的两组数分别为｛2，10｝和｛5，6｝。
   </p>
   <p>
    <strong>
@@ -851,54 +637,6 @@ int area(rect const&amp; a, rect const&amp; b)
 {
   ...
 }
-  </p>
-  <p>
-   分析：参考代码可如下编写
-  </p>
-  <div class="highlight highlight-cpp">
-   <pre><span class="k">struct</span> <span class="n">rect</span>  
-<span class="p">{</span>  
- <span class="c1">// axis alignment assumed  </span>
- <span class="c1">// bottom left is (x[0],y[0]), top right is (x[1],y[1])  </span>
- <span class="kt">double</span> <span class="n">x</span> <span class="p">[</span><span class="mi">2</span><span class="p">];</span>  
- <span class="kt">double</span> <span class="n">y</span> <span class="p">[</span><span class="mi">2</span><span class="p">];</span>  
-<span class="p">};</span>  
-
-<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span> <span class="n">T</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">min</span> <span class="p">(</span><span class="n">T</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">x</span><span class="p">,</span> <span class="n">T</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">x</span><span class="o">&lt;</span><span class="n">y</span> <span class="o">?</span> <span class="n">x</span> <span class="o">:</span> <span class="n">y</span><span class="p">;</span> <span class="p">}</span>  
-<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span> <span class="n">T</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">max</span> <span class="p">(</span><span class="n">T</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">x</span><span class="p">,</span> <span class="n">T</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">x</span><span class="o">&gt;</span><span class="n">y</span> <span class="o">?</span> <span class="n">x</span> <span class="o">:</span> <span class="n">y</span><span class="p">;</span> <span class="p">}</span>  
-
-<span class="c1">// return type changed to handle non-integer rects  </span>
-<span class="kt">double</span> <span class="n">area</span> <span class="p">(</span><span class="n">rect</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="n">rect</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span>  
-<span class="p">{</span>  
- <span class="c1">// perfectly adjacent rects are considered having an intersection of 0 area  </span>
- <span class="kt">double</span> <span class="k">const</span> <span class="n">dx</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">max</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>  
- <span class="kt">double</span> <span class="k">const</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">max</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>  
- <span class="k">return</span> <span class="n">dx</span><span class="o">&gt;=</span><span class="mi">0</span><span class="o">&amp;&amp;</span><span class="n">dy</span><span class="o">&gt;=</span><span class="mi">0</span> <span class="o">?</span> <span class="n">dx</span><span class="o">*</span><span class="n">dy</span> <span class="o">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>  
-<span class="p">}</span>  
-</pre>
-  </div>
-  <p>
-   证明：对于平行于坐标轴的矩形 r，假设其左下角点坐标为 (rx0,ry0)，右上角点坐标为 (rx1,ry1)，那么由 r 定义的无限有界点集为：{(x,y)|x in [rx0,rx1] &amp;&amp; y in [ry0,ry1]}。
-  </p>
-  <p>
-   根据交集的定义，则任意二维点 (x,y) 在矩形 a,b 的交集内等价于
-  </p>
-  <ul>
-   <li>
-    {(x,y)|(x,y) in a 并且 (x,y) in b} &lt;==&gt;
-   </li>
-   <li>
-    {(x,y)|x in [ax0,ax1] &amp;&amp; x in [bx0,bx1] 并且 y in [ay0,ay1] &amp;&amp; y in [by0,by1]} &lt;==&gt;
-   </li>
-   <li>
-    {(x,y)|x in [max(ax0,bx0),min(ax1,bx1)] 并且 y in [max(ay0,by0),min(ay1,by1)]}
-   </li>
-  </ul>
-  <p>
-   因此，交集矩形的边长分别为 min(ax1,bx1)-max(ax0,bx0) 和 min(ay1,by1)-max(ay0,by0)。注意当交集为空时(a,b 不相交)，则经此法计算出来的交集边长为负值，此事实可用于验证 a,b 的相交性。
-  </p>
-  <p>
-   鉴于笛卡尔积各个维度上的不相关性，此方法可扩展到任意有限维线性空间，比如，三维空间中平行于坐标轴的长方体的交集体积可以用类似的方法计算。
   </p>
   <p>
    <strong>
@@ -957,31 +695,8 @@ int area(rect const&amp; a, rect const&amp; b)
    寻找3个数的中位数
   </p>
   <p>
-   提示：采用两两比较的思路，参考代码如下所示：
+   提示：可以采用两两比较的思路。
   </p>
-  <div class="highlight highlight-c">
-   <pre>    <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;=</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>    
-        <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">&lt;=</span> <span class="n">c</span><span class="p">)</span>    
-            <span class="k">return</span> <span class="n">b</span><span class="p">;</span>    
-        <span class="k">else</span> <span class="p">{</span>    
-            <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;=</span><span class="n">c</span><span class="p">)</span>    
-                <span class="k">return</span> <span class="n">c</span><span class="p">;</span>    
-            <span class="k">else</span>    
-                <span class="k">return</span> <span class="n">a</span><span class="p">;</span>    
-            <span class="p">}</span>    
-    <span class="p">}</span>    
-    <span class="k">else</span> <span class="p">{</span>    
-        <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;=</span> <span class="n">c</span><span class="p">)</span>    
-            <span class="k">return</span> <span class="n">a</span><span class="p">;</span>    
-        <span class="k">else</span> <span class="p">{</span>    
-            <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">&lt;=</span> <span class="n">c</span><span class="p">)</span>    
-                <span class="k">return</span> <span class="n">c</span><span class="p">;</span>    
-            <span class="k">else</span>    
-                <span class="k">return</span> <span class="n">b</span><span class="p">;</span>    
-            <span class="p">}</span>    
-    <span class="p">}</span>   
-</pre>
-  </div>
   <p>
    <strong>
     54
@@ -1101,13 +816,84 @@ int area(rect const&amp; a, rect const&amp; b)
   <p>
    请自己用双向链表实现一个队列，队列里节点内存的值为int，要求实现入队，出队和查找指定节点的三个功能。
   </p>
+  <p>
+   <strong>
+    66
+   </strong>
+  </p>
+  <p>
+   n个数字（0,1,…,n-1）形成一个圆圈，从数字0开始，每次从这个圆圈中删除第m个数字（第一个为当前数字本身，第二个为当前数字的下一个数字）。
+  </p>
+  <p>
+   当一个数字删除后，从被删除数字的下一个继续删除第m个数字。求出在这个圆圈中剩下的最后一个数字。
+  </p>
+  <p>
+   <strong>
+    67、在从1到n的正数中1出现的次数
+   </strong>
+  </p>
+  <p>
+   输入一个整数n，求从1到n这n个整数的十进制表示中1出现的次数。
+  </p>
+  <p>
+   例如输入12，从1到12这些整数中包含1 的数字有1，10，11和12，1一共出现了5次。
+  </p>
+  <p>
+   <strong>
+    68
+   </strong>
+  </p>
+  <p>
+   对于给定的整数集合S，求出最大的d，使得a+b+c=d。a,b,c,d互不相同，且都属于S。集合的元素个数小于等于2000个，元素的取值范围在[-2^28，2^28 - 1]，假定可用内存空间为100MB，硬盘使用空间无限大，试分析时间和空间复杂度，找出最快的解决方法。
+  </p>
+  <p>
+   提示：两两相加转为多项式乘法，比如(1 2 4 6) + (2 3 4 5) =&gt; (x + x^2 + x^4 + x^6)*(x^2 + x^3 + x^4 + x^5) 。
+  </p>
+  <p>
+   <strong>
+    69
+   </strong>
+  </p>
+  <p>
+   长度为N的数组乱序存放着0带N-1.现在只能进行0与其他数的swap操作，请设计并实现排序，必须通过交换实现排序。
+  </p>
+  <p>
+   <strong>
+    70
+   </strong>
+  </p>
+  <p>
+   输入是两个整数数组，他们任意两个数的和又可以组成一个数组，求这个和中前k个数怎么做？
+  </p>
+  <p>
+   分析：假设两个整数数组为A和B，各有N个元素，任意两个数的和组成的数组C有N^2个元素。那么可以把这些和看成N个有序数列：
+  </p>
+  <pre><code>          A[1]+B[1] &lt;= A[1]+B[2] &lt;= A[1]+B[3] &lt;=…
+
+          A[2]+B[1] &lt;= A[2]+B[2] &lt;= A[2]+B[3] &lt;=…
+
+          …
+
+         A[N]+B[1] &lt;= A[N]+B[2] &lt;= A[N]+B[3] &lt;=…
+</code></pre>
+  <p>
+   问题转变成，在这N个有序数列里，找到前k小的元素”。
+  </p>
+  <p>
+   <strong>
+    71、求500万以内的所有亲和数
+   </strong>
+  </p>
+  <p>
+   如果两个数a和b，a的所有真因数之和等于b,b的所有真因数之和等于a,则称a,b是一对亲和数。 例如220和284，1184和1210，2620和2924。
+  </p>
  </body>
 </html>
 		  </article>
 		  
 			<div id="nav">
 				
-					<a href="02.12.html">prev</a>
+					<a href="02.10.html">prev</a>
 					|
 				
 				

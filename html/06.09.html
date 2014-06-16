@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-3925d345e7ce5488c2099c3a8971e95784aa9d02.css" />
-  <link rel="stylesheet" href="style_cache/github2-0ee6a4d6913e5429aa63ee76db3b03a8f84e7aaf.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-6fc7fb2a2ad956975983882a7f95b27577e851a4.css" />
+  <link rel="stylesheet" href="style_cache/github2-ade82cf93cc23c0e2691785e7976cc718fe1986f.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -104,67 +104,177 @@
 		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
 			<html>
  <body>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#trie%E6%A0%91%E5%AD%97%E5%85%B8%E6%A0%91" name="user-content-trie%E6%A0%91%E5%AD%97%E5%85%B8%E6%A0%91">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   Trie树（字典树）
+  </h1>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D" name="user-content-%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   方法介绍
+  </h2>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#11%E4%BB%80%E4%B9%88%E6%98%AFtrie%E6%A0%91" name="user-content-11%E4%BB%80%E4%B9%88%E6%98%AFtrie%E6%A0%91">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   1.1、什么是Trie树
+  </h3>
   <p>
-   <strong>
-    倒排索引(Inverted index)
-   </strong>
+   Trie树，即字典树，又称单词查找树或键树，是一种树形结构。典型应用是用于统计和排序大量的字符串（但不仅限于字符串），所以经常被搜索引擎系统用于文本词频统计。它的优点是最大限度地减少无谓的字符串比较，查询效率比较高。
   </p>
   <p>
-   适用范围：搜索引擎，关键字查询
+   Trie的核心思想是空间换时间，利用字符串的公共前缀来降低查询时间的开销以达到提高效率的目的。
   </p>
   <p>
-   基本原理及要点：为何叫倒排索引？一种索引方法，被用来存储在全文搜索下某个单词在一个文档或者一组文档中的存储位置的映射。
+   它有3个基本性质：
+  </p>
+  <ol>
+   <li>
+    根节点不包含字符，除根节点外每一个节点都只包含一个字符。
+   </li>
+   <li>
+    从根节点到某一节点，路径上经过的字符连接起来，为该节点对应的字符串。
+   </li>
+   <li>
+    每个节点的所有子节点包含的字符都不相同。
+   </li>
+  </ol>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#12%E6%A0%91%E7%9A%84%E6%9E%84%E5%BB%BA" name="user-content-12%E6%A0%91%E7%9A%84%E6%9E%84%E5%BB%BA">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   1.2、树的构建
+  </h3>
+  <p>
+   咱们先来看一个问题：假如现在给你10万个长度不超过10的单词，对于每一个单词，我们要判断它出没出现过，如果出现了，求第一次出现在第几个位置。对于这个问题，我们该怎么解决呢？
   </p>
   <p>
-   以英文为例，下面是要被索引的文本：
-  </p>
-  <pre><code>T0 = "it is what it is"  
-T1 = "what is it"  
-T2 = "it is a banana"  
-</code></pre>
-  <p>
-   我们就能得到下面的反向文件索引：
-  </p>
-  <pre><code>"a":      {2}
-"banana": {2}
-"is":     {0, 1, 2}
-"it":     {0, 1, 2}
-"what":   {0, 1}
-</code></pre>
-  <p>
-   检索的条件"what","is"和"it"将对应集合的交集。
+   如果我们用最傻的方法，对于每一个单词，我们都要去查找它前面的单词中是否有它。那么这个算法的复杂度就是O(n^2)。显然对于10万的范围难以接受。
   </p>
   <p>
-   正向索引开发出来用来存储每个文档的单词的列表。正向索引的查询往往满足每个文档有序频繁的全文查询和每个单词在校验文档中的验证这样的查询。在正向索引中，文档占据了中心的位置，每个文档指向了一个它所包含的索引项的序列。也就是说文档指向了它包含的那些单词，而反向索引则是单词指向了包含它的文档，很容易看到这个反向的关系。
-  </p>
-  <p>
-   扩展：
-  </p>
-  <p>
-   问题实例：文档检索系统，查询那些文件包含了某单词，比如常见的学术论文的关键字搜索。
-  </p>
-  <p>
-   关于倒排索引的应用，更多请参见：
+   换个思路想：
   </p>
   <ul>
    <li>
-    <a href="03.02.html">
-     第二十三章：杨氏矩阵查找
-    </a>
-    ，
-   </li>
-   <li>
-    <a href="07.03.html">
-     第二十四章：倒排索引关键词Hash不重复编码实践
-    </a>
-   </li>
-   <li>
-    <a href="07.04.md">
-     第二十六章：基于给定的文档生成倒排索引的编码与实践
-    </a>
-    。
+    假设我要查询的单词是abcd，那么在它前面的单词中，以b，c，d，f之类开头的显然不必考虑，而只要找以a开头的中是否存在abcd就可以了。
+    <ul>
+     <li>
+      同样的，在以a开头中的单词中，我们只要考虑以b作为第二个字母的，一次次缩小范围和提高针对性，这样一个树的模型就渐渐清晰了。
+     </li>
+    </ul>
    </li>
   </ul>
+  <p>
+   即如果现在有b，abc，abd，bcd，abcd，efg，hii 这6个单词，我们可以构建一棵如下图所示的树：
+  </p>
+  <p>
+   <a href="../images/8/8.4/1.jpg" target="_blank">
+    <img alt="" src="../images/8/8.4/1.jpg" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   如上图所示，对于每一个节点，从根遍历到他的过程就是一个单词，如果这个节点被标记为红色，就表示这个单词存在，否则不存在。
+  </p>
+  <p>
+   那么，对于一个单词，只要顺着他从根走到对应的节点，再看这个节点是否被标记为红色就可以知道它是否出现过了。把这个节点标记为红色，就相当于插入了这个单词。
+  </p>
+  <p>
+   这样一来我们查询和插入可以一起完成，所用时间仅仅为单词长度（在这个例子中，便是10）。这就是一棵trie树。
+  </p>
+  <p>
+   我们可以看到，trie树每一层的节点数是26^i级别的。所以为了节省空间，我们还可以用动态链表，或者用数组来模拟动态。而空间的花费，不会超过单词数×单词长度。
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#13%E6%9F%A5%E8%AF%A2" name="user-content-13%E6%9F%A5%E8%AF%A2">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   1.3、查询
+  </h3>
+  <p>
+   Trie树是简单但实用的数据结构，通常用于实现字典查询。我们做即时响应用户输入的AJAX搜索框时，就是Trie开始。本质上，Trie是一颗存储多个字符串的树。相邻节点间的边代表一个字符，这样树的每条分支代表一则子串，而树的叶节点则代表完整的字符串。和普通树不同的地方是，相同的字符串前缀共享同一条分支。
+  </p>
+  <p>
+   下面，再举一个例子。给出一组单词，inn, int, at, age, adv, ant, 我们可以得到下面的Trie：
+  </p>
+  <p>
+   <a href="../images/8/8.4/2.gif" target="_blank">
+    <img alt="" src="../images/8/8.4/2.gif" style="max-width:100%;"/>
+   </a>
+  </p>
+  <p>
+   可以看出：
+  </p>
+  <ul>
+   <li>
+    每条边对应一个字母。
+   </li>
+   <li>
+    每个节点对应一项前缀。叶节点对应最长前缀，即单词本身。
+   </li>
+   <li>
+    单词inn与单词int有共同的前缀“in”, 因此他们共享左边的一条分支，root-&gt;i-&gt;in。同理，ate, age, adv, 和ant共享前缀"a"，所以他们共享从根节点到节点"a"的边。
+   </li>
+  </ul>
+  <p>
+   查询操纵非常简单。比如要查找int，顺着路径i -&gt; in -&gt; int就找到了。
+  </p>
+  <p>
+   搭建Trie的基本算法也很简单，无非是逐一把每则单词的每个字母插入Trie。插入前先看前缀是否存在。如果存在，就共享，否则创建对应的节点和边。比如要插入单词add，就有下面几步：
+  </p>
+  <ol>
+   <li>
+    考察前缀"a"，发现边a已经存在。于是顺着边a走到节点a。
+   </li>
+   <li>
+    考察剩下的字符串"dd"的前缀"d"，发现从节点a出发，已经有边d存在。于是顺着边d走到节点ad
+   </li>
+   <li>
+    考察最后一个字符"d"，这下从节点ad出发没有边d了，于是创建节点ad的子节点add，并把边ad-&gt;add标记为d。
+   </li>
+  </ol>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B" name="user-content-%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   问题实例
+  </h2>
+  <p>
+   <strong>
+    1、一个文本文件，大约有一万行，每行一个词，要求统计出其中最频繁出现的前10个词，请给出思想，给出时间复杂度分析
+   </strong>
+  </p>
+  <p>
+   <strong>
+    提示
+   </strong>
+   ：用trie树统计每个词出现的次数，时间复杂度是O(n*le)（le表示单词的平均长度），然后是找出出现最频繁的前10个词。当然，也可以用堆来实现，时间复杂度是O(n*lg10)。所以总的时间复杂度，是O(n*le)与O(n*lg10)中较大的哪一个。
+  </p>
+  <p>
+   <strong>
+    2、寻找热门查询
+   </strong>
+  </p>
+  <p>
+   <strong>
+    原题
+   </strong>
+   ：搜索引擎会通过日志文件把用户每次检索使用的所有检索串都记录下来，每个查询串的长度为1-255字节。假设目前有一千万个记录，这些查询串的重复读比较高，虽然总数是1千万，但是如果去除重复和，不超过3百万个。一个查询串的重复度越高，说明查询它的用户越多，也就越热门。请你统计最热门的10个查询串，要求使用的内存不能超过1G。
+  </p>
+  <p>
+   <strong>
+    提示
+   </strong>
+   ：利用trie树，关键字域存该查询串出现的次数，没有出现为0。最后用10个元素的最小推来对出现频率进行排序。
+  </p>
  </body>
 </html>
 		  </article>
