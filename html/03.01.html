@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-6fc7fb2a2ad956975983882a7f95b27577e851a4.css" />
-  <link rel="stylesheet" href="style_cache/github2-ade82cf93cc23c0e2691785e7976cc718fe1986f.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-013db558b75ed8e45b8a7ccd0caca4ad57c6f1ac.css" />
+  <link rel="stylesheet" href="style_cache/github2-c9b5fd6520f5ab77dd823b1b2c81ff9c461b1374.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -111,21 +111,6 @@
    </a>
    教你透彻了解红黑树
   </h1>
-  <p>
-   作者：July、saturnman   2010年12月29日
-  </p>
-  <p>
-   本文参考：Google、算法导论、STL源码剖析、计算机程序设计艺术
-  </p>
-  <p>
-   推荐阅读：Left-Leaning Red-Black Trees, Dagstuhl Workshop on Data Structures, Wadern, Germany, February, 2008.
-   <br/>
-   直接下载：
-   <a href="http://www.cs.princeton.edu/%7Ers/talks/LLRB/RedBlack.pdf">
-    http://www.cs.princeton.edu/~rs/talks/LLRB/RedBlack.pdf
-   </a>
-   。
-  </p>
   <h2>
    <a aria-hidden="true" class="anchor" href="#%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91" name="user-content-%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91">
     <span class="octicon octicon-link">
@@ -144,7 +129,7 @@
     若任意节点的左子树不空，则左子树上所有结点的值均小于它的根结点的值；
    </li>
    <li>
-    任意节点的右子树不空，则右子树上所有结点的值均大于它的根结点的值；
+    若任意节点的右子树不空，则右子树上所有结点的值均大于它的根结点的值；
    </li>
    <li>
     任意节点的左、右子树也分别为二叉查找树。
@@ -170,7 +155,7 @@
    前面我们已经说过，红黑树，本质上来说就是一棵二叉查找树，但它在二叉查找树的基础上增加了着色和相关的性质使得红黑树相对平衡，从而保证了红黑树的查找、插入、删除的时间复杂度最坏为O(log n)。
   </p>
   <p>
-   下面，咱们便来具体看看红黑树的5条性质：
+   但它是如何保证一棵n个结点的红黑树的高度始终保持在h = logn的呢？这就引出了红黑树的5条性质：
   </p>
   <pre><code>1）每个结点要么是红的，要么是黑的。  
 2）根结点是黑的。  
@@ -179,7 +164,7 @@
 5）对于任一结点而言，其到叶结点树尾端NIL指针的每一条路径都包含相同数目的黑结点。  
 </code></pre>
   <p>
-   注：上述第3、5点性质中所说的NULL结点（包括wikipedia.算法导论上所认为的叶子结点），即为树尾端的NIL指针，或者说NULL结点。然百度百科以及网上一些其它博文直接说的叶结点，则易引起误会，因，此叶结点非子结点。
+   正是红黑树的这5条性质，使得一棵n个结点是红黑树始终保持了logn的高度，从而也就解释了上面我们所说的“红黑树的查找、插入、删除的时间复杂度最坏为O(log n)”这一结论的原因。
   </p>
   <p>
    如下图所示，即是一颗红黑树(下图引自wikipedia：
@@ -224,7 +209,7 @@
    如上图所示：
   </p>
   <p>
-   当在某个结点pivot上，做左旋操作时，我们假设它的右孩子y不是NIL[T]，pivot可以为树内任意左孩子而不是NIL[T]的结点。
+   当在某个结点pivot上，做左旋操作时，我们假设它的右孩子y不是NIL[T]，pivot可以为任何不是NIL[T]的左孩子结点。
   </p>
   <p>
    左旋以pivot到y之间的链为“支轴”进行，它使y成为该孩子树新的根，而y的左孩子b则成为pivot的右孩子。
@@ -470,7 +455,7 @@
 14                           RIGHT-ROTATE(T, p[p[z]])            ▹ Case 3
 </code></pre>
   <p>
-   最后，把根结点涂为红色，整棵红黑树便重新恢复了平衡。
+   最后，把根结点涂为黑色，整棵红黑树便重新恢复了平衡。
   </p>
   <p>
    如下图所示[当前节点为2节点]
@@ -776,8 +761,21 @@
     <img alt="" src="../images/rbtree/17.jpg" style="max-width:100%;"/>
    </a>
   </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#%E6%9C%AC%E6%96%87%E5%8F%82%E8%80%83" name="user-content-%E6%9C%AC%E6%96%87%E5%8F%82%E8%80%83">
+    <span class="octicon octicon-link">
+    </span>
+   </a>
+   本文参考
+  </h3>
   <p>
-   July、二零一四年五月六日、再次更新。
+   本文参考了算法导论、STL源码剖析、计算机程序设计艺术等资料，并推荐阅读这个PDF：Left-Leaning Red-Black Trees, Dagstuhl Workshop on Data Structures, Wadern, Germany, February, 2008.
+   <br/>
+   下载地址：
+   <a href="http://www.cs.princeton.edu/%7Ers/talks/LLRB/RedBlack.pdf">
+    http://www.cs.princeton.edu/~rs/talks/LLRB/RedBlack.pdf
+   </a>
+   。
   </p>
  </body>
 </html>

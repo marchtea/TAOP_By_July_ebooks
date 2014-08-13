@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-6fc7fb2a2ad956975983882a7f95b27577e851a4.css" />
-  <link rel="stylesheet" href="style_cache/github2-ade82cf93cc23c0e2691785e7976cc718fe1986f.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-013db558b75ed8e45b8a7ccd0caca4ad57c6f1ac.css" />
+  <link rel="stylesheet" href="style_cache/github2-c9b5fd6520f5ab77dd823b1b2c81ff9c461b1374.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -104,20 +104,20 @@
 		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
 			<html>
  <body>
-  <h1>
+  <h2>
    <a aria-hidden="true" class="anchor" href="#%E6%9C%80%E5%A4%A7%E8%BF%9E%E7%BB%AD%E4%B9%98%E7%A7%AF%E5%AD%90%E4%B8%B2" name="user-content-%E6%9C%80%E5%A4%A7%E8%BF%9E%E7%BB%AD%E4%B9%98%E7%A7%AF%E5%AD%90%E4%B8%B2">
     <span class="octicon octicon-link">
     </span>
    </a>
    最大连续乘积子串
-  </h1>
-  <h2>
+  </h2>
+  <h3>
    <a aria-hidden="true" class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
     <span class="octicon octicon-link">
     </span>
    </a>
    题目描述
-  </h2>
+  </h3>
   <p>
    给一个浮点数序列，取最大乘积连续子串的值，例如 -2.5，4，0，3，0.5，8，-1，则取出的最大乘积连续子串为3，0.5，8。也就是说，上述数组中，3 0.5 8这3个数的乘积3*0.5*8=12是最大的，而且是连续的。
   </p>
@@ -154,22 +154,18 @@
    或许，读者初看此题，可能立马会想到用最简单粗暴的方式：两个for循环直接轮询。
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="kt">double</span> <span class="nf">MaxProductSubstring</span><span class="p">(</span><span class="kt">double</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">length</span><span class="p">)</span>
+   <pre><span class="kt">double</span> <span class="nf">maxProductSubstring</span><span class="p">(</span><span class="kt">double</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">length</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="kt">double</span> <span class="n">maxResult</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="kt">double</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="kt">double</span> <span class="n">end</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">maxResult</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
     <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="kt">double</span> <span class="n">x</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+        <span class="kt">double</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">x</span> <span class="o">*=</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">maxResult</span><span class="p">)</span>
             <span class="p">{</span>
                 <span class="n">maxResult</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
-                <span class="n">start</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-                <span class="n">end</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">}</span>
@@ -222,17 +218,16 @@
   <p>
    动态规划求解的方法一个for循环搞定，所以时间复杂度为O(n)。
   </p>
-  <h2>
+  <h3>
    <a aria-hidden="true" class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
     <span class="octicon octicon-link">
     </span>
    </a>
    举一反三
-  </h2>
+  </h3>
   <p>
    1、给定一个长度为N的整数数组，只允许用乘法，不能用除法，计算任意（N-1）个数的组合中乘积最大的一组，并写出算法的时间复杂度。
-  </p>
-  <p>
+   <br/>
    分析：我们可以把所有可能的（N-1）个数的组合找出来，分别计算它们的乘积，并比较大小。由于总共有N个（N-1）个数的组合，总的时间复杂度为O（N2），显然这不是最好的解法。
   </p>
  </body>

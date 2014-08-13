@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-6fc7fb2a2ad956975983882a7f95b27577e851a4.css" />
-  <link rel="stylesheet" href="style_cache/github2-ade82cf93cc23c0e2691785e7976cc718fe1986f.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-013db558b75ed8e45b8a7ccd0caca4ad57c6f1ac.css" />
+  <link rel="stylesheet" href="style_cache/github2-c9b5fd6520f5ab77dd823b1b2c81ff9c461b1374.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -104,13 +104,13 @@
 		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
 			<html>
  <body>
-  <h1>
+  <h2>
    <a aria-hidden="true" class="anchor" href="#%E6%9C%AC%E7%AB%A0%E5%A0%86%E6%A0%88%E6%A0%91%E5%9B%BE%E7%9B%B8%E5%85%B3%E7%9A%84%E4%B9%A0%E9%A2%98" name="user-content-%E6%9C%AC%E7%AB%A0%E5%A0%86%E6%A0%88%E6%A0%91%E5%9B%BE%E7%9B%B8%E5%85%B3%E7%9A%84%E4%B9%A0%E9%A2%98">
     <span class="octicon octicon-link">
     </span>
    </a>
    本章堆栈树图相关的习题
-  </h1>
+  </h2>
   <p>
    <strong>
     1、附近地点搜索
@@ -163,12 +163,21 @@
   </p>
   <p>
    <strong>
+    3、最少操作次数的简易版
+   </strong>
+  </p>
+  <p>
+   给定两个字符串，仅由小写字母组成，它们包含了相同字符。
+求把第一个字符串变成第二个字符串的最小操作次数，且每次操作只能对第一个字符串中的某个字符移动到此字符串中的开头。
+例如给定两个字符串“abcd" "bcad" ，输出：2，因为需要操作2次才能把"abcd"变成“bcad" ，方法是：abcd-&gt;cabd-&gt;bcad。
+  </p>
+  <p>
+   <strong>
     3、把二元查找树转变成排序的双向链表
    </strong>
   </p>
   <p>
-   输入一棵二元查找树，将该二元查找树转换成一个排序的双向链表。
-要求不能创建任何新的结点，只调整指针的指向。
+   输入一棵二元查找树，将该二元查找树转换成一个排序的双向链表。要求不能创建任何新的结点，只调整指针的指向。例如把下述二叉查找树
   </p>
   <p>
    10
@@ -186,7 +195,7 @@
    4  8 12
   </p>
   <p>
-   转换成双向链表
+   转换成双向链表，即得：
   </p>
   <p>
    4=6=8=10=12=14=16。
@@ -200,18 +209,6 @@
    输入一个整数和一棵二元树。
 从树的根结点开始往下访问一直到叶结点所经过的所有结点形成一条路径。
 打印出和与输入整数相等的所有路径。
-例如 输入整数22和如下二元树
-  </p>
-  <pre><code>10  
-</code></pre>
-  <p>
-   /   /
-   <br/>
-   5    12
-   <br/>
-   / \
-   <br/>
-   4  7
   </p>
   <p>
    <strong>
@@ -219,7 +216,7 @@
    </strong>
   </p>
   <p>
-   题目：输入一个整数数组，判断该数组是不是某二元查找树的后序遍历的结果，如果是返回true，否则返回false。
+   输入一个整数数组，判断该数组是不是某二元查找树的后序遍历的结果，如果是返回true，否则返回false。
   </p>
   <p>
    例如输入5、7、6、9、11、10、8，由于这一整数序列是如下树的后序遍历结果：
@@ -298,10 +295,7 @@
    </strong>
   </p>
   <p>
-   输入一棵二元树的根结点，求该树的深度。
-  </p>
-  <p>
-   从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。
+   输入一棵二元树的根结点，求该树的深度。从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。
   </p>
   <p>
    例如：输入二元树：

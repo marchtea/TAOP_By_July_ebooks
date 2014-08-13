@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-6fc7fb2a2ad956975983882a7f95b27577e851a4.css" />
-  <link rel="stylesheet" href="style_cache/github2-ade82cf93cc23c0e2691785e7976cc718fe1986f.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-013db558b75ed8e45b8a7ccd0caca4ad57c6f1ac.css" />
+  <link rel="stylesheet" href="style_cache/github2-c9b5fd6520f5ab77dd823b1b2c81ff9c461b1374.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -104,20 +104,20 @@
 		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
 			<html>
  <body>
-  <h1>
+  <h2>
    <a aria-hidden="true" class="anchor" href="#%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E7%9A%84%E6%9F%A5%E6%89%BE" name="user-content-%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E7%9A%84%E6%9F%A5%E6%89%BE">
     <span class="octicon octicon-link">
     </span>
    </a>
    有序数组的查找
-  </h1>
-  <h2>
+  </h2>
+  <h3>
    <a aria-hidden="true" class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
     <span class="octicon octicon-link">
     </span>
    </a>
    题目描述
-  </h2>
+  </h3>
   <p>
    给定一个有序的数组，查找某个数是否在数组中，请编程实现。
   </p>
@@ -136,13 +136,13 @@
   </p>
   <ul>
    <li>
-    1、一开始，范围覆盖整个数组。
+    一开始，范围覆盖整个数组。
    </li>
    <li>
-    2、将数组的中间项与T进行比较，如果T比数组的中间项要小，则到数组的前半部分继续查找，反之，则到数组的后半部分继续查找。
+    将数组的中间项与T进行比较，如果T比数组的中间项要小，则到数组的前半部分继续查找，反之，则到数组的后半部分继续查找。
    </li>
    <li>
-    3、如此，每次查找可以排除一半元素，范围缩小一半。就这样反复比较，反复缩小范围，最终就会在数组中找到T，或者确定原以为T所在的范围实际为空。
+    如此，每次查找可以排除一半元素，范围缩小一半。就这样反复比较，反复缩小范围，最终就会在数组中找到T，或者确定原以为T所在的范围实际为空。
    </li>
   </ul>
   <p>
@@ -161,21 +161,29 @@
    你能正确无误的写出二分查找代码么？不妨一试，关闭所有网页，窗口，打开记事本，或者编辑器，或者直接在本文评论下，不参考上面我写的或其他任何人的程序，给自己十分钟到N个小时不等的时间，立即编写一个二分查找程序。
   </p>
   <p>
-   当然，能正确写出来不代表任何什么，不能正确写出来亦不代表什么。
+   要准确实现二分查找，首先要把握下面几个要点：
   </p>
+  <ul>
+   <li>
+    关于right的赋值
+    <ul>
+     <li>
+      right = n-1 =&gt; while(left &lt;= right) =&gt; right = middle-1;
+     </li>
+     <li>
+      right = n   =&gt; while(left &lt;  right) =&gt; right = middle;
+     </li>
+    </ul>
+   </li>
+   <li>
+    middle的计算不能写在while循环外，否则无法得到更新。
+   </li>
+  </ul>
   <p>
    以下是一份参考实现：
   </p>
   <div class="highlight highlight-cpp">
-   <pre><span class="c1">//二分查找V0.1实现版</span>
-<span class="c1">//copyright@2011 July</span>
-
-<span class="c1">//首先要把握下面几个要点：</span>
-<span class="c1">//right = n-1 =&gt; while(left &lt;= right) =&gt; right = middle-1;</span>
-<span class="c1">//right = n   =&gt; while(left &lt;  right) =&gt; right = middle;</span>
-<span class="c1">//middle的计算不能写在while循环外，否则无法得到更新。</span>
-
-<span class="kt">int</span> <span class="nf">BinarySearch</span><span class="p">(</span><span class="kt">int</span> <span class="n">array</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value</span><span class="p">)</span>
+   <pre><span class="kt">int</span> <span class="nf">BinarySearch</span><span class="p">(</span><span class="kt">int</span> <span class="n">array</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
     <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
@@ -212,101 +220,19 @@
    总结
   </h2>
   <p>
-   编写正确的二分查找程序，首先要把握下面几个要点：
+   编写二分查找的程序时
   </p>
-  <pre><code>right = n-1 =&gt; while(left &lt;= right) =&gt; right = middle-1;
-middle的计算不能写在while循环外，否则无法得到更新。
-</code></pre>
+  <ul>
+   <li>
+    如果令 `left &lt;= right，则right = middle - 1;
+   </li>
+   <li>
+    如果令left &lt; right，则 right = middle;`
+   </li>
+  </ul>
   <p>
-   还有一个最最常犯的错误，具体可以参考
-   <a href="http://googleresearch.blogspot.com/2006/06/extra-extra-read-all-about-it-nearly.html">
-    Extra, Extra - Read All About It: Nearly All Binary Searches and Mergesorts are Broken
-   </a>
-   ，其中提到了JDK5中该BUG：
+   换言之，算法所操作的区间,是左闭右开区间,还是左闭右闭区间,这个区间,需要在循环初始化。且在循环体是否终止的判断中,以及每次修改left, right区间值这三个地方保持一致,否则就可能出错。
   </p>
-  <pre><code>middle = (left+right)&gt;&gt;1; 这样的话left与right的值比较大的时候，其和可能溢出。
-</code></pre>
-  <p>
-   这个也是错误的：
-  </p>
-  <pre><code>right = n   =&gt; while(left &lt;  right) =&gt; right = middle;
-</code></pre>
-  <p>
-   如果搜索数组中不存在的数字的时候,可能会导致死循环，因为最后left = middle, right = middle + 1,这样每次更新left和middle总是不变的。
-  </p>
-  <h2>
-   <a aria-hidden="true" class="anchor" href="#%E6%89%A9%E5%B1%95" name="user-content-%E6%89%A9%E5%B1%95">
-    <span class="octicon octicon-link">
-    </span>
-   </a>
-   扩展
-  </h2>
-  <p>
-   二分查找时：
-   <code>
-    left &lt;= right，right = middle - 1;left &lt; right，right = middle;
-   </code>
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="c1">//算法所操作的区间,是左闭右开区间,还是左闭右闭区间,这个区间,需要在循环初始化,</span>
-<span class="c1">//循环体是否终止的判断中,以及每次修改left,right区间值这三个地方保持一致,否则就可能出错.</span>
-
-<span class="c1">//二分查找实现一</span>
-<span class="kt">int</span> <span class="nf">BinarySearch</span><span class="p">(</span><span class="kt">int</span> <span class="n">array</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">v</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">middle</span><span class="p">;</span>
-
-    <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-
-    <span class="k">while</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="n">right</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">middle</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">middle</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">v</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">right</span> <span class="o">=</span> <span class="n">middle</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">middle</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">v</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">left</span> <span class="o">=</span> <span class="n">middle</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span>
-        <span class="p">{</span>
-            <span class="k">return</span> <span class="n">middle</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="c1">//二分查找实现二</span>
-<span class="kt">int</span> <span class="nf">BinarySearch</span><span class="p">(</span><span class="kt">int</span> <span class="n">array</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">v</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">middle</span><span class="p">;</span>
-
-    <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
-
-    <span class="k">while</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">middle</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">middle</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">v</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">right</span> <span class="o">=</span> <span class="n">middle</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">middle</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">v</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">left</span> <span class="o">=</span> <span class="n">middle</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span>
-        <span class="p">{</span>
-            <span class="k">return</span> <span class="n">middle</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
-  </div>
  </body>
 </html>
 		  </article>

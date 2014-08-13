@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-6fc7fb2a2ad956975983882a7f95b27577e851a4.css" />
-  <link rel="stylesheet" href="style_cache/github2-ade82cf93cc23c0e2691785e7976cc718fe1986f.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-013db558b75ed8e45b8a7ccd0caca4ad57c6f1ac.css" />
+  <link rel="stylesheet" href="style_cache/github2-c9b5fd6520f5ab77dd823b1b2c81ff9c461b1374.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -155,16 +155,8 @@
    </strong>
   </p>
   <p>
-   输入一个链表的头结点，从尾到头反过来输出每个结点的值。链表结点定义如下：
+   输入一个链表的头结点，从尾到头反过来输出每个结点的值。
   </p>
-  <div class="highlight highlight-c">
-   <pre><span class="k">struct</span> <span class="n">ListNode</span>
-<span class="p">{</span>
-      <span class="kt">int</span>       <span class="n">m_nKey</span><span class="p">;</span>
-      <span class="n">ListNode</span><span class="o">*</span> <span class="n">m_pNext</span><span class="p">;</span>
-<span class="p">};</span>
-</pre>
-  </div>
   <p>
    <strong>
     5、在O(1)时间内删除单链表结点
@@ -174,32 +166,13 @@
    给定单链表的一个结点的指针，同时该结点不是尾结点，此外没有指向其它任何结点的指针，请在O(1)时间内删除该结点。
   </p>
   <p>
-   单链表结点的定义如下：
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="k">struct</span> <span class="n">ListNode</span>
-<span class="p">{</span>
-      <span class="kt">int</span>        <span class="n">m_nKey</span><span class="p">;</span>
-      <span class="n">ListNode</span><span class="o">*</span>  <span class="n">m_pNext</span><span class="p">;</span>
-<span class="p">};</span>
-</pre>
-  </div>
-  <p>
    <strong>
     6、找出链表的第一个公共结点
    </strong>
   </p>
   <p>
-   两个单向链表，找出它们的第一个公共结点。链表的结点定义为：
+   两个单向链表，找出它们的第一个公共结点。
   </p>
-  <div class="highlight highlight-c">
-   <pre><span class="k">struct</span> <span class="n">ListNode</span>
-<span class="p">{</span>
-      <span class="kt">int</span>         <span class="n">m_nKey</span><span class="p">;</span>
-      <span class="n">ListNode</span><span class="o">*</span>   <span class="n">m_pNext</span><span class="p">;</span>
-<span class="p">};</span>
-</pre>
-  </div>
   <p>
    <strong>
     7、在字符串中删除特定的字符
@@ -222,18 +195,6 @@
     、?），通配符“
    </em>
    ”表示零个或多个任意字母，通配符“?”表示一个任意字母。如：“J* Smi??” 可以匹配“John Smith” .
-  </p>
-  <p>
-   请用C语言实现如下函数：
-  </p>
-  <p>
-   void scan(const char* pszText, const char* pszName);
-  </p>
-  <p>
-   注：pszText为整个文章字符，pszName为要求匹配的英文名。
-  </p>
-  <p>
-   请完成些函数实现输出所有匹配的英文名，除了printf外，不能用第三方的库函数等。
   </p>
   <p>
    <strong>
@@ -358,7 +319,9 @@
   </p>
   <p>
    输入：
-L:“hello”“july”
+  </p>
+  <p>
+   L:“hello”“july”
   </p>
   <p>
    S:“hellomehellojuly”
@@ -465,21 +428,7 @@ L:“hello”“july”
    </strong>
   </p>
   <p>
-   已知集合A和B的元素分别用不含头结点的单链表存储，函数difference()用于求解集合A与B的差集，并将结果保存在集合A的单链表中。例如，若集合A={5,10,20,15,25,30}，集合B={5,15,35,25}，完成计算后A={10,20,30}。
-  </p>
-  <p>
-   链表结点的结构类型定义如下：
-  </p>
-  <div class="highlight highlight-c">
-   <pre><span class="k">struct</span> <span class="n">node</span>    
-<span class="p">{</span>    
-    <span class="kt">int</span> <span class="n">elem</span><span class="p">;</span>    
-    <span class="n">node</span><span class="o">*</span> <span class="n">next</span><span class="p">;</span>    
-<span class="p">};</span>    
-</pre>
-  </div>
-  <p>
-   请完成函数void difference(node** LA , node* LB)
+   已知集合A和B的元素分别用不含头结点的单链表存储，请求集合A与B的差集，并将结果保存在集合A的单链表中。例如，若集合A={5,10,20,15,25,30}，集合B={5,15,35,25}，完成计算后A={10,20,30}。
   </p>
   <p>
    <strong>
@@ -491,7 +440,46 @@ L:“hello”“july”
   </p>
   <p>
    <strong>
-    25、最短摘要生成
+    25、均分01
+   </strong>
+  </p>
+  <p>
+   给定一个字符串，长度不超过100，其中只包含字符0和1,并且字符0和1出现得次数都是偶数。你可以把字符串任意切分，把切分后得字符串任意分给两个人，让两个人得到的0的总个数相等，得到的1的总个数也相等。
+  </p>
+  <p>
+   例如，输入串是010111,我们可以把串切位01, 011,和1，把第1段和第3段放在一起分给一个人，第二段分给另外一个人，这样每个人都得到了1个0和两个1。我们要做的是让切分的次数尽可能少。
+  </p>
+  <p>
+   考虑到最差情况，则是把字符串切分(n - 1)次形成n个长度为1的串。
+  </p>
+  <p>
+   <strong>
+    26、合法字符串
+   </strong>
+  </p>
+  <p>
+   用n个不同的字符（编号1 - n），组成一个字符串，有如下2点要求：
+  </p>
+  <ul>
+   <li>
+    1、对于编号为i 的字符，如果2 * i &gt; n，则该字符可以作为最后一个字符，但如果该字符不是作为最后一个字符的话，则该字符后面可以接任意字符；
+   </li>
+   <li>
+    2、对于编号为i的字符，如果2 * i &lt;= n，则该字符不可以作为最后一个字符，且该字符后面所紧接着的下一个字符的编号一定要 &gt;= 2 * i。
+   </li>
+  </ul>
+  <p>
+   问有多少长度为M且符合条件的字符串。
+  </p>
+  <p>
+   例如：N = 2，M = 3。则abb, bab, bbb是符合条件的字符串，剩下的均为不符合条件的字符串。
+  </p>
+  <p>
+   假定n和m皆满足：2&lt;=n,m&lt;=1000000000)。
+  </p>
+  <p>
+   <strong>
+    27、最短摘要生成
    </strong>
   </p>
   <p>
@@ -507,7 +495,7 @@ L:“hello”“july”
   </p>
   <p>
    <strong>
-    26、实现memcpy函数
+    28、实现memcpy函数
    </strong>
   </p>
   <p>
@@ -545,7 +533,7 @@ L:“hello”“july”
   </div>
   <p>
    <strong>
-    27、实现memmove函数
+    29、实现memmove函数
    </strong>
   </p>
   <p>

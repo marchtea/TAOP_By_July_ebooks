@@ -29,7 +29,7 @@ Or, You can click `Download ZIP` button besides.
 
 ##Current Version
 
-updated 2014/06/16
+updated 2014/08/13
 
 ##TODO
 Add Pdf format.
