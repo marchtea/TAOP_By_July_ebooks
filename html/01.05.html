@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-013db558b75ed8e45b8a7ccd0caca4ad57c6f1ac.css" />
-  <link rel="stylesheet" href="style_cache/github2-c9b5fd6520f5ab77dd823b1b2c81ff9c461b1374.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-0b7f6f87923ad9426424470c38a307b7e83d5ca5.css" />
+  <link rel="stylesheet" href="style_cache/github2-d5b333d2db016759f0579af151c14effd2373ff4.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -147,22 +147,26 @@
   <div class="highlight highlight-cpp">
    <pre><span class="kt">int</span> <span class="nf">LongestPalindrome</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">max</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">max</span><span class="p">,</span><span class="n">c</span><span class="p">;</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
     <span class="n">max</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
     <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// i is the middle point of the palindrome  </span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">);</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="c1">// if the length of the palindrome is odd  </span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">])</span>
-            <span class="k">break</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="n">max</span><span class="p">)</span>
-            <span class="n">max</span> <span class="o">=</span> <span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">);</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="c1">// for the even case  </span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
-            <span class="k">break</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">&gt;</span> <span class="n">max</span><span class="p">)</span>
-            <span class="n">max</span> <span class="o">=</span> <span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">);</span> <span class="o">++</span><span class="n">j</span><span class="p">){</span> <span class="c1">// if the length of the palindrome is odd  </span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">])</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">c</span> <span class="o">&gt;</span> <span class="n">max</span><span class="p">)</span>
+            <span class="n">max</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">);</span> <span class="o">++</span><span class="n">j</span><span class="p">){</span> <span class="c1">// for the even case  </span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">c</span> <span class="o">&gt;</span> <span class="n">max</span><span class="p">)</span>
+            <span class="n">max</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="n">max</span><span class="p">;</span>
 <span class="p">}</span>

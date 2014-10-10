@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-013db558b75ed8e45b8a7ccd0caca4ad57c6f1ac.css" />
-  <link rel="stylesheet" href="style_cache/github2-c9b5fd6520f5ab77dd823b1b2c81ff9c461b1374.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-0b7f6f87923ad9426424470c38a307b7e83d5ca5.css" />
+  <link rel="stylesheet" href="style_cache/github2-d5b333d2db016759f0579af151c14effd2373ff4.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -196,10 +196,10 @@
   </p>
   <ul>
    <li>
-    对第i+1个元素有两种选择：要么放入前面找到的子数组，要么做为新子数组的第一个元素；
+    对第j+1个元素有两种选择：要么放入前面找到的子数组，要么做为新子数组的第一个元素；
     <ul>
      <li>
-      如果currSum加上当前元素a[j]后currSum变大了，则令currSum加上a[j]，否则currSum重新赋值，置为下一个元素，即currSum = a[j]。
+      如果currSum加上当前元素a[j]后不小于a[j]，则令currSum加上a[j]，否则currSum重新赋值，置为下一个元素，即currSum = a[j]。
      </li>
     </ul>
    </li>

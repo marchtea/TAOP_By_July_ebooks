@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-013db558b75ed8e45b8a7ccd0caca4ad57c6f1ac.css" />
-  <link rel="stylesheet" href="style_cache/github2-c9b5fd6520f5ab77dd823b1b2c81ff9c461b1374.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-0b7f6f87923ad9426424470c38a307b7e83d5ca5.css" />
+  <link rel="stylesheet" href="style_cache/github2-d5b333d2db016759f0579af151c14effd2373ff4.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -104,32 +104,33 @@
 		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
 			<html>
  <body>
-  <h1>
-   <a aria-hidden="true" class="anchor" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0%E5%AF%BC%E8%AF%BB" name="user-content-%E7%AC%AC%E4%BA%94%E7%AB%A0%E5%AF%BC%E8%AF%BB">
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#%E6%9C%AC%E7%AB%A0%E5%AF%BC%E8%AF%BB" name="user-content-%E6%9C%AC%E7%AB%A0%E5%AF%BC%E8%AF%BB">
     <span class="octicon octicon-link">
     </span>
    </a>
-   第五章导读
-  </h1>
+   本章导读
+  </h2>
   <p>
-   学习一个算法，先知其解决什么，后知其解决策略，最后了解彼此之间的联系。如图算法中，
+   本章导读
+学习一个算法，可分为3个步骤：首先了解算法本身解决什么问题，然后学习它的解决策略，最后了解某些相似算法之间的联系。例如图算法中，
   </p>
   <ul>
    <li>
-    ①广搜：一层一层往外遍历，寻找最短路径，策略：队列，
+    广搜是一层一层往外遍历，寻找最短路径，其策略是采取队列的方法。
    </li>
    <li>
-    ②最小生成树：最小代价连接所有点，策略：贪心（Prim：贪心+权重队列），
+    最小生成树是最小代价连接所有点，其策略是贪心，比如Prim的策略是贪心+权重队列。
    </li>
    <li>
-    ③Dijkstra：寻找单源最短路径，策略：贪心+非负权重队列，
+    Dijkstra是寻找单源最短路径，其策略是贪心+非负权重队列。
    </li>
    <li>
-    ④Floyd：多结点对的最短路径，策略：动态规划。
+    Floyd是多结点对的最短路径，其策略是动态规划。
    </li>
   </ul>
   <p>
-   而贪心和动态规划之间的联系是，贪心：最优子结构+局部最优，动态规划：最优独立重叠子结构+全局最优。故一句话理解动态规划则是枚举所有状态，然后剪枝，找到最优状态，保存，以后再遇到重叠的子问题，从保存的状态中搜索（俗称记忆化搜索）。
+   而贪心和动态规划是有联系的，贪心是“最优子结构+局部最优”，动态规划是“最优独立重叠子结构+全局最优”。一句话理解动态规划，则是枚举所有状态，然后剪枝，寻找最优状态，同时将每一次求解子问题的结果保存在一张“表格”中，以后再遇到重叠的子问题，从表格中保存的状态中查找（俗称记忆化搜索）。
   </p>
  </body>
 </html>
