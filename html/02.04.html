@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0b7f6f87923ad9426424470c38a307b7e83d5ca5.css" />
-  <link rel="stylesheet" href="style_cache/github2-d5b333d2db016759f0579af151c14effd2373ff4.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-fff66249e57e12b5b264967f6a4d21f8923d59247f86c4419d1e3092660fe54b.css" />
+  <link rel="stylesheet" href="style_cache/github2-27099ff875724b3da49fac6911968f783aa96ed08970c77185d963ce6c21af75.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,14 +105,14 @@
 			<html>
  <body>
   <h1>
-   <a aria-hidden="true" class="anchor" href="#%E6%9C%80%E5%A4%A7%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C" name="user-content-%E6%9C%80%E5%A4%A7%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C">
+   <a aria-hidden="true" class="anchor" href="#%E6%9C%80%E5%A4%A7%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C" id="user-content-最大连续子数组和">
     <span class="octicon octicon-link">
     </span>
    </a>
    最大连续子数组和
   </h1>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+   <a aria-hidden="true" class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" id="user-content-题目描述">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -135,14 +135,14 @@
 因此输出为该子数组的和18。
   </p>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" id="user-content-分析与解法">
     <span class="octicon octicon-link">
     </span>
    </a>
    分析与解法
   </h2>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" id="user-content-解法一">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -159,33 +159,32 @@
    参考代码如下：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="kt">int</span> <span class="nf">MaxSubArray</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">A</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">maxSum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>  <span class="c1">//全负情况，返回最大负数</span>
-    <span class="kt">int</span> <span class="n">currSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="n">j</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="n">currSum</span> <span class="o">+=</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">];</span>
-            <span class="p">}</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">currSum</span> <span class="o">&gt;</span> <span class="n">maxSum</span><span class="p">)</span>
-                <span class="n">maxSum</span> <span class="o">=</span> <span class="n">currSum</span><span class="p">;</span>
+   <pre><span class="pl-st">int</span> <span class="pl-en">MaxSubArray</span>(<span class="pl-st">int</span>* A, <span class="pl-st">int</span> n)
+{
+    <span class="pl-st">int</span> maxSum = a[<span class="pl-c1">0</span>];  <span class="pl-c">//全负情况，返回最大负数</span>
+    <span class="pl-st">int</span> currSum = <span class="pl-c1">0</span>;
+    <span class="pl-k">for</span> (<span class="pl-st">int</span> i = <span class="pl-c1">0</span>; i &lt; n; i++)
+    {
+        <span class="pl-k">for</span> (<span class="pl-st">int</span> j = i; j &lt; n; j++)
+        {
+            <span class="pl-k">for</span> (<span class="pl-st">int</span> k = i; k &lt;= j; k++)
+            {
+                currSum += A[k];
+            }
+            <span class="pl-k">if</span> (currSum &gt; maxSum)
+                maxSum = currSum;
 
-            <span class="n">currSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">//这里要记得清零，否则的话sum最终存放的是所有子数组的和。</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">maxSum</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
+            currSum = <span class="pl-c1">0</span>; <span class="pl-c">//这里要记得清零，否则的话sum最终存放的是所有子数组的和。</span>
+        }
+    }
+    <span class="pl-k">return</span> maxSum;
+}</pre>
   </div>
   <p>
    此方法的时间复杂度为O(n^3)。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C">
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" id="user-content-解法二">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -232,23 +231,22 @@ maxSum = max(maxSum, currSum)
    参考代码如下：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="kt">int</span> <span class="nf">MaxSubArray</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">currSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">maxSum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>       <span class="c1">//全负情况，返回最大数</span>
+   <pre><span class="pl-st">int</span> <span class="pl-en">MaxSubArray</span>(<span class="pl-st">int</span>* a, <span class="pl-st">int</span> n)
+{
+    <span class="pl-st">int</span> currSum = <span class="pl-c1">0</span>;
+    <span class="pl-st">int</span> maxSum = a[<span class="pl-c1">0</span>];       <span class="pl-c">//全负情况，返回最大数</span>
 
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">currSum</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">currSum</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">?</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">:</span> <span class="n">currSum</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
-        <span class="n">maxSum</span> <span class="o">=</span> <span class="p">(</span><span class="n">maxSum</span> <span class="o">&gt;</span> <span class="n">currSum</span><span class="p">)</span> <span class="o">?</span> <span class="nl">maxSum</span> <span class="p">:</span> <span class="n">currSum</span><span class="p">;</span>
+    <span class="pl-k">for</span> (<span class="pl-st">int</span> j = <span class="pl-c1">0</span>; j &lt; n; j++)
+    {
+        currSum = (a[j] &gt; currSum + a[j]) ? a[j] : currSum + a[j];
+        maxSum = (maxSum &gt; currSum) ? maxSum : currSum;
 
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">maxSum</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
+    }
+    <span class="pl-k">return</span> maxSum;
+}</pre>
   </div>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95" name="user-content-%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95">
+   <a aria-hidden="true" class="anchor" href="#%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95" id="user-content-问题扩展">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -266,7 +264,7 @@ maxSum = max(maxSum, currSum)
    </li>
   </ol>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
+   <a aria-hidden="true" class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" id="user-content-举一反三">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -288,8 +286,12 @@ maxSum = max(maxSum, currSum)
    3、最大子矩阵和
   </p>
   <p>
-   一个M*N的矩阵，找到此矩阵的一个子矩阵，并且这个子矩阵的元素的和是最大的，输出这个最大的值。如果所有数都是负数，就输出0。
-例如：3*5的矩阵：
+   一个M
+   <em>
+    N的矩阵，找到此矩阵的一个子矩阵，并且这个子矩阵的元素的和是最大的，输出这个最大的值。如果所有数都是负数，就输出0。
+例如：3
+   </em>
+   5的矩阵：
   </p>
   <p>
    1 2 0 3 4

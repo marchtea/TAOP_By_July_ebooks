@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0b7f6f87923ad9426424470c38a307b7e83d5ca5.css" />
-  <link rel="stylesheet" href="style_cache/github2-d5b333d2db016759f0579af151c14effd2373ff4.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-fff66249e57e12b5b264967f6a4d21f8923d59247f86c4419d1e3092660fe54b.css" />
+  <link rel="stylesheet" href="style_cache/github2-27099ff875724b3da49fac6911968f783aa96ed08970c77185d963ce6c21af75.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,14 +105,14 @@
 			<html>
  <body>
   <h1>
-   <a aria-hidden="true" class="anchor" href="#k%E8%BF%91%E9%82%BB%E7%AE%97%E6%B3%95" name="user-content-k%E8%BF%91%E9%82%BB%E7%AE%97%E6%B3%95">
+   <a aria-hidden="true" class="anchor" href="#k%E8%BF%91%E9%82%BB%E7%AE%97%E6%B3%95" id="user-content-k近邻算法">
     <span class="octicon octicon-link">
     </span>
    </a>
    K近邻算法
   </h1>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#11%E4%BB%80%E4%B9%88%E6%98%AFk%E8%BF%91%E9%82%BB%E7%AE%97%E6%B3%95" name="user-content-11%E4%BB%80%E4%B9%88%E6%98%AFk%E8%BF%91%E9%82%BB%E7%AE%97%E6%B3%95">
+   <a aria-hidden="true" class="anchor" href="#11%E4%BB%80%E4%B9%88%E6%98%AFk%E8%BF%91%E9%82%BB%E7%AE%97%E6%B3%95" id="user-content-11什么是k近邻算法">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -145,7 +145,7 @@
    于此我们看到，当无法判定当前待分类点是从属于已知分类中的哪一类时，我们可以依据统计学的理论看它所处的位置特征，衡量它周围邻居的权重，而把它归为(或分配)到权重更大的那一类。这就是K近邻算法的核心思想。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#12%E8%BF%91%E9%82%BB%E7%9A%84%E8%B7%9D%E7%A6%BB%E5%BA%A6%E9%87%8F%E8%A1%A8%E7%A4%BA%E6%B3%95" name="user-content-12%E8%BF%91%E9%82%BB%E7%9A%84%E8%B7%9D%E7%A6%BB%E5%BA%A6%E9%87%8F%E8%A1%A8%E7%A4%BA%E6%B3%95">
+   <a aria-hidden="true" class="anchor" href="#12%E8%BF%91%E9%82%BB%E7%9A%84%E8%B7%9D%E7%A6%BB%E5%BA%A6%E9%87%8F%E8%A1%A8%E7%A4%BA%E6%B3%95" id="user-content-12近邻的距离度量表示法">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -200,18 +200,17 @@
    其上，二维平面上两点欧式距离，代码可以如下编写：
   </p>
   <div class="highlight highlight-cpp">
-   <pre><span class="c1">//unixfy：计算欧氏距离  </span>
-<span class="kt">double</span> <span class="nf">euclideanDistance</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;&amp;</span> <span class="n">v1</span><span class="p">,</span> <span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;&amp;</span> <span class="n">v2</span><span class="p">)</span>  
-<span class="p">{</span>  
-     <span class="n">assert</span><span class="p">(</span><span class="n">v1</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="n">v2</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>  
-     <span class="kt">double</span> <span class="n">ret</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>  
-     <span class="k">for</span> <span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;::</span><span class="n">size_type</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">v1</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>  
-     <span class="p">{</span>  
-         <span class="n">ret</span> <span class="o">+=</span> <span class="p">(</span><span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">v2</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">v2</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>  
-     <span class="p">}</span>  
-     <span class="k">return</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">ret</span><span class="p">);</span>  
- <span class="p">}</span>
-</pre>
+   <pre><span class="pl-c">//unixfy：计算欧氏距离  </span>
+<span class="pl-st">double</span> <span class="pl-en">euclideanDistance</span>(<span class="pl-s">const</span> vector&lt;<span class="pl-st">double</span>&gt;&amp; v1, <span class="pl-s">const</span> vector&lt;<span class="pl-st">double</span>&gt;&amp; v2)  
+{  
+     <span class="pl-s3">assert</span>(v1.<span class="pl-s3">size</span>() == v2.<span class="pl-s3">size</span>());  
+     <span class="pl-st">double</span> ret = <span class="pl-c1">0.0</span>;  
+     <span class="pl-k">for</span> (vector&lt;<span class="pl-st">double</span>&gt;::size_type i = <span class="pl-c1">0</span>; i != v1.<span class="pl-s3">size</span>(); ++i)  
+     {  
+         ret += (v1[i] - v2[i]) * (v1[i] - v2[i]);  
+     }  
+     <span class="pl-k">return</span> <span class="pl-s3">sqrt</span>(ret);  
+ }</pre>
   </div>
   <p>
    2.
@@ -519,13 +518,12 @@
    </a>
   </p>
   <div class="highlight highlight-cpp">
-   <pre><span class="c1">//动态规划：    </span>
+   <pre><span class="pl-c">//动态规划：    </span>
 
-<span class="c1">//f[i,j]表示s[0...i]与t[0...j]的最小编辑距离。    </span>
-<span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span> <span class="p">{</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>  <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>  <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="mi">1</span><span class="p">)</span> <span class="p">}</span>    
+<span class="pl-c">//f[i,j]表示s[0...i]与t[0...j]的最小编辑距离。    </span>
+f[i,j] = min { f[i-<span class="pl-c1">1</span>,j]+<span class="pl-c1">1</span>,  f[i,j-<span class="pl-c1">1</span>]+<span class="pl-c1">1</span>,  f[i-<span class="pl-c1">1</span>,j-<span class="pl-c1">1</span>]+(s[i]==t[j]?<span class="pl-c1">0</span>:<span class="pl-c1">1</span>) }    
 
-<span class="c1">//分别表示：添加1个，删除1个，替换1个（相同就不用替换）。</span>
-</pre>
+<span class="pl-c">//分别表示：添加1个，删除1个，替换1个（相同就不用替换）。</span></pre>
   </div>
   <p>
    与此同时，面试官还可以继续问下去：那么，请问，如何设计一个比较两篇文章相似性的算法？（这个问题的讨论可以看看这里：
@@ -914,7 +912,7 @@
    简单说来，各种“距离”的应用场景简单概括为，空间：欧氏距离，路径：曼哈顿距离，国际象棋国王：切比雪夫距离，以上三种的统一形式:闵可夫斯基距离，加权：标准化欧氏距离，排除量纲和依存：马氏距离，向量差距：夹角余弦，编码差别：汉明距离，集合近似度：杰卡德类似系数与距离，相关：相关系数与相关距离。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#13k%E5%80%BC%E7%9A%84%E9%80%89%E6%8B%A9" name="user-content-13k%E5%80%BC%E7%9A%84%E9%80%89%E6%8B%A9">
+   <a aria-hidden="true" class="anchor" href="#13k%E5%80%BC%E7%9A%84%E9%80%89%E6%8B%A9" id="user-content-13k值的选择">
     <span class="octicon octicon-link">
     </span>
    </a>

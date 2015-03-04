@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0b7f6f87923ad9426424470c38a307b7e83d5ca5.css" />
-  <link rel="stylesheet" href="style_cache/github2-d5b333d2db016759f0579af151c14effd2373ff4.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-fff66249e57e12b5b264967f6a4d21f8923d59247f86c4419d1e3092660fe54b.css" />
+  <link rel="stylesheet" href="style_cache/github2-27099ff875724b3da49fac6911968f783aa96ed08970c77185d963ce6c21af75.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,14 +105,14 @@
 			<html>
  <body>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E8%B7%B3%E5%8F%B0%E9%98%B6%E9%97%AE%E9%A2%98" name="user-content-%E8%B7%B3%E5%8F%B0%E9%98%B6%E9%97%AE%E9%A2%98">
+   <a aria-hidden="true" class="anchor" href="#%E8%B7%B3%E5%8F%B0%E9%98%B6%E9%97%AE%E9%A2%98" id="user-content-跳台阶问题">
     <span class="octicon octicon-link">
     </span>
    </a>
    跳台阶问题
   </h2>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+   <a aria-hidden="true" class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" id="user-content-题目描述">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -125,14 +125,14 @@
    求总共有多少总跳法，并分析算法的时间复杂度。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" id="user-content-分析与解法">
     <span class="octicon octicon-link">
     </span>
    </a>
    分析与解法
   </h3>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" id="user-content-解法一">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -171,15 +171,14 @@ f(n)=      2                             n = 2
    原来上述问题就是我们平常所熟知的Fibonacci数列问题。可编写代码，如下：
   </p>
   <div class="highlight highlight-cpp">
-   <pre><span class="kt">long</span> <span class="kt">long</span> <span class="nf">Fibonacci</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">result</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">};</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+   <pre><span class="pl-st">long</span> <span class="pl-st">long</span> <span class="pl-en">Fibonacci</span>(<span class="pl-st">unsigned</span> <span class="pl-st">int</span> n)
+{
+    <span class="pl-st">int</span> result[<span class="pl-c1">3</span>] = {<span class="pl-c1">0</span>, <span class="pl-c1">1</span>, <span class="pl-c1">2</span>};
+    <span class="pl-k">if</span> (n &lt;= <span class="pl-c1">2</span>)
+        <span class="pl-k">return</span> result[n];
 
-    <span class="k">return</span> <span class="n">Fibonacci</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">Fibonacci</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">);</span>
-<span class="p">}</span>
-</pre>
+    <span class="pl-k">return</span> <span class="pl-s3">Fibonacci</span>(n - <span class="pl-c1">1</span>) + <span class="pl-s3">Fibonacci</span>(n - <span class="pl-c1">2</span>);
+}</pre>
   </div>
   <p>
    那么，如果一个人上台阶可以一次上1个，2个，或者3个呢？这个时候，公式是这样写的：
@@ -190,7 +189,7 @@ f(n)=     2                                      n = 2
         \ f(n-1)+f(n-2)+f(n-3)                   n &gt; 3
 </code></pre>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C">
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" id="user-content-解法二">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -206,26 +205,25 @@ f(n)=     2                                      n = 2
    参考代码如下：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="c1">//1, 1, 2, 3, 5, 8, 13, 21..</span>
-<span class="kt">int</span> <span class="nf">ClimbStairs</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">dp</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">};</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">dp</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">dp</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-        <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-        <span class="n">dp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
-<span class="p">}</span>
-</pre>
+   <pre><span class="pl-c">//1, 1, 2, 3, 5, 8, 13, 21..</span>
+<span class="pl-st">int</span> <span class="pl-en">ClimbStairs</span>(<span class="pl-st">int</span> n)
+{
+    <span class="pl-st">int</span> dp[<span class="pl-c1">3</span>] = { <span class="pl-c1">1</span>, <span class="pl-c1">1</span> };
+    <span class="pl-k">if</span> (n &lt; <span class="pl-c1">2</span>)
+    {
+        <span class="pl-k">return</span> <span class="pl-c1">1</span>;
+    }
+    <span class="pl-k">for</span> (<span class="pl-st">int</span> i = <span class="pl-c1">2</span>; i &lt;= n; i++)
+    {
+        dp[<span class="pl-c1">2</span>] = dp[<span class="pl-c1">0</span>] + dp[<span class="pl-c1">1</span>];
+        dp[<span class="pl-c1">0</span>] = dp[<span class="pl-c1">1</span>];
+        dp[<span class="pl-c1">1</span>] = dp[<span class="pl-c1">2</span>];
+    }
+    <span class="pl-k">return</span> dp[<span class="pl-c1">2</span>];
+}</pre>
   </div>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
+   <a aria-hidden="true" class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" id="user-content-举一反三">
     <span class="octicon octicon-link">
     </span>
    </a>

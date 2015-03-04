@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0b7f6f87923ad9426424470c38a307b7e83d5ca5.css" />
-  <link rel="stylesheet" href="style_cache/github2-d5b333d2db016759f0579af151c14effd2373ff4.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-fff66249e57e12b5b264967f6a4d21f8923d59247f86c4419d1e3092660fe54b.css" />
+  <link rel="stylesheet" href="style_cache/github2-27099ff875724b3da49fac6911968f783aa96ed08970c77185d963ce6c21af75.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,14 +105,14 @@
 			<html>
  <body>
   <h1>
-   <a aria-hidden="true" class="anchor" href="#%E6%9C%80%E8%BF%91%E5%85%AC%E5%85%B1%E7%A5%96%E5%85%88lca%E9%97%AE%E9%A2%98" name="user-content-%E6%9C%80%E8%BF%91%E5%85%AC%E5%85%B1%E7%A5%96%E5%85%88lca%E9%97%AE%E9%A2%98">
+   <a aria-hidden="true" class="anchor" href="#%E6%9C%80%E8%BF%91%E5%85%AC%E5%85%B1%E7%A5%96%E5%85%88lca%E9%97%AE%E9%A2%98" id="user-content-最近公共祖先lca问题">
     <span class="octicon octicon-link">
     </span>
    </a>
    最近公共祖先LCA问题
   </h1>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0" name="user-content-%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0">
+   <a aria-hidden="true" class="anchor" href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0" id="user-content-问题描述">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -122,7 +122,7 @@
    求有根树的任意两个节点的最近公共祖先。
   </p>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" id="user-content-分析与解法">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -150,14 +150,14 @@
    明确了题意，咱们便来试着解决这个问题。直观的做法，可能是针对是否为二叉查找树分情况讨论，这也是一般人最先想到的思路。除此之外，还有所谓的Tarjan算法、倍增算法、以及转换为RMQ问题（求某段区间的极值）。后面这几种算法相对高级，不那么直观，但思路比较有启发性，了解一下也有裨益。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80%E6%9A%B4%E5%8A%9B%E5%AF%B9%E5%BE%85" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80%E6%9A%B4%E5%8A%9B%E5%AF%B9%E5%BE%85">
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80%E6%9A%B4%E5%8A%9B%E5%AF%B9%E5%BE%85" id="user-content-解法一暴力对待">
     <span class="octicon octicon-link">
     </span>
    </a>
    解法一：暴力对待
   </h3>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#11%E6%98%AF%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91" name="user-content-11%E6%98%AF%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91">
+   <a aria-hidden="true" class="anchor" href="#11%E6%98%AF%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91" id="user-content-11是二叉查找树">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -192,41 +192,40 @@
    代码如下所示：
   </p>
   <div class="highlight highlight-cpp">
-   <pre><span class="c1">//copyright@eriol 2011  </span>
-<span class="c1">//modified by July 2014  </span>
-<span class="k">public</span> <span class="kt">int</span> <span class="nf">query</span><span class="p">(</span><span class="n">Node</span> <span class="n">t</span><span class="p">,</span> <span class="n">Node</span> <span class="n">u</span><span class="p">,</span> <span class="n">Node</span> <span class="n">v</span><span class="p">)</span> <span class="p">{</span>    
-    <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="n">u</span><span class="p">.</span><span class="n">value</span><span class="p">;</span>    
-    <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">v</span><span class="p">.</span><span class="n">value</span><span class="p">;</span>    
-    <span class="n">Node</span> <span class="n">parent</span> <span class="o">=</span> <span class="n">null</span><span class="p">;</span>    
+   <pre><span class="pl-c">//copyright@eriol 2011  </span>
+<span class="pl-c">//modified by July 2014  </span>
+public <span class="pl-st">int</span> <span class="pl-en">query</span>(Node t, Node u, Node v) {    
+    <span class="pl-st">int</span> left = u.<span class="pl-vo">value</span>;    
+    <span class="pl-st">int</span> right = v.<span class="pl-vo">value</span>;    
+    Node parent = null;    
 
-    <span class="c1">//二叉查找树内，如果左结点大于右结点，不对，交换  </span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">left</span> <span class="o">&gt;</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span>    
-        <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span>    
-        <span class="n">left</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>    
-        <span class="n">right</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>    
-    <span class="p">}</span>    
+    <span class="pl-c">//二叉查找树内，如果左结点大于右结点，不对，交换  </span>
+    <span class="pl-k">if</span> (left &gt; right) {    
+        <span class="pl-st">int</span> temp = left;    
+        left = right;    
+        right = temp;    
+    }    
 
-    <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>    
-        <span class="c1">//如果t小于u、v，往t的右子树中查找  </span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">value</span> <span class="o">&lt;</span> <span class="n">left</span><span class="p">)</span> <span class="p">{</span>    
-            <span class="n">parent</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>    
-            <span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="p">.</span><span class="n">right</span><span class="p">;</span>    
+    <span class="pl-k">while</span> (<span class="pl-c1">true</span>) {    
+        <span class="pl-c">//如果t小于u、v，往t的右子树中查找  </span>
+        <span class="pl-k">if</span> (t.<span class="pl-vo">value</span> &lt; left) {    
+            parent = t;    
+            t = t.<span class="pl-vo">right</span>;    
 
-        <span class="c1">//如果t大于u、v，往t的左子树中查找  </span>
-        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">value</span> <span class="o">&gt;</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span>    
-            <span class="n">parent</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>    
-            <span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="p">.</span><span class="n">left</span><span class="p">;</span>    
-        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">left</span> <span class="o">||</span> <span class="n">t</span><span class="p">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span>    
-            <span class="k">return</span> <span class="n">parent</span><span class="p">.</span><span class="n">value</span><span class="p">;</span>    
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>    
-            <span class="k">return</span> <span class="n">t</span><span class="p">.</span><span class="n">value</span><span class="p">;</span>    
-        <span class="p">}</span>    
-    <span class="p">}</span>    
-<span class="p">}</span>  
-</pre>
+        <span class="pl-c">//如果t大于u、v，往t的左子树中查找  </span>
+        } <span class="pl-k">else</span> <span class="pl-k">if</span> (t.<span class="pl-vo">value</span> &gt; right) {    
+            parent = t;    
+            t = t.<span class="pl-vo">left</span>;    
+        } <span class="pl-k">else</span> <span class="pl-k">if</span> (t.<span class="pl-vo">value</span> == left || t.<span class="pl-vo">value</span> == right) {    
+            <span class="pl-k">return</span> parent.<span class="pl-vo">value</span>;    
+        } <span class="pl-k">else</span> {    
+            <span class="pl-k">return</span> t.<span class="pl-vo">value</span>;    
+        }    
+    }    
+}  </pre>
   </div>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#12%E4%B8%8D%E6%98%AF%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91" name="user-content-12%E4%B8%8D%E6%98%AF%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91">
+   <a aria-hidden="true" class="anchor" href="#12%E4%B8%8D%E6%98%AF%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91" id="user-content-12不是二叉查找树">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -239,27 +238,26 @@
    此外，如果给出根节点，LCA问题可以用递归很快解决。而关于树的问题一般都可以转换为递归（因为树本来就是递归描述），参考代码如下：
   </p>
   <div class="highlight highlight-cpp">
-   <pre><span class="c1">//copyright@allantop 2014-1-22-20:01  </span>
-<span class="n">node</span><span class="o">*</span> <span class="nf">getLCA</span><span class="p">(</span><span class="n">node</span><span class="o">*</span> <span class="n">root</span><span class="p">,</span> <span class="n">node</span><span class="o">*</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node</span><span class="o">*</span> <span class="n">node2</span><span class="p">)</span>  
-<span class="p">{</span>  
-    <span class="k">if</span><span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="n">null</span><span class="p">)</span>  
-        <span class="k">return</span> <span class="n">null</span><span class="p">;</span>  
-    <span class="k">if</span><span class="p">(</span><span class="n">root</span><span class="o">==</span> <span class="n">node1</span> <span class="o">||</span> <span class="n">root</span><span class="o">==</span><span class="n">node2</span><span class="p">)</span>  
-        <span class="k">return</span> <span class="n">root</span><span class="p">;</span>  
+   <pre><span class="pl-c">//copyright@allantop 2014-1-22-20:01  </span>
+node* <span class="pl-en">getLCA</span>(node* root, node* node1, node* node2)  
+{  
+    <span class="pl-k">if</span>(root == null)  
+        <span class="pl-k">return</span> null;  
+    <span class="pl-k">if</span>(root== node1 || root==node2)  
+        <span class="pl-k">return</span> root;  
 
-    <span class="n">node</span><span class="o">*</span> <span class="n">left</span> <span class="o">=</span> <span class="n">getLCA</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">);</span>  
-    <span class="n">node</span><span class="o">*</span> <span class="n">right</span> <span class="o">=</span> <span class="n">getLCA</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">);</span>  
+    node* left = <span class="pl-s3">getLCA</span>(root-&gt;left, node1, node2);  
+    node* right = <span class="pl-s3">getLCA</span>(root-&gt;right, node1, node2);  
 
-    <span class="k">if</span><span class="p">(</span><span class="n">left</span> <span class="o">!=</span> <span class="n">null</span> <span class="o">&amp;&amp;</span> <span class="n">right</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span>  
-        <span class="k">return</span> <span class="n">root</span><span class="p">;</span>  
-    <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">left</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span>  
-        <span class="k">return</span> <span class="n">left</span><span class="p">;</span>  
-    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">right</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span>  
-        <span class="k">return</span> <span class="n">right</span><span class="p">;</span>  
-    <span class="k">else</span>   
-        <span class="k">return</span> <span class="n">null</span><span class="p">;</span>  
-<span class="p">}</span>  
-</pre>
+    <span class="pl-k">if</span>(left != null &amp;&amp; right != null)  
+        <span class="pl-k">return</span> root;  
+    <span class="pl-k">else</span> <span class="pl-k">if</span>(left != null)  
+        <span class="pl-k">return</span> left;  
+    <span class="pl-k">else</span> <span class="pl-k">if</span> (right != null)  
+        <span class="pl-k">return</span> right;  
+    <span class="pl-k">else</span>   
+        <span class="pl-k">return</span> null;  
+}  </pre>
   </div>
   <p>
    然不论是针对普通的二叉树，还是针对二叉查找树，上面的解法有一个很大的弊端就是：如需N 次查询，则总体复杂度会扩大N 倍，故这种暴力解法仅适合一次查询，不适合多次查询。
@@ -276,7 +274,7 @@
    </li>
   </ul>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8Ctarjan%E7%AE%97%E6%B3%95" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8Ctarjan%E7%AE%97%E6%B3%95">
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8Ctarjan%E7%AE%97%E6%B3%95" id="user-content-解法二tarjan算法">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -289,7 +287,7 @@
    涉及到批量查询的时候，咱们可以借鉴离线处理的方式，这就引出了解决此LCA问题的Tarjan离线算法。
   </p>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#21%E4%BB%80%E4%B9%88%E6%98%AFtarjan%E7%AE%97%E6%B3%95" name="user-content-21%E4%BB%80%E4%B9%88%E6%98%AFtarjan%E7%AE%97%E6%B3%95">
+   <a aria-hidden="true" class="anchor" href="#21%E4%BB%80%E4%B9%88%E6%98%AFtarjan%E7%AE%97%E6%B3%95" id="user-content-21什么是tarjan算法">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -333,7 +331,7 @@
    得出的结论便是：LCA(u,v)便是根至u的路径上到节点v最近的点。
   </p>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#22tarjan%E7%AE%97%E6%B3%95%E5%A6%82%E4%BD%95%E8%80%8C%E6%9D%A5" name="user-content-22tarjan%E7%AE%97%E6%B3%95%E5%A6%82%E4%BD%95%E8%80%8C%E6%9D%A5">
+   <a aria-hidden="true" class="anchor" href="#22tarjan%E7%AE%97%E6%B3%95%E5%A6%82%E4%BD%95%E8%80%8C%E6%9D%A5" id="user-content-22tarjan算法如何而来">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -368,7 +366,7 @@
    可此方法需要判断一个结点是在左子树、还是右子树，或是都不在，都只能遍历一棵树，而多次遍历的代价实在是太大了，所以我们需要找到更好的方法。这就引出了下面要阐述的Tarjan算法，即每个结点只遍历一次，怎么做到的呢，请看下文讲解。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#23tarjan%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B" name="user-content-23tarjan%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B">
+   <a aria-hidden="true" class="anchor" href="#23tarjan%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B" id="user-content-23tarjan算法流程">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -395,7 +393,7 @@
    ，它每次把两个结点对的最近公共祖先的查询保存起来，然后dfs 更新一次。如此，利用并查集优越的时空复杂度，此算法的时间复杂度可以缩小至O(n＋Q)，其中，n为数据规模，Q为询问个数。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%89%E8%BD%AC%E6%8D%A2%E4%B8%BArmq%E9%97%AE%E9%A2%98" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%89%E8%BD%AC%E6%8D%A2%E4%B8%BArmq%E9%97%AE%E9%A2%98">
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%89%E8%BD%AC%E6%8D%A2%E4%B8%BArmq%E9%97%AE%E9%A2%98" id="user-content-解法三转换为rmq问题">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -405,7 +403,7 @@
    解决此最近公共祖先问题的还有一个算法，即转换为RMQ问题，用Sparse Table（简称ST）算法解决。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#31%E4%BB%80%E4%B9%88%E6%98%AFrmq%E9%97%AE%E9%A2%98" name="user-content-31%E4%BB%80%E4%B9%88%E6%98%AFrmq%E9%97%AE%E9%A2%98">
+   <a aria-hidden="true" class="anchor" href="#31%E4%BB%80%E4%B9%88%E6%98%AFrmq%E9%97%AE%E9%A2%98" id="user-content-31什么是rmq问题">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -429,14 +427,14 @@
    很显然，从上图中，我们可以看出最小值是A[3] = 1，所以也就不难得出最小值的索引值RMQA(2,7) = 3。
   </p>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#32%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3rmq%E9%97%AE%E9%A2%98" name="user-content-32%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3rmq%E9%97%AE%E9%A2%98">
+   <a aria-hidden="true" class="anchor" href="#32%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3rmq%E9%97%AE%E9%A2%98" id="user-content-32如何解决rmq问题">
     <span class="octicon octicon-link">
     </span>
    </a>
    3.2、如何解决RMQ问题
   </h4>
   <h5>
-   <a aria-hidden="true" class="anchor" href="#321trivial-algorithms-for-rmq" name="user-content-321trivial-algorithms-for-rmq">
+   <a aria-hidden="true" class="anchor" href="#321trivial-algorithms-for-rmq" id="user-content-321trivial-algorithms-for-rmq">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -451,24 +449,23 @@
    </li>
   </ul>
   <div class="highlight highlight-cpp">
-   <pre><span class="c1">//copyright@  </span>
-<span class="c1">//modified by July 2014  </span>
-<span class="kt">void</span> <span class="nf">process1</span><span class="p">(</span><span class="kt">int</span> <span class="n">M</span><span class="p">[</span><span class="n">MAXN</span><span class="p">][</span><span class="n">MAXN</span><span class="p">],</span> <span class="kt">int</span> <span class="n">A</span><span class="p">[</span><span class="n">MAXN</span><span class="p">],</span> <span class="kt">int</span> <span class="n">N</span><span class="p">)</span>  
-<span class="p">{</span>  
-    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>  
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>  
-        <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>  
+   <pre><span class="pl-c">//copyright@  </span>
+<span class="pl-c">//modified by July 2014  </span>
+<span class="pl-st">void</span> <span class="pl-en">process1</span>(<span class="pl-st">int</span> M[MAXN][MAXN], <span class="pl-st">int</span> A[MAXN], <span class="pl-st">int</span> N)  
+{  
+    <span class="pl-st">int</span> i, j;  
+    <span class="pl-k">for</span> (i =<span class="pl-c1">0</span>; i &lt; N; i++)  
+        M[i][i] = i;  
 
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>  
-        <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>  
-            <span class="c1">//若前者小于后者，则把后者的索引值付给M[i][j]  </span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">&lt;</span> <span class="n">A</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>  
-                <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>  
-            <span class="c1">//否则前者的索引值付给M[i][j]  </span>
-            <span class="k">else</span>  
-                <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>  
-<span class="p">}</span>  
-</pre>
+    <span class="pl-k">for</span> (i = <span class="pl-c1">0</span>; i &lt; N; i++)  
+        <span class="pl-k">for</span> (j = i + <span class="pl-c1">1</span>; j &lt; N; j++)  
+            <span class="pl-c">//若前者小于后者，则把后者的索引值付给M[i][j]  </span>
+            <span class="pl-k">if</span> (A[M[i][j - <span class="pl-c1">1</span>]] &lt; A[j])  
+                M[i][j] = M[i][j - <span class="pl-c1">1</span>];  
+            <span class="pl-c">//否则前者的索引值付给M[i][j]  </span>
+            <span class="pl-k">else</span>  
+                M[i][j] = j;  
+}  </pre>
   </div>
   <ul>
    <li>
@@ -486,7 +483,7 @@
    </li>
   </ul>
   <h5>
-   <a aria-hidden="true" class="anchor" href="#322sparse-table-st-algorithm" name="user-content-322sparse-table-st-algorithm">
+   <a aria-hidden="true" class="anchor" href="#322sparse-table-st-algorithm" id="user-content-322sparse-table-st-algorithm">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -523,23 +520,22 @@
    根据上述公式，可以写出这个预处理的递归代码，如下：
   </p>
   <div class="highlight highlight-cpp">
-   <pre><span class="kt">void</span> <span class="nf">process2</span><span class="p">(</span><span class="kt">int</span> <span class="n">M</span><span class="p">[</span><span class="n">MAXN</span><span class="p">][</span><span class="n">LOGMAXN</span><span class="p">],</span> <span class="kt">int</span> <span class="n">A</span><span class="p">[</span><span class="n">MAXN</span><span class="p">],</span> <span class="kt">int</span> <span class="n">N</span><span class="p">)</span>  
-<span class="p">{</span>  
-    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>  
-    <span class="c1">//initialize M for the intervals with length 1  </span>
+   <pre><span class="pl-st">void</span> <span class="pl-en">process2</span>(<span class="pl-st">int</span> M[MAXN][LOGMAXN], <span class="pl-st">int</span> A[MAXN], <span class="pl-st">int</span> N)  
+{  
+    <span class="pl-st">int</span> i, j;  
+    <span class="pl-c">//initialize M for the intervals with length 1  </span>
 
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>  
-        <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>  
+    <span class="pl-k">for</span> (i = <span class="pl-c1">0</span>; i &lt; N; i++)  
+        M[i][<span class="pl-c1">0</span>] = i;  
 
-    <span class="c1">//compute values from smaller to bigger intervals  </span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">N</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>  
-        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">j</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>  
-            <span class="k">if</span> <span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">&lt;</span> <span class="n">A</span><span class="p">[</span><span class="n">M</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]])</span>  
-                <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>  
-            <span class="k">else</span>  
-                <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">M</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>  
-<span class="p">}</span>
-</pre>
+    <span class="pl-c">//compute values from smaller to bigger intervals  </span>
+    <span class="pl-k">for</span> (j = <span class="pl-c1">1</span>; <span class="pl-c1">1</span> &lt;&lt; j &lt;= N; j++)  
+        <span class="pl-k">for</span> (i = <span class="pl-c1">0</span>; i + (<span class="pl-c1">1</span> &lt;&lt; j) - <span class="pl-c1">1</span> &lt; N; i++)  
+            <span class="pl-k">if</span> (A[M[i][j - <span class="pl-c1">1</span>]] &lt; A[M[i + (<span class="pl-c1">1</span> &lt;&lt; (j - <span class="pl-c1">1</span>))][j - <span class="pl-c1">1</span>]])  
+                M[i][j] = M[i][j - <span class="pl-c1">1</span>];  
+            <span class="pl-k">else</span>  
+                M[i][j] = M[i + (<span class="pl-c1">1</span> &lt;&lt; (j - <span class="pl-c1">1</span>))][j - <span class="pl-c1">1</span>];  
+}</pre>
   </div>
   <p>
    经过这个O(N logN)时间复杂度的预处理之后，让我们看看怎样使用它们去计算 RMQA(i, j)。思路是选择两个能够完全覆盖区间[i..j]的块并且找到它们之间的最小值。设k = [log(j - i + 1)]。
@@ -556,7 +552,7 @@
    故，综合来看，咱们预处理的时间复杂度从O(N3)降低到了O(N logN)，查询的时间复杂度为O(1)，所以最终的整体复杂度为：&lt; O(N logN), O(1) &gt;。
   </p>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#33lca%E4%B8%8Ermq%E7%9A%84%E5%85%B3%E8%81%94%E6%80%A7" name="user-content-33lca%E4%B8%8Ermq%E7%9A%84%E5%85%B3%E8%81%94%E6%80%A7">
+   <a aria-hidden="true" class="anchor" href="#33lca%E4%B8%8Ermq%E7%9A%84%E5%85%B3%E8%81%94%E6%80%A7" id="user-content-33lca与rmq的关联性">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -605,7 +601,7 @@
    注意L中连续的元素相差为1。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#34%E4%BB%8Ermq%E5%88%B0lca" name="user-content-34%E4%BB%8Ermq%E5%88%B0lca">
+   <a aria-hidden="true" class="anchor" href="#34%E4%BB%8Ermq%E5%88%B0lca" id="user-content-34从rmq到lca">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -668,7 +664,7 @@
    RMQ和LCA是密切相关的问题，因为它们之间可以相互规约。有许多算法可以用来解决它们，并且他们适应于一类问题。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%9B%9B%E7%BA%BF%E6%AE%B5%E6%A0%91" name="user-content-%E8%A7%A3%E6%B3%95%E5%9B%9B%E7%BA%BF%E6%AE%B5%E6%A0%91">
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%9B%9B%E7%BA%BF%E6%AE%B5%E6%A0%91" id="user-content-解法四线段树">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -694,28 +690,31 @@
    </a>
   </p>
   <p>
-   线段树和堆具有相同的结构，因此我们定义x是一个非叶结点，那么左孩子结点为2*x,而右孩子结点为2*x+1。想要使用线段树解决RMQ问题，我们则要要使用数组 M[1, 2 * 2[logN] + 1]，这里M[i]保存结点i区间最小值的位置。初始时M的所有元素为-1。树应当用下面的函数进行初始化(b和e是当前区间的范围)：
+   线段树和堆具有相同的结构，因此我们定义x是一个非叶结点，那么左孩子结点为2
+   <em>
+    x,而右孩子结点为2
+   </em>
+   x+1。想要使用线段树解决RMQ问题，我们则要要使用数组 M[1, 2 * 2[logN] + 1]，这里M[i]保存结点i区间最小值的位置。初始时M的所有元素为-1。树应当用下面的函数进行初始化(b和e是当前区间的范围)：
   </p>
   <div class="highlight highlight-cpp">
-   <pre><span class="kt">void</span> <span class="nf">initialize</span><span class="p">(</span><span class="kt">int</span> <span class="n">node</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="n">e</span><span class="p">,</span> <span class="kt">int</span> <span class="n">M</span><span class="p">[</span><span class="n">MAXIND</span><span class="p">],</span> <span class="kt">int</span> <span class="n">A</span><span class="p">[</span><span class="n">MAXN</span><span class="p">],</span> <span class="kt">int</span> <span class="n">N</span><span class="p">)</span>  
-<span class="p">{</span>  
-    <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">==</span> <span class="n">e</span><span class="p">)</span>  
-        <span class="n">M</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>  
-    <span class="k">else</span>  
-    <span class="p">{</span>  
-        <span class="c1">//compute the values in the left and right subtrees  </span>
-        <span class="n">initialize</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">node</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">e</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>  
-        <span class="n">initialize</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">node</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">e</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>  
+   <pre><span class="pl-st">void</span> <span class="pl-en">initialize</span>(<span class="pl-st">int</span> node, <span class="pl-st">int</span> b, <span class="pl-st">int</span> e, <span class="pl-st">int</span> M[MAXIND], <span class="pl-st">int</span> A[MAXN], <span class="pl-st">int</span> N)  
+{  
+    <span class="pl-k">if</span> (b == e)  
+        M[node] = b;  
+    <span class="pl-k">else</span>  
+    {  
+        <span class="pl-c">//compute the values in the left and right subtrees  </span>
+        <span class="pl-s3">initialize</span>(<span class="pl-c1">2</span> * node, b, (b + e) / <span class="pl-c1">2</span>, M, A, N);  
+        <span class="pl-s3">initialize</span>(<span class="pl-c1">2</span> * node + <span class="pl-c1">1</span>, (b + e) / <span class="pl-c1">2</span> + <span class="pl-c1">1</span>, e, M, A, N);  
 
-        <span class="c1">//search for the minimum value in the first and  </span>
-        <span class="c1">//second half of the interval  </span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">M</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">node</span><span class="p">]]</span> <span class="o">&lt;=</span> <span class="n">A</span><span class="p">[</span><span class="n">M</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">node</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]])</span>  
-            <span class="n">M</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">M</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">node</span><span class="p">];</span>  
-        <span class="k">else</span>  
-            <span class="n">M</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">M</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">node</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>  
-    <span class="p">}</span>  
-<span class="p">}</span>
-</pre>
+        <span class="pl-c">//search for the minimum value in the first and  </span>
+        <span class="pl-c">//second half of the interval  </span>
+        <span class="pl-k">if</span> (A[M[<span class="pl-c1">2</span> * node]] &lt;= A[M[<span class="pl-c1">2</span> * node + <span class="pl-c1">1</span>]])  
+            M[node] = M[<span class="pl-c1">2</span> * node];  
+        <span class="pl-k">else</span>  
+            M[node] = M[<span class="pl-c1">2</span> * node + <span class="pl-c1">1</span>];  
+    }  
+}</pre>
   </div>
   <p>
    上面的函数映射出了这棵树建造的方式。当计算一些区间的最小值位置时，我们应当首先查看子结点的值。调用函数的时候使用 node = 1, b = 0和e  = N-1。
@@ -724,35 +723,34 @@
    现在我们可以开始进行查询了。如果我们想要查找区间[i, j]中的最小值的位置时，我们可以使用下一个简单的函数：
   </p>
   <div class="highlight highlight-cpp">
-   <pre><span class="kt">int</span> <span class="nf">query</span><span class="p">(</span><span class="kt">int</span> <span class="n">node</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="n">e</span><span class="p">,</span> <span class="kt">int</span> <span class="n">M</span><span class="p">[</span><span class="n">MAXIND</span><span class="p">],</span> <span class="kt">int</span> <span class="n">A</span><span class="p">[</span><span class="n">MAXN</span><span class="p">],</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">j</span><span class="p">)</span>  
-<span class="p">{</span>  
-    <span class="kt">int</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">;</span>  
-    <span class="c1">//if the current interval doesn't intersect  </span>
-    <span class="c1">//the query interval return -1  </span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;</span> <span class="n">e</span> <span class="o">||</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">)</span>  
-        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>  
+   <pre><span class="pl-st">int</span> <span class="pl-en">query</span>(<span class="pl-st">int</span> node, <span class="pl-st">int</span> b, <span class="pl-st">int</span> e, <span class="pl-st">int</span> M[MAXIND], <span class="pl-st">int</span> A[MAXN], <span class="pl-st">int</span> i, <span class="pl-st">int</span> j)  
+{  
+    <span class="pl-st">int</span> p1, p2;  
+    <span class="pl-c">//if the current interval doesn't intersect  </span>
+    <span class="pl-c">//the query interval return -1  </span>
+    <span class="pl-k">if</span> (i &gt; e || j &lt; b)  
+        <span class="pl-k">return</span> -<span class="pl-c1">1</span>;  
 
-    <span class="c1">//if the current interval is included in  </span>
-    <span class="c1">//the query interval return M[node]  </span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">&gt;=</span> <span class="n">i</span> <span class="o">&amp;&amp;</span> <span class="n">e</span> <span class="o">&lt;=</span> <span class="n">j</span><span class="p">)</span>  
-        <span class="k">return</span> <span class="n">M</span><span class="p">[</span><span class="n">node</span><span class="p">];</span>  
+    <span class="pl-c">//if the current interval is included in  </span>
+    <span class="pl-c">//the query interval return M[node]  </span>
+    <span class="pl-k">if</span> (b &gt;= i &amp;&amp; e &lt;= j)  
+        <span class="pl-k">return</span> M[node];  
 
-    <span class="c1">//compute the minimum position in the  </span>
-    <span class="c1">//left and right part of the interval  </span>
-    <span class="n">p1</span> <span class="o">=</span> <span class="n">query</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">node</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">e</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">);</span>  
-    <span class="n">p2</span> <span class="o">=</span> <span class="n">query</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">node</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">e</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">);</span>  
+    <span class="pl-c">//compute the minimum position in the  </span>
+    <span class="pl-c">//left and right part of the interval  </span>
+    p1 = <span class="pl-s3">query</span>(<span class="pl-c1">2</span> * node, b, (b + e) / <span class="pl-c1">2</span>, M, A, i, j);  
+    p2 = <span class="pl-s3">query</span>(<span class="pl-c1">2</span> * node + <span class="pl-c1">1</span>, (b + e) / <span class="pl-c1">2</span> + <span class="pl-c1">1</span>, e, M, A, i, j);  
 
-    <span class="c1">//return the position where the overall  </span>
-    <span class="c1">//minimum is  </span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">p1</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>  
-        <span class="k">return</span> <span class="n">M</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">p2</span><span class="p">;</span>  
-    <span class="k">if</span> <span class="p">(</span><span class="n">p2</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>  
-        <span class="k">return</span> <span class="n">M</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">p1</span><span class="p">;</span>  
-    <span class="k">if</span> <span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">p1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">A</span><span class="p">[</span><span class="n">p2</span><span class="p">])</span>  
-        <span class="k">return</span> <span class="n">M</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">p1</span><span class="p">;</span>  
-    <span class="k">return</span> <span class="n">M</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">p2</span><span class="p">;</span>  
-<span class="p">}</span>
-</pre>
+    <span class="pl-c">//return the position where the overall  </span>
+    <span class="pl-c">//minimum is  </span>
+    <span class="pl-k">if</span> (p1 == -<span class="pl-c1">1</span>)  
+        <span class="pl-k">return</span> M[node] = p2;  
+    <span class="pl-k">if</span> (p2 == -<span class="pl-c1">1</span>)  
+        <span class="pl-k">return</span> M[node] = p1;  
+    <span class="pl-k">if</span> (A[p1] &lt;= A[p2])  
+        <span class="pl-k">return</span> M[node] = p1;  
+    <span class="pl-k">return</span> M[node] = p2;  
+}</pre>
   </div>
   <p>
    你应该使用node = 1, b = 0和e = N - 1来调用这个函数，因为分配给第一个结点的区间是[0, N-1]。
@@ -764,7 +762,7 @@
    线段树非常强大，不仅仅是因为它能够用在RMQ上，还因为它是一个非常灵活的数据结构，它能够解决动态版本的RMQ问题和大量的区间搜索问题。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E5%85%B6%E4%BD%99%E8%A7%A3%E6%B3%95" name="user-content-%E5%85%B6%E4%BD%99%E8%A7%A3%E6%B3%95">
+   <a aria-hidden="true" class="anchor" href="#%E5%85%B6%E4%BD%99%E8%A7%A3%E6%B3%95" id="user-content-其余解法">
     <span class="octicon octicon-link">
     </span>
    </a>

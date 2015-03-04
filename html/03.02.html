@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0b7f6f87923ad9426424470c38a307b7e83d5ca5.css" />
-  <link rel="stylesheet" href="style_cache/github2-d5b333d2db016759f0579af151c14effd2373ff4.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-fff66249e57e12b5b264967f6a4d21f8923d59247f86c4419d1e3092660fe54b.css" />
+  <link rel="stylesheet" href="style_cache/github2-27099ff875724b3da49fac6911968f783aa96ed08970c77185d963ce6c21af75.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,14 +105,14 @@
 			<html>
  <body>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#b%E6%A0%91" name="user-content-b%E6%A0%91">
+   <a aria-hidden="true" class="anchor" href="#b%E6%A0%91" id="user-content-b树">
     <span class="octicon octicon-link">
     </span>
    </a>
    B树
   </h2>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#1%E5%89%8D%E8%A8%80" name="user-content-1%E5%89%8D%E8%A8%80">
+   <a aria-hidden="true" class="anchor" href="#1%E5%89%8D%E8%A8%80" id="user-content-1前言">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -143,13 +143,15 @@
   <p>
    这样我们就提出了一个新的查找树结构——平衡多路查找树，即
    <strong>
-    B-tree（B-tree树即B树*
+    B-tree（B-tree树即B树\
    </strong>
-   ，B即Balanced，平衡的意思
-   <strong>
+   <em>
+    ，B即Balanced，平衡的意思
+   </em>
+   <em>
     ）
-   </strong>
-   ，这棵神奇的树是在
+   </em>
+   *，这棵神奇的树是在
    <a href="http://academic.research.microsoft.com/Author/1008233/rudolf-bayer">
     Rudolf Bayer, Edward M. McCreight
    </a>
@@ -159,7 +161,7 @@
    后面我们会看到，B树的各种操作能使B树保持较低的高度，从而有效避免磁盘过于频繁的查找存取操作，达到有效提高查找效率的目的。然在开始介绍B~tree之前，先了解下相关的硬件知识，才能很好的了解为什么需要B~tree这种外存数据结构。
   </p>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#2%E5%A4%96%E5%AD%98%E5%82%A8%E5%99%A8%E7%A3%81%E7%9B%98" name="user-content-2%E5%A4%96%E5%AD%98%E5%82%A8%E5%99%A8%E7%A3%81%E7%9B%98">
+   <a aria-hidden="true" class="anchor" href="#2%E5%A4%96%E5%AD%98%E5%82%A8%E5%99%A8%E7%A3%81%E7%9B%98" id="user-content-2外存储器磁盘">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -172,7 +174,7 @@
    外存储器—磁盘是一种直接存取的存储设备(DASD)。它是以存取时间变化不大为特征的。可以直接存取任何字符组，且容量大、速度较其它外存设备更快。
   </p>
   <h5>
-   <a aria-hidden="true" class="anchor" href="#21-%E7%A3%81%E7%9B%98%E7%9A%84%E6%9E%84%E9%80%A0" name="user-content-21-%E7%A3%81%E7%9B%98%E7%9A%84%E6%9E%84%E9%80%A0">
+   <a aria-hidden="true" class="anchor" href="#21-%E7%A3%81%E7%9B%98%E7%9A%84%E6%9E%84%E9%80%A0" id="user-content-21-磁盘的构造">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -196,7 +198,7 @@
    活动头盘 (如上图)的磁头是可移动的。每一个盘面上只有一个磁头(磁头是双向的，因此正反盘面都能读写)。它可以从该面的一个磁道移动到另一个磁道。所有磁头都装在同一个动臂上，因此不同盘面上的所有磁头都是同时移动的(行动整齐划一)。当盘片绕主轴旋转的时候，磁头与旋转的盘片形成一个圆柱体。各个盘面上半径相同的磁道组成了一个圆柱面，我们称为柱面 。因此，柱面的个数也就是盘面上的磁道数。
   </p>
   <h5>
-   <a aria-hidden="true" class="anchor" href="#22-%E7%A3%81%E7%9B%98%E7%9A%84%E8%AF%BB%E5%86%99%E5%8E%9F%E7%90%86%E5%92%8C%E6%95%88%E7%8E%87" name="user-content-22-%E7%A3%81%E7%9B%98%E7%9A%84%E8%AF%BB%E5%86%99%E5%8E%9F%E7%90%86%E5%92%8C%E6%95%88%E7%8E%87">
+   <a aria-hidden="true" class="anchor" href="#22-%E7%A3%81%E7%9B%98%E7%9A%84%E8%AF%BB%E5%86%99%E5%8E%9F%E7%90%86%E5%92%8C%E6%95%88%E7%8E%87" id="user-content-22-磁盘的读写原理和效率">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -253,14 +255,14 @@
    所以，在大规模数据存储方面，大量数据存储在外存磁盘中，而在外存磁盘中读取/写入块(block)中某数据时，首先需要定位到磁盘中的某块，如何有效地查找磁盘中的数据，需要一种合理高效的外存数据结构，就是下面所要重点阐述的B-tree结构，以及相关的变种结构：B+-tree结构和B*-tree结构。
   </p>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#3b--%E6%A0%91" name="user-content-3b--%E6%A0%91">
+   <a aria-hidden="true" class="anchor" href="#3b--%E6%A0%91" id="user-content-3b--树">
     <span class="octicon octicon-link">
     </span>
    </a>
    3.B- 树
   </h4>
   <h5>
-   <a aria-hidden="true" class="anchor" href="#31-%E4%BB%80%E4%B9%88%E6%98%AFb-%E6%A0%91" name="user-content-31-%E4%BB%80%E4%B9%88%E6%98%AFb-%E6%A0%91">
+   <a aria-hidden="true" class="anchor" href="#31-%E4%BB%80%E4%B9%88%E6%98%AFb-%E6%A0%91" id="user-content-31-什么是b-树">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -355,7 +357,7 @@
    B树中的每个结点根据实际情况可以包含大量的关键字信息和分支(当然是不能超过磁盘块的大小，根据磁盘驱动(disk drives)的不同，一般块的大小在1k~4k左右)；这样树的深度降低了，这就意味着查找一个元素只要很少结点从外存磁盘中读入内存，很快访问到要查找的数据。
   </p>
   <h5>
-   <a aria-hidden="true" class="anchor" href="#32-b%E6%A0%91%E7%9A%84%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%8A%82%E7%82%B9%E5%AE%9A%E4%B9%89" name="user-content-32-b%E6%A0%91%E7%9A%84%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%8A%82%E7%82%B9%E5%AE%9A%E4%B9%89">
+   <a aria-hidden="true" class="anchor" href="#32-b%E6%A0%91%E7%9A%84%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%8A%82%E7%82%B9%E5%AE%9A%E4%B9%89" id="user-content-32-b树的类型和节点定义">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -375,7 +377,7 @@
    </a>
   </p>
   <h5>
-   <a aria-hidden="true" class="anchor" href="#33-%E6%96%87%E4%BB%B6%E6%9F%A5%E6%89%BE%E7%9A%84%E5%85%B7%E4%BD%93%E8%BF%87%E7%A8%8B%E6%B6%89%E5%8F%8A%E7%A3%81%E7%9B%98io%E6%93%8D%E4%BD%9C" name="user-content-33-%E6%96%87%E4%BB%B6%E6%9F%A5%E6%89%BE%E7%9A%84%E5%85%B7%E4%BD%93%E8%BF%87%E7%A8%8B%E6%B6%89%E5%8F%8A%E7%A3%81%E7%9B%98io%E6%93%8D%E4%BD%9C">
+   <a aria-hidden="true" class="anchor" href="#33-%E6%96%87%E4%BB%B6%E6%9F%A5%E6%89%BE%E7%9A%84%E5%85%B7%E4%BD%93%E8%BF%87%E7%A8%8B%E6%B6%89%E5%8F%8A%E7%A3%81%E7%9B%98io%E6%93%8D%E4%BD%9C" id="user-content-33-文件查找的具体过程涉及磁盘io操作">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -388,17 +390,16 @@
    其结构可以简单定义为：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
-    <span class="cm">/*文件数*/</span>
-    <span class="kt">int</span>  <span class="n">file_num</span><span class="p">;</span>
-    <span class="cm">/*文件名(key)*/</span>
-    <span class="kt">char</span> <span class="o">*</span> <span class="n">file_name</span><span class="p">[</span><span class="n">max_file_num</span><span class="p">];</span>
-    <span class="cm">/*指向子节点的指针*/</span>
-     <span class="n">BTNode</span> <span class="o">*</span> <span class="n">BTptr</span><span class="p">[</span><span class="n">max_file_num</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
-     <span class="cm">/*文件在硬盘中的存储位置*/</span>
-     <span class="n">FILE_HARD_ADDR</span> <span class="n">offset</span><span class="p">[</span><span class="n">max_file_num</span><span class="p">];</span>
-<span class="p">}</span><span class="n">BTNode</span><span class="p">;</span>
-</pre>
+   <pre><span class="pl-st">typedef</span> <span class="pl-st">struct</span> {
+    <span class="pl-c">/*文件数*/</span>
+    <span class="pl-st">int</span>  file_num;
+    <span class="pl-c">/*文件名(key)*/</span>
+    <span class="pl-st">char</span> * file_name[max_file_num];
+    <span class="pl-c">/*指向子节点的指针*/</span>
+     BTNode * BTptr[max_file_num+<span class="pl-c1">1</span>];
+     <span class="pl-c">/*文件在硬盘中的存储位置*/</span>
+     FILE_HARD_ADDR offset[max_file_num];
+}BTNode;</pre>
   </div>
   <p>
    假如每个盘块可以正好存放一个B树的结点（正好存放2个文件名）。那么一个BTNODE结点就代表一个盘块，而子树指针就是存放另外一个盘块的地址。
@@ -440,7 +441,7 @@
    当然，如果我们使用平衡二叉树的磁盘存储结构来进行查找，磁盘4次，最多5次，而且文件越多，B树比平衡二叉树所用的磁盘IO操作次数将越少，效率也越高。
   </p>
   <h5>
-   <a aria-hidden="true" class="anchor" href="#34-b%E6%A0%91%E7%9A%84%E9%AB%98%E5%BA%A6" name="user-content-34-b%E6%A0%91%E7%9A%84%E9%AB%98%E5%BA%A6">
+   <a aria-hidden="true" class="anchor" href="#34-b%E6%A0%91%E7%9A%84%E9%AB%98%E5%BA%A6" id="user-content-34-b树的高度">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -466,7 +467,7 @@
    树的高度降低了，磁盘存取的次数也随着树高度的降低而减少，从而使得存取性能也相应提升。
   </p>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#4b%E6%A0%91%E7%9A%84%E6%8F%92%E5%85%A5%E5%88%A0%E9%99%A4%E6%93%8D%E4%BD%9C" name="user-content-4b%E6%A0%91%E7%9A%84%E6%8F%92%E5%85%A5%E5%88%A0%E9%99%A4%E6%93%8D%E4%BD%9C">
+   <a aria-hidden="true" class="anchor" href="#4b%E6%A0%91%E7%9A%84%E6%8F%92%E5%85%A5%E5%88%A0%E9%99%A4%E6%93%8D%E4%BD%9C" id="user-content-4b树的插入删除操作">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -513,12 +514,11 @@
    结点定义如下：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="k">typedef</span> <span class="k">struct</span><span class="p">{</span>
-   <span class="kt">int</span> <span class="n">Count</span><span class="p">;</span>         <span class="c1">// 当前节点中关键元素数目</span>
-   <span class="n">ItemType</span> <span class="n">Key</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>   <span class="c1">// 存储关键字元素的数组</span>
-   <span class="kt">long</span> <span class="n">Branch</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>    <span class="c1">// 伪指针数组，(记录数目)方便判断合并和分裂的情况</span>
-<span class="p">}</span> <span class="n">NodeType</span><span class="p">;</span>
-</pre>
+   <pre><span class="pl-st">typedef</span> <span class="pl-st">struct</span>{
+   <span class="pl-st">int</span> Count;         <span class="pl-c">// 当前节点中关键元素数目</span>
+   ItemType Key[<span class="pl-c1">4</span>];   <span class="pl-c">// 存储关键字元素的数组</span>
+   <span class="pl-st">long</span> Branch[<span class="pl-c1">5</span>];    <span class="pl-c">// 伪指针数组，(记录数目)方便判断合并和分裂的情况</span>
+} NodeType;</pre>
   </div>
   <p>
    <a href="../images/7/12.jpg" target="_blank">
@@ -526,7 +526,7 @@
    </a>
   </p>
   <h5>
-   <a aria-hidden="true" class="anchor" href="#41-%E6%8F%92%E5%85%A5insert%E6%93%8D%E4%BD%9C" name="user-content-41-%E6%8F%92%E5%85%A5insert%E6%93%8D%E4%BD%9C">
+   <a aria-hidden="true" class="anchor" href="#41-%E6%8F%92%E5%85%A5insert%E6%93%8D%E4%BD%9C" id="user-content-41-插入insert操作">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -616,7 +616,7 @@
    </li>
   </ol>
   <h5>
-   <a aria-hidden="true" class="anchor" href="#42%E5%88%A0%E9%99%A4delete%E6%93%8D%E4%BD%9C" name="user-content-42%E5%88%A0%E9%99%A4delete%E6%93%8D%E4%BD%9C">
+   <a aria-hidden="true" class="anchor" href="#42%E5%88%A0%E9%99%A4delete%E6%93%8D%E4%BD%9C" id="user-content-42删除delete操作">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -763,7 +763,7 @@
    从以上操作可看出：除根结点之外的结点（包括叶子结点）的关键字的个数n满足：（ceil(m / 2)-1）&lt;= n &lt;= m-1，即2&lt;=n&lt;=4。这也佐证了咱们之前的观点。删除操作完。
   </p>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#5b-tree" name="user-content-5b-tree">
+   <a aria-hidden="true" class="anchor" href="#5b-tree" id="user-content-5b-tree">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -842,7 +842,7 @@ B+-tree的内部结点并没有指向关键字具体信息的指针。因此其�
    </a>
   </p>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#6b-tree" name="user-content-6b-tree">
+   <a aria-hidden="true" class="anchor" href="#6b-tree" id="user-content-6b-tree">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -866,7 +866,7 @@ B+-tree的内部结点并没有指向关键字具体信息的指针。因此其�
    所以，B*树分配新结点的概率比B+树要低，空间使用率更高；
   </p>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#7%E6%80%BB%E7%BB%93" name="user-content-7%E6%80%BB%E7%BB%93">
+   <a aria-hidden="true" class="anchor" href="#7%E6%80%BB%E7%BB%93" id="user-content-7总结">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -887,7 +887,11 @@ B+-tree的内部结点并没有指向关键字具体信息的指针。因此其�
    </li>
   </ul>
   <p>
-   顺便说一句，无论是B树，还是B+树、b*树，由于根或者树的上面几层被反复查询，所以这几块可以存在内存中，换言之，B树、B+树、B*树的根结点和部分顶层数据在内存中，大部分下层数据在磁盘上。
+   顺便说一句，无论是B树，还是B+树、b
+   <em>
+    树，由于根或者树的上面几层被反复查询，所以这几块可以存在内存中，换言之，B树、B+树、B
+   </em>
+   树的根结点和部分顶层数据在内存中，大部分下层数据在磁盘上。
   </p>
  </body>
 </html>

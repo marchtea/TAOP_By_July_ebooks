@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0b7f6f87923ad9426424470c38a307b7e83d5ca5.css" />
-  <link rel="stylesheet" href="style_cache/github2-d5b333d2db016759f0579af151c14effd2373ff4.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-fff66249e57e12b5b264967f6a4d21f8923d59247f86c4419d1e3092660fe54b.css" />
+  <link rel="stylesheet" href="style_cache/github2-27099ff875724b3da49fac6911968f783aa96ed08970c77185d963ce6c21af75.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,14 +105,14 @@
 			<html>
  <body>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%85%A8%E6%8E%92%E5%88%97" name="user-content-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%85%A8%E6%8E%92%E5%88%97">
+   <a aria-hidden="true" class="anchor" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%85%A8%E6%8E%92%E5%88%97" id="user-content-字符串的全排列">
     <span class="octicon octicon-link">
     </span>
    </a>
    字符串的全排列
   </h2>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+   <a aria-hidden="true" class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" id="user-content-题目描述">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -128,14 +128,14 @@
    abc、acb、bac、bca、cab 和 cba。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" id="user-content-分析与解法">
     <span class="octicon octicon-link">
     </span>
    </a>
    分析与解法
   </h3>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0">
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0" id="user-content-解法一递归实现">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -159,33 +159,32 @@
    代码可如下编写所示：
   </p>
   <div class="highlight highlight-cpp">
-   <pre><span class="kt">void</span> <span class="nf">CalcAllPermutation</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">perm</span><span class="p">,</span> <span class="kt">int</span> <span class="n">from</span><span class="p">,</span> <span class="kt">int</span> <span class="n">to</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">to</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">return</span><span class="p">;</span>
-    <span class="p">}</span>
+   <pre><span class="pl-st">void</span> <span class="pl-en">CalcAllPermutation</span>(<span class="pl-st">char</span>* perm, <span class="pl-st">int</span> from, <span class="pl-st">int</span> to)
+{
+    <span class="pl-k">if</span> (to &lt;= <span class="pl-c1">1</span>)
+    {
+        <span class="pl-k">return</span>;
+    }
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">from</span> <span class="o">==</span> <span class="n">to</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">to</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">from</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">to</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">swap</span><span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">perm</span><span class="p">[</span><span class="n">from</span><span class="p">]);</span>
-            <span class="n">CalcAllPermutation</span><span class="p">(</span><span class="n">perm</span><span class="p">,</span> <span class="n">from</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">to</span><span class="p">);</span>
-            <span class="n">swap</span><span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">perm</span><span class="p">[</span><span class="n">from</span><span class="p">]);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre>
+    <span class="pl-k">if</span> (from == to)
+    {
+        <span class="pl-k">for</span> (<span class="pl-st">int</span> i = <span class="pl-c1">0</span>; i &lt;= to; i++)
+            cout &lt;&lt; perm[i];
+        cout &lt;&lt; endl;
+    }
+    <span class="pl-k">else</span>
+    {
+        <span class="pl-k">for</span> (<span class="pl-st">int</span> j = from; j &lt;= to; j++)
+        {
+            <span class="pl-s3">swap</span>(perm[j], perm[from]);
+            <span class="pl-s3">CalcAllPermutation</span>(perm, from + <span class="pl-c1">1</span>, to);
+            <span class="pl-s3">swap</span>(perm[j], perm[from]);
+        }
+    }
+}</pre>
   </div>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C%E5%AD%97%E5%85%B8%E5%BA%8F%E6%8E%92%E5%88%97" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C%E5%AD%97%E5%85%B8%E5%BA%8F%E6%8E%92%E5%88%97">
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C%E5%AD%97%E5%85%B8%E5%BA%8F%E6%8E%92%E5%88%97" id="user-content-解法二字典序排列">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -316,37 +315,36 @@
    23145即为所求的21543的下一个排列。参考实现代码如下：
   </p>
   <div class="highlight highlight-cpp">
-   <pre><span class="kt">bool</span> <span class="nf">CalcAllPermutation</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">perm</span><span class="p">,</span> <span class="kt">int</span> <span class="n">num</span><span class="p">){</span>
-    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+   <pre><span class="pl-st">bool</span> <span class="pl-en">CalcAllPermutation</span>(<span class="pl-st">char</span>* perm, <span class="pl-st">int</span> num){
+    <span class="pl-st">int</span> i;
 
-    <span class="c1">//①找到排列中最后（最右）一个升序的首位位置i，x = ai</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">num</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">perm</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]);</span> <span class="o">--</span><span class="n">i</span><span class="p">){</span>
-        <span class="p">;</span>
-    <span class="p">}</span>
-    <span class="c1">// 已经找到所有排列</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">){</span>
-        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-    <span class="p">}</span>
+    <span class="pl-c">//①找到排列中最后（最右）一个升序的首位位置i，x = ai</span>
+    <span class="pl-k">for</span> (i = num - <span class="pl-c1">2</span>; (i &gt;= <span class="pl-c1">0</span>) &amp;&amp; (perm[i] &gt;= perm[i + <span class="pl-c1">1</span>]); --i){
+        ;
+    }
+    <span class="pl-c">// 已经找到所有排列</span>
+    <span class="pl-k">if</span> (i &lt; <span class="pl-c1">0</span>){
+        <span class="pl-k">return</span> <span class="pl-c1">false</span>;
+    }
 
-    <span class="kt">int</span> <span class="n">k</span><span class="p">;</span>
-    <span class="c1">//②找到排列中第i位右边最后一个比ai 大的位置j，y = aj</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">k</span> <span class="o">=</span> <span class="n">num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="p">(</span><span class="n">k</span> <span class="o">&gt;</span> <span class="n">i</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span> <span class="o">--</span><span class="n">k</span><span class="p">){</span>
-        <span class="p">;</span>
-    <span class="p">}</span>
+    <span class="pl-st">int</span> k;
+    <span class="pl-c">//②找到排列中第i位右边最后一个比ai 大的位置j，y = aj</span>
+    <span class="pl-k">for</span> (k = num - <span class="pl-c1">1</span>; (k &gt; i) &amp;&amp; (perm[k] &lt;= perm[i]); --k){
+        ;
+    }
 
-    <span class="c1">//③交换x，y</span>
-    <span class="n">swap</span><span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">perm</span><span class="p">[</span><span class="n">k</span><span class="p">]);</span>
-    <span class="c1">//④把第(i+ 1)位到最后的部分翻转</span>
-    <span class="n">reverse</span><span class="p">(</span><span class="n">perm</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">perm</span> <span class="o">+</span> <span class="n">num</span><span class="p">);</span>
-    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
+    <span class="pl-c">//③交换x，y</span>
+    <span class="pl-s3">swap</span>(perm[i], perm[k]);
+    <span class="pl-c">//④把第(i+ 1)位到最后的部分翻转</span>
+    <span class="pl-s3">reverse</span>(perm + i + <span class="pl-c1">1</span>, perm + num);
+    <span class="pl-k">return</span> <span class="pl-c1">true</span>;
+}</pre>
   </div>
   <p>
    然后在主函数里循环判断和调用calcAllPermutation函数输出全排列即可。
   </p>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E6%80%BB%E7%BB%93" name="user-content-%E8%A7%A3%E6%B3%95%E6%80%BB%E7%BB%93">
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E6%80%BB%E7%BB%93" id="user-content-解法总结">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -356,7 +354,7 @@
    由于全排列总共有n!种排列情况，所以不论解法一中的递归方法，还是上述解法二的字典序排列方法，这两种方法的时间复杂度都为O(n!)。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98" name="user-content-%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98">
+   <a aria-hidden="true" class="anchor" href="#%E7%B1%BB%E4%BC%BC%E9%97%AE%E9%A2%98" id="user-content-类似问题">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -370,22 +368,21 @@
 本题可用递归的思想，设置一个变量表示已输出的个数，然后当个数达到字符串长度时，就输出。
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="c1">//copyright@ 一直很安静 &amp;&amp; World Gao</span>
-<span class="c1">//假设str已经有序</span>
-<span class="kt">void</span> <span class="nf">perm</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">result</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">,</span> <span class="kt">int</span> <span class="n">size</span><span class="p">,</span> <span class="kt">int</span> <span class="n">resPos</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span><span class="n">resPos</span> <span class="o">==</span> <span class="n">size</span><span class="p">)</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">result</span><span class="p">);</span>
-  <span class="k">else</span>
-    <span class="p">{</span>
-      <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-        <span class="p">{</span>
-          <span class="n">result</span><span class="p">[</span><span class="n">resPos</span><span class="p">]</span> <span class="o">=</span> <span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-          <span class="n">perm</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">str</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">resPos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre>
+   <pre><span class="pl-c">//copyright@ 一直很安静 &amp;&amp; World Gao</span>
+<span class="pl-c">//假设str已经有序</span>
+<span class="pl-st">void</span> <span class="pl-en">perm</span>(<span class="pl-st">char</span>* result, <span class="pl-st">char</span> *str, <span class="pl-st">int</span> size, <span class="pl-st">int</span> resPos)
+{
+  <span class="pl-k">if</span>(resPos == size)
+    <span class="pl-s3">printf</span>(<span class="pl-s1"><span class="pl-pds">"</span><span class="pl-c1">%s</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, result);
+  <span class="pl-k">else</span>
+    {
+      <span class="pl-k">for</span>(<span class="pl-st">int</span> i = <span class="pl-c1">0</span>; i &lt; size; ++i)
+        {
+          result[resPos] = str[i];
+          <span class="pl-s3">perm</span>(result, str, size, resPos + <span class="pl-c1">1</span>);
+        }
+    }
+}</pre>
   </div>
   <p>
    2、如果不是求字符的所有排列，而是求字符的所有组合，应该怎么办呢？当输入的字符串中含有相同的字符串时，相同的字符交换位置是不同的排列，但是同一个组合。举个例子，如果输入abc，它的组合有a、b、c、ab、ac、bc、abc。

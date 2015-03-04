@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0b7f6f87923ad9426424470c38a307b7e83d5ca5.css" />
-  <link rel="stylesheet" href="style_cache/github2-d5b333d2db016759f0579af151c14effd2373ff4.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-fff66249e57e12b5b264967f6a4d21f8923d59247f86c4419d1e3092660fe54b.css" />
+  <link rel="stylesheet" href="style_cache/github2-27099ff875724b3da49fac6911968f783aa96ed08970c77185d963ce6c21af75.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,14 +105,14 @@
 			<html>
  <body>
   <h1>
-   <a aria-hidden="true" class="anchor" href="#%E7%9F%A9%E9%98%B5%E7%9B%B8%E4%B9%98" name="user-content-%E7%9F%A9%E9%98%B5%E7%9B%B8%E4%B9%98">
+   <a aria-hidden="true" class="anchor" href="#%E7%9F%A9%E9%98%B5%E7%9B%B8%E4%B9%98" id="user-content-矩阵相乘">
     <span class="octicon octicon-link">
     </span>
    </a>
    矩阵相乘
   </h1>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+   <a aria-hidden="true" class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" id="user-content-题目描述">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -122,7 +122,7 @@
    请编程实现矩阵乘法，并考虑当矩阵规模较大时的优化方法。
   </p>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" id="user-content-分析与解法">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -148,7 +148,7 @@
    下面咱们来具体解决这个矩阵相乘的问题。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80%E6%9A%B4%E5%8A%9B%E8%A7%A3%E6%B3%95" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80%E6%9A%B4%E5%8A%9B%E8%A7%A3%E6%B3%95">
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80%E6%9A%B4%E5%8A%9B%E8%A7%A3%E6%B3%95" id="user-content-解法一暴力解法">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -158,25 +158,24 @@
    其实，通过前面的分析，我们已经很明显的看出，两个具有相同维数的矩阵相乘，其复杂度为O(n^3)，参考代码如下：
   </p>
   <div class="highlight highlight-cpp">
-   <pre><span class="c1">//矩阵乘法，3个for循环搞定    </span>
-<span class="kt">void</span> <span class="nf">MulMatrix</span><span class="p">(</span><span class="kt">int</span><span class="o">**</span> <span class="n">matrixA</span><span class="p">,</span> <span class="kt">int</span><span class="o">**</span> <span class="n">matrixB</span><span class="p">,</span> <span class="kt">int</span><span class="o">**</span> <span class="n">matrixC</span><span class="p">)</span>    
-<span class="p">{</span>    
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>     
-    <span class="p">{</span>    
-        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>     
-        <span class="p">{</span>    
-            <span class="n">matrixC</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>    
-            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="o">++</span><span class="n">k</span><span class="p">)</span>     
-            <span class="p">{</span>    
-                <span class="n">matrixC</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">matrixA</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">matrixB</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>    
-            <span class="p">}</span>    
-        <span class="p">}</span>    
-    <span class="p">}</span>    
-<span class="p">}</span>  
-</pre>
+   <pre><span class="pl-c">//矩阵乘法，3个for循环搞定    </span>
+<span class="pl-st">void</span> <span class="pl-en">MulMatrix</span>(<span class="pl-st">int</span>** matrixA, <span class="pl-st">int</span>** matrixB, <span class="pl-st">int</span>** matrixC)    
+{    
+    <span class="pl-k">for</span>(<span class="pl-st">int</span> i = <span class="pl-c1">0</span>; i &lt; <span class="pl-c1">2</span>; ++i)     
+    {    
+        <span class="pl-k">for</span>(<span class="pl-st">int</span> j = <span class="pl-c1">0</span>; j &lt; <span class="pl-c1">2</span>; ++j)     
+        {    
+            matrixC[i][j] = <span class="pl-c1">0</span>;    
+            <span class="pl-k">for</span>(<span class="pl-st">int</span> k = <span class="pl-c1">0</span>; k &lt; <span class="pl-c1">2</span>; ++k)     
+            {    
+                matrixC[i][j] += matrixA[i][k] * matrixB[k][j];    
+            }    
+        }    
+    }    
+}  </pre>
   </div>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8Cstrassen%E7%AE%97%E6%B3%95" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8Cstrassen%E7%AE%97%E6%B3%95">
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8Cstrassen%E7%AE%97%E6%B3%95" id="user-content-解法二strassen算法">
     <span class="octicon octicon-link">
     </span>
    </a>

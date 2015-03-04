@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0b7f6f87923ad9426424470c38a307b7e83d5ca5.css" />
-  <link rel="stylesheet" href="style_cache/github2-d5b333d2db016759f0579af151c14effd2373ff4.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-fff66249e57e12b5b264967f6a4d21f8923d59247f86c4419d1e3092660fe54b.css" />
+  <link rel="stylesheet" href="style_cache/github2-27099ff875724b3da49fac6911968f783aa96ed08970c77185d963ce6c21af75.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,14 +105,14 @@
 			<html>
  <body>
   <h1>
-   <a aria-hidden="true" class="anchor" href="#%E6%A0%BC%E5%AD%90%E5%8F%96%E6%95%B0%E9%97%AE%E9%A2%98" name="user-content-%E6%A0%BC%E5%AD%90%E5%8F%96%E6%95%B0%E9%97%AE%E9%A2%98">
+   <a aria-hidden="true" class="anchor" href="#%E6%A0%BC%E5%AD%90%E5%8F%96%E6%95%B0%E9%97%AE%E9%A2%98" id="user-content-格子取数问题">
     <span class="octicon octicon-link">
     </span>
    </a>
    格子取数问题
   </h1>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+   <a aria-hidden="true" class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" id="user-content-题目描述">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -127,7 +127,7 @@
    </a>
   </p>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" id="user-content-分析与解法">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -321,70 +321,69 @@
    为了便于实现，我们认为所有不能达到的状态的得分都是负无穷，参考代码如下：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="c1">//copyright@caopengcs 2013</span>
-<span class="k">const</span> <span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">202</span><span class="p">;</span>
-<span class="k">const</span> <span class="kt">int</span> <span class="n">inf</span> <span class="o">=</span> <span class="mi">1000000000</span><span class="p">;</span>  <span class="c1">//无穷大</span>
-<span class="kt">int</span> <span class="n">dp</span><span class="p">[</span><span class="n">N</span> <span class="o">*</span> <span class="mi">2</span><span class="p">][</span><span class="n">N</span><span class="p">][</span><span class="n">N</span><span class="p">];</span>
-<span class="kt">bool</span> <span class="nf">IsValid</span><span class="p">(</span><span class="kt">int</span> <span class="n">step</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x2</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="c1">//判断状态是否合法</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">step</span> <span class="o">-</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">step</span> <span class="o">-</span> <span class="n">x2</span><span class="p">;</span>
-    <span class="k">return</span> <span class="p">((</span><span class="n">x1</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">x1</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">x2</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">x2</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">y1</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">y1</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">y2</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">y2</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">));</span>
-<span class="p">}</span>
+   <pre><span class="pl-c">//copyright@caopengcs 2013</span>
+<span class="pl-s">const</span> <span class="pl-st">int</span> N = <span class="pl-c1">202</span>;
+<span class="pl-s">const</span> <span class="pl-st">int</span> inf = <span class="pl-c1">1000000000</span>;  <span class="pl-c">//无穷大</span>
+<span class="pl-st">int</span> dp[N * <span class="pl-c1">2</span>][N][N];
+<span class="pl-st">bool</span> <span class="pl-en">IsValid</span>(<span class="pl-st">int</span> step, <span class="pl-st">int</span> x1, <span class="pl-st">int</span> x2, <span class="pl-st">int</span> n) <span class="pl-c">//判断状态是否合法</span>
+{
+    <span class="pl-st">int</span> <span class="pl-s3">y1</span> = step - x1, y2 = step - x2;
+    <span class="pl-k">return</span> ((x1 &gt;= <span class="pl-c1">0</span>) &amp;&amp; (x1 &lt; n) &amp;&amp; (x2 &gt;= <span class="pl-c1">0</span>) &amp;&amp; (x2 &lt; n) &amp;&amp; (<span class="pl-s3">y1</span> &gt;= <span class="pl-c1">0</span>) &amp;&amp; (<span class="pl-s3">y1</span> &lt; n) &amp;&amp; (y2 &gt;= <span class="pl-c1">0</span>) &amp;&amp; (y2 &lt; n));
+}
 
-<span class="kt">int</span> <span class="nf">GetValue</span><span class="p">(</span><span class="kt">int</span> <span class="n">step</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x2</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>  <span class="c1">//处理越界 不存在的位置 给负无穷的值</span>
-<span class="p">{</span>
-    <span class="k">return</span> <span class="n">IsValid</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">?</span> <span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">x1</span><span class="p">][</span><span class="n">x2</span><span class="p">]</span> <span class="o">:</span> <span class="p">(</span><span class="o">-</span><span class="n">inf</span><span class="p">);</span>
-<span class="p">}</span>
+<span class="pl-st">int</span> <span class="pl-en">GetValue</span>(<span class="pl-st">int</span> step, <span class="pl-st">int</span> x1, <span class="pl-st">int</span> x2, <span class="pl-st">int</span> n)  <span class="pl-c">//处理越界 不存在的位置 给负无穷的值</span>
+{
+    <span class="pl-k">return</span> <span class="pl-s3">IsValid</span>(step, x1, x2, n) ? dp[step][x1][x2] : (-inf);
+}
 
-<span class="c1">//状态表示dp[step][i][j] 并且i &lt;= j, 第step步  两个人分别在第i行和第j行的最大得分 时间复杂度O(n^3) 空间复杂度O(n^3)</span>
-<span class="kt">int</span> <span class="nf">MinPathSum</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="n">N</span><span class="p">][</span><span class="n">N</span><span class="p">],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">P</span> <span class="o">=</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="c1">//最终的步数</span>
-    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">step</span><span class="p">;</span>
+<span class="pl-c">//状态表示dp[step][i][j] 并且i &lt;= j, 第step步  两个人分别在第i行和第j行的最大得分 时间复杂度O(n^3) 空间复杂度O(n^3)</span>
+<span class="pl-st">int</span> <span class="pl-en">MinPathSum</span>(<span class="pl-st">int</span> a[N][N], <span class="pl-st">int</span> n)
+{
+    <span class="pl-st">int</span> P = n * <span class="pl-c1">2</span> - <span class="pl-c1">2</span>; <span class="pl-c">//最终的步数</span>
+    <span class="pl-st">int</span> i, j, step;
 
-    <span class="c1">//不能到达的位置 设置为负无穷大</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">inf</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+    <span class="pl-c">//不能到达的位置 设置为负无穷大</span>
+    <span class="pl-k">for</span> (i = <span class="pl-c1">0</span>; i &lt; n; ++i)
+    {
+        <span class="pl-k">for</span> (j = i; j &lt; n; ++j)
+        {
+            dp[<span class="pl-c1">0</span>][i][j] = -inf;
+        }
+    }
+    dp[<span class="pl-c1">0</span>][<span class="pl-c1">0</span>][<span class="pl-c1">0</span>] = a[<span class="pl-c1">0</span>][<span class="pl-c1">0</span>];
 
-    <span class="k">for</span> <span class="p">(</span><span class="n">step</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">step</span> <span class="o">&lt;=</span> <span class="n">P</span><span class="p">;</span> <span class="o">++</span><span class="n">step</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">inf</span><span class="p">;</span>
-                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">IsValid</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>   <span class="c1">//非法位置</span>
-                <span class="p">{</span>
-                    <span class="k">continue</span><span class="p">;</span>
-                <span class="p">}</span>
-                <span class="c1">//对于合法的位置进行dp</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">GetValue</span><span class="p">(</span><span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">));</span>
-                    <span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">GetValue</span><span class="p">(</span><span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span><span class="p">));</span>
-                    <span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">GetValue</span><span class="p">(</span><span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">));</span>
-                    <span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">GetValue</span><span class="p">(</span><span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span><span class="p">));</span>
-                    <span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">step</span> <span class="o">-</span> <span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">step</span> <span class="o">-</span> <span class="n">j</span><span class="p">];</span>  <span class="c1">//不在同一个格子，加两个数</span>
-                <span class="p">}</span>
-                <span class="k">else</span>
-                <span class="p">{</span>
-                    <span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">GetValue</span><span class="p">(</span><span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">));</span>
-                    <span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">GetValue</span><span class="p">(</span><span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span>  <span class="n">n</span><span class="p">));</span>
-                    <span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">GetValue</span><span class="p">(</span><span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span>  <span class="n">n</span><span class="p">));</span>
-                    <span class="n">dp</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">step</span> <span class="o">-</span> <span class="n">i</span><span class="p">];</span> <span class="c1">// 在同一个格子里，只能加一次</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">P</span><span class="p">][</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
-<span class="p">}</span>
-</pre>
+    <span class="pl-k">for</span> (step = <span class="pl-c1">1</span>; step &lt;= P; ++step)
+    {
+        <span class="pl-k">for</span> (i = <span class="pl-c1">0</span>; i &lt; n; ++i)
+        {
+            <span class="pl-k">for</span> (j = i; j &lt; n; ++j)
+            {
+                dp[step][i][j] = -inf;
+                <span class="pl-k">if</span> (!<span class="pl-s3">IsValid</span>(step, i, j, n))   <span class="pl-c">//非法位置</span>
+                {
+                    <span class="pl-k">continue</span>;
+                }
+                <span class="pl-c">//对于合法的位置进行dp</span>
+                <span class="pl-k">if</span> (i != j)
+                {
+                    dp[step][i][j] = <span class="pl-s3">max</span>(dp[step][i][j], <span class="pl-s3">GetValue</span>(step - <span class="pl-c1">1</span>, i - <span class="pl-c1">1</span>, j - <span class="pl-c1">1</span>, n));
+                    dp[step][i][j] = <span class="pl-s3">max</span>(dp[step][i][j], <span class="pl-s3">GetValue</span>(step - <span class="pl-c1">1</span>, i - <span class="pl-c1">1</span>, j, n));
+                    dp[step][i][j] = <span class="pl-s3">max</span>(dp[step][i][j], <span class="pl-s3">GetValue</span>(step - <span class="pl-c1">1</span>, i, j - <span class="pl-c1">1</span>, n));
+                    dp[step][i][j] = <span class="pl-s3">max</span>(dp[step][i][j], <span class="pl-s3">GetValue</span>(step - <span class="pl-c1">1</span>, i, j, n));
+                    dp[step][i][j] += a[i][step - i] + a[j][step - j];  <span class="pl-c">//不在同一个格子，加两个数</span>
+                }
+                <span class="pl-k">else</span>
+                {
+                    dp[step][i][j] = <span class="pl-s3">max</span>(dp[step][i][j], <span class="pl-s3">GetValue</span>(step - <span class="pl-c1">1</span>, i - <span class="pl-c1">1</span>, j - <span class="pl-c1">1</span>, n));
+                    dp[step][i][j] = <span class="pl-s3">max</span>(dp[step][i][j], <span class="pl-s3">GetValue</span>(step - <span class="pl-c1">1</span>, i - <span class="pl-c1">1</span>, j,  n));
+                    dp[step][i][j] = <span class="pl-s3">max</span>(dp[step][i][j], <span class="pl-s3">GetValue</span>(step - <span class="pl-c1">1</span>, i, j,  n));
+                    dp[step][i][j] += a[i][step - i]; <span class="pl-c">// 在同一个格子里，只能加一次</span>
+                }
+            }
+        }
+    }
+    <span class="pl-k">return</span> dp[P][n - <span class="pl-c1">1</span>][n - <span class="pl-c1">1</span>];
+}</pre>
   </div>
   <p>
    复杂度分析：状态转移最多需要统计4个变量的情况，看做是O(1)的，共有O(n^3)个状态，所以总的时间复杂度是O(n^3)的，且dp数组开了N^3大小，故其空间复杂度亦为O(n^3)。
@@ -396,7 +395,7 @@
    即我们在推算dp[step]的时候，只依靠它上一次的状态dp[step - 1]，所以dp数组的第一维，我们只开到2就可以了。即step为奇数时，我们用dp[1][i][j]表示状态，step为偶数我们用dp[0][i][j]表示状态，这样我们只需要O(n^2)的空间，这就是滚动数组的方法。滚动数组写起来并不复杂，只需要对上面的代码稍作修改即可，感兴趣的读者可以自己写代码实现下。
   </p>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
+   <a aria-hidden="true" class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" id="user-content-举一反三">
     <span class="octicon octicon-link">
     </span>
    </a>

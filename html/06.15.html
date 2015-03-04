@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0b7f6f87923ad9426424470c38a307b7e83d5ca5.css" />
-  <link rel="stylesheet" href="style_cache/github2-d5b333d2db016759f0579af151c14effd2373ff4.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-fff66249e57e12b5b264967f6a4d21f8923d59247f86c4419d1e3092660fe54b.css" />
+  <link rel="stylesheet" href="style_cache/github2-27099ff875724b3da49fac6911968f783aa96ed08970c77185d963ce6c21af75.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,7 +105,7 @@
 			<html>
  <body>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E6%9C%AC%E7%AB%A0%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E7%9A%84%E4%B9%A0%E9%A2%98" name="user-content-%E6%9C%AC%E7%AB%A0%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E7%9A%84%E4%B9%A0%E9%A2%98">
+   <a aria-hidden="true" class="anchor" href="#%E6%9C%AC%E7%AB%A0%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E7%9A%84%E4%B9%A0%E9%A2%98" id="user-content-本章海量数据的习题">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -122,7 +122,11 @@
   </p>
   <ul>
    <li>
-    先把100W个关键字hash映射到小文件，根据题意，100W*50B = 50*10^6B = 50M，而内存只有1M，故干脆搞一个hash函数 % 50，分解成50个小文件；
+    先把100W个关键字hash映射到小文件，根据题意，100W
+    <em>
+     50B = 50
+    </em>
+    10^6B = 50M，而内存只有1M，故干脆搞一个hash函数 % 50，分解成50个小文件；
    </li>
    <li>
     针对对每个小文件依次运用hashmap(key，value)完成每个key的value次数统计，后用堆找出每个小文件中value次数最大的top 10；

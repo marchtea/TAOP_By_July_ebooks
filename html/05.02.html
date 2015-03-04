@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0b7f6f87923ad9426424470c38a307b7e83d5ca5.css" />
-  <link rel="stylesheet" href="style_cache/github2-d5b333d2db016759f0579af151c14effd2373ff4.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-fff66249e57e12b5b264967f6a4d21f8923d59247f86c4419d1e3092660fe54b.css" />
+  <link rel="stylesheet" href="style_cache/github2-27099ff875724b3da49fac6911968f783aa96ed08970c77185d963ce6c21af75.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,14 +105,14 @@
 			<html>
  <body>
   <h1>
-   <a aria-hidden="true" class="anchor" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%BC%96%E8%BE%91%E8%B7%9D%E7%A6%BB" name="user-content-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%BC%96%E8%BE%91%E8%B7%9D%E7%A6%BB">
+   <a aria-hidden="true" class="anchor" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%BC%96%E8%BE%91%E8%B7%9D%E7%A6%BB" id="user-content-字符串编辑距离">
     <span class="octicon octicon-link">
     </span>
    </a>
    字符串编辑距离
   </h1>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+   <a aria-hidden="true" class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" id="user-content-题目描述">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -131,7 +131,7 @@
    写一个程序，返回最小操作数，使得对源串进行这些操作后等于目标串，源串和目标串的长度都小于2000。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" id="user-content-分析与解法">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -253,50 +253,48 @@ dp[i][k]+(j-k)
    综上，可以写出简单的DP状态方程：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="c1">//dp[i,j]表示表示源串S[0…i] 和目标串T[0…j] 的最短编辑距离</span>
-<span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span> <span class="p">{</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>  <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>  <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="mi">1</span><span class="p">)</span> <span class="p">}</span>
-<span class="c1">//分别表示：删除1个，添加1个，替换1个（相同就不用替换）。</span>
-</pre>
+   <pre><span class="pl-c">//dp[i,j]表示表示源串S[0…i] 和目标串T[0…j] 的最短编辑距离</span>
+dp[i, j] = min { dp[i - <span class="pl-c1">1</span>, j] + <span class="pl-c1">1</span>,  dp[i, j - <span class="pl-c1">1</span>] + <span class="pl-c1">1</span>,  dp[i - <span class="pl-c1">1</span>, j - <span class="pl-c1">1</span>] + (s[i] == t[j] ? <span class="pl-c1">0</span> : <span class="pl-c1">1</span>) }
+<span class="pl-c">//分别表示：删除1个，添加1个，替换1个（相同就不用替换）。</span></pre>
   </div>
   <p>
    参考代码如下：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="c1">//dp[i][j]表示源串source[0-i)和目标串target[0-j)的编辑距离</span>
-<span class="kt">int</span> <span class="nf">EditDistance</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">pSource</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pTarget</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">srcLength</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">pSource</span><span class="p">);</span>
-    <span class="kt">int</span> <span class="n">targetLength</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">pTarget</span><span class="p">);</span>
-    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
-    <span class="c1">//边界dp[i][0] = i，dp[0][j] = j  </span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">srcLength</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">targetLength</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">srcLength</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">targetLength</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">pSource</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">pTarget</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
-            <span class="p">{</span>
-                <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
-            <span class="p">}</span>
-            <span class="k">else</span>
-            <span class="p">{</span>
-                <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">min</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">srcLength</span><span class="p">][</span><span class="n">targetLength</span><span class="p">];</span>
-<span class="p">}</span>
-</pre>
+   <pre><span class="pl-c">//dp[i][j]表示源串source[0-i)和目标串target[0-j)的编辑距离</span>
+<span class="pl-st">int</span> <span class="pl-en">EditDistance</span>(<span class="pl-st">char</span> *pSource, <span class="pl-st">char</span> *pTarget)
+{
+    <span class="pl-st">int</span> srcLength = <span class="pl-s3">strlen</span>(pSource);
+    <span class="pl-st">int</span> targetLength = <span class="pl-s3">strlen</span>(pTarget);
+    <span class="pl-st">int</span> i, j;
+    <span class="pl-c">//边界dp[i][0] = i，dp[0][j] = j  </span>
+    <span class="pl-k">for</span> (i = <span class="pl-c1">1</span>; i &lt;= srcLength; ++i)
+    {
+        dp[i][<span class="pl-c1">0</span>] = i;
+    }
+    <span class="pl-k">for</span> (j = <span class="pl-c1">1</span>; j &lt;= targetLength; ++j)
+    {
+        dp[<span class="pl-c1">0</span>][j] = j;
+    }
+    <span class="pl-k">for</span> (i = <span class="pl-c1">1</span>; i &lt;= srcLength; ++i)
+    {
+        <span class="pl-k">for</span> (j = <span class="pl-c1">1</span>; j &lt;= targetLength; ++j)
+        {
+            <span class="pl-k">if</span> (pSource[i - <span class="pl-c1">1</span>] == pTarget[j - <span class="pl-c1">1</span>])
+            {
+                dp[i][j] = dp[i - <span class="pl-c1">1</span>][j - <span class="pl-c1">1</span>];
+            }
+            <span class="pl-k">else</span>
+            {
+                dp[i][j] = <span class="pl-c1">1</span> + <span class="pl-s3">min</span>(dp[i - <span class="pl-c1">1</span>][j], dp[i][j - <span class="pl-c1">1</span>]);
+            }
+        }
+    }
+    <span class="pl-k">return</span> dp[srcLength][targetLength];
+}</pre>
   </div>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
+   <a aria-hidden="true" class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" id="user-content-举一反三">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -309,7 +307,7 @@ dp[i][k]+(j-k)
    2、有一亿个数，输入一个数，找出与它编辑距离在3以内的数，比如输入6（0110），找出0010等数，数是32位的。
   </p>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95" name="user-content-%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95">
+   <a aria-hidden="true" class="anchor" href="#%E9%97%AE%E9%A2%98%E6%89%A9%E5%B1%95" id="user-content-问题扩展">
     <span class="octicon octicon-link">
     </span>
    </a>

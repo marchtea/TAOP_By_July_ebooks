@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0b7f6f87923ad9426424470c38a307b7e83d5ca5.css" />
-  <link rel="stylesheet" href="style_cache/github2-d5b333d2db016759f0579af151c14effd2373ff4.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-fff66249e57e12b5b264967f6a4d21f8923d59247f86c4419d1e3092660fe54b.css" />
+  <link rel="stylesheet" href="style_cache/github2-27099ff875724b3da49fac6911968f783aa96ed08970c77185d963ce6c21af75.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,7 +105,7 @@
 			<html>
  <body>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E6%9C%AC%E7%AB%A0%E6%95%B0%E7%BB%84%E5%92%8C%E9%98%9F%E5%88%97%E7%9A%84%E4%B9%A0%E9%A2%98" name="user-content-%E6%9C%AC%E7%AB%A0%E6%95%B0%E7%BB%84%E5%92%8C%E9%98%9F%E5%88%97%E7%9A%84%E4%B9%A0%E9%A2%98">
+   <a aria-hidden="true" class="anchor" href="#%E6%9C%AC%E7%AB%A0%E6%95%B0%E7%BB%84%E5%92%8C%E9%98%9F%E5%88%97%E7%9A%84%E4%B9%A0%E9%A2%98" id="user-content-本章数组和队列的习题">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -117,7 +117,11 @@
    </strong>
   </p>
   <p>
-   两个数组a[N]，b[N]，其中A[N]的各个元素值已知，现给b[i]赋值，b[i] = a[0]*a[1]*a[2]...*a[N-1]/a[i]；
+   两个数组a[N]，b[N]，其中A[N]的各个元素值已知，现给b[i]赋值，b[i] = a[0]
+   <em>
+    a[1]
+   </em>
+   a[2]...*a[N-1]/a[i]；
 要求：
   </p>
   <ul>
@@ -132,7 +136,23 @@
    </li>
   </ul>
   <p>
-   提示：题目要求b[i] = a[0]*a[1]*a[2]...*a[N-1]/a[i] ，相当于求：a[0]*a[1]*a[2]*a[3]...a[i-1]*a[i+1]..*a[N-1]，等价于除掉当前元素a[i]，其他所有元素(a[i]左边部分，和a[i]右边部分)的积。
+   提示：题目要求b[i] = a[0]
+   <em>
+    a[1]
+   </em>
+   a[2]...
+   <em>
+    a[N-1]/a[i] ，相当于求：a[0]
+   </em>
+   a[1]
+   <em>
+    a[2]
+   </em>
+   a[3]...a[i-1]
+   <em>
+    a[i+1]..
+   </em>
+   a[N-1]，等价于除掉当前元素a[i]，其他所有元素(a[i]左边部分，和a[i]右边部分)的积。
   </p>
   <p>
    记left[i]=∏a[k], (k=1...i-1); right=∏a[k], (k=i+1...n)，根据题目描述b[i]=left[i] * right[i]， 对于每一个b[i]初始化为1，left[i]和right[i]两部分可以分开两次相乘，即对于循环变量i=1...n, b[i]=left[i];b[n-i]=right[n-i]， 循环完成时即可完成计算。
@@ -141,21 +161,20 @@
    参考代码如下所示：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="kt">void</span> <span class="nf">Multiplication</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">output</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">length</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-        <span class="n">output</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">output</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="n">left</span><span class="p">;</span>
-        <span class="n">output</span><span class="p">[</span><span class="n">length</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*=</span> <span class="n">right</span><span class="p">;</span>
-        <span class="n">left</span> <span class="o">*=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="n">right</span> <span class="o">*=</span> <span class="n">a</span><span class="p">[</span><span class="n">length</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre>
+   <pre><span class="pl-st">void</span> <span class="pl-en">Multiplication</span>(<span class="pl-st">int</span> a[], <span class="pl-st">int</span> output[], <span class="pl-st">int</span> length)
+{
+    <span class="pl-st">int</span> left = <span class="pl-c1">1</span>;
+    <span class="pl-st">int</span> right = <span class="pl-c1">1</span>;
+    <span class="pl-k">for</span> (<span class="pl-st">int</span> i = <span class="pl-c1">0</span>; i &lt; length; i++)
+        output[i] = <span class="pl-c1">1</span>;
+    <span class="pl-k">for</span> (<span class="pl-st">int</span> i = <span class="pl-c1">0</span>; i &lt; length; i++)
+    {
+        output[i] *= left;
+        output[length - i - <span class="pl-c1">1</span>] *= right;
+        left *= a[i];
+        right *= a[length - i - <span class="pl-c1">1</span>];
+    }
+}</pre>
   </div>
   <p>
    <strong>

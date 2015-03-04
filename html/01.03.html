@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0b7f6f87923ad9426424470c38a307b7e83d5ca5.css" />
-  <link rel="stylesheet" href="style_cache/github2-d5b333d2db016759f0579af151c14effd2373ff4.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-fff66249e57e12b5b264967f6a4d21f8923d59247f86c4419d1e3092660fe54b.css" />
+  <link rel="stylesheet" href="style_cache/github2-27099ff875724b3da49fac6911968f783aa96ed08970c77185d963ce6c21af75.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,14 +105,14 @@
 			<html>
  <body>
   <h1>
-   <a aria-hidden="true" class="anchor" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%8D%A2%E6%88%90%E6%95%B4%E6%95%B0" name="user-content-%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%8D%A2%E6%88%90%E6%95%B4%E6%95%B0">
+   <a aria-hidden="true" class="anchor" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%8D%A2%E6%88%90%E6%95%B4%E6%95%B0" id="user-content-字符串转换成整数">
     <span class="octicon octicon-link">
     </span>
    </a>
    字符串转换成整数
   </h1>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+   <a aria-hidden="true" class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" id="user-content-题目描述">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -129,7 +129,7 @@
    ，实现字符串转换成整数的功能，不能使用库函数atoi。
   </p>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" id="user-content-分析与解法">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -156,18 +156,17 @@
    思路有了，你可能不假思索，写下如下代码：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="kt">int</span> <span class="nf">StrToInt</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="o">*</span><span class="n">str</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="o">*</span><span class="n">str</span> <span class="o">-</span> <span class="sc">'0'</span><span class="p">;</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">c</span><span class="p">;</span>
-        <span class="o">++</span><span class="n">str</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">n</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
+   <pre><span class="pl-st">int</span> <span class="pl-en">StrToInt</span>(<span class="pl-s">const</span> <span class="pl-st">char</span> *str)
+{
+    <span class="pl-st">int</span> n = <span class="pl-c1">0</span>;
+    <span class="pl-k">while</span> (*str != <span class="pl-c1">0</span>)
+    {
+        <span class="pl-st">int</span> c = *str - <span class="pl-s1"><span class="pl-pds">'</span>0<span class="pl-pds">'</span></span>;
+        n = n * <span class="pl-c1">10</span> + c;
+        ++str;
+    }
+    <span class="pl-k">return</span> n;
+}</pre>
   </div>
   <p>
    显然，上述代码忽略了以下细节：
@@ -213,30 +212,32 @@
    而后，你可能会编写如下代码段处理溢出问题：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="c1">//当发生正溢出时，返回INT_MAX</span>
-<span class="k">if</span> <span class="p">((</span><span class="n">sign</span> <span class="o">==</span> <span class="sc">'+'</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">c</span> <span class="o">&gt;</span> <span class="n">MAX_INT</span> <span class="o">-</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">10</span><span class="p">))</span>
-<span class="p">{</span>
+   <pre><span class="pl-c">//当发生正溢出时，返回INT_MAX</span>
+<span class="pl-k">if</span> ((sign == <span class="pl-s1"><span class="pl-pds">'</span>+<span class="pl-pds">'</span></span>) &amp;&amp; (c &gt; MAX_INT - n * <span class="pl-c1">10</span>))
+{
 
-    <span class="n">n</span> <span class="o">=</span> <span class="n">MAX_INT</span><span class="p">;</span>
-    <span class="k">break</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="c1">//发生负溢出时，返回INT_MIN</span>
-<span class="k">else</span> <span class="k">if</span> <span class="p">((</span><span class="n">sign</span> <span class="o">==</span> <span class="sc">'-'</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">c</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="n">MAX_INT</span> <span class="o">-</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">10</span><span class="p">))</span>
-<span class="p">{</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="n">MIN_INT</span><span class="p">;</span>
-    <span class="k">break</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
+    n = MAX_INT;
+    <span class="pl-k">break</span>;
+}
+<span class="pl-c">//发生负溢出时，返回INT_MIN</span>
+<span class="pl-k">else</span> <span class="pl-k">if</span> ((sign == <span class="pl-s1"><span class="pl-pds">'</span>-<span class="pl-pds">'</span></span>) &amp;&amp; (c - <span class="pl-c1">1</span> &gt; MAX_INT - n * <span class="pl-c1">10</span>))
+{
+    n = MIN_INT;
+    <span class="pl-k">break</span>;
+}</pre>
   </div>
   <p>
    但当上述代码转换"    10522545459"会出错，因为正常的话理应得到MAX_INT：2147483647，但程序运行结果将会是：1932610867。
   </p>
   <p>
-   为什么呢？因为当给定字符串"    10522545459"时，而MAX_INT是2147483647，即MAX_INT(2147483647) &lt; n*10(1052254545*10)，所以当扫描到最后一个字符‘9’的时候，执行上面的这行代码：
+   为什么呢？因为当给定字符串"    10522545459"时，而MAX_INT是2147483647，即MAX_INT(2147483647) &lt; n
+   <em>
+    10(1052254545\
+   </em>
+   10)，所以当扫描到最后一个字符‘9’的时候，执行上面的这行代码：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="n">c</span> <span class="o">&gt;</span> <span class="n">MAX_INT</span> <span class="o">-</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">10</span>
-</pre>
+   <pre>c &gt; MAX_INT - n * <span class="pl-c1">10</span></pre>
   </div>
   <p>
    已无意义，因为此时(MAX_INT - n * 10)已经小于0，程序已经出错。
@@ -281,74 +282,72 @@
    如此我们可以写出正确的处理溢出的代码：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="n">c</span> <span class="o">=</span> <span class="o">*</span><span class="n">str</span> <span class="o">-</span> <span class="sc">'0'</span><span class="p">;</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">sign</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="n">MAX_INT</span> <span class="o">/</span> <span class="mi">10</span> <span class="o">||</span> <span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="n">MAX_INT</span> <span class="o">/</span> <span class="mi">10</span> <span class="o">&amp;&amp;</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="n">MAX_INT</span> <span class="o">%</span> <span class="mi">10</span><span class="p">)))</span>
-<span class="p">{</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="n">MAX_INT</span><span class="p">;</span>
-    <span class="k">break</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">sign</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="p">(</span><span class="kt">unsigned</span><span class="p">)</span><span class="n">MIN_INT</span> <span class="o">/</span> <span class="mi">10</span> <span class="o">||</span> <span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="p">(</span><span class="kt">unsigned</span><span class="p">)</span><span class="n">MIN_INT</span> <span class="o">/</span> <span class="mi">10</span> <span class="o">&amp;&amp;</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="p">(</span><span class="kt">unsigned</span><span class="p">)</span><span class="n">MIN_INT</span> <span class="o">%</span> <span class="mi">10</span><span class="p">)))</span>
-<span class="p">{</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="n">MIN_INT</span><span class="p">;</span>
-    <span class="k">break</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
+   <pre>c = *str - <span class="pl-s1"><span class="pl-pds">'</span>0<span class="pl-pds">'</span></span>;
+<span class="pl-k">if</span> (sign &gt; <span class="pl-c1">0</span> &amp;&amp; (n &gt; MAX_INT / <span class="pl-c1">10</span> || (n == MAX_INT / <span class="pl-c1">10</span> &amp;&amp; c &gt; MAX_INT % <span class="pl-c1">10</span>)))
+{
+    n = MAX_INT;
+    <span class="pl-k">break</span>;
+}
+<span class="pl-k">else</span> <span class="pl-k">if</span> (sign &lt; <span class="pl-c1">0</span> &amp;&amp; (n &gt; (<span class="pl-st">unsigned</span>)MIN_INT / <span class="pl-c1">10</span> || (n == (<span class="pl-st">unsigned</span>)MIN_INT / <span class="pl-c1">10</span> &amp;&amp; c &gt; (<span class="pl-st">unsigned</span>)MIN_INT % <span class="pl-c1">10</span>)))
+{
+    n = MIN_INT;
+    <span class="pl-k">break</span>;
+}</pre>
   </div>
   <p>
    从而，字符串转换成整数，完整的参考代码为：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="kt">int</span> <span class="nf">StrToInt</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">str</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">static</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">MAX_INT</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)((</span><span class="kt">unsigned</span><span class="p">)</span><span class="o">~</span><span class="mi">0</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">);</span>
-    <span class="k">static</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">MIN_INT</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="kt">int</span><span class="p">)((</span><span class="kt">unsigned</span><span class="p">)</span><span class="o">~</span><span class="mi">0</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+   <pre><span class="pl-st">int</span> <span class="pl-en">StrToInt</span>(<span class="pl-s">const</span> <span class="pl-st">char</span>* str)
+{
+    <span class="pl-s">static</span> <span class="pl-s">const</span> <span class="pl-st">int</span> MAX_INT = (<span class="pl-st">int</span>)((<span class="pl-st">unsigned</span>)~<span class="pl-c1">0</span> &gt;&gt; <span class="pl-c1">1</span>);
+    <span class="pl-s">static</span> <span class="pl-s">const</span> <span class="pl-st">int</span> MIN_INT = -(<span class="pl-st">int</span>)((<span class="pl-st">unsigned</span>)~<span class="pl-c1">0</span> &gt;&gt; <span class="pl-c1">1</span>) - <span class="pl-c1">1</span>;
+    <span class="pl-st">unsigned</span> <span class="pl-st">int</span> n = <span class="pl-c1">0</span>;
 
-    <span class="c1">//判断是否输入为空</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">str</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="p">}</span>
+    <span class="pl-c">//判断是否输入为空</span>
+    <span class="pl-k">if</span> (str == <span class="pl-c1">0</span>)
+    {
+        <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+    }
 
-    <span class="c1">//处理空格</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">isspace</span><span class="p">(</span><span class="o">*</span><span class="n">str</span><span class="p">))</span>
-        <span class="o">++</span><span class="n">str</span><span class="p">;</span>
+    <span class="pl-c">//处理空格</span>
+    <span class="pl-k">while</span> (<span class="pl-s3">isspace</span>(*str))
+        ++str;
 
-    <span class="c1">//处理正负</span>
-    <span class="kt">int</span> <span class="n">sign</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">str</span> <span class="o">==</span> <span class="sc">'+'</span> <span class="o">||</span> <span class="o">*</span><span class="n">str</span> <span class="o">==</span> <span class="sc">'-'</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">str</span> <span class="o">==</span> <span class="sc">'-'</span><span class="p">)</span>
-            <span class="n">sign</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-        <span class="o">++</span><span class="n">str</span><span class="p">;</span>
-    <span class="p">}</span>
+    <span class="pl-c">//处理正负</span>
+    <span class="pl-st">int</span> sign = <span class="pl-c1">1</span>;
+    <span class="pl-k">if</span> (*str == <span class="pl-s1"><span class="pl-pds">'</span>+<span class="pl-pds">'</span></span> || *str == <span class="pl-s1"><span class="pl-pds">'</span>-<span class="pl-pds">'</span></span>)
+    {
+        <span class="pl-k">if</span> (*str == <span class="pl-s1"><span class="pl-pds">'</span>-<span class="pl-pds">'</span></span>)
+            sign = -<span class="pl-c1">1</span>;
+        ++str;
+    }
 
-    <span class="c1">//确定是数字后才执行循环</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">isdigit</span><span class="p">(</span><span class="o">*</span><span class="n">str</span><span class="p">))</span>
-    <span class="p">{</span>
-        <span class="c1">//处理溢出</span>
-        <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="o">*</span><span class="n">str</span> <span class="o">-</span> <span class="sc">'0'</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">sign</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="n">MAX_INT</span> <span class="o">/</span> <span class="mi">10</span> <span class="o">||</span> <span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="n">MAX_INT</span> <span class="o">/</span> <span class="mi">10</span> <span class="o">&amp;&amp;</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="n">MAX_INT</span> <span class="o">%</span> <span class="mi">10</span><span class="p">)))</span>
-        <span class="p">{</span>
-            <span class="n">n</span> <span class="o">=</span> <span class="n">MAX_INT</span><span class="p">;</span>
-            <span class="k">break</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">sign</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;</span><span class="p">(</span><span class="kt">unsigned</span><span class="p">)</span><span class="n">MIN_INT</span> <span class="o">/</span> <span class="mi">10</span> <span class="o">||</span> <span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="p">(</span><span class="kt">unsigned</span><span class="p">)</span><span class="n">MIN_INT</span> <span class="o">/</span> <span class="mi">10</span> <span class="o">&amp;&amp;</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="p">(</span><span class="kt">unsigned</span><span class="p">)</span><span class="n">MIN_INT</span> <span class="o">%</span> <span class="mi">10</span><span class="p">)))</span>
-        <span class="p">{</span>
-            <span class="n">n</span> <span class="o">=</span> <span class="n">MIN_INT</span><span class="p">;</span>
-            <span class="k">break</span><span class="p">;</span>
-        <span class="p">}</span>
+    <span class="pl-c">//确定是数字后才执行循环</span>
+    <span class="pl-k">while</span> (<span class="pl-s3">isdigit</span>(*str))
+    {
+        <span class="pl-c">//处理溢出</span>
+        <span class="pl-st">int</span> c = *str - <span class="pl-s1"><span class="pl-pds">'</span>0<span class="pl-pds">'</span></span>;
+        <span class="pl-k">if</span> (sign &gt; <span class="pl-c1">0</span> &amp;&amp; (n &gt; MAX_INT / <span class="pl-c1">10</span> || (n == MAX_INT / <span class="pl-c1">10</span> &amp;&amp; c &gt; MAX_INT % <span class="pl-c1">10</span>)))
+        {
+            n = MAX_INT;
+            <span class="pl-k">break</span>;
+        }
+        <span class="pl-k">else</span> <span class="pl-k">if</span> (sign &lt; <span class="pl-c1">0</span> &amp;&amp; (n &gt;(<span class="pl-st">unsigned</span>)MIN_INT / <span class="pl-c1">10</span> || (n == (<span class="pl-st">unsigned</span>)MIN_INT / <span class="pl-c1">10</span> &amp;&amp; c &gt; (<span class="pl-st">unsigned</span>)MIN_INT % <span class="pl-c1">10</span>)))
+        {
+            n = MIN_INT;
+            <span class="pl-k">break</span>;
+        }
 
-        <span class="c1">//把之前得到的数字乘以10，再加上当前字符表示的数字。</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">c</span><span class="p">;</span>
-        <span class="o">++</span><span class="n">str</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">sign</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="nl">n</span> <span class="p">:</span> <span class="o">-</span><span class="n">n</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
+        <span class="pl-c">//把之前得到的数字乘以10，再加上当前字符表示的数字。</span>
+        n = n * <span class="pl-c1">10</span> + c;
+        ++str;
+    }
+    <span class="pl-k">return</span> sign &gt; <span class="pl-c1">0</span> ? n : -n;
+}</pre>
   </div>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
+   <a aria-hidden="true" class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" id="user-content-举一反三">
     <span class="octicon octicon-link">
     </span>
    </a>

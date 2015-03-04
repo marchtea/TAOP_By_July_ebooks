@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0b7f6f87923ad9426424470c38a307b7e83d5ca5.css" />
-  <link rel="stylesheet" href="style_cache/github2-d5b333d2db016759f0579af151c14effd2373ff4.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-fff66249e57e12b5b264967f6a4d21f8923d59247f86c4419d1e3092660fe54b.css" />
+  <link rel="stylesheet" href="style_cache/github2-27099ff875724b3da49fac6911968f783aa96ed08970c77185d963ce6c21af75.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,7 +105,7 @@
 			<html>
  <body>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E6%9C%AC%E7%AB%A0%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E9%93%BE%E8%A1%A8%E7%9A%84%E4%B9%A0%E9%A2%98" name="user-content-%E6%9C%AC%E7%AB%A0%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E9%93%BE%E8%A1%A8%E7%9A%84%E4%B9%A0%E9%A2%98">
+   <a aria-hidden="true" class="anchor" href="#%E6%9C%AC%E7%AB%A0%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E9%93%BE%E8%A1%A8%E7%9A%84%E4%B9%A0%E9%A2%98" id="user-content-本章字符串和链表的习题">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -499,37 +499,36 @@
    </strong>
   </p>
   <p>
-   已知memcpy的函数为： void* memcpy(void
-   <em>
-    dest , const void
-   </em>
-   src , size_t count)其中dest是目的指针，src是源指针。不调用c++/c的memcpy库函数，请编写memcpy。
+   已知memcpy的函数为：
+   <code>
+    void* memcpy(void* dest , const void* src , size_t count)
+   </code>
+   其中dest是目的指针，src是源指针。不调用c++/c的memcpy库函数，请编写memcpy。
   </p>
   <p>
    分析：参考代码如下：
   </p>
   <div class="highlight highlight-cpp">
-   <pre><span class="kt">void</span><span class="o">*</span> <span class="nf">memcpy</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">dst</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">src</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">count</span><span class="p">)</span>      
-<span class="p">{</span>      
-    <span class="c1">//安全检查  </span>
-    <span class="n">assert</span><span class="p">(</span> <span class="p">(</span><span class="n">dst</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">src</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">);</span>      
+   <pre><span class="pl-st">void</span>* <span class="pl-en">memcpy</span>(<span class="pl-st">void</span> *dst, <span class="pl-s">const</span> <span class="pl-st">void</span> *src, <span class="pl-s3">size_t</span> count)      
+{      
+    <span class="pl-c">//安全检查  </span>
+    <span class="pl-s3">assert</span>( (dst != <span class="pl-c1">NULL</span>) &amp;&amp; (src != <span class="pl-c1">NULL</span>) );      
 
-    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pdst</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">dst</span><span class="p">;</span>      
-    <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">psrc</span> <span class="o">=</span> <span class="p">(</span><span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">src</span><span class="p">;</span>      
+    <span class="pl-st">unsigned</span> <span class="pl-st">char</span> *pdst = (<span class="pl-st">unsigned</span> <span class="pl-st">char</span> *)dst;      
+    <span class="pl-s">const</span> <span class="pl-st">unsigned</span> <span class="pl-st">char</span> *psrc = (<span class="pl-s">const</span> <span class="pl-st">unsigned</span> <span class="pl-st">char</span> *)src;      
 
-    <span class="c1">//防止内存重复  </span>
-    <span class="n">assert</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">psrc</span><span class="o">&lt;=</span><span class="n">pdst</span> <span class="o">&amp;&amp;</span> <span class="n">pdst</span><span class="o">&lt;</span><span class="n">psrc</span><span class="o">+</span><span class="n">count</span><span class="p">));</span>      
-    <span class="n">assert</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">pdst</span><span class="o">&lt;=</span><span class="n">psrc</span> <span class="o">&amp;&amp;</span> <span class="n">psrc</span><span class="o">&lt;</span><span class="n">pdst</span><span class="o">+</span><span class="n">count</span><span class="p">));</span>      
+    <span class="pl-c">//防止内存重复  </span>
+    <span class="pl-s3">assert</span>(!(psrc&lt;=pdst &amp;&amp; pdst&lt;psrc+count));      
+    <span class="pl-s3">assert</span>(!(pdst&lt;=psrc &amp;&amp; psrc&lt;pdst+count));      
 
-    <span class="k">while</span><span class="p">(</span><span class="n">count</span><span class="o">--</span><span class="p">)</span>      
-    <span class="p">{</span>      
-        <span class="o">*</span><span class="n">pdst</span> <span class="o">=</span> <span class="o">*</span><span class="n">psrc</span><span class="p">;</span>      
-        <span class="n">pdst</span><span class="o">++</span><span class="p">;</span>      
-        <span class="n">psrc</span><span class="o">++</span><span class="p">;</span>      
-    <span class="p">}</span>      
-    <span class="k">return</span> <span class="n">dst</span><span class="p">;</span>      
-<span class="p">}</span>    
-</pre>
+    <span class="pl-k">while</span>(count--)      
+    {      
+        *pdst = *psrc;      
+        pdst++;      
+        psrc++;      
+    }      
+    <span class="pl-k">return</span> dst;      
+}    </pre>
   </div>
   <p>
    <strong>
@@ -546,32 +545,31 @@
    参考代码如下：
   </p>
   <div class="highlight highlight-cpp">
-   <pre><span class="c1">//void * memmove ( void * destination, const void * source, size_t num );)  </span>
- <span class="kt">void</span><span class="o">*</span> <span class="nf">memmove</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">dest</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">source</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">count</span><span class="p">)</span>  
-   <span class="p">{</span>  
+   <pre><span class="pl-c">//void * memmove ( void * destination, const void * source, size_t num );)  </span>
+ <span class="pl-st">void</span>* <span class="pl-en">memmove</span>(<span class="pl-st">void</span>* dest, <span class="pl-st">void</span>* source, <span class="pl-s3">size_t</span> count)  
+   {  
 
-      <span class="kt">void</span><span class="o">*</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">dest</span><span class="p">;</span>  
+      <span class="pl-st">void</span>* ret = dest;  
 
-      <span class="k">if</span> <span class="p">(</span><span class="n">dest</span> <span class="o">&lt;=</span> <span class="n">source</span> <span class="o">||</span> <span class="n">dest</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="n">source</span> <span class="o">+</span> <span class="n">count</span><span class="p">))</span>  
-       <span class="p">{</span>  
-          <span class="c1">//正向拷贝  </span>
-         <span class="c1">//copy from lower addresses to higher addresses  </span>
-         <span class="k">while</span> <span class="p">(</span><span class="n">count</span> <span class="o">--</span><span class="p">)</span>  
-             <span class="o">*</span><span class="n">dest</span><span class="o">++</span> <span class="o">=</span> <span class="o">*</span><span class="n">source</span><span class="o">++</span><span class="p">;</span>  
-     <span class="p">}</span>  
-     <span class="k">else</span>  
-     <span class="p">{</span>  
-         <span class="c1">//反向拷贝  </span>
-         <span class="c1">//copy from higher addresses to lower addresses  </span>
-         <span class="n">dest</span> <span class="o">+=</span> <span class="n">count</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>  
-         <span class="n">source</span> <span class="o">+=</span> <span class="n">count</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>  
+      <span class="pl-k">if</span> (dest &lt;= source || dest &gt;= (source + count))  
+       {  
+          <span class="pl-c">//正向拷贝  </span>
+         <span class="pl-c">//copy from lower addresses to higher addresses  </span>
+         <span class="pl-k">while</span> (count --)  
+             *dest++ = *source++;  
+     }  
+     <span class="pl-k">else</span>  
+     {  
+         <span class="pl-c">//反向拷贝  </span>
+         <span class="pl-c">//copy from higher addresses to lower addresses  </span>
+         dest += count - <span class="pl-c1">1</span>;  
+         source += count - <span class="pl-c1">1</span>;  
 
-         <span class="k">while</span> <span class="p">(</span><span class="n">count</span><span class="o">--</span><span class="p">)</span>  
-             <span class="o">*</span><span class="n">dest</span><span class="o">--</span> <span class="o">=</span> <span class="o">*</span><span class="n">source</span><span class="o">--</span><span class="p">;</span>  
-     <span class="p">}</span>  
-     <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>  
- <span class="p">}</span>  
-</pre>
+         <span class="pl-k">while</span> (count--)  
+             *dest-- = *source--;  
+     }  
+     <span class="pl-k">return</span> ret;  
+ }  </pre>
   </div>
  </body>
 </html>

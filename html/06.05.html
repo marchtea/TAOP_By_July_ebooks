@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0b7f6f87923ad9426424470c38a307b7e83d5ca5.css" />
-  <link rel="stylesheet" href="style_cache/github2-d5b333d2db016759f0579af151c14effd2373ff4.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-fff66249e57e12b5b264967f6a4d21f8923d59247f86c4419d1e3092660fe54b.css" />
+  <link rel="stylesheet" href="style_cache/github2-27099ff875724b3da49fac6911968f783aa96ed08970c77185d963ce6c21af75.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,14 +105,14 @@
 			<html>
  <body>
   <h1>
-   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E5%A4%84%E7%90%86%E4%B9%8Bmapreduce" name="user-content-%E5%88%86%E5%B8%83%E5%BC%8F%E5%A4%84%E7%90%86%E4%B9%8Bmapreduce">
+   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E5%A4%84%E7%90%86%E4%B9%8Bmapreduce" id="user-content-分布式处理之mapreduce">
     <span class="octicon octicon-link">
     </span>
    </a>
    分布式处理之MapReduce
   </h1>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D" name="user-content-%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D">
+   <a aria-hidden="true" class="anchor" href="#%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D" id="user-content-方法介绍">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -128,7 +128,7 @@
    基本原理及要点：将数据交给不同的机器去处理，数据划分，结果归约。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84" name="user-content-%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84">
+   <a aria-hidden="true" class="anchor" href="#%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84" id="user-content-基础架构">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -156,7 +156,7 @@
    。下面，咱们可以依次深入学习和了解MapReduce和hadoop这两个东西了。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#mapreduce%E6%A8%A1%E5%BC%8F" name="user-content-mapreduce%E6%A8%A1%E5%BC%8F">
+   <a aria-hidden="true" class="anchor" href="#mapreduce%E6%A8%A1%E5%BC%8F" id="user-content-mapreduce模式">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -196,7 +196,7 @@
    如上图所示，其中map阶段，当map task开始运算，并产生中间数据后并非直接而简单的写入磁盘，它首先利用内存buffer来对已经产生的buffer进行缓存，并在内存buffer中进行一些预排序来优化整个map的性能。而上图右边的reduce阶段则经历了三个阶段，分别Copy-&gt;Sort-&gt;reduce。我们能明显的看出，其中的Sort是采用的归并排序，即merge sort。
   </p>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B" name="user-content-%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B">
+   <a aria-hidden="true" class="anchor" href="#%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B" id="user-content-问题实例">
     <span class="octicon octicon-link">
     </span>
    </a>

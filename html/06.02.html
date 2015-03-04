@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0b7f6f87923ad9426424470c38a307b7e83d5ca5.css" />
-  <link rel="stylesheet" href="style_cache/github2-d5b333d2db016759f0579af151c14effd2373ff4.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-fff66249e57e12b5b264967f6a4d21f8923d59247f86c4419d1e3092660fe54b.css" />
+  <link rel="stylesheet" href="style_cache/github2-27099ff875724b3da49fac6911968f783aa96ed08970c77185d963ce6c21af75.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,14 +105,14 @@
 			<html>
  <body>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E8%80%8C%E6%B2%BB%E4%B9%8B" name="user-content-%E5%88%86%E8%80%8C%E6%B2%BB%E4%B9%8B">
+   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E8%80%8C%E6%B2%BB%E4%B9%8B" id="user-content-分而治之">
     <span class="octicon octicon-link">
     </span>
    </a>
    分而治之
   </h2>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D" name="user-content-%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D">
+   <a aria-hidden="true" class="anchor" href="#%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D" id="user-content-方法介绍">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -125,7 +125,7 @@
    那什么是hash映射呢？简单来说，就是为了便于计算机在有限的内存中处理big数据，我们通过一种映射散列的方式让数据均匀分布在对应的内存位置(如大数据通过取余的方式映射成小数存放在内存中，或大文件映射成多个小文件)，而这个映射散列方式便是我们通常所说的hash函数，设计的好的hash函数能让数据均匀分布而减少冲突。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B" name="user-content-%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B">
+   <a aria-hidden="true" class="anchor" href="#%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B" id="user-content-问题实例">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -234,7 +234,11 @@
    </li>
   </ul>
   <p>
-   关于第2步堆排序，可以维护k个元素的最小堆，即用容量为k的最小堆存储最先遍历到的k个数，并假设它们即是最大的k个数，建堆费时O（k），并调整堆(费时O(logk))后，有k1&gt;k2&gt;...kmin（kmin设为小顶堆中最小元素）。继续遍历数列，每次遍历一个元素x，与堆顶元素比较，若x&gt;kmin，则更新堆（x入堆，用时logk），否则不更新堆。这样下来，总费时O（k*logk+（n-k）*logk）=O（n*logk）。此方法得益于在堆中，查找等各项操作时间复杂度均为logk。
+   关于第2步堆排序，可以维护k个元素的最小堆，即用容量为k的最小堆存储最先遍历到的k个数，并假设它们即是最大的k个数，建堆费时O（k），并调整堆(费时O(logk))后，有k1&gt;k2&gt;...kmin（kmin设为小顶堆中最小元素）。继续遍历数列，每次遍历一个元素x，与堆顶元素比较，若x&gt;kmin，则更新堆（x入堆，用时logk），否则不更新堆。这样下来，总费时O（k
+   <em>
+    logk+（n-k）
+   </em>
+   logk）=O（n*logk）。此方法得益于在堆中，查找等各项操作时间复杂度均为logk。
   </p>
   <p>
    当然，你也可以采用trie树，关键字域存该查询串出现的次数，没有出现为0。最后用10个元素的最小推来对出现频率进行排序。
@@ -472,7 +476,7 @@
    ：在前面的题中，我们已经提到了，用一个含100个元素的最小堆完成。复杂度为O(100万*lg100)。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
+   <a aria-hidden="true" class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" id="user-content-举一反三">
     <span class="octicon octicon-link">
     </span>
    </a>

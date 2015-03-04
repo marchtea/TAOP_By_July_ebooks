@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0b7f6f87923ad9426424470c38a307b7e83d5ca5.css" />
-  <link rel="stylesheet" href="style_cache/github2-d5b333d2db016759f0579af151c14effd2373ff4.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-fff66249e57e12b5b264967f6a4d21f8923d59247f86c4419d1e3092660fe54b.css" />
+  <link rel="stylesheet" href="style_cache/github2-27099ff875724b3da49fac6911968f783aa96ed08970c77185d963ce6c21af75.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,14 +105,14 @@
 			<html>
  <body>
   <h1>
-   <a aria-hidden="true" class="anchor" href="#%E5%AF%BB%E6%89%BE%E6%9C%80%E5%B0%8F%E7%9A%84k%E4%B8%AA%E6%95%B0" name="user-content-%E5%AF%BB%E6%89%BE%E6%9C%80%E5%B0%8F%E7%9A%84k%E4%B8%AA%E6%95%B0">
+   <a aria-hidden="true" class="anchor" href="#%E5%AF%BB%E6%89%BE%E6%9C%80%E5%B0%8F%E7%9A%84k%E4%B8%AA%E6%95%B0" id="user-content-寻找最小的k个数">
     <span class="octicon octicon-link">
     </span>
    </a>
    寻找最小的k个数
   </h1>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+   <a aria-hidden="true" class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" id="user-content-题目描述">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -122,14 +122,14 @@
    输入n个整数，输出其中最小的k个。
   </p>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" id="user-content-分析与解法">
     <span class="octicon octicon-link">
     </span>
    </a>
    分析与解法
   </h2>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" id="user-content-解法一">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -150,7 +150,7 @@
    。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" name="user-content-%E8%A7%A3%E6%B3%95%E4%BA%8C">
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C" id="user-content-解法二">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -194,7 +194,7 @@
    。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%89" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%89">
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%89" id="user-content-解法三">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -234,7 +234,7 @@
    。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%9B%9B" name="user-content-%E8%A7%A3%E6%B3%95%E5%9B%9B">
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%9B%9B" id="user-content-解法四">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -270,38 +270,37 @@
    示例代码如下：
   </p>
   <div class="highlight highlight-cpp">
-   <pre><span class="c1">//QuickSelect 将第k小的元素放在 a[k-1]  </span>
-<span class="kt">void</span> <span class="nf">QuickSelect</span><span class="p">(</span> <span class="kt">int</span> <span class="n">a</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span> <span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">pivot</span><span class="p">;</span>
+   <pre><span class="pl-c">//QuickSelect 将第k小的元素放在 a[k-1]  </span>
+<span class="pl-st">void</span> <span class="pl-en">QuickSelect</span>( <span class="pl-st">int</span> a[], <span class="pl-st">int</span> k, <span class="pl-st">int</span> left, <span class="pl-st">int</span> right )
+{
+    <span class="pl-st">int</span> i, j;
+    <span class="pl-st">int</span> pivot;
 
-    <span class="k">if</span><span class="p">(</span> <span class="n">left</span> <span class="o">+</span> <span class="n">cutoff</span> <span class="o">&lt;=</span> <span class="n">right</span> <span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">pivot</span> <span class="o">=</span> <span class="n">median3</span><span class="p">(</span> <span class="n">a</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="p">);</span>
-        <span class="c1">//取三数中值作为枢纽元，可以很大程度上避免最坏情况</span>
-        <span class="n">i</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span> <span class="n">j</span> <span class="o">=</span> <span class="n">right</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="k">for</span><span class="p">(</span> <span class="p">;</span> <span class="p">;</span> <span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">while</span><span class="p">(</span> <span class="n">a</span><span class="p">[</span> <span class="o">++</span><span class="n">i</span> <span class="p">]</span> <span class="o">&lt;</span> <span class="n">pivot</span> <span class="p">){</span> <span class="p">}</span>
-            <span class="k">while</span><span class="p">(</span> <span class="n">a</span><span class="p">[</span> <span class="o">--</span><span class="n">j</span> <span class="p">]</span> <span class="o">&gt;</span> <span class="n">pivot</span> <span class="p">){</span> <span class="p">}</span>
-            <span class="k">if</span><span class="p">(</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span> <span class="p">)</span>
-                <span class="n">swap</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span> <span class="n">i</span> <span class="p">],</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span> <span class="n">j</span> <span class="p">]</span> <span class="p">);</span>
-            <span class="k">else</span>
-                <span class="k">break</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="c1">//重置枢纽元</span>
-        <span class="n">swap</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span> <span class="n">i</span> <span class="p">],</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span> <span class="n">right</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">]</span> <span class="p">);</span>  
+    <span class="pl-k">if</span>( left + cutoff &lt;= right )
+    {
+        pivot = <span class="pl-s3">median3</span>( a, left, right );
+        <span class="pl-c">//取三数中值作为枢纽元，可以很大程度上避免最坏情况</span>
+        i = left; j = right - <span class="pl-c1">1</span>;
+        <span class="pl-k">for</span>( ; ; )
+        {
+            <span class="pl-k">while</span>( a[ ++i ] &lt; pivot ){ }
+            <span class="pl-k">while</span>( a[ --j ] &gt; pivot ){ }
+            <span class="pl-k">if</span>( i &lt; j )
+                <span class="pl-s3">swap</span>( &amp;a[ i ], &amp;a[ j ] );
+            <span class="pl-k">else</span>
+                <span class="pl-k">break</span>;
+        }
+        <span class="pl-c">//重置枢纽元</span>
+        <span class="pl-s3">swap</span>( &amp;a[ i ], &amp;a[ right - <span class="pl-c1">1</span> ] );  
 
-        <span class="k">if</span><span class="p">(</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="p">)</span>
-            <span class="n">QuickSelect</span><span class="p">(</span> <span class="n">a</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">);</span>
-        <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">)</span>
-            <span class="n">QuickSelect</span><span class="p">(</span> <span class="n">a</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">right</span> <span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">else</span>  
-        <span class="n">InsertSort</span><span class="p">(</span> <span class="n">a</span> <span class="o">+</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">);</span>
-<span class="p">}</span>
-
+        <span class="pl-k">if</span>( k &lt;= i )
+            <span class="pl-s3">QuickSelect</span>( a, k, left, i - <span class="pl-c1">1</span> );
+        <span class="pl-k">else</span> <span class="pl-k">if</span>( k &gt; i + <span class="pl-c1">1</span> )
+            <span class="pl-s3">QuickSelect</span>( a, k, i + <span class="pl-c1">1</span>, right );
+    }
+    <span class="pl-k">else</span>  
+        <span class="pl-s3">InsertSort</span>( a + left, right - left + <span class="pl-c1">1</span> );
+}
 </pre>
   </div>
   <p>
@@ -315,7 +314,7 @@
    更进一步，《算法导论》第9章第9.3节介绍了一个最坏情况下亦为O(n)时间的SELECT算法，有兴趣的读者可以参看。
   </p>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
+   <a aria-hidden="true" class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" id="user-content-举一反三">
     <span class="octicon octicon-link">
     </span>
    </a>

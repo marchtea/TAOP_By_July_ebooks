@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0b7f6f87923ad9426424470c38a307b7e83d5ca5.css" />
-  <link rel="stylesheet" href="style_cache/github2-d5b333d2db016759f0579af151c14effd2373ff4.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-fff66249e57e12b5b264967f6a4d21f8923d59247f86c4419d1e3092660fe54b.css" />
+  <link rel="stylesheet" href="style_cache/github2-27099ff875724b3da49fac6911968f783aa96ed08970c77185d963ce6c21af75.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,7 +105,7 @@
 			<html>
  <body>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E6%95%99%E4%BD%A0%E4%B8%80%E6%AD%A5%E4%B8%80%E6%AD%A5%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0sift%E7%AE%97%E6%B3%95%E4%B8%8A" name="user-content-%E6%95%99%E4%BD%A0%E4%B8%80%E6%AD%A5%E4%B8%80%E6%AD%A5%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0sift%E7%AE%97%E6%B3%95%E4%B8%8A">
+   <a aria-hidden="true" class="anchor" href="#%E6%95%99%E4%BD%A0%E4%B8%80%E6%AD%A5%E4%B8%80%E6%AD%A5%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0sift%E7%AE%97%E6%B3%95%E4%B8%8A" id="user-content-教你一步一步用c语言实现sift算法上">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -119,7 +119,7 @@
    条件：c语言实现。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E5%BC%95%E8%A8%80" name="user-content-%E5%BC%95%E8%A8%80">
+   <a aria-hidden="true" class="anchor" href="#%E5%BC%95%E8%A8%80" id="user-content-引言">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -180,7 +180,7 @@
    </a>
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#sift%E7%AE%97%E6%B3%95%E7%9A%84%E6%AD%A5%E9%AA%A4" name="user-content-sift%E7%AE%97%E6%B3%95%E7%9A%84%E6%AD%A5%E9%AA%A4">
+   <a aria-hidden="true" class="anchor" href="#sift%E7%AE%97%E6%B3%95%E7%9A%84%E6%AD%A5%E9%AA%A4" id="user-content-sift算法的步骤">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -202,7 +202,7 @@
    以下是sift算法的五个步骤：
   </p>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#%E4%B8%80%E5%BB%BA%E7%AB%8B%E5%9B%BE%E5%83%8F%E5%B0%BA%E5%BA%A6%E7%A9%BA%E9%97%B4%E6%88%96%E9%AB%98%E6%96%AF%E9%87%91%E5%AD%97%E5%A1%94%E5%B9%B6%E6%A3%80%E6%B5%8B%E6%9E%81%E5%80%BC%E7%82%B9" name="user-content-%E4%B8%80%E5%BB%BA%E7%AB%8B%E5%9B%BE%E5%83%8F%E5%B0%BA%E5%BA%A6%E7%A9%BA%E9%97%B4%E6%88%96%E9%AB%98%E6%96%AF%E9%87%91%E5%AD%97%E5%A1%94%E5%B9%B6%E6%A3%80%E6%B5%8B%E6%9E%81%E5%80%BC%E7%82%B9">
+   <a aria-hidden="true" class="anchor" href="#%E4%B8%80%E5%BB%BA%E7%AB%8B%E5%9B%BE%E5%83%8F%E5%B0%BA%E5%BA%A6%E7%A9%BA%E9%97%B4%E6%88%96%E9%AB%98%E6%96%AF%E9%87%91%E5%AD%97%E5%A1%94%E5%B9%B6%E6%A3%80%E6%B5%8B%E6%9E%81%E5%80%BC%E7%82%B9" id="user-content-一建立图像尺度空间或高斯金字塔并检测极值点">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -306,7 +306,7 @@ D(x,y,e) = ((G(x,y,ke) - G(x,y,e)) * I(x,y) = L(x,y,ke) - L(x,y,e)
    SIFT的精妙之处在于采用图像金字塔的方法解决这一问题，我们可以把两幅图像想象成是连续的，分别以它们作为底面作四棱锥，就像金字塔，那么每一个 截面与原图像相似，那么两个金字塔中必然会有包含大小一致的物体的无穷个截面，但应用只能是离散的，所以我们只能构造有限层，层数越多当然越好，但处理时 间会相应增加，层数太少不行，因为向下采样的截面中可能找不到尺寸大小一致的两个物体的图像。
   </p>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#%E5%92%B1%E4%BB%AC%E5%86%8D%E6%9D%A5%E5%85%B7%E4%BD%93%E9%98%90%E8%BF%B0%E4%B8%8B%E6%9E%84%E9%80%A0dxye%E7%9A%84%E8%AF%A6%E7%BB%86%E6%AD%A5%E9%AA%A4" name="user-content-%E5%92%B1%E4%BB%AC%E5%86%8D%E6%9D%A5%E5%85%B7%E4%BD%93%E9%98%90%E8%BF%B0%E4%B8%8B%E6%9E%84%E9%80%A0dxye%E7%9A%84%E8%AF%A6%E7%BB%86%E6%AD%A5%E9%AA%A4">
+   <a aria-hidden="true" class="anchor" href="#%E5%92%B1%E4%BB%AC%E5%86%8D%E6%9D%A5%E5%85%B7%E4%BD%93%E9%98%90%E8%BF%B0%E4%B8%8B%E6%9E%84%E9%80%A0dxye%E7%9A%84%E8%AF%A6%E7%BB%86%E6%AD%A5%E9%AA%A4" id="user-content-咱们再来具体阐述下构造dxye的详细步骤">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -352,7 +352,7 @@ D(x,y,e) = ((G(x,y,ke) - G(x,y,e)) * I(x,y) = L(x,y,ke) - L(x,y,e)
    </li>
   </ol>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#%E4%BA%8C%E6%A3%80%E6%B5%8B%E5%85%B3%E9%94%AE%E7%82%B9" name="user-content-%E4%BA%8C%E6%A3%80%E6%B5%8B%E5%85%B3%E9%94%AE%E7%82%B9">
+   <a aria-hidden="true" class="anchor" href="#%E4%BA%8C%E6%A3%80%E6%B5%8B%E5%85%B3%E9%94%AE%E7%82%B9" id="user-content-二检测关键点">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -373,7 +373,7 @@ D(x,y,e) = ((G(x,y,ke) - G(x,y,e)) * I(x,y) = L(x,y,ke) - L(x,y,e)
    当然这样产生的极值点并不都是稳定的特征点，因为某些极值点响应较弱，而且DOG算子会产生较强的边缘响应。
   </p>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#%E4%B8%89%E5%85%B3%E9%94%AE%E7%82%B9%E6%96%B9%E5%90%91%E7%9A%84%E5%88%86%E9%85%8D" name="user-content-%E4%B8%89%E5%85%B3%E9%94%AE%E7%82%B9%E6%96%B9%E5%90%91%E7%9A%84%E5%88%86%E9%85%8D">
+   <a aria-hidden="true" class="anchor" href="#%E4%B8%89%E5%85%B3%E9%94%AE%E7%82%B9%E6%96%B9%E5%90%91%E7%9A%84%E5%88%86%E9%85%8D" id="user-content-三关键点方向的分配">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -411,7 +411,7 @@ D(x,y,e) = ((G(x,y,ke) - G(x,y,e)) * I(x,y) = L(x,y,ke) - L(x,y,e)
    至此，图像的关键点已检测完毕，每个关键点有三个信息：位置、所处尺度、方向。由此可以确定一个SIFT特征区域。
   </p>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#%E5%9B%9B%E7%89%B9%E5%BE%81%E7%82%B9%E6%8F%8F%E8%BF%B0%E7%AC%A6" name="user-content-%E5%9B%9B%E7%89%B9%E5%BE%81%E7%82%B9%E6%8F%8F%E8%BF%B0%E7%AC%A6">
+   <a aria-hidden="true" class="anchor" href="#%E5%9B%9B%E7%89%B9%E5%BE%81%E7%82%B9%E6%8F%8F%E8%BF%B0%E7%AC%A6" id="user-content-四特征点描述符">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -441,7 +441,7 @@ D(x,y,e) = ((G(x,y,ke) - G(x,y,e)) * I(x,y) = L(x,y,ke) - L(x,y,e)
    实际计算过程中，为了增强匹配的稳健性，Lowe建议对每个关键点使用4×4共16个种子点来描述，这样对于一个关键点就可以产生128个数据，即最终形成128维的SIFT特征向量。此时SIFT特征向量已经去除了尺度变化、旋转等几何变形因素的影响，再继续将特征向量的长度归一化，则可以进一步去除光照变化的影响。
   </p>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#%E4%BA%94%E6%9C%80%E5%90%8E%E4%B8%80%E6%AD%A5" name="user-content-%E4%BA%94%E6%9C%80%E5%90%8E%E4%B8%80%E6%AD%A5">
+   <a aria-hidden="true" class="anchor" href="#%E4%BA%94%E6%9C%80%E5%90%8E%E4%B8%80%E6%AD%A5" id="user-content-五最后一步">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -463,7 +463,7 @@ D(x,y,e) = ((G(x,y,ke) - G(x,y,e)) * I(x,y) = L(x,y,ke) - L(x,y,e)
    。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#sift%E7%AE%97%E6%B3%95%E7%9A%84%E9%80%90%E6%AD%A5c%E5%AE%9E%E7%8E%B0" name="user-content-sift%E7%AE%97%E6%B3%95%E7%9A%84%E9%80%90%E6%AD%A5c%E5%AE%9E%E7%8E%B0">
+   <a aria-hidden="true" class="anchor" href="#sift%E7%AE%97%E6%B3%95%E7%9A%84%E9%80%90%E6%AD%A5c%E5%AE%9E%E7%8E%B0" id="user-content-sift算法的逐步c实现">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -476,7 +476,7 @@ D(x,y,e) = ((G(x,y,ke) - G(x,y,e)) * I(x,y) = L(x,y,ke) - L(x,y,e)
    yeah，请看：
   </p>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#%E5%89%8D%E6%9C%9F%E5%B7%A5%E4%BD%9C" name="user-content-%E5%89%8D%E6%9C%9F%E5%B7%A5%E4%BD%9C">
+   <a aria-hidden="true" class="anchor" href="#%E5%89%8D%E6%9C%9F%E5%B7%A5%E4%BD%9C" id="user-content-前期工作">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -491,30 +491,29 @@ D(x,y,e) = ((G(x,y,ke) - G(x,y,e)) * I(x,y) = L(x,y,ke) - L(x,y,e)
      头文件：
     </p>
     <div class="highlight highlight-c">
-     <pre><span class="cp">#ifdef _CH_  </span>
-<span class="cp">#pragma package &lt;opencv&gt;  </span>
-<span class="cp">#endif  </span>
+     <pre>#<span class="pl-k">ifdef</span> _CH_  
+#<span class="pl-k">pragma</span> package &lt;opencv&gt;  
+#<span class="pl-k">endif</span>  
 
-<span class="cp">#ifndef _EiC  </span>
-<span class="cp">#include &lt;stdio.h&gt;  </span>
+#<span class="pl-k">ifndef</span> _EiC  
+#<span class="pl-k">include</span> <span class="pl-s1"><span class="pl-pds">&lt;</span>stdio.h<span class="pl-pds">&gt;</span></span>  
 
-<span class="cp">#include "stdlib.h"  </span>
-<span class="cp">#include "string.h"   </span>
-<span class="cp">#include "malloc.h"   </span>
-<span class="cp">#include "math.h"   </span>
-<span class="cp">#include &lt;assert.h&gt;  </span>
-<span class="cp">#include &lt;ctype.h&gt;  </span>
-<span class="cp">#include &lt;time.h&gt;  </span>
-<span class="cp">#include &lt;cv.h&gt;  </span>
-<span class="cp">#include &lt;cxcore.h&gt;  </span>
-<span class="cp">#include &lt;highgui.h&gt;  </span>
-<span class="cp">#include &lt;vector&gt;  </span>
-<span class="cp">#endif  </span>
+#<span class="pl-k">include</span> <span class="pl-s1"><span class="pl-pds">"</span>stdlib.h<span class="pl-pds">"</span></span>  
+#<span class="pl-k">include</span> <span class="pl-s1"><span class="pl-pds">"</span>string.h<span class="pl-pds">"</span></span>   
+#<span class="pl-k">include</span> <span class="pl-s1"><span class="pl-pds">"</span>malloc.h<span class="pl-pds">"</span></span>   
+#<span class="pl-k">include</span> <span class="pl-s1"><span class="pl-pds">"</span>math.h<span class="pl-pds">"</span></span>   
+#<span class="pl-k">include</span> <span class="pl-s1"><span class="pl-pds">&lt;</span>assert.h<span class="pl-pds">&gt;</span></span>  
+#<span class="pl-k">include</span> <span class="pl-s1"><span class="pl-pds">&lt;</span>ctype.h<span class="pl-pds">&gt;</span></span>  
+#<span class="pl-k">include</span> <span class="pl-s1"><span class="pl-pds">&lt;</span>time.h<span class="pl-pds">&gt;</span></span>  
+#<span class="pl-k">include</span> <span class="pl-s1"><span class="pl-pds">&lt;</span>cv.h<span class="pl-pds">&gt;</span></span>  
+#<span class="pl-k">include</span> <span class="pl-s1"><span class="pl-pds">&lt;</span>cxcore.h<span class="pl-pds">&gt;</span></span>  
+#<span class="pl-k">include</span> <span class="pl-s1"><span class="pl-pds">&lt;</span>highgui.h<span class="pl-pds">&gt;</span></span>  
+#<span class="pl-k">include</span> <span class="pl-s1"><span class="pl-pds">&lt;</span>vector<span class="pl-pds">&gt;</span></span>  
+#<span class="pl-k">endif</span>  
 
-<span class="cp">#ifdef _EiC  </span>
-<span class="cp">#define WIN32  </span>
-<span class="cp">#endif  </span>
-</pre>
+#<span class="pl-k">ifdef</span> _EiC  
+#<span class="pl-k">define</span> <span class="pl-en">WIN32</span>  
+#<span class="pl-k">endif</span>  </pre>
     </div>
    </li>
    <li>
@@ -522,29 +521,28 @@ D(x,y,e) = ((G(x,y,ke) - G(x,y,e)) * I(x,y) = L(x,y,ke) - L(x,y,e)
      定义几个宏，及变量，以免下文函数中，突然冒出一个变量，而您却不知道怎么一回事：
     </p>
     <div class="highlight highlight-c">
-     <pre><span class="cp">#define NUMSIZE 2  </span>
-<span class="cp">#define GAUSSKERN 3.5  </span>
-<span class="cp">#define PI 3.14159265358979323846  </span>
+     <pre>#<span class="pl-k">define</span> <span class="pl-en">NUMSIZE</span> <span class="pl-c1">2</span>  
+#<span class="pl-k">define</span> <span class="pl-en">GAUSSKERN</span> <span class="pl-c1">3.5</span>  
+#<span class="pl-k">define</span> <span class="pl-en">PI</span> <span class="pl-c1">3.14159265358979323846</span>  
 
-<span class="c1">//Sigma of base image -- See D.L.'s paper.  </span>
-<span class="cp">#define INITSIGMA 0.5  </span>
-<span class="c1">//Sigma of each octave -- See D.L.'s paper.  </span>
-<span class="cp">#define SIGMA sqrt(3)</span><span class="c1">//1.6//  </span>
+<span class="pl-c">//Sigma of base image -- See D.L.'s paper.  </span>
+#<span class="pl-k">define</span> <span class="pl-en">INITSIGMA</span> <span class="pl-c1">0.5</span>  
+<span class="pl-c">//Sigma of each octave -- See D.L.'s paper.  </span>
+#<span class="pl-k">define</span> <span class="pl-en">SIGMA</span> <span class="pl-en">sqrt</span>(<span class="pl-c1">3</span>)<span class="pl-c">//1.6//  </span>
 
-<span class="c1">//Number of scales per octave.  See D.L.'s paper.  </span>
-<span class="cp">#define SCALESPEROCTAVE 2  </span>
-<span class="cp">#define MAXOCTAVES 4  </span>
-<span class="kt">int</span>     <span class="n">numoctaves</span><span class="p">;</span>  
+<span class="pl-c">//Number of scales per octave.  See D.L.'s paper.  </span>
+#<span class="pl-k">define</span> <span class="pl-en">SCALESPEROCTAVE</span> <span class="pl-c1">2</span>  
+#<span class="pl-k">define</span> <span class="pl-en">MAXOCTAVES</span> <span class="pl-c1">4</span>  
+<span class="pl-st">int</span>     numoctaves;  
 
-<span class="cp">#define CONTRAST_THRESHOLD   0.02  </span>
-<span class="cp">#define CURVATURE_THRESHOLD  10.0  </span>
-<span class="cp">#define DOUBLE_BASE_IMAGE_SIZE 1  </span>
-<span class="cp">#define peakRelThresh 0.8  </span>
-<span class="cp">#define LEN 128  </span>
+#<span class="pl-k">define</span> <span class="pl-en">CONTRAST_THRESHOLD</span>   <span class="pl-c1">0.02</span>  
+#<span class="pl-k">define</span> <span class="pl-en">CURVATURE_THRESHOLD</span>  <span class="pl-c1">10.0</span>  
+#<span class="pl-k">define</span> <span class="pl-en">DOUBLE_BASE_IMAGE_SIZE</span> <span class="pl-c1">1</span>  
+#<span class="pl-k">define</span> <span class="pl-en">peakRelThresh</span> <span class="pl-c1">0.8</span>  
+#<span class="pl-k">define</span> <span class="pl-en">LEN</span> <span class="pl-c1">128</span>  
 
-<span class="c1">// temporary storage  </span>
-<span class="n">CvMemStorage</span><span class="o">*</span> <span class="n">storage</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>   
-</pre>
+<span class="pl-c">// temporary storage  </span>
+CvMemStorage* storage = <span class="pl-c1">0</span>;   </pre>
     </div>
    </li>
    <li>
@@ -552,44 +550,43 @@ D(x,y,e) = ((G(x,y,ke) - G(x,y,e)) * I(x,y) = L(x,y,ke) - L(x,y,e)
      然后，咱们还得，声明几个变量，以及建几个数据结构（数据结构是一切程序事物的基础麻，:D。）：
     </p>
     <div class="highlight highlight-c">
-     <pre><span class="c1">//Data structure for a float image.  </span>
-<span class="k">typedef</span> <span class="k">struct</span> <span class="n">ImageSt</span> <span class="p">{</span>        <span class="cm">/*金字塔每一层*/</span>  
+     <pre><span class="pl-c">//Data structure for a float image.  </span>
+<span class="pl-st">typedef</span> <span class="pl-st">struct</span> ImageSt {        <span class="pl-c">/*金字塔每一层*/</span>  
 
- <span class="kt">float</span> <span class="n">levelsigma</span><span class="p">;</span>  
- <span class="kt">int</span> <span class="n">levelsigmalength</span><span class="p">;</span>  
- <span class="kt">float</span> <span class="n">absolute_sigma</span><span class="p">;</span>  
- <span class="n">CvMat</span> <span class="o">*</span><span class="n">Level</span><span class="p">;</span>       <span class="c1">//CvMat是OPENCV的矩阵类，其元素可以是图像的象素值         </span>
-<span class="p">}</span> <span class="n">ImageLevels</span><span class="p">;</span>  
+ <span class="pl-st">float</span> levelsigma;  
+ <span class="pl-st">int</span> levelsigmalength;  
+ <span class="pl-st">float</span> absolute_sigma;  
+ CvMat *Level;       <span class="pl-c">//CvMat是OPENCV的矩阵类，其元素可以是图像的象素值         </span>
+} ImageLevels;  
 
-<span class="k">typedef</span> <span class="k">struct</span> <span class="n">ImageSt1</span> <span class="p">{</span>      <span class="cm">/*金字塔每一阶梯*/</span>  
- <span class="kt">int</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">;</span>          <span class="c1">//Dimensions of image.   </span>
- <span class="kt">float</span> <span class="n">subsample</span><span class="p">;</span>  
- <span class="n">ImageLevels</span> <span class="o">*</span><span class="n">Octave</span><span class="p">;</span>                
-<span class="p">}</span> <span class="n">ImageOctaves</span><span class="p">;</span>  
+<span class="pl-st">typedef</span> <span class="pl-st">struct</span> ImageSt1 {      <span class="pl-c">/*金字塔每一阶梯*/</span>  
+ <span class="pl-st">int</span> row, col;          <span class="pl-c">//Dimensions of image.   </span>
+ <span class="pl-st">float</span> subsample;  
+ ImageLevels *Octave;                
+} ImageOctaves;  
 
-<span class="n">ImageOctaves</span> <span class="o">*</span><span class="n">DOGoctaves</span><span class="p">;</span>        
-<span class="c1">//DOG pyr，DOG算子计算简单，是尺度归一化的LoG算子的近似。  </span>
+ImageOctaves *DOGoctaves;        
+<span class="pl-c">//DOG pyr，DOG算子计算简单，是尺度归一化的LoG算子的近似。  </span>
 
-<span class="n">ImageOctaves</span> <span class="o">*</span><span class="n">mag_thresh</span> <span class="p">;</span>  
-<span class="n">ImageOctaves</span> <span class="o">*</span><span class="n">mag_pyr</span> <span class="p">;</span>  
-<span class="n">ImageOctaves</span> <span class="o">*</span><span class="n">grad_pyr</span> <span class="p">;</span>  
+ImageOctaves *mag_thresh ;  
+ImageOctaves *mag_pyr ;  
+ImageOctaves *grad_pyr ;  
 
-<span class="c1">//keypoint数据结构，Lists of keypoints are linked by the "next" field.  </span>
-<span class="k">typedef</span> <span class="k">struct</span> <span class="n">KeypointSt</span>   
-<span class="p">{</span>  
- <span class="kt">float</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">;</span> <span class="cm">/* 反馈回原图像大小，特征点的位置 */</span>  
- <span class="kt">float</span> <span class="n">sx</span><span class="p">,</span><span class="n">sy</span><span class="p">;</span>    <span class="cm">/* 金字塔中特征点的位置*/</span>  
- <span class="kt">int</span> <span class="n">octave</span><span class="p">,</span><span class="n">level</span><span class="p">;</span><span class="cm">/*金字塔中，特征点所在的阶梯、层次*/</span>  
+<span class="pl-c">//keypoint数据结构，Lists of keypoints are linked by the "next" field.  </span>
+<span class="pl-st">typedef</span> <span class="pl-st">struct</span> KeypointSt   
+{  
+ <span class="pl-st">float</span> row, col; <span class="pl-c">/* 反馈回原图像大小，特征点的位置 */</span>  
+ <span class="pl-st">float</span> sx,sy;    <span class="pl-c">/* 金字塔中特征点的位置*/</span>  
+ <span class="pl-st">int</span> octave,level;<span class="pl-c">/*金字塔中，特征点所在的阶梯、层次*/</span>  
 
- <span class="kt">float</span> <span class="n">scale</span><span class="p">,</span> <span class="n">ori</span><span class="p">,</span><span class="n">mag</span><span class="p">;</span> <span class="cm">/*所在层的尺度sigma,主方向orientation (range [-PI,PI])，以及幅值*/</span>  
- <span class="kt">float</span> <span class="o">*</span><span class="n">descrip</span><span class="p">;</span>       <span class="cm">/*特征描述字指针：128维或32维等*/</span>  
- <span class="k">struct</span> <span class="n">KeypointSt</span> <span class="o">*</span><span class="n">next</span><span class="p">;</span><span class="cm">/* Pointer to next keypoint in list. */</span>  
-<span class="p">}</span> <span class="o">*</span><span class="n">Keypoint</span><span class="p">;</span>  
+ <span class="pl-st">float</span> scale, ori,mag; <span class="pl-c">/*所在层的尺度sigma,主方向orientation (range [-PI,PI])，以及幅值*/</span>  
+ <span class="pl-st">float</span> *descrip;       <span class="pl-c">/*特征描述字指针：128维或32维等*/</span>  
+ <span class="pl-st">struct</span> KeypointSt *next;<span class="pl-c">/* Pointer to next keypoint in list. */</span>  
+} *Keypoint;  
 
-<span class="c1">//定义特征点具体变量  </span>
-<span class="n">Keypoint</span> <span class="n">keypoints</span><span class="o">=</span><span class="nb">NULL</span><span class="p">;</span>      <span class="c1">//用于临时存储特征点的位置等  </span>
-<span class="n">Keypoint</span> <span class="n">keyDescriptors</span><span class="o">=</span><span class="nb">NULL</span><span class="p">;</span> <span class="c1">//用于最后的确定特征点以及特征描述字  </span>
-</pre>
+<span class="pl-c">//定义特征点具体变量  </span>
+Keypoint keypoints=<span class="pl-c1">NULL</span>;      <span class="pl-c">//用于临时存储特征点的位置等  </span>
+Keypoint keyDescriptors=<span class="pl-c1">NULL</span>; <span class="pl-c">//用于最后的确定特征点以及特征描述字  </span></pre>
     </div>
    </li>
    <li>
@@ -597,31 +594,30 @@ D(x,y,e) = ((G(x,y,ke) - G(x,y,e)) * I(x,y) = L(x,y,ke) - L(x,y,e)
      声明几个图像的基本处理函数：
     </p>
     <div class="highlight highlight-c">
-     <pre><span class="n">CvMat</span> <span class="o">*</span> <span class="nf">halfSizeImage</span><span class="p">(</span><span class="n">CvMat</span> <span class="o">*</span> <span class="n">im</span><span class="p">);</span>     <span class="c1">//缩小图像：下采样  </span>
-<span class="n">CvMat</span> <span class="o">*</span> <span class="nf">doubleSizeImage</span><span class="p">(</span><span class="n">CvMat</span> <span class="o">*</span> <span class="n">im</span><span class="p">);</span>   <span class="c1">//扩大图像：最近临方法  </span>
-<span class="n">CvMat</span> <span class="o">*</span> <span class="nf">doubleSizeImage2</span><span class="p">(</span><span class="n">CvMat</span> <span class="o">*</span> <span class="n">im</span><span class="p">);</span>  <span class="c1">//扩大图像：线性插值  </span>
-<span class="kt">float</span> <span class="nf">getPixelBI</span><span class="p">(</span><span class="n">CvMat</span> <span class="o">*</span> <span class="n">im</span><span class="p">,</span> <span class="kt">float</span> <span class="n">col</span><span class="p">,</span> <span class="kt">float</span> <span class="n">row</span><span class="p">);</span><span class="c1">//双线性插值函数  </span>
-<span class="kt">void</span> <span class="nf">normalizeVec</span><span class="p">(</span><span class="kt">float</span><span class="o">*</span> <span class="n">vec</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dim</span><span class="p">);</span><span class="c1">//向量归一化    </span>
-<span class="n">CvMat</span><span class="o">*</span> <span class="nf">GaussianKernel2D</span><span class="p">(</span><span class="kt">float</span> <span class="n">sigma</span><span class="p">);</span>  <span class="c1">//得到2维高斯核  </span>
-<span class="kt">void</span> <span class="nf">normalizeMat</span><span class="p">(</span><span class="n">CvMat</span><span class="o">*</span> <span class="n">mat</span><span class="p">)</span> <span class="p">;</span>        <span class="c1">//矩阵归一化  </span>
-<span class="kt">float</span><span class="o">*</span> <span class="nf">GaussianKernel1D</span><span class="p">(</span><span class="kt">float</span> <span class="n">sigma</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dim</span><span class="p">)</span> <span class="p">;</span> <span class="c1">//得到1维高斯核  </span>
+     <pre>CvMat * <span class="pl-en">halfSizeImage</span>(CvMat * im);     <span class="pl-c">//缩小图像：下采样  </span>
+CvMat * <span class="pl-en">doubleSizeImage</span>(CvMat * im);   <span class="pl-c">//扩大图像：最近临方法  </span>
+CvMat * <span class="pl-en">doubleSizeImage2</span>(CvMat * im);  <span class="pl-c">//扩大图像：线性插值  </span>
+<span class="pl-st">float</span> <span class="pl-en">getPixelBI</span>(CvMat * im, <span class="pl-st">float</span> col, <span class="pl-st">float</span> row);<span class="pl-c">//双线性插值函数  </span>
+<span class="pl-st">void</span> <span class="pl-en">normalizeVec</span>(<span class="pl-st">float</span>* vec, <span class="pl-st">int</span> dim);<span class="pl-c">//向量归一化    </span>
+CvMat* <span class="pl-en">GaussianKernel2D</span>(<span class="pl-st">float</span> sigma);  <span class="pl-c">//得到2维高斯核  </span>
+<span class="pl-st">void</span> <span class="pl-en">normalizeMat</span>(CvMat* mat) ;        <span class="pl-c">//矩阵归一化  </span>
+<span class="pl-st">float</span>* <span class="pl-en">GaussianKernel1D</span>(<span class="pl-st">float</span> sigma, <span class="pl-st">int</span> dim) ; <span class="pl-c">//得到1维高斯核  </span>
 
-<span class="c1">//在具体像素处宽度方向进行高斯卷积  </span>
-<span class="kt">float</span> <span class="nf">ConvolveLocWidth</span><span class="p">(</span><span class="kt">float</span><span class="o">*</span> <span class="n">kernel</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dim</span><span class="p">,</span> <span class="n">CvMat</span> <span class="o">*</span> <span class="n">src</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">)</span> <span class="p">;</span>    
-<span class="c1">//在整个图像宽度方向进行1D高斯卷积  </span>
-<span class="kt">void</span> <span class="nf">Convolve1DWidth</span><span class="p">(</span><span class="kt">float</span><span class="o">*</span> <span class="n">kern</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dim</span><span class="p">,</span> <span class="n">CvMat</span> <span class="o">*</span> <span class="n">src</span><span class="p">,</span> <span class="n">CvMat</span> <span class="o">*</span> <span class="n">dst</span><span class="p">)</span> <span class="p">;</span>         
-<span class="c1">//在具体像素处高度方向进行高斯卷积  </span>
-<span class="kt">float</span> <span class="nf">ConvolveLocHeight</span><span class="p">(</span><span class="kt">float</span><span class="o">*</span> <span class="n">kernel</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dim</span><span class="p">,</span> <span class="n">CvMat</span> <span class="o">*</span> <span class="n">src</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">)</span> <span class="p">;</span>   
-<span class="c1">//在整个图像高度方向进行1D高斯卷积  </span>
-<span class="kt">void</span> <span class="nf">Convolve1DHeight</span><span class="p">(</span><span class="kt">float</span><span class="o">*</span> <span class="n">kern</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dim</span><span class="p">,</span> <span class="n">CvMat</span> <span class="o">*</span> <span class="n">src</span><span class="p">,</span> <span class="n">CvMat</span> <span class="o">*</span> <span class="n">dst</span><span class="p">);</span>       
-<span class="c1">//用高斯函数模糊图像    </span>
-<span class="kt">int</span> <span class="nf">BlurImage</span><span class="p">(</span><span class="n">CvMat</span> <span class="o">*</span> <span class="n">src</span><span class="p">,</span> <span class="n">CvMat</span> <span class="o">*</span> <span class="n">dst</span><span class="p">,</span> <span class="kt">float</span> <span class="n">sigma</span><span class="p">)</span> <span class="p">;</span>            
-</pre>
+<span class="pl-c">//在具体像素处宽度方向进行高斯卷积  </span>
+<span class="pl-st">float</span> <span class="pl-en">ConvolveLocWidth</span>(<span class="pl-st">float</span>* kernel, <span class="pl-st">int</span> dim, CvMat * src, <span class="pl-st">int</span> x, <span class="pl-st">int</span> y) ;    
+<span class="pl-c">//在整个图像宽度方向进行1D高斯卷积  </span>
+<span class="pl-st">void</span> <span class="pl-en">Convolve1DWidth</span>(<span class="pl-st">float</span>* kern, <span class="pl-st">int</span> dim, CvMat * src, CvMat * dst) ;         
+<span class="pl-c">//在具体像素处高度方向进行高斯卷积  </span>
+<span class="pl-st">float</span> <span class="pl-en">ConvolveLocHeight</span>(<span class="pl-st">float</span>* kernel, <span class="pl-st">int</span> dim, CvMat * src, <span class="pl-st">int</span> x, <span class="pl-st">int</span> y) ;   
+<span class="pl-c">//在整个图像高度方向进行1D高斯卷积  </span>
+<span class="pl-st">void</span> <span class="pl-en">Convolve1DHeight</span>(<span class="pl-st">float</span>* kern, <span class="pl-st">int</span> dim, CvMat * src, CvMat * dst);       
+<span class="pl-c">//用高斯函数模糊图像    </span>
+<span class="pl-st">int</span> <span class="pl-en">BlurImage</span>(CvMat * src, CvMat * dst, <span class="pl-st">float</span> sigma) ;            </pre>
     </div>
    </li>
   </ol>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#%E7%AE%97%E6%B3%95%E6%A0%B8%E5%BF%83" name="user-content-%E7%AE%97%E6%B3%95%E6%A0%B8%E5%BF%83">
+   <a aria-hidden="true" class="anchor" href="#%E7%AE%97%E6%B3%95%E6%A0%B8%E5%BF%83" id="user-content-算法核心">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -631,41 +627,40 @@ D(x,y,e) = ((G(x,y,ke) - G(x,y,e)) * I(x,y) = L(x,y,ke) - L(x,y,e)
    本程序中，sift算法被分为以下五个步骤及其相对应的函数（可能表述与上，或与前俩篇文章有所偏差，但都一个意思）：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="c1">//SIFT算法第一步：图像预处理  </span>
-<span class="n">CvMat</span> <span class="o">*</span><span class="nf">ScaleInitImage</span><span class="p">(</span><span class="n">CvMat</span> <span class="o">*</span> <span class="n">im</span><span class="p">)</span> <span class="p">;</span>                  <span class="c1">//金字塔初始化  </span>
+   <pre><span class="pl-c">//SIFT算法第一步：图像预处理  </span>
+CvMat *<span class="pl-en">ScaleInitImage</span>(CvMat * im) ;                  <span class="pl-c">//金字塔初始化  </span>
 
-<span class="c1">//SIFT算法第二步：建立高斯金字塔函数  </span>
-<span class="n">ImageOctaves</span><span class="o">*</span> <span class="nf">BuildGaussianOctaves</span><span class="p">(</span><span class="n">CvMat</span> <span class="o">*</span> <span class="n">image</span><span class="p">)</span> <span class="p">;</span>  <span class="c1">//建立高斯金字塔  </span>
+<span class="pl-c">//SIFT算法第二步：建立高斯金字塔函数  </span>
+ImageOctaves* <span class="pl-en">BuildGaussianOctaves</span>(CvMat * image) ;  <span class="pl-c">//建立高斯金字塔  </span>
 
-<span class="c1">//SIFT算法第三步：特征点位置检测，最后确定特征点的位置  </span>
-<span class="kt">int</span> <span class="nf">DetectKeypoint</span><span class="p">(</span><span class="kt">int</span> <span class="n">numoctaves</span><span class="p">,</span> <span class="n">ImageOctaves</span> <span class="o">*</span><span class="n">GaussianPyr</span><span class="p">);</span>  
-<span class="kt">void</span> <span class="nf">DisplayKeypointLocation</span><span class="p">(</span><span class="n">IplImage</span><span class="o">*</span> <span class="n">image</span><span class="p">,</span> <span class="n">ImageOctaves</span> <span class="o">*</span><span class="n">GaussianPyr</span><span class="p">);</span>  
+<span class="pl-c">//SIFT算法第三步：特征点位置检测，最后确定特征点的位置  </span>
+<span class="pl-st">int</span> <span class="pl-en">DetectKeypoint</span>(<span class="pl-st">int</span> numoctaves, ImageOctaves *GaussianPyr);  
+<span class="pl-st">void</span> <span class="pl-en">DisplayKeypointLocation</span>(IplImage* image, ImageOctaves *GaussianPyr);  
 
-<span class="c1">//SIFT算法第四步：计算高斯图像的梯度方向和幅值，计算各个特征点的主方向  </span>
-<span class="kt">void</span> <span class="nf">ComputeGrad_DirecandMag</span><span class="p">(</span><span class="kt">int</span> <span class="n">numoctaves</span><span class="p">,</span> <span class="n">ImageOctaves</span> <span class="o">*</span><span class="n">GaussianPyr</span><span class="p">);</span>  
+<span class="pl-c">//SIFT算法第四步：计算高斯图像的梯度方向和幅值，计算各个特征点的主方向  </span>
+<span class="pl-st">void</span> <span class="pl-en">ComputeGrad_DirecandMag</span>(<span class="pl-st">int</span> numoctaves, ImageOctaves *GaussianPyr);  
 
-<span class="kt">int</span> <span class="nf">FindClosestRotationBin</span> <span class="p">(</span><span class="kt">int</span> <span class="n">binCount</span><span class="p">,</span> <span class="kt">float</span> <span class="n">angle</span><span class="p">);</span>  <span class="c1">//进行方向直方图统计  </span>
-<span class="kt">void</span> <span class="nf">AverageWeakBins</span> <span class="p">(</span><span class="kt">double</span><span class="o">*</span> <span class="n">bins</span><span class="p">,</span> <span class="kt">int</span> <span class="n">binCount</span><span class="p">);</span>       <span class="c1">//对方向直方图滤波  </span>
-<span class="c1">//确定真正的主方向  </span>
-<span class="kt">bool</span> <span class="nf">InterpolateOrientation</span> <span class="p">(</span><span class="kt">double</span> <span class="n">left</span><span class="p">,</span> <span class="kt">double</span> <span class="n">middle</span><span class="p">,</span><span class="kt">double</span> <span class="n">right</span><span class="p">,</span> <span class="kt">double</span> <span class="o">*</span><span class="n">degreeCorrection</span><span class="p">,</span> <span class="kt">double</span> <span class="o">*</span><span class="n">peakValue</span><span class="p">);</span>  
-<span class="c1">//确定各个特征点处的主方向函数  </span>
-<span class="kt">void</span> <span class="nf">AssignTheMainOrientation</span><span class="p">(</span><span class="kt">int</span> <span class="n">numoctaves</span><span class="p">,</span> <span class="n">ImageOctaves</span> <span class="o">*</span><span class="n">GaussianPyr</span><span class="p">,</span><span class="n">ImageOctaves</span> <span class="o">*</span><span class="n">mag_pyr</span><span class="p">,</span><span class="n">ImageOctaves</span> <span class="o">*</span><span class="n">grad_pyr</span><span class="p">);</span>  
-<span class="c1">//显示主方向  </span>
-<span class="kt">void</span> <span class="nf">DisplayOrientation</span> <span class="p">(</span><span class="n">IplImage</span><span class="o">*</span> <span class="n">image</span><span class="p">,</span> <span class="n">ImageOctaves</span> <span class="o">*</span><span class="n">GaussianPyr</span><span class="p">);</span>  
+<span class="pl-st">int</span> <span class="pl-en">FindClosestRotationBin</span> (<span class="pl-st">int</span> binCount, <span class="pl-st">float</span> angle);  <span class="pl-c">//进行方向直方图统计  </span>
+<span class="pl-st">void</span> <span class="pl-en">AverageWeakBins</span> (<span class="pl-st">double</span>* bins, <span class="pl-st">int</span> binCount);       <span class="pl-c">//对方向直方图滤波  </span>
+<span class="pl-c">//确定真正的主方向  </span>
+<span class="pl-st">bool</span> <span class="pl-en">InterpolateOrientation</span> (<span class="pl-st">double</span> left, <span class="pl-st">double</span> middle,<span class="pl-st">double</span> right, <span class="pl-st">double</span> *degreeCorrection, <span class="pl-st">double</span> *peakValue);  
+<span class="pl-c">//确定各个特征点处的主方向函数  </span>
+<span class="pl-st">void</span> <span class="pl-en">AssignTheMainOrientation</span>(<span class="pl-st">int</span> numoctaves, ImageOctaves *GaussianPyr,ImageOctaves *mag_pyr,ImageOctaves *grad_pyr);  
+<span class="pl-c">//显示主方向  </span>
+<span class="pl-st">void</span> <span class="pl-en">DisplayOrientation</span> (IplImage* image, ImageOctaves *GaussianPyr);  
 
-<span class="c1">//SIFT算法第五步：抽取各个特征点处的特征描述字  </span>
-<span class="kt">void</span> <span class="nf">ExtractFeatureDescriptors</span><span class="p">(</span><span class="kt">int</span> <span class="n">numoctaves</span><span class="p">,</span> <span class="n">ImageOctaves</span> <span class="o">*</span><span class="n">GaussianPyr</span><span class="p">);</span>  
+<span class="pl-c">//SIFT算法第五步：抽取各个特征点处的特征描述字  </span>
+<span class="pl-st">void</span> <span class="pl-en">ExtractFeatureDescriptors</span>(<span class="pl-st">int</span> numoctaves, ImageOctaves *GaussianPyr);  
 
-<span class="c1">//为了显示图象金字塔，而作的图像水平、垂直拼接  </span>
-<span class="n">CvMat</span><span class="o">*</span> <span class="nf">MosaicHorizen</span><span class="p">(</span> <span class="n">CvMat</span><span class="o">*</span> <span class="n">im1</span><span class="p">,</span> <span class="n">CvMat</span><span class="o">*</span> <span class="n">im2</span> <span class="p">);</span>  
-<span class="n">CvMat</span><span class="o">*</span> <span class="nf">MosaicVertical</span><span class="p">(</span> <span class="n">CvMat</span><span class="o">*</span> <span class="n">im1</span><span class="p">,</span> <span class="n">CvMat</span><span class="o">*</span> <span class="n">im2</span> <span class="p">);</span>  
+<span class="pl-c">//为了显示图象金字塔，而作的图像水平、垂直拼接  </span>
+CvMat* <span class="pl-en">MosaicHorizen</span>( CvMat* im1, CvMat* im2 );  
+CvMat* <span class="pl-en">MosaicVertical</span>( CvMat* im1, CvMat* im2 );  
 
-<span class="c1">//特征描述点，网格    </span>
-<span class="cp">#define GridSpacing 4  </span>
-</pre>
+<span class="pl-c">//特征描述点，网格    </span>
+#<span class="pl-k">define</span> <span class="pl-en">GridSpacing</span> <span class="pl-c1">4</span>  </pre>
   </div>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#%E4%B8%BB%E4%BD%93%E5%AE%9E%E7%8E%B0" name="user-content-%E4%B8%BB%E4%BD%93%E5%AE%9E%E7%8E%B0">
+   <a aria-hidden="true" class="anchor" href="#%E4%B8%BB%E4%BD%93%E5%AE%9E%E7%8E%B0" id="user-content-主体实现">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -682,192 +677,191 @@ D(x,y,e) = ((G(x,y,ke) - G(x,y,e)) * I(x,y) = L(x,y,ke) - L(x,y,e)
    ，咱们自会一个一个编写）：
   </p>
   <div class="highlight highlight-c">
-   <pre><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span> <span class="kt">void</span> <span class="p">)</span>  
-<span class="p">{</span>  
- <span class="c1">//声明当前帧IplImage指针  </span>
- <span class="n">IplImage</span><span class="o">*</span> <span class="n">src</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>   
- <span class="n">IplImage</span><span class="o">*</span> <span class="n">image1</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>   
- <span class="n">IplImage</span><span class="o">*</span> <span class="n">grey_im1</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>   
- <span class="n">IplImage</span><span class="o">*</span> <span class="n">DoubleSizeImage</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>  
+   <pre><span class="pl-st">int</span> <span class="pl-en">main</span>( <span class="pl-st">void</span> )  
+{  
+ <span class="pl-c">//声明当前帧IplImage指针  </span>
+ IplImage* src = <span class="pl-c1">NULL</span>;   
+ IplImage* image1 = <span class="pl-c1">NULL</span>;   
+ IplImage* grey_im1 = <span class="pl-c1">NULL</span>;   
+ IplImage* DoubleSizeImage = <span class="pl-c1">NULL</span>;  
 
- <span class="n">IplImage</span><span class="o">*</span> <span class="n">mosaic1</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>   
- <span class="n">IplImage</span><span class="o">*</span> <span class="n">mosaic2</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>   
+ IplImage* mosaic1 = <span class="pl-c1">NULL</span>;   
+ IplImage* mosaic2 = <span class="pl-c1">NULL</span>;   
 
- <span class="n">CvMat</span><span class="o">*</span> <span class="n">mosaicHorizen1</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>  
- <span class="n">CvMat</span><span class="o">*</span> <span class="n">mosaicHorizen2</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>  
- <span class="n">CvMat</span><span class="o">*</span> <span class="n">mosaicVertical1</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>  
+ CvMat* mosaicHorizen1 = <span class="pl-c1">NULL</span>;  
+ CvMat* mosaicHorizen2 = <span class="pl-c1">NULL</span>;  
+ CvMat* mosaicVertical1 = <span class="pl-c1">NULL</span>;  
 
- <span class="n">CvMat</span><span class="o">*</span> <span class="n">image1Mat</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>  
- <span class="n">CvMat</span><span class="o">*</span> <span class="n">tempMat</span><span class="o">=</span><span class="nb">NULL</span><span class="p">;</span>  
+ CvMat* image1Mat = <span class="pl-c1">NULL</span>;  
+ CvMat* tempMat=<span class="pl-c1">NULL</span>;  
 
- <span class="n">ImageOctaves</span> <span class="o">*</span><span class="n">Gaussianpyr</span><span class="p">;</span>  
- <span class="kt">int</span> <span class="n">rows</span><span class="p">,</span><span class="n">cols</span><span class="p">;</span>  
+ ImageOctaves *Gaussianpyr;  
+ <span class="pl-st">int</span> rows,cols;  
 
-<span class="cp">#define Im1Mat(ROW,COL) ((float *)(image1Mat-&gt;data.fl + image1Mat-&gt;step/sizeof(float) *(ROW)))[(COL)]  </span>
+#<span class="pl-k">define</span> <span class="pl-en">Im1Mat</span>(<span class="pl-v">ROW,COL</span>) ((<span class="pl-st">float</span> *)(image1Mat-&gt;data.fl + image1Mat-&gt;step/<span class="pl-k">sizeof</span>(<span class="pl-st">float</span>) *(ROW)))[(COL)]  
 
- <span class="c1">//灰度图象像素的数据结构  </span>
-<span class="cp">#define Im1B(ROW,COL) ((uchar*)(image1-&gt;imageData + image1-&gt;widthStep*(ROW)))[(COL)*3]  </span>
-<span class="cp">#define Im1G(ROW,COL) ((uchar*)(image1-&gt;imageData + image1-&gt;widthStep*(ROW)))[(COL)*3+1]  </span>
-<span class="cp">#define Im1R(ROW,COL) ((uchar*)(image1-&gt;imageData + image1-&gt;widthStep*(ROW)))[(COL)*3+2]  </span>
+ <span class="pl-c">//灰度图象像素的数据结构  </span>
+#<span class="pl-k">define</span> <span class="pl-en">Im1B</span>(<span class="pl-v">ROW,COL</span>) ((uchar*)(image1-&gt;imageData + image1-&gt;widthStep*(ROW)))[(COL)*<span class="pl-c1">3</span>]  
+#<span class="pl-k">define</span> <span class="pl-en">Im1G</span>(<span class="pl-v">ROW,COL</span>) ((uchar*)(image1-&gt;imageData + image1-&gt;widthStep*(ROW)))[(COL)*<span class="pl-c1">3</span>+<span class="pl-c1">1</span>]  
+#<span class="pl-k">define</span> <span class="pl-en">Im1R</span>(<span class="pl-v">ROW,COL</span>) ((uchar*)(image1-&gt;imageData + image1-&gt;widthStep*(ROW)))[(COL)*<span class="pl-c1">3</span>+<span class="pl-c1">2</span>]  
 
- <span class="n">storage</span> <span class="o">=</span> <span class="n">cvCreateMemStorage</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>   
+ storage = <span class="pl-s3">cvCreateMemStorage</span>(<span class="pl-c1">0</span>);   
 
- <span class="c1">//读取图片  </span>
- <span class="k">if</span><span class="p">(</span> <span class="p">(</span><span class="n">src</span> <span class="o">=</span> <span class="n">cvLoadImage</span><span class="p">(</span> <span class="s">"street1.jpg"</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span>  <span class="c1">// test1.jpg einstein.pgm back1.bmp  </span>
-  <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>  
+ <span class="pl-c">//读取图片  </span>
+ <span class="pl-k">if</span>( (src = <span class="pl-s3">cvLoadImage</span>( <span class="pl-s1"><span class="pl-pds">"</span>street1.jpg<span class="pl-pds">"</span></span>, <span class="pl-c1">1</span>)) == <span class="pl-c1">0</span> )  <span class="pl-c">// test1.jpg einstein.pgm back1.bmp  </span>
+  <span class="pl-k">return</span> -<span class="pl-c1">1</span>;  
 
- <span class="c1">//为图像分配内存   </span>
- <span class="n">image1</span> <span class="o">=</span> <span class="n">cvCreateImage</span><span class="p">(</span><span class="n">cvSize</span><span class="p">(</span><span class="n">src</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">,</span> <span class="n">src</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">),</span>  <span class="n">IPL_DEPTH_8U</span><span class="p">,</span><span class="mi">3</span><span class="p">);</span>  
- <span class="n">grey_im1</span> <span class="o">=</span> <span class="n">cvCreateImage</span><span class="p">(</span><span class="n">cvSize</span><span class="p">(</span><span class="n">src</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">,</span> <span class="n">src</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">),</span>  <span class="n">IPL_DEPTH_8U</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>  
- <span class="n">DoubleSizeImage</span> <span class="o">=</span> <span class="n">cvCreateImage</span><span class="p">(</span><span class="n">cvSize</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">src</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">),</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">src</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">)),</span>  <span class="n">IPL_DEPTH_8U</span><span class="p">,</span><span class="mi">3</span><span class="p">);</span>  
+ <span class="pl-c">//为图像分配内存   </span>
+ image1 = <span class="pl-s3">cvCreateImage</span>(<span class="pl-s3">cvSize</span>(src-&gt;width, src-&gt;height),  IPL_DEPTH_8U,<span class="pl-c1">3</span>);  
+ grey_im1 = <span class="pl-s3">cvCreateImage</span>(<span class="pl-s3">cvSize</span>(src-&gt;width, src-&gt;height),  IPL_DEPTH_8U,<span class="pl-c1">1</span>);  
+ DoubleSizeImage = <span class="pl-s3">cvCreateImage</span>(<span class="pl-s3">cvSize</span>(<span class="pl-c1">2</span>*(src-&gt;width), <span class="pl-c1">2</span>*(src-&gt;height)),  IPL_DEPTH_8U,<span class="pl-c1">3</span>);  
 
- <span class="c1">//为图像阵列分配内存，假设两幅图像的大小相同，tempMat跟随image1的大小  </span>
- <span class="n">image1Mat</span> <span class="o">=</span> <span class="n">cvCreateMat</span><span class="p">(</span><span class="n">src</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">,</span> <span class="n">src</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">,</span> <span class="n">CV_32FC1</span><span class="p">);</span>  
- <span class="c1">//转化成单通道图像再处理  </span>
- <span class="n">cvCvtColor</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">grey_im1</span><span class="p">,</span> <span class="n">CV_BGR2GRAY</span><span class="p">);</span>  
- <span class="c1">//转换进入Mat数据结构,图像操作使用的是浮点型操作  </span>
- <span class="n">cvConvert</span><span class="p">(</span><span class="n">grey_im1</span><span class="p">,</span> <span class="n">image1Mat</span><span class="p">);</span>  
+ <span class="pl-c">//为图像阵列分配内存，假设两幅图像的大小相同，tempMat跟随image1的大小  </span>
+ image1Mat = <span class="pl-s3">cvCreateMat</span>(src-&gt;height, src-&gt;width, CV_32FC1);  
+ <span class="pl-c">//转化成单通道图像再处理  </span>
+ <span class="pl-s3">cvCvtColor</span>(src, grey_im1, CV_BGR2GRAY);  
+ <span class="pl-c">//转换进入Mat数据结构,图像操作使用的是浮点型操作  </span>
+ <span class="pl-s3">cvConvert</span>(grey_im1, image1Mat);  
 
- <span class="kt">double</span> <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">cvGetTickCount</span><span class="p">();</span>  
- <span class="c1">//图像归一化  </span>
- <span class="n">cvConvertScale</span><span class="p">(</span> <span class="n">image1Mat</span><span class="p">,</span> <span class="n">image1Mat</span><span class="p">,</span> <span class="mf">1.0</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>  
+ <span class="pl-st">double</span> t = (<span class="pl-st">double</span>)<span class="pl-s3">cvGetTickCount</span>();  
+ <span class="pl-c">//图像归一化  </span>
+ <span class="pl-s3">cvConvertScale</span>( image1Mat, image1Mat, <span class="pl-c1">1.0</span>/<span class="pl-c1">255</span>, <span class="pl-c1">0</span> );  
 
- <span class="kt">int</span> <span class="n">dim</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">image1Mat</span><span class="o">-&gt;</span><span class="n">rows</span><span class="p">,</span> <span class="n">image1Mat</span><span class="o">-&gt;</span><span class="n">cols</span><span class="p">);</span>  
- <span class="n">numoctaves</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="n">log</span><span class="p">((</span><span class="kt">double</span><span class="p">)</span> <span class="n">dim</span><span class="p">)</span> <span class="o">/</span> <span class="n">log</span><span class="p">(</span><span class="mf">2.0</span><span class="p">))</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span>    <span class="c1">//金字塔阶数  </span>
- <span class="n">numoctaves</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">numoctaves</span><span class="p">,</span> <span class="n">MAXOCTAVES</span><span class="p">);</span>  
+ <span class="pl-st">int</span> dim = <span class="pl-s3">min</span>(image1Mat-&gt;rows, image1Mat-&gt;cols);  
+ numoctaves = (<span class="pl-st">int</span>) (<span class="pl-s3">log</span>((<span class="pl-st">double</span>) dim) / <span class="pl-s3">log</span>(<span class="pl-c1">2.0</span>)) - <span class="pl-c1">2</span>;    <span class="pl-c">//金字塔阶数  </span>
+ numoctaves = <span class="pl-s3">min</span>(numoctaves, MAXOCTAVES);  
 
- <span class="c1">//SIFT算法第一步，预滤波除噪声，建立金字塔底层  </span>
- <span class="n">tempMat</span> <span class="o">=</span> <span class="n">ScaleInitImage</span><span class="p">(</span><span class="n">image1Mat</span><span class="p">)</span> <span class="p">;</span>  
- <span class="c1">//SIFT算法第二步，建立Guassian金字塔和DOG金字塔  </span>
- <span class="n">Gaussianpyr</span> <span class="o">=</span> <span class="n">BuildGaussianOctaves</span><span class="p">(</span><span class="n">tempMat</span><span class="p">)</span> <span class="p">;</span>  
+ <span class="pl-c">//SIFT算法第一步，预滤波除噪声，建立金字塔底层  </span>
+ tempMat = <span class="pl-s3">ScaleInitImage</span>(image1Mat) ;  
+ <span class="pl-c">//SIFT算法第二步，建立Guassian金字塔和DOG金字塔  </span>
+ Gaussianpyr = <span class="pl-s3">BuildGaussianOctaves</span>(tempMat) ;  
 
- <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">cvGetTickCount</span><span class="p">()</span> <span class="o">-</span> <span class="n">t</span><span class="p">;</span>  
- <span class="n">printf</span><span class="p">(</span> <span class="s">"the time of build Gaussian pyramid and DOG pyramid is %.1f/n"</span><span class="p">,</span> <span class="n">t</span><span class="o">/</span><span class="p">(</span><span class="n">cvGetTickFrequency</span><span class="p">()</span><span class="o">*</span><span class="mf">1000.</span><span class="p">)</span> <span class="p">);</span>  
+ t = (<span class="pl-st">double</span>)<span class="pl-s3">cvGetTickCount</span>() - t;  
+ <span class="pl-s3">printf</span>( <span class="pl-s1"><span class="pl-pds">"</span>the time of build Gaussian pyramid and DOG pyramid is <span class="pl-c1">%.1f</span>/n<span class="pl-pds">"</span></span>, t/(<span class="pl-s3">cvGetTickFrequency</span>()*<span class="pl-c1">1000</span>.) );  
 
-<span class="cp">#define ImLevels(OCTAVE,LEVEL,ROW,COL) ((float *)(Gaussianpyr[(OCTAVE)].Octave[(LEVEL)].Level-&gt;data.fl + Gaussianpyr[(OCTAVE)].Octave[(LEVEL)].Level-&gt;step/sizeof(float) *(ROW)))[(COL)]  </span>
- <span class="c1">//显示高斯金字塔  </span>
- <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">numoctaves</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>  
- <span class="p">{</span>  
-  <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>  
-  <span class="p">{</span>  
-   <span class="n">mosaicHorizen1</span><span class="o">=</span><span class="n">MosaicHorizen</span><span class="p">(</span> <span class="p">(</span><span class="n">Gaussianpyr</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">Octave</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="n">Level</span><span class="p">,</span> <span class="p">(</span><span class="n">Gaussianpyr</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">Octave</span><span class="p">)[</span><span class="mi">1</span><span class="p">].</span><span class="n">Level</span> <span class="p">);</span>  
-   <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">SCALESPEROCTAVE</span><span class="o">+</span><span class="mi">3</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>  
-    <span class="n">mosaicHorizen1</span><span class="o">=</span><span class="n">MosaicHorizen</span><span class="p">(</span> <span class="n">mosaicHorizen1</span><span class="p">,</span> <span class="p">(</span><span class="n">Gaussianpyr</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">Octave</span><span class="p">)[</span><span class="n">j</span><span class="p">].</span><span class="n">Level</span> <span class="p">);</span>  
-   <span class="k">for</span> <span class="p">(</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">NUMSIZE</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>  
-    <span class="n">mosaicHorizen1</span><span class="o">=</span><span class="n">halfSizeImage</span><span class="p">(</span><span class="n">mosaicHorizen1</span><span class="p">);</span>  
-  <span class="p">}</span>  
-  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>  
-  <span class="p">{</span>  
-   <span class="n">mosaicHorizen2</span><span class="o">=</span><span class="n">MosaicHorizen</span><span class="p">(</span> <span class="p">(</span><span class="n">Gaussianpyr</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">Octave</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="n">Level</span><span class="p">,</span> <span class="p">(</span><span class="n">Gaussianpyr</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">Octave</span><span class="p">)[</span><span class="mi">1</span><span class="p">].</span><span class="n">Level</span> <span class="p">);</span>  
-   <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">SCALESPEROCTAVE</span><span class="o">+</span><span class="mi">3</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>  
-    <span class="n">mosaicHorizen2</span><span class="o">=</span><span class="n">MosaicHorizen</span><span class="p">(</span> <span class="n">mosaicHorizen2</span><span class="p">,</span> <span class="p">(</span><span class="n">Gaussianpyr</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">Octave</span><span class="p">)[</span><span class="n">j</span><span class="p">].</span><span class="n">Level</span> <span class="p">);</span>  
-   <span class="k">for</span> <span class="p">(</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">NUMSIZE</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>  
-    <span class="n">mosaicHorizen2</span><span class="o">=</span><span class="n">halfSizeImage</span><span class="p">(</span><span class="n">mosaicHorizen2</span><span class="p">);</span>  
-   <span class="n">mosaicVertical1</span><span class="o">=</span><span class="n">MosaicVertical</span><span class="p">(</span> <span class="n">mosaicHorizen1</span><span class="p">,</span> <span class="n">mosaicHorizen2</span> <span class="p">);</span>  
-  <span class="p">}</span>  
-  <span class="k">else</span>  
-  <span class="p">{</span>  
-   <span class="n">mosaicHorizen1</span><span class="o">=</span><span class="n">MosaicHorizen</span><span class="p">(</span> <span class="p">(</span><span class="n">Gaussianpyr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Octave</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="n">Level</span><span class="p">,</span> <span class="p">(</span><span class="n">Gaussianpyr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Octave</span><span class="p">)[</span><span class="mi">1</span><span class="p">].</span><span class="n">Level</span> <span class="p">);</span>  
-   <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">SCALESPEROCTAVE</span><span class="o">+</span><span class="mi">3</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>  
-    <span class="n">mosaicHorizen1</span><span class="o">=</span><span class="n">MosaicHorizen</span><span class="p">(</span> <span class="n">mosaicHorizen1</span><span class="p">,</span> <span class="p">(</span><span class="n">Gaussianpyr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Octave</span><span class="p">)[</span><span class="n">j</span><span class="p">].</span><span class="n">Level</span> <span class="p">);</span>  
-   <span class="k">for</span> <span class="p">(</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">NUMSIZE</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>  
-    <span class="n">mosaicHorizen1</span><span class="o">=</span><span class="n">halfSizeImage</span><span class="p">(</span><span class="n">mosaicHorizen1</span><span class="p">);</span>  
-   <span class="n">mosaicVertical1</span><span class="o">=</span><span class="n">MosaicVertical</span><span class="p">(</span> <span class="n">mosaicVertical1</span><span class="p">,</span> <span class="n">mosaicHorizen1</span> <span class="p">);</span>  
-  <span class="p">}</span>  
- <span class="p">}</span>  
- <span class="n">mosaic1</span> <span class="o">=</span> <span class="n">cvCreateImage</span><span class="p">(</span><span class="n">cvSize</span><span class="p">(</span><span class="n">mosaicVertical1</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">,</span> <span class="n">mosaicVertical1</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">),</span>  <span class="n">IPL_DEPTH_8U</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>  
- <span class="n">cvConvertScale</span><span class="p">(</span> <span class="n">mosaicVertical1</span><span class="p">,</span> <span class="n">mosaicVertical1</span><span class="p">,</span> <span class="mf">255.0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>  
- <span class="n">cvConvertScaleAbs</span><span class="p">(</span> <span class="n">mosaicVertical1</span><span class="p">,</span> <span class="n">mosaic1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>  
+#<span class="pl-k">define</span> <span class="pl-en">ImLevels</span>(<span class="pl-v">OCTAVE,LEVEL,ROW,COL</span>) ((<span class="pl-st">float</span> *)(Gaussianpyr[(OCTAVE)].Octave[(LEVEL)].Level-&gt;data.fl + Gaussianpyr[(OCTAVE)].Octave[(LEVEL)].Level-&gt;step/<span class="pl-k">sizeof</span>(<span class="pl-st">float</span>) *(ROW)))[(COL)]  
+ <span class="pl-c">//显示高斯金字塔  </span>
+ <span class="pl-k">for</span> (<span class="pl-st">int</span> i=<span class="pl-c1">0</span>; i&lt;numoctaves;i++)  
+ {  
+  <span class="pl-k">if</span> (i==<span class="pl-c1">0</span>)  
+  {  
+   mosaicHorizen1=<span class="pl-s3">MosaicHorizen</span>( (Gaussianpyr[<span class="pl-c1">0</span>].<span class="pl-vo">Octave</span>)[<span class="pl-c1">0</span>].<span class="pl-vo">Level</span>, (Gaussianpyr[<span class="pl-c1">0</span>].<span class="pl-vo">Octave</span>)[<span class="pl-c1">1</span>].<span class="pl-vo">Level</span> );  
+   <span class="pl-k">for</span> (<span class="pl-st">int</span> j=<span class="pl-c1">2</span>;j&lt;SCALESPEROCTAVE+<span class="pl-c1">3</span>;j++)  
+    mosaicHorizen1=<span class="pl-s3">MosaicHorizen</span>( mosaicHorizen1, (Gaussianpyr[<span class="pl-c1">0</span>].<span class="pl-vo">Octave</span>)[j].<span class="pl-vo">Level</span> );  
+   <span class="pl-k">for</span> ( j=<span class="pl-c1">0</span>;j&lt;NUMSIZE;j++)  
+    mosaicHorizen1=<span class="pl-s3">halfSizeImage</span>(mosaicHorizen1);  
+  }  
+  <span class="pl-k">else</span> <span class="pl-k">if</span> (i==<span class="pl-c1">1</span>)  
+  {  
+   mosaicHorizen2=<span class="pl-s3">MosaicHorizen</span>( (Gaussianpyr[<span class="pl-c1">1</span>].<span class="pl-vo">Octave</span>)[<span class="pl-c1">0</span>].<span class="pl-vo">Level</span>, (Gaussianpyr[<span class="pl-c1">1</span>].<span class="pl-vo">Octave</span>)[<span class="pl-c1">1</span>].<span class="pl-vo">Level</span> );  
+   <span class="pl-k">for</span> (<span class="pl-st">int</span> j=<span class="pl-c1">2</span>;j&lt;SCALESPEROCTAVE+<span class="pl-c1">3</span>;j++)  
+    mosaicHorizen2=<span class="pl-s3">MosaicHorizen</span>( mosaicHorizen2, (Gaussianpyr[<span class="pl-c1">1</span>].<span class="pl-vo">Octave</span>)[j].<span class="pl-vo">Level</span> );  
+   <span class="pl-k">for</span> ( j=<span class="pl-c1">0</span>;j&lt;NUMSIZE;j++)  
+    mosaicHorizen2=<span class="pl-s3">halfSizeImage</span>(mosaicHorizen2);  
+   mosaicVertical1=<span class="pl-s3">MosaicVertical</span>( mosaicHorizen1, mosaicHorizen2 );  
+  }  
+  <span class="pl-k">else</span>  
+  {  
+   mosaicHorizen1=<span class="pl-s3">MosaicHorizen</span>( (Gaussianpyr[i].<span class="pl-vo">Octave</span>)[<span class="pl-c1">0</span>].<span class="pl-vo">Level</span>, (Gaussianpyr[i].<span class="pl-vo">Octave</span>)[<span class="pl-c1">1</span>].<span class="pl-vo">Level</span> );  
+   <span class="pl-k">for</span> (<span class="pl-st">int</span> j=<span class="pl-c1">2</span>;j&lt;SCALESPEROCTAVE+<span class="pl-c1">3</span>;j++)  
+    mosaicHorizen1=<span class="pl-s3">MosaicHorizen</span>( mosaicHorizen1, (Gaussianpyr[i].<span class="pl-vo">Octave</span>)[j].<span class="pl-vo">Level</span> );  
+   <span class="pl-k">for</span> ( j=<span class="pl-c1">0</span>;j&lt;NUMSIZE;j++)  
+    mosaicHorizen1=<span class="pl-s3">halfSizeImage</span>(mosaicHorizen1);  
+   mosaicVertical1=<span class="pl-s3">MosaicVertical</span>( mosaicVertical1, mosaicHorizen1 );  
+  }  
+ }  
+ mosaic1 = <span class="pl-s3">cvCreateImage</span>(<span class="pl-s3">cvSize</span>(mosaicVertical1-&gt;width, mosaicVertical1-&gt;height),  IPL_DEPTH_8U,<span class="pl-c1">1</span>);  
+ <span class="pl-s3">cvConvertScale</span>( mosaicVertical1, mosaicVertical1, <span class="pl-c1">255.0</span>, <span class="pl-c1">0</span> );  
+ <span class="pl-s3">cvConvertScaleAbs</span>( mosaicVertical1, mosaic1, <span class="pl-c1">1</span>, <span class="pl-c1">0</span> );  
 
- <span class="c1">//  cvSaveImage("GaussianPyramid of me.jpg",mosaic1);  </span>
- <span class="n">cvNamedWindow</span><span class="p">(</span><span class="s">"mosaic1"</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>  
- <span class="n">cvShowImage</span><span class="p">(</span><span class="s">"mosaic1"</span><span class="p">,</span> <span class="n">mosaic1</span><span class="p">);</span>  
- <span class="n">cvWaitKey</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>  
- <span class="n">cvDestroyWindow</span><span class="p">(</span><span class="s">"mosaic1"</span><span class="p">);</span>  
- <span class="c1">//显示DOG金字塔  </span>
- <span class="k">for</span> <span class="p">(</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">numoctaves</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>  
- <span class="p">{</span>  
-  <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>  
-  <span class="p">{</span>  
-   <span class="n">mosaicHorizen1</span><span class="o">=</span><span class="n">MosaicHorizen</span><span class="p">(</span> <span class="p">(</span><span class="n">DOGoctaves</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">Octave</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="n">Level</span><span class="p">,</span> <span class="p">(</span><span class="n">DOGoctaves</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">Octave</span><span class="p">)[</span><span class="mi">1</span><span class="p">].</span><span class="n">Level</span> <span class="p">);</span>  
-   <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">SCALESPEROCTAVE</span><span class="o">+</span><span class="mi">2</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>  
-    <span class="n">mosaicHorizen1</span><span class="o">=</span><span class="n">MosaicHorizen</span><span class="p">(</span> <span class="n">mosaicHorizen1</span><span class="p">,</span> <span class="p">(</span><span class="n">DOGoctaves</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">Octave</span><span class="p">)[</span><span class="n">j</span><span class="p">].</span><span class="n">Level</span> <span class="p">);</span>  
-   <span class="k">for</span> <span class="p">(</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">NUMSIZE</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>  
-    <span class="n">mosaicHorizen1</span><span class="o">=</span><span class="n">halfSizeImage</span><span class="p">(</span><span class="n">mosaicHorizen1</span><span class="p">);</span>  
-  <span class="p">}</span>  
-  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>  
-  <span class="p">{</span>  
-   <span class="n">mosaicHorizen2</span><span class="o">=</span><span class="n">MosaicHorizen</span><span class="p">(</span> <span class="p">(</span><span class="n">DOGoctaves</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">Octave</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="n">Level</span><span class="p">,</span> <span class="p">(</span><span class="n">DOGoctaves</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">Octave</span><span class="p">)[</span><span class="mi">1</span><span class="p">].</span><span class="n">Level</span> <span class="p">);</span>  
-   <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">SCALESPEROCTAVE</span><span class="o">+</span><span class="mi">2</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>  
-    <span class="n">mosaicHorizen2</span><span class="o">=</span><span class="n">MosaicHorizen</span><span class="p">(</span> <span class="n">mosaicHorizen2</span><span class="p">,</span> <span class="p">(</span><span class="n">DOGoctaves</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">Octave</span><span class="p">)[</span><span class="n">j</span><span class="p">].</span><span class="n">Level</span> <span class="p">);</span>  
-   <span class="k">for</span> <span class="p">(</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">NUMSIZE</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>  
-    <span class="n">mosaicHorizen2</span><span class="o">=</span><span class="n">halfSizeImage</span><span class="p">(</span><span class="n">mosaicHorizen2</span><span class="p">);</span>  
-   <span class="n">mosaicVertical1</span><span class="o">=</span><span class="n">MosaicVertical</span><span class="p">(</span> <span class="n">mosaicHorizen1</span><span class="p">,</span> <span class="n">mosaicHorizen2</span> <span class="p">);</span>  
-  <span class="p">}</span>  
-  <span class="k">else</span>  
-  <span class="p">{</span>  
-   <span class="n">mosaicHorizen1</span><span class="o">=</span><span class="n">MosaicHorizen</span><span class="p">(</span> <span class="p">(</span><span class="n">DOGoctaves</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Octave</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="n">Level</span><span class="p">,</span> <span class="p">(</span><span class="n">DOGoctaves</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Octave</span><span class="p">)[</span><span class="mi">1</span><span class="p">].</span><span class="n">Level</span> <span class="p">);</span>  
-   <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">SCALESPEROCTAVE</span><span class="o">+</span><span class="mi">2</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>  
-    <span class="n">mosaicHorizen1</span><span class="o">=</span><span class="n">MosaicHorizen</span><span class="p">(</span> <span class="n">mosaicHorizen1</span><span class="p">,</span> <span class="p">(</span><span class="n">DOGoctaves</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Octave</span><span class="p">)[</span><span class="n">j</span><span class="p">].</span><span class="n">Level</span> <span class="p">);</span>  
-   <span class="k">for</span> <span class="p">(</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">NUMSIZE</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>  
-    <span class="n">mosaicHorizen1</span><span class="o">=</span><span class="n">halfSizeImage</span><span class="p">(</span><span class="n">mosaicHorizen1</span><span class="p">);</span>  
-   <span class="n">mosaicVertical1</span><span class="o">=</span><span class="n">MosaicVertical</span><span class="p">(</span> <span class="n">mosaicVertical1</span><span class="p">,</span> <span class="n">mosaicHorizen1</span> <span class="p">);</span>  
-  <span class="p">}</span>  
- <span class="p">}</span>  
- <span class="c1">//考虑到DOG金字塔各层图像都会有正负，所以，必须寻找最负的，以将所有图像抬高一个台阶去显示  </span>
- <span class="kt">double</span> <span class="n">min_val</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>  
- <span class="kt">double</span> <span class="n">max_val</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>  
- <span class="n">cvMinMaxLoc</span><span class="p">(</span> <span class="n">mosaicVertical1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">min_val</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">max_val</span><span class="p">,</span><span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span> <span class="p">);</span>  
- <span class="k">if</span> <span class="p">(</span> <span class="n">min_val</span><span class="o">&lt;</span><span class="mf">0.0</span> <span class="p">)</span>  
-  <span class="n">cvAddS</span><span class="p">(</span> <span class="n">mosaicVertical1</span><span class="p">,</span> <span class="n">cvScalarAll</span><span class="p">(</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span><span class="o">*</span><span class="n">min_val</span> <span class="p">),</span> <span class="n">mosaicVertical1</span><span class="p">,</span> <span class="nb">NULL</span> <span class="p">);</span>  
- <span class="n">mosaic2</span> <span class="o">=</span> <span class="n">cvCreateImage</span><span class="p">(</span><span class="n">cvSize</span><span class="p">(</span><span class="n">mosaicVertical1</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">,</span> <span class="n">mosaicVertical1</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">),</span>  <span class="n">IPL_DEPTH_8U</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>  
- <span class="n">cvConvertScale</span><span class="p">(</span> <span class="n">mosaicVertical1</span><span class="p">,</span> <span class="n">mosaicVertical1</span><span class="p">,</span> <span class="mf">255.0</span><span class="o">/</span><span class="p">(</span><span class="n">max_val</span><span class="o">-</span><span class="n">min_val</span><span class="p">),</span> <span class="mi">0</span> <span class="p">);</span>  
- <span class="n">cvConvertScaleAbs</span><span class="p">(</span> <span class="n">mosaicVertical1</span><span class="p">,</span> <span class="n">mosaic2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>  
+ <span class="pl-c">//  cvSaveImage("GaussianPyramid of me.jpg",mosaic1);  </span>
+ <span class="pl-s3">cvNamedWindow</span>(<span class="pl-s1"><span class="pl-pds">"</span>mosaic1<span class="pl-pds">"</span></span>,<span class="pl-c1">1</span>);  
+ <span class="pl-s3">cvShowImage</span>(<span class="pl-s1"><span class="pl-pds">"</span>mosaic1<span class="pl-pds">"</span></span>, mosaic1);  
+ <span class="pl-s3">cvWaitKey</span>(<span class="pl-c1">0</span>);  
+ <span class="pl-s3">cvDestroyWindow</span>(<span class="pl-s1"><span class="pl-pds">"</span>mosaic1<span class="pl-pds">"</span></span>);  
+ <span class="pl-c">//显示DOG金字塔  </span>
+ <span class="pl-k">for</span> ( i=<span class="pl-c1">0</span>; i&lt;numoctaves;i++)  
+ {  
+  <span class="pl-k">if</span> (i==<span class="pl-c1">0</span>)  
+  {  
+   mosaicHorizen1=<span class="pl-s3">MosaicHorizen</span>( (DOGoctaves[<span class="pl-c1">0</span>].<span class="pl-vo">Octave</span>)[<span class="pl-c1">0</span>].<span class="pl-vo">Level</span>, (DOGoctaves[<span class="pl-c1">0</span>].<span class="pl-vo">Octave</span>)[<span class="pl-c1">1</span>].<span class="pl-vo">Level</span> );  
+   <span class="pl-k">for</span> (<span class="pl-st">int</span> j=<span class="pl-c1">2</span>;j&lt;SCALESPEROCTAVE+<span class="pl-c1">2</span>;j++)  
+    mosaicHorizen1=<span class="pl-s3">MosaicHorizen</span>( mosaicHorizen1, (DOGoctaves[<span class="pl-c1">0</span>].<span class="pl-vo">Octave</span>)[j].<span class="pl-vo">Level</span> );  
+   <span class="pl-k">for</span> ( j=<span class="pl-c1">0</span>;j&lt;NUMSIZE;j++)  
+    mosaicHorizen1=<span class="pl-s3">halfSizeImage</span>(mosaicHorizen1);  
+  }  
+  <span class="pl-k">else</span> <span class="pl-k">if</span> (i==<span class="pl-c1">1</span>)  
+  {  
+   mosaicHorizen2=<span class="pl-s3">MosaicHorizen</span>( (DOGoctaves[<span class="pl-c1">1</span>].<span class="pl-vo">Octave</span>)[<span class="pl-c1">0</span>].<span class="pl-vo">Level</span>, (DOGoctaves[<span class="pl-c1">1</span>].<span class="pl-vo">Octave</span>)[<span class="pl-c1">1</span>].<span class="pl-vo">Level</span> );  
+   <span class="pl-k">for</span> (<span class="pl-st">int</span> j=<span class="pl-c1">2</span>;j&lt;SCALESPEROCTAVE+<span class="pl-c1">2</span>;j++)  
+    mosaicHorizen2=<span class="pl-s3">MosaicHorizen</span>( mosaicHorizen2, (DOGoctaves[<span class="pl-c1">1</span>].<span class="pl-vo">Octave</span>)[j].<span class="pl-vo">Level</span> );  
+   <span class="pl-k">for</span> ( j=<span class="pl-c1">0</span>;j&lt;NUMSIZE;j++)  
+    mosaicHorizen2=<span class="pl-s3">halfSizeImage</span>(mosaicHorizen2);  
+   mosaicVertical1=<span class="pl-s3">MosaicVertical</span>( mosaicHorizen1, mosaicHorizen2 );  
+  }  
+  <span class="pl-k">else</span>  
+  {  
+   mosaicHorizen1=<span class="pl-s3">MosaicHorizen</span>( (DOGoctaves[i].<span class="pl-vo">Octave</span>)[<span class="pl-c1">0</span>].<span class="pl-vo">Level</span>, (DOGoctaves[i].<span class="pl-vo">Octave</span>)[<span class="pl-c1">1</span>].<span class="pl-vo">Level</span> );  
+   <span class="pl-k">for</span> (<span class="pl-st">int</span> j=<span class="pl-c1">2</span>;j&lt;SCALESPEROCTAVE+<span class="pl-c1">2</span>;j++)  
+    mosaicHorizen1=<span class="pl-s3">MosaicHorizen</span>( mosaicHorizen1, (DOGoctaves[i].<span class="pl-vo">Octave</span>)[j].<span class="pl-vo">Level</span> );  
+   <span class="pl-k">for</span> ( j=<span class="pl-c1">0</span>;j&lt;NUMSIZE;j++)  
+    mosaicHorizen1=<span class="pl-s3">halfSizeImage</span>(mosaicHorizen1);  
+   mosaicVertical1=<span class="pl-s3">MosaicVertical</span>( mosaicVertical1, mosaicHorizen1 );  
+  }  
+ }  
+ <span class="pl-c">//考虑到DOG金字塔各层图像都会有正负，所以，必须寻找最负的，以将所有图像抬高一个台阶去显示  </span>
+ <span class="pl-st">double</span> min_val=<span class="pl-c1">0</span>;  
+ <span class="pl-st">double</span> max_val=<span class="pl-c1">0</span>;  
+ <span class="pl-s3">cvMinMaxLoc</span>( mosaicVertical1, &amp;min_val, &amp;max_val,<span class="pl-c1">NULL</span>, <span class="pl-c1">NULL</span>, <span class="pl-c1">NULL</span> );  
+ <span class="pl-k">if</span> ( min_val&lt;<span class="pl-c1">0.0</span> )  
+  <span class="pl-s3">cvAddS</span>( mosaicVertical1, <span class="pl-s3">cvScalarAll</span>( (-<span class="pl-c1">1.0</span>)*min_val ), mosaicVertical1, <span class="pl-c1">NULL</span> );  
+ mosaic2 = <span class="pl-s3">cvCreateImage</span>(<span class="pl-s3">cvSize</span>(mosaicVertical1-&gt;width, mosaicVertical1-&gt;height),  IPL_DEPTH_8U,<span class="pl-c1">1</span>);  
+ <span class="pl-s3">cvConvertScale</span>( mosaicVertical1, mosaicVertical1, <span class="pl-c1">255.0</span>/(max_val-min_val), <span class="pl-c1">0</span> );  
+ <span class="pl-s3">cvConvertScaleAbs</span>( mosaicVertical1, mosaic2, <span class="pl-c1">1</span>, <span class="pl-c1">0</span> );  
 
- <span class="c1">//  cvSaveImage("DOGPyramid of me.jpg",mosaic2);  </span>
- <span class="n">cvNamedWindow</span><span class="p">(</span><span class="s">"mosaic1"</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>  
- <span class="n">cvShowImage</span><span class="p">(</span><span class="s">"mosaic1"</span><span class="p">,</span> <span class="n">mosaic2</span><span class="p">);</span>  
- <span class="n">cvWaitKey</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>  
+ <span class="pl-c">//  cvSaveImage("DOGPyramid of me.jpg",mosaic2);  </span>
+ <span class="pl-s3">cvNamedWindow</span>(<span class="pl-s1"><span class="pl-pds">"</span>mosaic1<span class="pl-pds">"</span></span>,<span class="pl-c1">1</span>);  
+ <span class="pl-s3">cvShowImage</span>(<span class="pl-s1"><span class="pl-pds">"</span>mosaic1<span class="pl-pds">"</span></span>, mosaic2);  
+ <span class="pl-s3">cvWaitKey</span>(<span class="pl-c1">0</span>);  
 
- <span class="c1">//SIFT算法第三步：特征点位置检测，最后确定特征点的位置  </span>
- <span class="kt">int</span> <span class="n">keycount</span><span class="o">=</span><span class="n">DetectKeypoint</span><span class="p">(</span><span class="n">numoctaves</span><span class="p">,</span> <span class="n">Gaussianpyr</span><span class="p">);</span>  
- <span class="n">printf</span><span class="p">(</span><span class="s">"the keypoints number are %d ;/n"</span><span class="p">,</span> <span class="n">keycount</span><span class="p">);</span>  
- <span class="n">cvCopy</span><span class="p">(</span><span class="n">src</span><span class="p">,</span><span class="n">image1</span><span class="p">,</span><span class="nb">NULL</span><span class="p">);</span>  
- <span class="n">DisplayKeypointLocation</span><span class="p">(</span> <span class="n">image1</span> <span class="p">,</span><span class="n">Gaussianpyr</span><span class="p">);</span>  
+ <span class="pl-c">//SIFT算法第三步：特征点位置检测，最后确定特征点的位置  </span>
+ <span class="pl-st">int</span> keycount=<span class="pl-s3">DetectKeypoint</span>(numoctaves, Gaussianpyr);  
+ <span class="pl-s3">printf</span>(<span class="pl-s1"><span class="pl-pds">"</span>the keypoints number are <span class="pl-c1">%d</span> ;/n<span class="pl-pds">"</span></span>, keycount);  
+ <span class="pl-s3">cvCopy</span>(src,image1,<span class="pl-c1">NULL</span>);  
+ <span class="pl-s3">DisplayKeypointLocation</span>( image1 ,Gaussianpyr);  
 
- <span class="n">cvPyrUp</span><span class="p">(</span> <span class="n">image1</span><span class="p">,</span> <span class="n">DoubleSizeImage</span><span class="p">,</span> <span class="n">CV_GAUSSIAN_5x5</span> <span class="p">);</span>  
- <span class="n">cvNamedWindow</span><span class="p">(</span><span class="s">"image1"</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>  
- <span class="n">cvShowImage</span><span class="p">(</span><span class="s">"image1"</span><span class="p">,</span> <span class="n">DoubleSizeImage</span><span class="p">);</span>  
- <span class="n">cvWaitKey</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>    
- <span class="n">cvDestroyWindow</span><span class="p">(</span><span class="s">"image1"</span><span class="p">);</span>  
+ <span class="pl-s3">cvPyrUp</span>( image1, DoubleSizeImage, CV_GAUSSIAN_5x5 );  
+ <span class="pl-s3">cvNamedWindow</span>(<span class="pl-s1"><span class="pl-pds">"</span>image1<span class="pl-pds">"</span></span>,<span class="pl-c1">1</span>);  
+ <span class="pl-s3">cvShowImage</span>(<span class="pl-s1"><span class="pl-pds">"</span>image1<span class="pl-pds">"</span></span>, DoubleSizeImage);  
+ <span class="pl-s3">cvWaitKey</span>(<span class="pl-c1">0</span>);    
+ <span class="pl-s3">cvDestroyWindow</span>(<span class="pl-s1"><span class="pl-pds">"</span>image1<span class="pl-pds">"</span></span>);  
 
- <span class="c1">//SIFT算法第四步：计算高斯图像的梯度方向和幅值，计算各个特征点的主方向  </span>
- <span class="n">ComputeGrad_DirecandMag</span><span class="p">(</span><span class="n">numoctaves</span><span class="p">,</span> <span class="n">Gaussianpyr</span><span class="p">);</span>  
- <span class="n">AssignTheMainOrientation</span><span class="p">(</span> <span class="n">numoctaves</span><span class="p">,</span> <span class="n">Gaussianpyr</span><span class="p">,</span><span class="n">mag_pyr</span><span class="p">,</span><span class="n">grad_pyr</span><span class="p">);</span>  
- <span class="n">cvCopy</span><span class="p">(</span><span class="n">src</span><span class="p">,</span><span class="n">image1</span><span class="p">,</span><span class="nb">NULL</span><span class="p">);</span>  
- <span class="n">DisplayOrientation</span> <span class="p">(</span> <span class="n">image1</span><span class="p">,</span> <span class="n">Gaussianpyr</span><span class="p">);</span>  
+ <span class="pl-c">//SIFT算法第四步：计算高斯图像的梯度方向和幅值，计算各个特征点的主方向  </span>
+ <span class="pl-s3">ComputeGrad_DirecandMag</span>(numoctaves, Gaussianpyr);  
+ <span class="pl-s3">AssignTheMainOrientation</span>( numoctaves, Gaussianpyr,mag_pyr,grad_pyr);  
+ <span class="pl-s3">cvCopy</span>(src,image1,<span class="pl-c1">NULL</span>);  
+ <span class="pl-s3">DisplayOrientation</span> ( image1, Gaussianpyr);  
 
- <span class="c1">//  cvPyrUp( image1, DoubleSizeImage, CV_GAUSSIAN_5x5 );  </span>
- <span class="n">cvNamedWindow</span><span class="p">(</span><span class="s">"image1"</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>  
- <span class="c1">//  cvResizeWindow("image1", 2*(image1-&gt;width), 2*(image1-&gt;height) );  </span>
- <span class="n">cvShowImage</span><span class="p">(</span><span class="s">"image1"</span><span class="p">,</span> <span class="n">image1</span><span class="p">);</span>  
- <span class="n">cvWaitKey</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>  
+ <span class="pl-c">//  cvPyrUp( image1, DoubleSizeImage, CV_GAUSSIAN_5x5 );  </span>
+ <span class="pl-s3">cvNamedWindow</span>(<span class="pl-s1"><span class="pl-pds">"</span>image1<span class="pl-pds">"</span></span>,<span class="pl-c1">1</span>);  
+ <span class="pl-c">//  cvResizeWindow("image1", 2*(image1-&gt;width), 2*(image1-&gt;height) );  </span>
+ <span class="pl-s3">cvShowImage</span>(<span class="pl-s1"><span class="pl-pds">"</span>image1<span class="pl-pds">"</span></span>, image1);  
+ <span class="pl-s3">cvWaitKey</span>(<span class="pl-c1">0</span>);  
 
- <span class="c1">//SIFT算法第五步：抽取各个特征点处的特征描述字  </span>
- <span class="n">ExtractFeatureDescriptors</span><span class="p">(</span> <span class="n">numoctaves</span><span class="p">,</span> <span class="n">Gaussianpyr</span><span class="p">);</span>  
- <span class="n">cvWaitKey</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>  
+ <span class="pl-c">//SIFT算法第五步：抽取各个特征点处的特征描述字  </span>
+ <span class="pl-s3">ExtractFeatureDescriptors</span>( numoctaves, Gaussianpyr);  
+ <span class="pl-s3">cvWaitKey</span>(<span class="pl-c1">0</span>);  
 
- <span class="c1">//销毁窗口  </span>
- <span class="n">cvDestroyWindow</span><span class="p">(</span><span class="s">"image1"</span><span class="p">);</span>  
- <span class="n">cvDestroyWindow</span><span class="p">(</span><span class="s">"mosaic1"</span><span class="p">);</span>  
- <span class="c1">//释放图像  </span>
- <span class="n">cvReleaseImage</span><span class="p">(</span><span class="o">&amp;</span><span class="n">image1</span><span class="p">);</span>  
- <span class="n">cvReleaseImage</span><span class="p">(</span><span class="o">&amp;</span><span class="n">grey_im1</span><span class="p">);</span>  
- <span class="n">cvReleaseImage</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mosaic1</span><span class="p">);</span>  
- <span class="n">cvReleaseImage</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mosaic2</span><span class="p">);</span>  
- <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>  
-<span class="p">}</span>  
-</pre>
+ <span class="pl-c">//销毁窗口  </span>
+ <span class="pl-s3">cvDestroyWindow</span>(<span class="pl-s1"><span class="pl-pds">"</span>image1<span class="pl-pds">"</span></span>);  
+ <span class="pl-s3">cvDestroyWindow</span>(<span class="pl-s1"><span class="pl-pds">"</span>mosaic1<span class="pl-pds">"</span></span>);  
+ <span class="pl-c">//释放图像  </span>
+ <span class="pl-s3">cvReleaseImage</span>(&amp;image1);  
+ <span class="pl-s3">cvReleaseImage</span>(&amp;grey_im1);  
+ <span class="pl-s3">cvReleaseImage</span>(&amp;mosaic1);  
+ <span class="pl-s3">cvReleaseImage</span>(&amp;mosaic2);  
+ <span class="pl-k">return</span> <span class="pl-c1">0</span>;  
+}  </pre>
   </div>
   <p>
    更多见下文：

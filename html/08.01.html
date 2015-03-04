@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0b7f6f87923ad9426424470c38a307b7e83d5ca5.css" />
-  <link rel="stylesheet" href="style_cache/github2-d5b333d2db016759f0579af151c14effd2373ff4.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-fff66249e57e12b5b264967f6a4d21f8923d59247f86c4419d1e3092660fe54b.css" />
+  <link rel="stylesheet" href="style_cache/github2-27099ff875724b3da49fac6911968f783aa96ed08970c77185d963ce6c21af75.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,7 +105,7 @@
 			<html>
  <body>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E6%A6%82%E7%8E%87%E7%BB%9F%E8%AE%A1" name="user-content-%E6%A6%82%E7%8E%87%E7%BB%9F%E8%AE%A1">
+   <a aria-hidden="true" class="anchor" href="#%E6%A6%82%E7%8E%87%E7%BB%9F%E8%AE%A1" id="user-content-概率统计">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -127,27 +127,30 @@
     1.rand7执行两次，出来的数为a1=rand7()-1，a2=rand7()-1.
    </li>
    <li>
-    2.如果a1*7+a2=40,重复第一步。参考代码如下所示：
+    2.如果a1
+    <em>
+     7+a2&lt;40,b=(a1
+    </em>
+    7+a2)/4+1；如果a1*7+a2&gt;=40,重复第一步。参考代码如下所示：
    </li>
   </ul>
   <div class="highlight highlight-c">
-   <pre><span class="kt">int</span> <span class="nf">rand7</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="k">return</span> <span class="n">rand</span><span class="p">()</span> <span class="o">%</span> <span class="mi">7</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-<span class="p">}</span>
+   <pre><span class="pl-st">int</span> <span class="pl-en">rand7</span>()
+{
+    <span class="pl-k">return</span> <span class="pl-s3">rand</span>() % <span class="pl-c1">7</span> + <span class="pl-c1">1</span>;
+}
 
-<span class="kt">int</span> <span class="nf">rand10</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">a71</span><span class="p">,</span> <span class="n">a72</span><span class="p">,</span> <span class="n">a10</span><span class="p">;</span>
-    <span class="k">do</span>
-    <span class="p">{</span>
-        <span class="n">a71</span> <span class="o">=</span> <span class="n">rand7</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="n">a72</span> <span class="o">=</span> <span class="n">rand7</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="n">a10</span> <span class="o">=</span> <span class="n">a71</span> <span class="o">*</span> <span class="mi">7</span> <span class="o">+</span> <span class="n">a72</span><span class="p">;</span>
-    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">a10</span> <span class="o">&gt;=</span> <span class="mi">40</span><span class="p">);</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">a71</span> <span class="o">*</span> <span class="mi">7</span> <span class="o">+</span> <span class="n">a72</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
+<span class="pl-st">int</span> <span class="pl-en">rand10</span>()
+{
+    <span class="pl-st">int</span> a71, a72, a10;
+    <span class="pl-k">do</span>
+    {
+        a71 = <span class="pl-s3">rand7</span>() - <span class="pl-c1">1</span>;
+        a72 = <span class="pl-s3">rand7</span>() - <span class="pl-c1">1</span>;
+        a10 = a71 * <span class="pl-c1">7</span> + a72;
+    } <span class="pl-k">while</span> (a10 &gt;= <span class="pl-c1">40</span>);
+    <span class="pl-k">return</span> (a71 * <span class="pl-c1">7</span> + a72) / <span class="pl-c1">4</span> + <span class="pl-c1">1</span>;
+}</pre>
   </div>
   <p>
    <strong>

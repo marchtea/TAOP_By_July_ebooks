@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0b7f6f87923ad9426424470c38a307b7e83d5ca5.css" />
-  <link rel="stylesheet" href="style_cache/github2-d5b333d2db016759f0579af151c14effd2373ff4.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-fff66249e57e12b5b264967f6a4d21f8923d59247f86c4419d1e3092660fe54b.css" />
+  <link rel="stylesheet" href="style_cache/github2-27099ff875724b3da49fac6911968f783aa96ed08970c77185d963ce6c21af75.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,14 +105,14 @@
 			<html>
  <body>
   <h1>
-   <a aria-hidden="true" class="anchor" href="#k%E4%B8%AA%E6%9C%80%E5%B0%8F%E5%92%8C-uva-11997-k-smallest-sums" name="user-content-k%E4%B8%AA%E6%9C%80%E5%B0%8F%E5%92%8C-uva-11997-k-smallest-sums">
+   <a aria-hidden="true" class="anchor" href="#k%E4%B8%AA%E6%9C%80%E5%B0%8F%E5%92%8C-uva-11997-k-smallest-sums" id="user-content-k个最小和-uva-11997-k-smallest-sums">
     <span class="octicon octicon-link">
     </span>
    </a>
    K个最小和 (UVA 11997 K Smallest Sums)
   </h1>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F" name="user-content-%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F">
+   <a aria-hidden="true" class="anchor" href="#%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F" id="user-content-题目大意">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -122,7 +122,7 @@
    You're given k arrays, each array has k integers. There are kk ways to pick exactly one element in each array and calculate the sum of the integers. Your task is to find the k smallest sums among them.
   </p>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#input" name="user-content-input">
+   <a aria-hidden="true" class="anchor" href="#input" id="user-content-input">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -132,7 +132,7 @@
    There will be several test cases. The first line of each case contains an integer k (2&lt;=k&lt;=750). Each of the following k lines contains k positive integers in each array. Each of these integers does not exceed 1,000,000. The input is terminated by end-of-file (EOF). The size of input file does not exceed 5MB.
   </p>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#output" name="user-content-output">
+   <a aria-hidden="true" class="anchor" href="#output" id="user-content-output">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -142,7 +142,7 @@
    For each test case, print the k smallest sums, in ascending order.
   </p>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#sample-input" name="user-content-sample-input">
+   <a aria-hidden="true" class="anchor" href="#sample-input" id="user-content-sample-input">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -158,7 +158,7 @@
 1 2
   </p>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#output-for-the-sample-input" name="user-content-output-for-the-sample-input">
+   <a aria-hidden="true" class="anchor" href="#output-for-the-sample-input" id="user-content-output-for-the-sample-input">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -172,7 +172,7 @@
    给定一个k*k的一个矩阵，如果让你在每一行取出一个数，再将每一行取出的数相加，那么总共可以得到k^k种相加方法，现在让你求出这k^k个结果中最小的k个结果。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" id="user-content-分析与解法">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -240,71 +240,70 @@ DP[k]+A[1] &lt; DP[m]+A[n]
    为什么不保存A的下标a呢？因为我们用不到a的值。如果我们需要在表(sum, b)中赵到下一个元素(sum', b+1)，只要计算sum' = s - B[b] + B[b+1],不需要知道a是多少。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81" name="user-content-%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81">
+   <a aria-hidden="true" class="anchor" href="#%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81" id="user-content-实现代码">
     <span class="octicon octicon-link">
     </span>
    </a>
    实现代码
   </h3>
   <div class="highlight highlight-c">
-   <pre><span class="cp">#include &lt;cstdio&gt;</span>
-<span class="cp">#include &lt;algorithm&gt;</span>
-<span class="cp">#include &lt;queue&gt;</span>
+   <pre>#<span class="pl-k">include</span> <span class="pl-s1"><span class="pl-pds">&lt;</span>cstdio<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s1"><span class="pl-pds">&lt;</span>algorithm<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s1"><span class="pl-pds">&lt;</span>queue<span class="pl-pds">&gt;</span></span>
 
-<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+using namespace std;
 
-<span class="kt">int</span>  <span class="n">a</span><span class="p">[</span><span class="mi">800</span><span class="p">][</span><span class="mi">800</span><span class="p">],</span><span class="n">k</span><span class="p">;</span>
+<span class="pl-st">int</span>  a[<span class="pl-c1">800</span>][<span class="pl-c1">800</span>],k;
 
-<span class="k">struct</span> <span class="n">node</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">s</span><span class="p">,</span><span class="n">b</span><span class="p">;</span>
-    <span class="kt">bool</span> <span class="n">operator</span><span class="o">&lt;</span><span class="p">(</span><span class="k">const</span> <span class="n">node</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">)</span> <span class="k">const</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="n">s</span><span class="o">&gt;</span><span class="n">a</span><span class="p">.</span><span class="n">s</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
+<span class="pl-st">struct</span> node
+{
+    <span class="pl-st">int</span> s,b;
+    <span class="pl-st">bool</span> operator&lt;(<span class="pl-s">const</span> node &amp;a) <span class="pl-s">const</span>
+    {
+        <span class="pl-k">return</span> s&gt;a.<span class="pl-vo">s</span>;
+    }
+};
 
-<span class="kt">void</span> <span class="nf">merge</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">A</span><span class="p">,</span><span class="kt">int</span> <span class="o">*</span><span class="n">B</span><span class="p">,</span><span class="kt">int</span> <span class="o">*</span><span class="n">C</span><span class="p">,</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">node</span> <span class="n">tmp</span><span class="p">;</span>
-    <span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">node</span><span class="o">&gt;</span> <span class="n">q</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">tmp</span><span class="p">.</span><span class="n">s</span><span class="o">=</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">B</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">tmp</span><span class="p">.</span><span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
-        <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">tmp</span><span class="o">=</span><span class="n">q</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
-        <span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
-        <span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">tmp</span><span class="p">.</span><span class="n">s</span><span class="p">;</span>
-        <span class="k">if</span><span class="p">(</span><span class="n">tmp</span><span class="p">.</span><span class="n">b</span><span class="o">+</span><span class="mi">1</span><span class="o">&lt;</span><span class="n">n</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">tmp</span><span class="p">.</span><span class="n">s</span><span class="o">=</span><span class="n">tmp</span><span class="p">.</span><span class="n">s</span><span class="o">-</span><span class="n">B</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">b</span><span class="p">]</span><span class="o">+</span><span class="n">B</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">b</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
-            <span class="n">tmp</span><span class="p">.</span><span class="n">b</span><span class="o">++</span><span class="p">;</span>
-            <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<span class="pl-st">void</span> <span class="pl-en">merge</span>(<span class="pl-st">int</span> *A,<span class="pl-st">int</span> *B,<span class="pl-st">int</span> *C,<span class="pl-st">int</span> n)
+{
+    node tmp;
+    priority_queue&lt;node&gt; q;
+    <span class="pl-k">for</span>(<span class="pl-st">int</span> i=<span class="pl-c1">0</span>;i&lt;n;i++)
+    {
+        tmp.<span class="pl-vo">s</span>=A[i]+B[<span class="pl-c1">0</span>],tmp.<span class="pl-vo">b</span>=<span class="pl-c1">0</span>;
+        q.<span class="pl-s3">push</span>(tmp);
+    }
+    <span class="pl-k">for</span>(<span class="pl-st">int</span> i=<span class="pl-c1">0</span>;i&lt;n;i++)
+    {
+        tmp=q.<span class="pl-s3">top</span>();
+        q.<span class="pl-s3">pop</span>();
+        C[i]=tmp.<span class="pl-vo">s</span>;
+        <span class="pl-k">if</span>(tmp.<span class="pl-vo">b</span>+<span class="pl-c1">1</span>&lt;n)
+        {
+            tmp.<span class="pl-vo">s</span>=tmp.<span class="pl-vo">s</span>-B[tmp.<span class="pl-vo">b</span>]+B[tmp.<span class="pl-vo">b</span>+<span class="pl-c1">1</span>];
+            tmp.<span class="pl-vo">b</span>++;
+            q.<span class="pl-s3">push</span>(tmp);
+        }
+    }
+}
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="k">while</span><span class="p">(</span><span class="o">~</span><span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span><span class="o">&amp;</span><span class="n">k</span><span class="p">))</span>
-    <span class="p">{</span>
-        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">k</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">k</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
-                <span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span><span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]);</span>
-            <span class="n">sort</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">k</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">k</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-            <span class="n">merge</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">k</span><span class="p">);</span>
-        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">k</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-            <span class="n">printf</span><span class="p">(</span><span class="s">"%d%s"</span><span class="p">,</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">],</span><span class="n">i</span><span class="o">!=</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="o">?</span><span class="s">" "</span><span class="o">:</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
+<span class="pl-st">int</span> <span class="pl-en">main</span>()
+{
+    <span class="pl-k">while</span>(~<span class="pl-s3">scanf</span>(<span class="pl-s1"><span class="pl-pds">"</span><span class="pl-c1">%d</span><span class="pl-pds">"</span></span>,&amp;k))
+    {
+        <span class="pl-k">for</span>(<span class="pl-st">int</span> i=<span class="pl-c1">0</span>;i&lt;k;i++)
+        {
+            <span class="pl-k">for</span>(<span class="pl-st">int</span> j=<span class="pl-c1">0</span>;j&lt;k;j++)
+                <span class="pl-s3">scanf</span>(<span class="pl-s1"><span class="pl-pds">"</span><span class="pl-c1">%d</span><span class="pl-pds">"</span></span>,&amp;a[i][j]);
+            <span class="pl-s3">sort</span>(a[i],a[i]+k);
+        }
+        <span class="pl-k">for</span>(<span class="pl-st">int</span> i=<span class="pl-c1">1</span>;i&lt;k;i++)
+            <span class="pl-s3">merge</span>(a[<span class="pl-c1">0</span>],a[i],a[<span class="pl-c1">0</span>],k);
+        <span class="pl-k">for</span>(<span class="pl-st">int</span> i=<span class="pl-c1">0</span>;i&lt;k;i++)
+            <span class="pl-s3">printf</span>(<span class="pl-s1"><span class="pl-pds">"</span><span class="pl-c1">%d%s</span><span class="pl-pds">"</span></span>,a[<span class="pl-c1">0</span>][i],i!=k-<span class="pl-c1">1</span>?<span class="pl-s1"><span class="pl-pds">"</span> <span class="pl-pds">"</span></span>:<span class="pl-s1"><span class="pl-pds">"</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+    }
+    <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+}</pre>
   </div>
   <p>
    参考

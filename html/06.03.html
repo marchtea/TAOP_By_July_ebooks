@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0b7f6f87923ad9426424470c38a307b7e83d5ca5.css" />
-  <link rel="stylesheet" href="style_cache/github2-d5b333d2db016759f0579af151c14effd2373ff4.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-fff66249e57e12b5b264967f6a4d21f8923d59247f86c4419d1e3092660fe54b.css" />
+  <link rel="stylesheet" href="style_cache/github2-27099ff875724b3da49fac6911968f783aa96ed08970c77185d963ce6c21af75.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,21 +105,21 @@
 			<html>
  <body>
   <h1>
-   <a aria-hidden="true" class="anchor" href="#simhash%E7%AE%97%E6%B3%95" name="user-content-simhash%E7%AE%97%E6%B3%95">
+   <a aria-hidden="true" class="anchor" href="#simhash%E7%AE%97%E6%B3%95" id="user-content-simhash算法">
     <span class="octicon octicon-link">
     </span>
    </a>
    simhash算法
   </h1>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D" name="user-content-%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D">
+   <a aria-hidden="true" class="anchor" href="#%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D" id="user-content-方法介绍">
     <span class="octicon octicon-link">
     </span>
    </a>
    方法介绍
   </h2>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E8%83%8C%E6%99%AF" name="user-content-%E8%83%8C%E6%99%AF">
+   <a aria-hidden="true" class="anchor" href="#%E8%83%8C%E6%99%AF" id="user-content-背景">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -194,7 +194,7 @@
    可理想当中的hash函数，需要对几乎相同的输入内容，产生相同或者相近的hash值，换言之，hash值的相似程度要能直接反映输入内容的相似程度，故md5等传统hash方法也无法满足我们的需求。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E5%87%BA%E4%B8%96" name="user-content-%E5%87%BA%E4%B8%96">
+   <a aria-hidden="true" class="anchor" href="#%E5%87%BA%E4%B8%96" id="user-content-出世">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -220,7 +220,7 @@
    如此，通过比较多个文档的simHash值的海明距离，可以获取它们的相似度。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E6%B5%81%E7%A8%8B" name="user-content-%E6%B5%81%E7%A8%8B">
+   <a aria-hidden="true" class="anchor" href="#%E6%B5%81%E7%A8%8B" id="user-content-流程">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -250,7 +250,11 @@
     加权
     <ul>
      <li>
-      在hash值的基础上，给所有特征向量进行加权，即W = Hash * weight，且遇到1则hash值和权值正相乘，遇到0则hash值和权值负相乘。例如给“CSDN”的hash值“100101”加权得到：W(CSDN) = 100101*4 = 4 -4 -4 4 -4 4，给“博客”的hash值“101011”加权得到：W(博客)=101011*5 = 5 -5 5 -5 5 5，其余特征向量类似此般操作。
+      在hash值的基础上，给所有特征向量进行加权，即W = Hash * weight，且遇到1则hash值和权值正相乘，遇到0则hash值和权值负相乘。例如给“CSDN”的hash值“100101”加权得到：W(CSDN) = 100101
+      <em>
+       4 = 4 -4 -4 4 -4 4，给“博客”的hash值“101011”加权得到：W(博客)=101011
+      </em>
+      5 = 5 -5 5 -5 5 5，其余特征向量类似此般操作。
      </li>
     </ul>
    </li>
@@ -278,7 +282,7 @@
    </a>
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E5%BA%94%E7%94%A8" name="user-content-%E5%BA%94%E7%94%A8">
+   <a aria-hidden="true" class="anchor" href="#%E5%BA%94%E7%94%A8" id="user-content-应用">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -364,7 +368,7 @@
    ，后续图片会全部重画）
   </p>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B" name="user-content-%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B">
+   <a aria-hidden="true" class="anchor" href="#%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B" id="user-content-问题实例">
     <span class="octicon octicon-link">
     </span>
    </a>

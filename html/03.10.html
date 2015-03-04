@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0b7f6f87923ad9426424470c38a307b7e83d5ca5.css" />
-  <link rel="stylesheet" href="style_cache/github2-d5b333d2db016759f0579af151c14effd2373ff4.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-fff66249e57e12b5b264967f6a4d21f8923d59247f86c4419d1e3092660fe54b.css" />
+  <link rel="stylesheet" href="style_cache/github2-27099ff875724b3da49fac6911968f783aa96ed08970c77185d963ce6c21af75.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,7 +105,7 @@
 			<html>
  <body>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E6%9C%AC%E7%AB%A0%E5%A0%86%E6%A0%88%E6%A0%91%E5%9B%BE%E7%9B%B8%E5%85%B3%E7%9A%84%E4%B9%A0%E9%A2%98" name="user-content-%E6%9C%AC%E7%AB%A0%E5%A0%86%E6%A0%88%E6%A0%91%E5%9B%BE%E7%9B%B8%E5%85%B3%E7%9A%84%E4%B9%A0%E9%A2%98">
+   <a aria-hidden="true" class="anchor" href="#%E6%9C%AC%E7%AB%A0%E5%A0%86%E6%A0%88%E6%A0%91%E5%9B%BE%E7%9B%B8%E5%85%B3%E7%9A%84%E4%B9%A0%E9%A2%98" id="user-content-本章堆栈树图相关的习题">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -324,18 +324,17 @@
    某队列的声明如下：
   </p>
   <div class="highlight highlight-cpp">
-   <pre><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span> <span class="k">class</span> <span class="nc">CQueue</span>
-<span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-      <span class="n">CQueue</span><span class="p">()</span> <span class="p">{}</span>
-      <span class="o">~</span><span class="n">CQueue</span><span class="p">()</span> <span class="p">{}</span>
-      <span class="kt">void</span> <span class="n">appendTail</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">node</span><span class="p">);</span>  <span class="c1">// append a element to tail</span>
-      <span class="kt">void</span> <span class="nf">deleteHead</span><span class="p">();</span>               <span class="c1">// remove a element from head</span>
-<span class="k">private</span><span class="o">:</span>
-     <span class="n">T</span><span class="o">&gt;</span> <span class="n">m_stack1</span><span class="p">;</span>
-     <span class="n">T</span><span class="o">&gt;</span> <span class="n">m_stack2</span><span class="p">;</span>
-<span class="p">};</span>
-</pre>
+   <pre><span class="pl-st">template</span>&lt;<span class="pl-s">typename</span> T&gt; <span class="pl-st">class</span> <span class="pl-en">CQueue</span>
+{
+<span class="pl-s">public:</span>
+      <span class="pl-en">CQueue</span>() {}
+      <span class="pl-en">~CQueue</span>() {}
+      <span class="pl-st">void</span> <span class="pl-en">appendTail</span>(<span class="pl-s">const</span> T&amp; node);  <span class="pl-c">// append a element to tail</span>
+      <span class="pl-st">void</span> <span class="pl-en">deleteHead</span>();               <span class="pl-c">// remove a element from head</span>
+<span class="pl-s">private:</span>
+     T&gt; m_stack1;
+     T&gt; m_stack2;
+};</pre>
   </div>
   <p>
    提示：这道题实质上是要求我们用两个栈来实现一个队列。栈是一种后入先出的数据容器，因此对队列进行的插入和删除操作都是在栈顶上进行；队列是一种先入先出的数据容器，我们总是把新元素插入到队列的尾部，而从队列的头部删除元素。

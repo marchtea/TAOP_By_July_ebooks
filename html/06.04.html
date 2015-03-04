@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0b7f6f87923ad9426424470c38a307b7e83d5ca5.css" />
-  <link rel="stylesheet" href="style_cache/github2-d5b333d2db016759f0579af151c14effd2373ff4.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-fff66249e57e12b5b264967f6a4d21f8923d59247f86c4419d1e3092660fe54b.css" />
+  <link rel="stylesheet" href="style_cache/github2-27099ff875724b3da49fac6911968f783aa96ed08970c77185d963ce6c21af75.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,14 +105,14 @@
 			<html>
  <body>
   <h1>
-   <a aria-hidden="true" class="anchor" href="#%E5%A4%96%E6%8E%92%E5%BA%8F" name="user-content-%E5%A4%96%E6%8E%92%E5%BA%8F">
+   <a aria-hidden="true" class="anchor" href="#%E5%A4%96%E6%8E%92%E5%BA%8F" id="user-content-外排序">
     <span class="octicon octicon-link">
     </span>
    </a>
    外排序
   </h1>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D" name="user-content-%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D">
+   <a aria-hidden="true" class="anchor" href="#%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D" id="user-content-方法介绍">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -192,7 +192,7 @@
    </li>
   </ul>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B" name="user-content-%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B">
+   <a aria-hidden="true" class="anchor" href="#%E9%97%AE%E9%A2%98%E5%AE%9E%E4%BE%8B" id="user-content-问题实例">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -285,7 +285,11 @@ for i={0...n}
    不过很快，我们就将意识到，用此位图方法，严格说来还是不太行，空间消耗10^7/8还是大于1M（1M=1024*1024空间，小于10^7/8）。
   </p>
   <p>
-   既然如果用位图方案的话，我们需要约1.25MB（若每条记录是8位的正整数的话，则10000000/(1024*1024*8) ~= 1.2M）的空间，而现在只有1MB的可用存储空间，那么究竟该作何处理呢？
+   既然如果用位图方案的话，我们需要约1.25MB（若每条记录是8位的正整数的话，则10000000/(1024
+   <em>
+    1024
+   </em>
+   8) ~= 1.2M）的空间，而现在只有1MB的可用存储空间，那么究竟该作何处理呢？
   </p>
   <p>
    <strong>
@@ -314,7 +318,11 @@ for i={0...n}
 多位归并   O(Nlogn)             1M
 </code></pre>
   <p>
-   （多路归并，时间复杂度为O（k*n/k*logn/k ），严格来说，还要加上读写磁盘的时间，而此算法绝大部分时间也是浪费在这上面）
+   （多路归并，时间复杂度为O（k
+   <em>
+    n/k
+   </em>
+   logn/k ），严格来说，还要加上读写磁盘的时间，而此算法绝大部分时间也是浪费在这上面）
   </p>
   <p>
    2、bit-map
@@ -329,7 +337,7 @@ for i={0...n}
    扩展：bloom filter可以看做是对bit-map的扩展
   </p>
   <h2>
-   <a aria-hidden="true" class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
+   <a aria-hidden="true" class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" id="user-content-举一反三">
     <span class="octicon octicon-link">
     </span>
    </a>

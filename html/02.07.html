@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title></title><link rel="stylesheet" href="style_cache/github-0b7f6f87923ad9426424470c38a307b7e83d5ca5.css" />
-  <link rel="stylesheet" href="style_cache/github2-d5b333d2db016759f0579af151c14effd2373ff4.css" />
+  <title></title><link rel="stylesheet" href="style_cache/github-fff66249e57e12b5b264967f6a4d21f8923d59247f86c4419d1e3092660fe54b.css" />
+  <link rel="stylesheet" href="style_cache/github2-27099ff875724b3da49fac6911968f783aa96ed08970c77185d963ce6c21af75.css" />
   <style>
     .file-box {
       margin: 64px auto;
@@ -105,14 +105,14 @@
 			<html>
  <body>
   <h1>
-   <a aria-hidden="true" class="anchor" href="#%E8%8D%B7%E5%85%B0%E5%9B%BD%E6%97%97" name="user-content-%E8%8D%B7%E5%85%B0%E5%9B%BD%E6%97%97">
+   <a aria-hidden="true" class="anchor" href="#%E8%8D%B7%E5%85%B0%E5%9B%BD%E6%97%97" id="user-content-荷兰国旗">
     <span class="octicon octicon-link">
     </span>
    </a>
    荷兰国旗
   </h1>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" name="user-content-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">
+   <a aria-hidden="true" class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" id="user-content-题目描述">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -134,7 +134,7 @@
 现有n个红白蓝三种不同颜色的小球，乱序排列在一起，请通过两两交换任意两个球，使得从左至右，依次是一些红球、一些白球、一些蓝球。
   </p>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" name="user-content-%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95">
+   <a aria-hidden="true" class="anchor" href="#%E5%88%86%E6%9E%90%E4%B8%8E%E8%A7%A3%E6%B3%95" id="user-content-分析与解法">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -147,7 +147,7 @@
    我们知道，快速排序依托于一个partition分治过程，在每一趟排序的过程中，选取的主元都会把整个数组排列成一大一小的部分，那我们是否可以借鉴partition过程设定三个指针完成重新排列，使得所有球排列成三个不同颜色的球呢？
   </p>
   <h4>
-   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" name="user-content-%E8%A7%A3%E6%B3%95%E4%B8%80">
+   <a aria-hidden="true" class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%80" id="user-content-解法一">
     <span class="octicon octicon-link">
     </span>
    </a>
@@ -185,30 +185,29 @@
    参考代码如下：
   </p>
   <div class="highlight highlight-cpp">
-   <pre><span class="c1">//引用自gnuhpc  </span>
-<span class="k">while</span><span class="p">(</span> <span class="n">current</span><span class="o">&lt;=</span><span class="n">end</span> <span class="p">)</span>        
-<span class="p">{</span>             
-  <span class="k">if</span><span class="p">(</span> <span class="n">array</span><span class="p">[</span><span class="n">current</span><span class="p">]</span> <span class="o">==</span><span class="mi">0</span> <span class="p">)</span>             
-   <span class="p">{</span>                 
-      <span class="n">swap</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">current</span><span class="p">],</span><span class="n">array</span><span class="p">[</span><span class="n">begin</span><span class="p">]);</span>                  
-      <span class="n">current</span><span class="o">++</span><span class="p">;</span>                  
-      <span class="n">begin</span><span class="o">++</span><span class="p">;</span>            
-   <span class="p">}</span>             
-   <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="n">array</span><span class="p">[</span><span class="n">current</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">)</span>            
-   <span class="p">{</span>                 
-      <span class="n">current</span><span class="o">++</span><span class="p">;</span>            
-   <span class="p">}</span>   
+   <pre><span class="pl-c">//引用自gnuhpc  </span>
+<span class="pl-k">while</span>( current&lt;=end )        
+{             
+  <span class="pl-k">if</span>( array[current] ==<span class="pl-c1">0</span> )             
+   {                 
+      <span class="pl-s3">swap</span>(array[current],array[begin]);                  
+      current++;                  
+      begin++;            
+   }             
+   <span class="pl-k">else</span> <span class="pl-k">if</span>( array[current] == <span class="pl-c1">1</span> )            
+   {                 
+      current++;            
+   }   
 
-   <span class="k">else</span> <span class="c1">//When array[current] =2   </span>
-   <span class="p">{</span>               
-      <span class="n">swap</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">current</span><span class="p">],</span><span class="n">array</span><span class="p">[</span><span class="n">end</span><span class="p">]);</span>                
-      <span class="n">end</span><span class="o">--</span><span class="p">;</span>            
-   <span class="p">}</span>      
-<span class="p">}</span>  
-</pre>
+   <span class="pl-k">else</span> <span class="pl-c">//When array[current] =2   </span>
+   {               
+      <span class="pl-s3">swap</span>(array[current],array[end]);                
+      end--;            
+   }      
+}  </pre>
   </div>
   <h3>
-   <a aria-hidden="true" class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" name="user-content-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89">
+   <a aria-hidden="true" class="anchor" href="#%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89" id="user-content-举一反三">
     <span class="octicon octicon-link">
     </span>
    </a>
